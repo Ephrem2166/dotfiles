@@ -1,0 +1,50 @@
+# Aria2 daemon configuration
+
+daemon=true
+continue=true
+check-integrity=true
+dir=/home/ephrem/Downloads/ 
+ 
+log=-
+log-level=warn
+enable-rpc=true
+file-allocation=falloc
+rpc-listen-all=true
+rpc-allow-origin-all=true
+rpc-save-upload-metadata=false
+rpc-secret={{ ARIA2_TOKEN }}
+
+enable-dht=true
+dht-listen-port=49164-49170
+
+# HTTP/FTP
+#max-tries=8
+#min-split-size=3M
+#remote-time=true
+#retry-wait=3
+#split=16
+
+max-concurrent-downloads=5
+max-overall-upload-limit=3K
+max-connection-per-server=4
+max-overall-download-limit=6M
+
+# BitTorrent
+listen-port=49164-49170
+bt-enable-lpd=true
+bt-max-peers=50
+bt-max-open-files=100
+bt-request-peer-speed-limit=100K
+enable-peer-exchange=true
+enable-dht=true
+enable-dht6=false
+follow-torrent=mem
+follow-metalink=mem
+bt-detach-seed-only=true
+seed-ratio=0.0
+bt-exclude-tracker=http://retracker.local/announce
+
+# Console
+enable-color=true
+#show-console-readout=false
+summary-interval=0
