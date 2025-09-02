@@ -1,0 +1,133 @@
+#import = [
+#	"~/.config/alacritty/themes/themes/nord.toml"
+#]
+[terminal.shell]
+program="/bin/zsh"
+
+[font]
+
+# JetBrainsMono
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
+
+#JuliaMono
+#normal = { family = "JuliaMono", style = "Regular" }
+#bold = { family = "JuliaMono", style = "Bold" }
+#italic = { family = "JuliaMono", style = "Italic" }
+#bold_italic = { family = "JuliaMono", style = "Bold Italic" }
+
+
+#normal = { family = "Iosevka Nerd Font Mono", style = "Regular" }
+#bold = { family = "Iosevka Nerd Font Mono", style = "Bold" }
+#italic = { family = "Iosevka Nerd Font Mono", style = "Italic" }
+#bold_italic = { family = "Iosevka Nerd Font Mono", style = "Bold Italic" }
+
+# Ubuntu Mono
+#normal = { family = "UbuntuMono Nerd Font", style = "Regular" }
+#bold = { family = "UbuntuMono Nerd Font", style = "Bold" }
+#italic = { family = "UbuntuMono Nerd Font", style = "Italic" }
+#bold_italic = { family = "UbuntuMono Nerd Font", style = "Bold Italic" }
+
+# Space Mono
+#normal = { family = "SpaceMono Nerd Font", style = "Regular" }
+#bold = { family = "SpaceMono Nerd Font", style = "Bold" }
+#italic = { family = "SpaceMono Nerd Font", style = "Italic" }
+#bold_italic = { family = "SpaceMono Nerd Font", style = "Bold Italic" }
+
+# PragmataPro Mono 
+#normal = { family = "PragmataPro Mono", style = "Regular" }
+#bold = { family = "PragmataPro Mono", style = "Bold" }
+#italic = { family = "PragmataPro Mono", style = "Italic" }
+#bold_italic = { family = "PragmataPro Mono", style = "Bold Italic" }
+
+
+
+size = 11.0
+offset = {x = 0, y = 1}
+
+[bell]
+animation = "Ease"
+duration = 300
+color = "#d8dee9"
+
+# Nord 
+[colors]
+[colors.primary]
+foreground="#D8DEE9"
+background="#2E3440"
+[colors.normal]
+black = "#3b4252"
+red = "#bf616a"
+green = "#a4be8c"
+yellow = "#ebcb8b"
+blue = "#81a1c1"
+magenta = "#b48ead"
+cyan = "#88c0d0"
+white = "#e5e9f0"
+[colors.bright]
+black = "#4c566a"
+red = "#bf616a"
+green = "#a4be8c"
+yellow = "#ebcb8b"
+blue = "#81a1c1"
+magenta = "#b48ead"
+cyan = "#8fbcbb"
+white = "#eceff4"
+
+# Tokyonight storm 
+# Default colors
+#[colors]
+#[colors.primary]
+#background = '#24283b'
+#foreground = '#a9b1d6'
+
+# Normal colors
+#[colors.normal]
+#black   = '#32344a'
+#red     = '#f7768e'
+#green   = '#9ece6a'
+#yellow  = '#e0af68'
+#blue    = '#7aa2f7'
+#magenta = '#ad8ee6'
+#cyan    = '#449dab'
+#white   = '#9699a8'
+
+# Bright colors
+#[colors.bright]
+#black   = '#444b6a'
+#red     = '#ff7a93'
+#green   = '#b9f27c'
+#yellow  = '#ff9e64'
+#blue    = '#7da6ff'
+#magenta = '#bb9af7'
+#cyan    = '#0db9d7'
+#white   = '#acb0d0'
+
+[cursor]
+style = {shape = "Beam", blinking = "Always"}
+unfocused_hollow = false
+blink_interval = 500
+blink_timeout = 30
+
+[mouse]
+hide_when_typing = true
+bindings = [
+    {mouse = "Middle", action = "Paste"}
+]
+
+[selection]
+save_to_clipboard = true
+
+[scrolling]
+multiplier = 4
+
+[window]
+opacity = 1.0
+#decorations = 'none'
+title = 'Alacritty'
+dynamic_title = true
+padding = {x = 9, y = 9}
+dynamic_padding = true
+startup_mode = "Windowed"
