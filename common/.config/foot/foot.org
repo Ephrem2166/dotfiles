@@ -1,0 +1,12 @@
+#+title: Foot
+
+* Foot Terminal Emulator
+#+begin_src lisp :tangle foot.ini
+include=~/.config/foot/themes/nord
+font=JetBrainsMono Nerd Font Mono:pixelsize=11
+font-italic=JetBrainsMono Nerd Font:style=SemiBold Italic:pixelsize=11
+initial-window-size-chars=80x32
+[cursor]
+beam-thickness=1
+#+end_src
+
