@@ -1,0 +1,77 @@
+#########
+# Theme #
+#########
+#theme = dark:vesper,light:catppuccin-latte
+#theme = dark:catppuccin-mocha,light:catppuccin-latte
+theme = dark:nord,light:nord-light
+# background = #1c2021
+#background = #0B1215
+#background-opacity = 0.90
+#background-blur-radius = 20
+
+##########
+# Cursor #
+##########
+cursor-color = #e5e9f0
+cursor-style = block
+cursor-style-blink = true
+#########
+# Fonts #
+#########
+font-family = "Berkeley Nerd Font"
+font-family-bold = "Berkeley Nerd Font" 
+font-family-italic = "Berkeley Nerd Font"
+font-family-bold-italic = "Berkeley Nerd Font"
+font-size = 11
+bold-is-bright = true
+##########
+# Mouse ##
+##########
+mouse-hide-while-typing = true
+# mouse-scroll-multiplier = 1
+
+##########
+# Window #
+##########
+window-theme = system
+window-decoration = auto
+gtk-single-instance = true
+gtk-tabs-location = bottom
+gtk-wide-tabs = false
+window-padding-y = 15,0
+window-padding-balance = true
+
+##########
+# Others #
+##########
+copy-on-select = true
+
+###############
+# Keybindings #
+###############
+# Format keybind = trigger = action 
+# keybind = ctrl+n=new_window 
+# keybind = super+shift+q=close_window
+# keybind = super+shift+c=close_all_windows 
+# keybind = ctrl+t=toggle_window_decorations 
+# 
+# keybind = super+shift+f=toggle_fullscreen
+# keybind = super+shift+t=new_tab
+# keybind = ctrl+shift+r=reload_config
+# keybind = ctrl+q=quit
+# keybind = ctrl+l=clear_screen
+# keybind = super+shift+c=copy_to_clipboard
+# keybind = super+shift+v=paste_from_clipboard
+# keybind = super+shift+u=new_split:up
+# keybind = super+shift+l=new_split:left  
+# keybind = super+shift+r=new_split:right
+# keybind = super+shift+b=new_split:down
+# keybind = ctrl+h=goto_split:left
+# keybind = ctrl+j=goto_split:bottom
+# keybind = ctrl+k=goto_split:top
+# keybind = ctrl+r=goto_split:right
+
+##########
+## Shell #
+##########
+shell-integration = zsh
