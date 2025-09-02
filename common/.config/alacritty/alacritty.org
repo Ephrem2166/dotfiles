@@ -1,0 +1,88 @@
+#+title: Alacritty Org
+#+author: Ephrem G
+
+:PROPERTIES:
+:header-args: :tangle alacritty.toml
+:END:
+
+* Import
+#+begin_src sh
+import = [
+
+ ]
+#+end_src
+* Shell
+#+begin_src sh
+[shell]
+program="/bin/zsh"
+#+end_src
+* Font
+#+begin_src sh
+ [font]
+
+#normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+#bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+#italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+#bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
+
+#normal = { family = "Iosevka Fixed", style = "Regular" }
+#bold = { family = "Iosevka Fixed", style = "Bold" }
+#italic = { family = "Iosevka Fixed", style = "Italic" }
+#bold_italic = { family = "Iosevka Fixed", style = "Bold Italic" }
+
+# Ubuntu Mono
+normal = { family = "UbuntuMono Nerd Font", style = "Regular" }
+bold = { family = "UbuntuMono Nerd Font", style = "Bold" }
+italic = { family = "UbuntuMono Nerd Font", style = "Italic" }
+bold_italic = { family = "UbuntuMono Nerd Font", style = "Bold Italic" }
+size = 8.0
+offset = {x = 0, y = -3}
+#+end_src
+* Bell
+#+begin_src sh
+[bell]
+animation = "Ease"
+duration = 300
+color = "#d8dee9"
+#+end_src
+* Colors
+#+begin_src sh
+[colors]
+[colors.primary]
+foreground="#D8DEE9"
+background="#2E3440"
+
+draw_bold_text_with_bright_colors = true
+#+end_src
+* Cursor
+#+begin_src sh
+[cursor]
+style = {shape = "Beam", blinking = "Always"}
+unfocused_hollow = false
+blink_interval = 500
+blink_timeout = 30
+#+end_src
+* Mouse
+#+begin_src sh
+[mouse]
+hide_when_typing = true
+bindings = [
+    {mouse = "Middle", action = "Paste"}
+]
+#+end_src
+* Scrolling
+#+begin_src sh
+[scrolling]
+multiplier = 4
+#+end_src
+* Window
+#+begin_src sh
+[window]
+opacity = 1.0
+decorations = none
+title = 'Alacritty'
+dynamic_title = true
+padding = {x = 9, y = 9}
+dynamic_padding = true
+startup_mode = "Windowed"
+#+end_src
