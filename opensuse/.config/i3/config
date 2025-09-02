@@ -1,0 +1,22 @@
+# i3 config file (v4)
+#
+# Please see https://i3wm.org/docs/userguide.html for a complete reference!
+
+font pango:  JetBrainsMono Nerd Font 12
+
+default_border pixel 1
+default_floating_border pixel 1
+gaps outer 0px
+gaps inner 0px
+smart_gaps inverse_outer
+focus_follows_mouse yes
+
+# class                 border  backgr. text    indicator child_border
+client.unfocused        #4c7899 #285577 #ffffff #2e9ef4   #285577
+client.focused          #D99887 #D99887 #D99887 #D99887   #D99887
+
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id /usr/bin/feh --bg-scale '/home/ephrem/Pictures/wallpapers/0650.jpg'
+include ./bind
+include ./rules
+include ./autostart
