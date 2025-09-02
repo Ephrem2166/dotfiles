@@ -1,1 +1,0 @@
-/home/ephrem/.config/vim/vimrc
