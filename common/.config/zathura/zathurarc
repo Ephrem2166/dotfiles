@@ -1,0 +1,56 @@
+# UI
+include nord 
+# Open document in fit-width mode by default
+set adjust-open "best-fit"
+# set font 'monospace normal 10'
+set font "Berkeley Nerd Font normal 10"
+
+set window-title-home-tilde true 
+set window-title-page true 
+
+# One page per row by default
+set pages-per-row 1
+
+#stop at page boundaries
+set smooth-scroll "true"
+
+set statusbar-h-padding 0
+set statusbar-v-padding 0
+set page-padding 1
+set synctex true
+
+# Show status line and vertical scroll bar
+set guioptions sv
+
+# Enable main clipboard (can paste with `Ctrl-v`)
+set selection-clipboard clipboard
+
+set recolor true 
+
+# Keybindings
+map k scroll half-up
+map j scroll half-down
+
+map <C-l> scroll right 
+map <c-h> scroll left
+map <C-j> scroll down 
+map <C-k> scroll up 
+
+map D toggle_page_mode
+map r reload
+map R rotate
+map <C-+> zoom in
+map <C--> zoom out
+
+map i recolor
+map p print
+map q abort
+map s search
+
+map <C-n> next
+map <C-p> previous
+
+unmap f 
+map f toggle_fullscreen
+map [fullscreen] f toggle_fullscreen
+
