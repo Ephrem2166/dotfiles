@@ -1,0 +1,224 @@
+# Export
+# XDG BASE DIR CONFIGURATION
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+# For Opensuse Tumbleweed
+export PACKAGE_MANAGER="zypper"
+
+# Bootstrap .zshrc to ~/.config/zsh/.zshrc, any other zsh config files can also reside here
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+
+# Scripts Folder
+export PATH="$XDG_CONFIG_HOME/scripts:$PATH"
+
+# Editor
+export EDITOR=nvim
+export VISUAL=nvim
+export LANG=en_US.UTF-8
+export SUDO_EDITOR=nvim
+
+# External Programs
+# Oh My Zsh
+export ZSH="$HOME/.oh-my-zsh"
+
+# export TERM="xterm-256color"     
+
+# Starship
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+
+# OTHER PROGRAM PATHS
+export PATH="/usr/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+# export PATH="$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.npm/bin:$PATH"
+
+# Ripgrep
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
+
+# Manpage
+# export MANPAGER="less -R --use-color -Dd+r -Du+b"
+# Use bat as man pager
+# Alternatively use `batman`
+export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
+
+# colored less + termcap vars
+export LESS="R --use-color -Dd+r -Du+b"
+export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
+export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
+export LESS_TERMCAP_me="$(printf '%b' '[0m')"
+export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
+export LESS_TERMCAP_se="$(printf '%b' '[0m')"
+export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
+export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
+# export MANPAGER="nvim +Man!"
+# export MANPAGER='less -s -M +Gg'
+# export LESS_TERMCAP_mb=$'\e[1;31m'
+# export LESS_TERMCAP_md=$'\e[1;36m'
+# export LESS_TERMCAP_me=$'\e[0m'
+# export LESS_TERMCAP_se=$'\e[0m'
+# export LESS_TERMCAP_so=$'\e[1;44;33m'
+# export LESS_TERMCAP_ue=$'\e[0m'
+# export LESS_TERMCAP_us=$'\e[1;32m'
+# export MANPAGER="less -MR+Gg"
+
+# Use `vimrc` from config directory
+#export VIMINIT='source $XDG_CONFIG_HOME/vim/vimrc'
+
+
+# General Settings
+# Go to folder path without using CD 
+setopt auto_cd
+ # Push the old directory onto the stack on cd.
+setopt auto_pushd
+# Do not store duplicates in the stack.
+setopt PUSHD_IGNORE_DUPS    
+# Do not print the directory stack after pushd or popd.
+setopt PUSHD_SILENT         
+
+setopt PROMPT_SUBST     # enable command substitution in prompt
+setopt MENU_COMPLETE    # Automatically highlight first element of completion menu
+setopt LIST_PACKED      # The completion menu takes less space.
+setopt AUTO_LIST        # Automatically list choices on ambiguous completion.
+setopt COMPLETE_IN_WORD # Complete from both ends of a word.
+
+# History Related 
+setopt appendhistory
+setopt share_history
+setopt extended_history
+# Expire a duplicate event first when trimming history.
+setopt HIST_EXPIRE_DUPS_FIRST 
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_find_no_dups
+setopt hist_ignore_dups
+HISTSIZE=1000000
+# SAVEHIST=100000
+HISTFILE="$XDG_CONFIG_HOME/zsh/zsh_history"
+HISTCONTROL=ignoreboth
+
+
+# TODO Modules
+zmodload zsh/complist
+
+# Command completion
+# Use `compinstall` for interactive configuration
+autoload -U compinit && compinit
+autoload -U colors && colors
+# Enable Prompt Themes
+autoload -U promptinit
+promptinit
+
+# Prompt Themes: use `prompt -l` to see themes
+# To preview them: `prompt -p`
+prompt fade
+
+# TODO Completion Style
+# Syntax for zstyle; `zstyle <pattern> <style> <values>`
+# Syntax for completion: `:completion:<function>:<completer>:<command>:<argument>:<tag>`
+# Define completers
+zstyle ':completion:*' completer _extensions _complete _approximate
+zstyle ':completion:*' menu select
+zstyle ':completion:*:*:kill:*' list-colors '=(#b) #([0-9]#)*( *[a-z])*=34=31=33'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:' cache-path "$HOME/.cache/zsh/.zcompcache"
+zstyle ':completion:*:parameters' list-colors '=*=1;35'
+zstyle ':completion:*:builtins' list-colors '=*=1;34'
+zstyle ':completion:*:aliases' list-colors '=*=1;33'
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
+zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
+zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}no matches found %f'
+zstyle ':completion:*:options' list-colors '=^(-- *)=34'
+zstyle ':completion:*:*:-command-:*:*' group-order alias functions builtins commands
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+# Grouping 
+# zstyle ':completion:*' group-name ''
+zstyle ':completion:*:*:-command-:*:*' group-order alias builtins functions commands
+# Detailed file listing 
+zstyle ':completion:*' file-list all
+
+# Alias
+[ -f "$XDG_CONFIG_HOME/zsh/alias" ] && source "$XDG_CONFIG_HOME/zsh/alias"
+
+# Bindings 
+# Vim Keybindings 
+# bindkey -v
+# export KEYTIMEOUT=1
+#
+# Theme
+ZSH_THEME="robbyrussell"
+
+# ShellFuncs
+# Colored manuals
+# man() {
+#     env \
+#         LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+#         LESS_TERMCAP_md=$(printf "\e[1;31m") \
+#         LESS_TERMCAP_me=$(printf "\e[0m") \
+#         LESS_TERMCAP_se=$(printf "\e[0m") \
+#         LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+#         LESS_TERMCAP_ue=$(printf "\e[0m") \
+#         LESS_TERMCAP_us=$(printf "\e[1;32m") \
+#         man "$@"
+# }
+
+function man() {
+    env \
+        LESS_TERMCAP_md=$(
+            tput bold
+            tput setaf 4
+        ) \
+        LESS_TERMCAP_me=$(tput sgr0) \
+        LESS_TERMCAP_mb=$(tput blink) \
+        LESS_TERMCAP_us=$(tput setaf 2) \
+        LESS_TERMCAP_ue=$(tput sgr0) \
+        LESS_TERMCAP_so=$(tput smso) \
+        LESS_TERMCAP_se=$(tput rmso) \
+        PAGER="${commands[less]:-$PAGER}" \
+        man "$@"
+}
+
+
+
+# Plugins
+plugins=(
+    git
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    fast-syntax-highlighting
+    zsh-history-substring-search
+    zsh-fzf-history-search
+)
+
+# Oh My Zsh
+source $ZSH/oh-my-zsh.sh
+
+# Others Configuration
+
+# FZF Shell integrations
+eval "$(fzf --zsh)"
+
+# FZF settings
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# FZF Configuration
+if [[ $(command -v "fzf") ]]; then
+  source $XDG_CONFIG_HOME/zsh/fzf.zsh
+fi
+
+# Zoxid integration
+eval "$(zoxide init zsh)"
+
+# PYENV
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+
+# STARSHIP
+eval "$(starship init zsh)"
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
