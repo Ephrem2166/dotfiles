@@ -1,0 +1,61 @@
+markup=1
+actions=1
+
+# Format
+font=JetBrainsMono Nerd Font 10
+border-color=#002028
+border-size=2
+background-color=##2e3440AA
+text-color=#d8dee9AA
+format=<b>%s</b> <span color="#93a1a1">(%a)</span>\n%b
+margin=8
+width=400
+border-radius=2
+max-visible=8
+group-by=app-name
+
+# icons
+# icon-path=/usr/share/icons/Papirus-Adapta-Nokto-Maia:/usr/share/icons/Papirus-Maia:/usr/share/icons/Papirus
+
+# Do not group actionables
+[actionable]
+group-by=none
+
+# Hidden format
+[hidden]
+format=Hidden: %h [%t]
+
+[urgency=low]
+text-color=#93a1a1
+
+[urgency=low actionable]
+border-color=#93a1a1
+group-by=none
+
+[urgency=normal actionable]
+border-color=#268bd2
+group-by=none
+
+[urgency=high]
+border-color=#303030
+[urgency=high actionable]
+border-color=#6c71c4
+group-by=none
+
+[app-name=playerctl]
+max-icon-size=96
+
+[app-name=clementine]
+max-icon-size=96
+
+[app-name=strawberry]
+max-icon-size=96
+
+[app-name=i3-hint]
+max-icon-size=48
+format=%s\n%b
+width=250
+
+[grouped]
+border-color=#073642
+
