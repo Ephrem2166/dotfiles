@@ -1,3 +1,3 @@
 # DOTFILES
 
-Dotfiles for my system.
+Dotfiles for my systems.
