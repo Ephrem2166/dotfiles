@@ -3,7 +3,7 @@ filetype on
 filetype indent on
 colorscheme slate
 set number
-
+set nocompatible
 set hidden
 set smartindent
 inoremap jk <ESC>
