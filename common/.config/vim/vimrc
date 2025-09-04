@@ -1,0 +1,10 @@
+syntax on
+filetype on
+filetype indent on
+colorscheme slate
+set number
+
+set hidden
+set smartindent
+inoremap jk <ESC>
+
