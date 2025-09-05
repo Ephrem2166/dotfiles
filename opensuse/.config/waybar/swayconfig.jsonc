@@ -1,0 +1,94 @@
+// Sway Configuration
+{
+  "include": [
+    "$HOME/.config/waybar/Modules.jsonc",
+    "$HOME/.config/waybar/CustomModules.jsonc",
+    "$HOME/.config/waybar/GroupModules.jsonc"
+  ],
+  /// GLOBAL CONFIG ///
+  "layer": "top",
+  "position": "top",
+  "height": 22,
+  "margin-left": 5,
+  "margin-right": 5,
+  "margin-top": 2,
+  // "margin-bottom": 2,
+  "spacing": 0,
+  "reload_style_on_change": true,
+  "modules-left": [
+    "sway/workspaces"
+      // "wlr/taskbar"
+  ],
+  "modules-center": [
+    "mpd"
+  ],
+  "modules-right": [
+    "custom/notification",
+    "wireplumber",
+    "group/system",
+    "group/connection",
+    "tray",
+    "clock",
+    "custom/power"
+  ],
+  // SWAY
+  // Sway Mode
+  "sway/mode": {
+    "format": " {}",
+    "max-length": 50,
+    "tooltip": true
+  },
+  // Sway Workspace
+  "sway/workspaces": {
+    "disable-scroll": false,
+    "all-outputs": false,
+    "active-only": false,
+    "enable-bar-scroll": true,
+    "show-specials": false,
+    "on-click": "activate",
+    "format": "{icon}",
+    "format-icons": {
+      "1": " ",
+      "2": " ",
+      "3": "󰈹 ",
+      "4": " ",
+      "5": " ",
+      "6": " ",
+      "7": " ",
+      "8": "󰈦 ",
+      "9": " ",
+      "10": ""
+      //"urgent": "",
+      //"focused": "",
+      //"default": "",
+    },
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+      "6": [],
+      "7": [],
+      "8": [],
+      "9": [],
+      "10": []
+    }
+  },
+  // Sway Window
+  "sway/window": {
+    "format": "{title}",
+    "align": 0,
+    "icon": true,
+    "icon-size": 22,
+    "tooltip": false,
+    "max-length": 50,
+    "seperate-outputs": true,
+    "all-outputs": false,
+    "expand": false,
+    "rewrite": {
+      "Mozila Firefox": " ",
+      "Alacritty": " "
+    }
+  }
+}

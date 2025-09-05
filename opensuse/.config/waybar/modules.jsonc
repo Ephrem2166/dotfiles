@@ -1,0 +1,326 @@
+[
+  {
+    "layer": "top",
+    "position": "top",
+    "height": 16,
+    "margin-left": 5,
+    "margin-right": 5,
+    "margin-top": 0,
+    "margin-bottom": 0,
+    "spacing": 0,
+    "reload_style_on_change": true,
+    "modules-left": [
+      "hyprland/workspaces"
+    ],
+    "modules-center": [
+      "mpd"
+    ],
+    "modules-right": [
+      "backlight",
+      "disk",
+      "memory",
+      "temperature",
+      "battery",
+      "network",
+      "tray",
+      "custom/power",
+      "clock"
+    ],
+    "hyprland/window": {
+      "format": "{title}",
+      "max-length": 333,
+      "seperate-outputs": true
+    },
+    "hyprland/workspaces": {
+      "on-click": "activate",
+      "on-scroll-up": "hyprctl dispatch workspace m+1 > /dev/null",
+      "on-scroll-down": "hyprctl dispatch workspace m-1 > /dev/null",
+      "active-only": false,
+      "all-outputs": true,
+      "show-specials": false,
+      "disable-scroll": false,
+      //"move-to-monitor": true,
+      "format": "{icon}",
+      "format-icons": {
+        "1": " ",
+        "2": "",
+        "3": "󰈹",
+        "4": " ",
+        "5": " ",
+        "6": "",
+        "7": "",
+        "8": "󰈦",
+        "9": "",
+        "10": ""
+        //"urgent": "",
+        // "active": "",
+        // "default": "",
+        // "focused": "",
+      },
+      "persistent-workspaces": {
+        "*": 10
+      }
+    },
+    "backlight": {
+      "device": "intel_backlight",
+      "tooltip": false,
+      "format": "{icon} {percent}%",
+      "format-icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "battery": {
+      "states": {
+        "warning": 30,
+        "critical": 15,
+        "good": 90
+      },
+      "format": "{icon} {capacity}%",
+      "format-charging": "  {capacity}%",
+      "format-plugged": "  {capacity}%",
+      "format-alt": "{icon}  {time}",
+      "format-icons": [
+        " ",
+        " ",
+        " ",
+        " ",
+        " "
+      ]
+    },
+    "bluetooth": {
+      "format": " {status}",
+      "format-disabled": "",
+      "format-on": " {controller_alias}",
+      "format-off": "󰂲",
+      "format-connected": " {device_alias}",
+      "interval": 30,
+      "on-click": "bluedevil",
+      "format-no-controller": ""
+    },
+    "cpu": {
+      "interval": 2,
+      "format": "   {usage}%",
+      "format-alt": " {avg_frequency} GHz {max_frequency} GHz",
+      "tooltip": false
+    },
+    "clock": {
+      "format": "  {:%a %d %b %I:%M}",
+      "tooltip": false,
+      "interval": 1,
+      "align": 1
+    },
+    "disk": {
+      "interval": 30,
+      "format": "󰋊  {percentage_used}%",
+      "path": "/home",
+      "on-click": "alacritty -e htop",
+      "tooltip": false
+    },
+    "idle_inhibitor": {
+      "format": "{icon}",
+      "format-icons": {
+        "activated": " ",
+        "deactivated": " "
+      },
+      "tooltip": false
+    },
+    "image#album-art": {
+      "path": "/tmp/mpd_cover.jpg",
+      "size": 40,
+      "interval": 1,
+      "on-click": "swayimg /tmp/mpd_cover.jpg",
+      "on-click-right": "alacritty -e ncmpcpp"
+    },
+    "keyboard-state": {
+      "numlock": true,
+      "capslock": true,
+      "format": "{name} {icon}",
+      "format-icons": {
+        "locked": "",
+        "unlocked": ""
+      }
+    },
+    "memory": {
+      "interval": 2,
+      "format": "   {}%",
+      "format-alt": " {used:0.1f} GB  {swapUsed:0.1f} GB"
+    },
+    "mpd": {
+      "server": "127.0.0.1",
+      "format": "{consumeIcon}{artist} - <span style=\"italic\">{title}</span>{singleIcon}{repeatIcon}{randomIcon}{stateIcon}",
+      "format-disconnected": " ",
+      "format-stopped": "{consumeIcon}{singleIcon}{repeatIcon}{randomIcon} ",
+      "title-len": 42,
+      "unknown-tag": "N/A",
+      "interval": 1,
+      "on-click": "mpc --host=127.0.0.1 toggle > /dev/null",
+      "on-click-right": "mpc --host=127.0.0.1 next > /dev/null",
+      "on-click-middle": "mpc --host=127.0.0.1 prev > /dev/null",
+      "consume-icons": {
+        "on": " "
+      },
+      "random-icons": {
+        "off": " ",
+        "on": " "
+      },
+      "repeat-icons": {
+        "on": " "
+      },
+      "single-icons": {
+        "on": "1 "
+      },
+      "state-icons": {
+        "playing": " ",
+        "paused": " "
+      },
+      "tooltip-format": "{artist} - {album}"
+    },
+    "network": {
+      "interval": 60,
+      "format": "{icon}",
+      "format-wifi": "{icon}  {essid} {signalStrength}%",
+      "format-ethernet": "{icon}",
+      "format-alt": " {ipaddr} {netmask}",
+      "format-disconnected": "",
+      "format-alt-click": "click-right",
+      "format-icons": {
+        "wifi": [
+          "",
+          "󰖩",
+          ""
+        ],
+        "ethernet": [
+          ""
+        ],
+        "disconnected": [
+          "󰖪"
+        ]
+      },
+      "on-click": "termite -e nmtui",
+      "tooltip": true,
+      "tooltip-format-wifi": "{essid}||{signaldBm}dB||{frequency}MHz\n{ipaddr}/{cidr}\n{bandwidthUpBits}/{bandwidthDownBits}",
+      "tooltip-format-ethernet": "{ipaddr}/{cidr}\n{bandwidthUpBits}/{bandwidthDownBits}",
+      "tooltip-format": ""
+    },
+    "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      }
+    },
+    "privacy": {
+      "icon-spacing": 8,
+      "icon-size": 24,
+      "transition-duration": 350,
+      "modules": [
+        {
+          "type": "screenshare",
+          "tooltip": true,
+          "tooltip-icon-size": 28
+        },
+        {
+          "type": "audio-out",
+          "tooltip": true,
+          "tooltip-icon-size": 28
+        },
+        {
+          "type": "audio-in",
+          "tooltip": true,
+          "tooltip-icon-size": 28
+        }
+      ]
+    },
+    "pulseaudio": {
+      "format": "{icon} {volume}%",
+      "format-bluetooth": "{volume}%  {icon} {format_source}",
+      "format-bluetooth-muted": " {icon} {format_source}",
+      "format-muted": " {format_source}",
+      "format-source": "{volume}% ",
+      "format-source-muted": "",
+      "format-icons": {
+        "headphone": " ",
+        "hands-free": "󱡒 ",
+        "headset": "󰋎",
+        "phone": " ",
+        "portable": " ",
+        "car": " ",
+        "default": [
+          " ",
+          " ",
+          " "
+        ]
+      },
+      "on-click": "pavucontrol"
+    },
+    "temperature": {
+      "interval": 15,
+      "critical-threshold": 90,
+      "format-icons": [
+        "",
+        "",
+        ""
+      ],
+      "format-critical": "  {temperatureC}°C",
+      "format": "  {temperatureC}°C"
+    },
+    "tray": {
+      "icon-size": 18,
+      "spacing": 5,
+      "show-passive-items": true,
+      "reverse-direction": true
+    },
+    "wireplumber": {
+      "format": "{icon}  {volume}%",
+      "format-muted": "󰖁  {volume}%",
+      "format-icons": [
+        "",
+        "",
+        ""
+      ]
+    },
+    "custom/primary": {
+      "format": "󰅇 {}",
+      "exec": "~/.config/waybar/scripts/clipboard.sh --primary",
+      "on-click": "~/.config/waybar/scripts/clipboard.sh --toggle; pkill -SIGRTMIN+8 waybar",
+      "restart-interval": 2,
+      "escape": true
+    },
+    "custom/clipboard": {
+      "format": "󱓥 {}",
+      "exec": "~/.config/waybar/scripts/clipboard.sh --clipboard",
+      "on-click": "~/.config/waybar/scripts/clipboard.sh --toggle; pkill -SIGRTMIN+8 waybar",
+      "restart-interval": 2,
+      "escape": true
+    },
+    "custom/dunst": {
+      "format": "{} ",
+      "exec": "~/.config/waybar/scripts/dunst.sh",
+      "on-click": "dunstctl set-paused toggle",
+      "restart-interval": 1
+    },
+    "custom/power": {
+      "format": " ⏻ ",
+      "on-click": "$HOME/.config/hypr/scripts/powermenu",
+      //"on-click": "bash ~/.config/rofi/powermenu.sh",
+      "escape": true,
+      "tooltip-format": "Power Menu"
+    },
+    "custom/rofi": {
+      "format": "",
+      "on-click": "sleep 0.2;rofi -show drun -replace"
+    }
+  }
+]
