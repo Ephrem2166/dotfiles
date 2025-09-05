@@ -1,0 +1,43 @@
+## Wofi Config
+#style=~/.config/wofi/style.css
+#color=~/.config/wofi/colors 
+
+## General
+show=drun
+width=20%
+height=40%
+prompt=Apps
+x=0
+y=0
+normal_window=true
+allow_images=true
+allow_markup=true
+term=alacritty
+exec_search=false
+hide_scroll=true
+matching=fuzzy
+insensitive=true
+parse_search=false
+location=0
+no_actions=true
+lines=15
+columns=1
+sort_order=default
+gtk_dark=false
+# search=Apps
+orientation=vertical
+halign=fill
+content_halign=fill
+# valign=fill
+filter_rate=100
+image_size=22
+line_wrap=word
+hide_search=false
+dynamic_lines=false
+layer=top
+single_click=false
+
+## Keys
+key_expand=Tab
+key_exit=Escape
+
