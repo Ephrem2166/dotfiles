@@ -1,0 +1,44 @@
+swaylock \
+--image=/home/ephrem/Documents/Others/berserk.png \
+--daemonize \
+--ignore-empty-password \ 
+--show-failed-attempts \
+--show-keyboard-layout \
+--indicator-caps-lock \
+--scaling=fit  \
+--bs-hl-color=BF616A \
+--caps-lock-bs-hl-color=BF616A \            
+--caps-lock-key-hl-color=BF616A \
+--font=Berkeley Nerd Font \
+--font-size=14  \
+--indicator-idle-visible \
+--indicator-radius=150 \
+--indicator-thickness=12 \
+--inside-color=2E3440 \
+--inside-clear-color=ECEFF4 \
+--inside-caps-lock-color=EBCB8B \
+--inside-ver-color=A3BE8C \
+--inside-wrong-color=BF616A \
+--key-hl-color=ECEFF4 \
+--layout-bg-color=2E3440 \
+--layout-border-color=2E3440 \
+--layout-text-color=D8DEE9 \
+--line-color=88C0D0 \
+--line-clear-color=ECEFF4 \
+--line-caps-lock-color=B48EAD \
+--line-ver-color=A3BE8C \
+--line-wrong-color=BF616A \
+--line-uses-inside \
+--line-uses-ring \
+--ring-color=2E3440 \
+--ring-clear-color=ECEFF4 \
+--ring-caps-lock-color=B48EAD \
+--ring-ver-color=A3BE8C \
+--ring-wrong-color=BF616A \
+--separator-color=E5E9F0 \
+--text-color=ECEFF4 \
+--text-clear-color=ECEFF4 \
+--text-caps-lock-color=ECEFF4 \
+--text-ver-color=A3BE8C \ 
+--text-wrong-color=BF616A 
+ 
