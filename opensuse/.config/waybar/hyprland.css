@@ -1,0 +1,175 @@
+@import "./colors.css";
+@define-color background #2E3440;
+@define-color foreground #D8DEE9;
+@define-color black #3B4252;
+@define-color red #BF616A;
+@define-color green #A3BE8C;
+@define-color yellow #EBCB8B;
+@define-color blue #81A1C1;
+@define-color magenta #B48EAD;
+@define-color cyan #88C0D0;
+@define-color white #E5E9F0;
+@define-color orange #C9826B;
+@define-color pink #BF88BC;
+@define-color bordercolor #7AA2F7;
+@define-color highlight  #7DCFFF;
+
+* {
+  background-color: @background;
+  color: @foreground;
+  border: none;
+  border-radius: 0;
+  font-family: "Berkeley Nerd Font", "PragmataProMono Nerd Font", "JetBrainsMono Nerd Font", Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  min-height: 0;
+}
+
+tooltip {
+    border:none;
+    border-radius:0;
+    color: @foreground;
+    text-shadow:2px 2px @background;
+    margin-bottom:1px;
+    padding:1px 1px;
+}
+
+/* Dont forget commas after each module! */
+#battery,
+#backlight,
+#bluetooth,
+#clock,
+#cpu,
+#cava,
+#disk,
+#memory,
+#mpd,
+#network,
+#pulseaudio,
+#temperature,
+#tray menu,
+#taskbar,
+#wireplumber,
+#keyboard-state,
+#custom-ddcutil,
+#custom-power,
+#custom-media,
+#custom-primary,
+#custom-clipboard,
+#custom-dunst,
+#custom-hyprshade,
+#custom-separator,
+#custom-bluetooth,
+#custom-wifi,
+#custom-group,
+#custom-notification,
+#custom-kdeconnect,
+#temperature,
+#kdeconnect,
+#power-profiles-daemon,
+#idle_inhibitor 
+#group-system
+#group-connection
+{
+  padding: 5px 5px;
+  margin: 1px 1px;
+  /* border-color: @border-color; */
+  /* border-right: 2px; */
+  border: 2px;
+  /* border-radius: 5px; */
+  /* margin: 0px 4px; */
+  /*border-right: 1px solid #D8DEE9;*/
+}
+
+/* -----------------------------------------------------
+ * Workspaces
+ * ----------------------------------------------------- */
+#workspaces {
+    margin: 0px 3px;
+    padding: 0px 2px;
+    border-radius: 5px;
+    border: 0px;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 12px;
+}
+#workspaces button {
+    padding: 0px 3px;
+    margin: 0px 5px;
+    border-radius: 3px;
+    border: 0px;
+    /*transition: all 0.3s ease-in-out;*/
+}
+
+#workspaces button.active {
+    color: @foreground;
+    background:  @background;
+    border-radius: 11px;
+    min-width: 10px;
+   /*transition: all 0.3s ease-in-out;*/
+}
+
+#workspaces button:hover {
+    color: @foreground;
+    background: @background;
+    border-radius: 15px;
+}
+
+/*Battery*/
+
+#battery.charging,
+#battery.plugged {
+  color: @green;
+}
+
+#battery.critical
+#battery.warning{
+  color: @red;
+}
+
+/* Network */
+#network.disconnected,
+#pulseaudio.muted,
+#wireplumber.muted {
+  color: @red;
+}
+
+#mpd{
+    border-radius: 3px;
+    color: @foreground;
+    /*border: 2px solid @blue; */
+}
+
+#tray{
+    padding: 0px 10px;
+}
+
+#tray menu * {
+    min-height: 16px
+}
+
+#tray menu separator {
+    min-height: 10px
+}
+#backlight-slider slider {
+    min-height: 0px;
+    min-width: 0px;
+    opacity: 0;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+#backlight-slider trough {
+    min-height: 20px;
+    min-width: 10px;
+    border-radius: 5px;
+    background-color: @background;
+}
+#backlight-slider highlight {
+    min-width: 10px;
+    border-radius: 5px;
+    background-color: @background;
+}
+#custom-kdeconnect{
+    padding: 0px 5px;
+}

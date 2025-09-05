@@ -1,0 +1,51 @@
+// Niri Configuration
+{
+  "include": [
+    "$HOME/.config/waybar/Modules.jsonc",
+    "$HOME/.config/waybar/CustomModules.jsonc",
+    "$HOME/.config/waybar/GroupModules.jsonc"
+  ],
+  /// GLOBAL CONFIG ///
+  "layer": "bottom",
+  "position": "top",
+  "height": 22,
+  "margin-left": 5,
+  "margin-right": 5,
+  "margin-top": 2,
+  "margin-bottom": 2,
+  "spacing": 0,
+  "reload_style_on_change": true,
+  "modules-left": [
+    "niri/workspaces"
+  ],
+  "modules-center": [
+    "mpd"
+  ],
+  "modules-right": [
+    "custom/notification",
+    "wireplumber",
+    "group/system",
+    "group/connection",
+    "tray",
+    "clock",
+    "custom/power"
+  ],
+  "niri/workspaces": {
+    "all-outputs": true,
+    "format": "{icon}",
+    "format-icons": {
+      // Named workspaces
+      // (you need to configure them in niri)
+        "browser": " ",
+        "terminal" : " ", 
+        "file": " ",
+        "chat": "<b></b>",
+        "video": " ",
+        // "music": " ",
+        "emacs": " ",
+      // Icons by state
+      // "active": "",
+      "default": " "
+    }
+  }
+}
