@@ -1,0 +1,297 @@
+#!/usr/bin/env bash
+#
+# # *** Script by Clay Gomera (Drake) ***
+# # Description: A simple WiFi management script using dmenu and NetworkManager
+# # Dependencies: dmenu, NetworkManager, notify-send
+# # Modified by me to use rofi
+#
+# # Main menu options
+# option1="  Turn on WiFi"
+# option2="  Turn off WiFi"
+# option3="󱛅  Disconnect WiFi"
+# option4="󱛃  Connect WiFi"
+# option5="󱛆  Setup captive portal"
+# option6="󱎘  Exit"
+# options="$option1\n$option2\n$option3\n$option4\n$option5\n$option6"
+#
+# # Retrieve wireless interface information
+# wifi_info=$(nmcli dev | awk '/wifi/ {print $1,$3; exit}')
+# read -r wlan state <<<"$wifi_info"
+#
+# # Function to turn off WiFi
+# turnoff() {
+#   nmcli radio wifi off
+#   if [ $? -eq 0 ]; then
+#     notify-send "WiFi has been turned off"
+#   else
+#     notify-send "Failed to turn off WiFi"
+#   fi
+# }
+#
+# # Function to turn on WiFi
+# turnon() {
+#   nmcli radio wifi on
+#   if [ $? -eq 0 ]; then
+#     notify-send "WiFi has been turned on"
+#   else
+#     notify-send "Failed to turn on WiFi"
+#   fi
+# }
+#
+# # Function to disconnect WiFi
+# disconnect() {
+#   if [ "$state" = "disconnected" ]; then
+#     notify-send "WiFi is already disconnected"
+#   elif [ "$state" = "connected" ]; then
+#     nmcli device disconnect "$wlan"
+#     if [ $? -eq 0 ]; then
+#       notify-send "WiFi has been disconnected"
+#     else
+#       notify-send "Failed to disconnect WiFi"
+#     fi
+#   else
+#     notify-send "Unknown WiFi state"
+#   fi
+# }
+#
+# # Function to select and connect to a WiFi network
+# connect() {
+#   notify-send -t 5000 "Scanning networks..."
+#   nmcli dev wifi rescan
+#   local wifinet
+#   wifinet=$(nmcli -f SSID,BARS,SECURITY dev wifi list | sed -n '1!p' | sed -E "s/WPA*.?\S/ /g" | sed "s/^--/ /g" | sed "s/  //g" | sed "/--/d" | rofi -dmenu -i -config "$HOME/.config/rofi/config.rasi" -p "  Wifi Network")
+#   if [ -z "$wifinet" ]; then
+#     exit 0
+#   fi
+#   bssid=$(echo "$wifinet" | awk '{print $1}')
+#   ssid=$(echo "$wifinet" | awk '{print $2}')
+# }
+#
+# # Function to prompt for WiFi password
+# password() {
+#
+#   if nmcli connection show | awk -v ssid="$ssid" '$1 == ssid {found=1} END {exit !found}'; then
+#     pass=""
+#   elif nmcli -f BSSID,SECURITY dev wifi list | grep -w "$bssid" | awk '{print $2}' | grep -q -- "--"; then
+#     pass=""
+#   else
+#     pass=$(rofi -dmenu -l 1 -config "$HOME/.config/rofi/regular.rasi" -p " Enter Password")
+#     if [ -z "$pass" ]; then
+#       exit 0
+#     fi
+#   fi
+# }
+#
+# # Function to connect to the selected WiFi network
+# action() {
+#   if [ -n "$pass" ]; then
+#     nmcli dev wifi connect "$bssid" password "$pass"
+#   else
+#     nmcli dev wifi connect "$bssid"
+#   fi
+#   if [ $? -eq 0 ]; then
+#     notify-send "Connected to $ssid"
+#   else
+#     notify-send "Failed to connect to $ssid"
+#   fi
+# }
+#
+# # Show menu and handle user choice
+# case=$(echo -e "$options" | rofi -dmenu -l 6 -i -config "$HOME/.config/rofi/regular.rasi" -p "  WiFi Settings")
+# if [ -z "$case" ]; then
+#   exit 0
+# fi
+#
+# case "$case" in
+# "$option1")
+#   turnon
+#   ;;
+# "$option2")
+#   turnoff
+#   ;;
+# "$option3")
+#   disconnect
+#   ;;
+# "$option4")
+#   if connect; then
+#     if password; then
+#       action
+#     fi
+#   fi
+#   ;;
+# "$option5")
+#   ${BROWSER:-xdg-open} http://networkcheck.kde.org
+#   ;;
+# "$option6")
+#   exit 0
+#   ;;
+# esac
+
+# connect_wifi() {
+#     notify-send "Fetching available Wi-Fi networks ..." -t 3000 -r 9991 -u normal
+#
+#     current=$(nmcli -t -f active,ssid dev wifi | awk -F: '/^yes/ {print $2}')
+#     wifi_list=$(nmcli --fields "SECURITY,SSID" device wifi list | sed 1d | sed 's/  */ /g' | sed -E "s/WPA*.?\S/ /g" | sed "s/^--/ /g" | sed "s/  //g" | sed "/--/d")
+#
+#     if [ -n "$current" ]; then
+#         wifi_list=$(echo "$wifi_list" | grep -v "$current")
+#         wifi_list="󰖩  $current [Connected]\n$wifi_list"
+#     fi
+#
+#     choice=$(echo -e "$toggle\n$wifi_list" | uniq -u | rofi -dmenu -i -p "  Wifi" -selected-row 1 -config "$HOME/.config/rofi/config.rasi")
+#
+#     if [ -z "$choice" ]; then
+#         exit
+#     fi
+#
+#     ssid=$(echo "$choice" | awk '{$1=""; print $0}' | sed 's/^ *//' | sed 's/ \[connected\]//')
+#
+#     if [[ "$choice" = "$toggle" ]]; then
+#         nmcli radio wifi off
+#         notify-send "Wi-Fi Disabled" -r 9991 -u normal -t 5000
+#         exit
+#     fi
+#
+#     if [[ "$ssid" = "$current" ]]; then
+#         notify-send "Already connected to $ssid" -r 9991 -u normal -t 5000
+#         exit
+#     else
+#         saved=$(nmcli -g NAME connection)
+#         if [[ $(echo "$saved" | grep -w "$ssid") = "$ssid" ]]; then
+#             nmcli connection up id "$ssid" | grep "successfully" && notify-send "Connection Established" "Connected to $ssid" -t 5000 -r 9991 && exit
+#         fi
+#         if [[ "$choice" =~ "" ]]; then
+#             password=$(rofi -dmenu -p "Password: " -l 0 -config "$HOME/.config/rofi/config.rasi")
+#         fi
+#         if nmcli device wifi connect "$ssid" password "$password" | grep "successfully"; then
+#             notify-send "Connection Established" "Connected to $ssid" -t 5000 -r 9991
+#         else
+#             notify-send "Connection Failed" "Could not connect to $ssid" -t 5000 -r 9991
+#         fi
+#     fi
+# }
+#
+# status=$(nmcli -fields WIFI g | sed -n 2p)
+# if [[ "$status" =~ "enabled" ]]; then
+#     toggle="󰖪  Disable Wi-Fi"
+#     flag=1
+# elif [[ "$status" =~ "disabled" ]]; then
+#     toggle="󰖩  Enable Wi-Fi"
+#     flag=0
+# fi
+#
+# if [ "$flag" -eq 1 ]; then
+#     connect_wifi
+# else
+#     choice=$(echo -e "$toggle" | rofi -dmenu -i -p "  Wifi" -config "$HOME/.config/rofi/config.rasi")
+#     if [[ "$choice" = "$toggle" ]]; then
+#         nmcli radio wifi on
+#         toggle="󰖪  Disable Wi-Fi"
+#         notify-send "Wi-Fi Enabled" -r 9991 -u normal -t 5000
+#         sleep 2
+#         connect_wifi
+#     fi
+# fi
+
+#!/bin/bash
+#
+# A rofi-based Wi-Fi menu for NetworkManager.
+# Modified for robustness on systems like openSUSE Tumbleweed.
+#
+# Dependencies: rofi, nmcli (NetworkManager), libnotify-tools, a Nerd Font
+
+# The Rofi configuration file
+# ROFI_CONFIG="$HOME/.config/rofi/config.rasi" # Uncomment and set if needed
+
+connect_wifi() {
+    notify-send "Scanning for Wi-Fi networks..." -t 2000 -r 9991 -u normal
+
+    # Get the current connection's SSID
+    current_ssid=$(nmcli -t -f ACTIVE,SSID dev wifi | awk -F: '/^yes/ {print $2}')
+
+    # MODIFIED: Use a more robust loop to build the Wi-Fi list
+    # This avoids fragile 'sed' chains and handles any security type.
+    wifi_list=""
+    while read -r line; do
+        # nmcli's terse output is 'SECURITY:SSID'
+        ssid=$(echo "$line" | sed 's/\\:/\n/g' | tail -n1)                     # Handle SSIDs with ':'
+        security=$(echo "$line" | sed 's/\\:/\n/g' | head -n1 | sed 's/--$//') # Handle SSIDs with ':'
+
+        if [ -n "$ssid" ]; then
+            if [ "$security" = "" ]; then
+                wifi_list+="  $ssid\n" # Open network icon
+            else
+                wifi_list+="  $ssid\n" # Locked network icon
+            fi
+        fi
+    done < <(nmcli -t --fields SECURITY,SSID dev wifi list --rescan yes)
+
+    # Place the current connection at the top of the list
+    if [ -n "$current_ssid" ]; then
+        wifi_list=$(echo -e "$wifi_list" | grep -v "^..$current_ssid$")
+        wifi_list="󰖩  $current_ssid [Connected]\n$wifi_list"
+    fi
+
+    # Present the menu with Rofi
+    choice=$(echo -e "$toggle\n$wifi_list" | sed '/^\s*$/d' | rofi -dmenu -i -p "  Wi-Fi" -selected-row 1)
+    # Rofi config can be added back with: -config "$ROFI_CONFIG"
+
+    # Exit if nothing was chosen
+    [ -z "$choice" ] && exit
+
+    # Extract the SSID from the choice, removing the icon and any status text
+    chosen_ssid=$(echo "$choice" | sed -e 's/^[[:space:]]*[󰖩]//' -e 's/\[Connected\]//' | xargs)
+
+    # Handle the toggle action
+    if [[ "$choice" == "$toggle" ]]; then
+        nmcli radio wifi off
+        notify-send "Wi-Fi Disabled" -r 9991 -u normal -t 3000
+        exit
+    fi
+
+    # Handle connecting
+    if [[ "$chosen_ssid" == "$current_ssid" ]]; then
+        notify-send "Already connected to $chosen_ssid" -r 9991 -u normal -t 3000
+    else
+        # Check if it's a known connection
+        if nmcli -g NAME connection show | grep -q "^$chosen_ssid$"; then
+            # MODIFIED: Use exit code to check for success
+            if nmcli connection up id "$chosen_ssid"; then
+                notify-send "Connection Established" "Connected to $chosen_ssid" -t 5000 -r 9991
+            else
+                notify-send "Connection Failed" "Could not switch to $chosen_ssid" -t 5000 -r 9991
+            fi
+        else
+            # It's a new connection, ask for password if secure
+            if [[ "$choice" =~ "" ]]; then
+                password=$(rofi -dmenu -p "Password for $chosen_ssid: " -password -l 0)
+                [ -z "$password" ] && exit
+            fi
+
+            # MODIFIED: Use exit code to check for success
+            if nmcli device wifi connect "$chosen_ssid" password "$password"; then
+                notify-send "Connection Established" "Connected to $chosen_ssid" -t 5000 -r 9991
+            else
+                notify-send "Connection Failed" "Could not connect to $chosen_ssid" -t 5000 -r 9991
+            fi
+        fi
+    fi
+}
+
+# --- Main Script Logic ---
+
+# Check the current Wi-Fi status
+if [[ $(nmcli -t -f WIFI g) == "enabled" ]]; then
+    toggle="󰖪  Disable Wi-Fi"
+    connect_wifi
+else
+    toggle="󰖩  Enable Wi-Fi"
+    choice=$(echo -e "$toggle" | rofi -dmenu -i -p "  Wi-Fi is disabled")
+
+    if [[ "$choice" == "$toggle" ]]; then
+        nmcli radio wifi on
+        notify-send "Wi-Fi Enabled" -r 9991 -u normal -t 3000
+        sleep 2 # Give it a moment to scan
+        connect_wifi
+    fi
+fi
