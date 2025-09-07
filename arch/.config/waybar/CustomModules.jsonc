@@ -1,0 +1,197 @@
+/* Waybar Modules - Custom Modules */
+{
+  "custom/bluetooth": {
+    "format": "{icon}",
+    "format-icons": "",
+    "exec-on-event": "true",
+    "on-click": "$HOME/.config/rofi/rofi-bluetooth.sh",
+    "tooltip-format": "Bluetooth Menu"
+  },
+  "custom/browser": {
+    "format": " ",
+    "on-click": "xdg-open http:// &",
+    "tooltip": true,
+    "tooltip-format": "Launch Browser"
+  },
+  "custom/clipboard": {
+    "format": "󱓥 {}",
+    "exec": "~/.config/waybar/scripts/clipboard.sh --clipboard",
+    "on-click": "~/.config/waybar/scripts/clipboard.sh --toggle; pkill -SIGRTMIN+8 waybar",
+    "restart-interval": 2,
+    "escape": true
+  },
+  "custom/cliphist": {
+    "format": "{}",
+    "rotate": 0,
+    "exec": "echo ; echo 󰅇 clipboard history",
+    "on-click": "sleep 0.1 && cliphist.sh c",
+    "on-click-right": "sleep 0.1 && cliphist.sh d",
+    "on-click-middle": "sleep 0.1 && cliphist.sh w",
+    "interval": 86400, // once every day
+    "tooltip": true
+  },
+  "custom/dunst": {
+    "tooltip": true,
+    "escape": true,
+    "interval": 1,
+    "format": "{icon} {}",
+    "format-icons": {
+      "email-notification": "<span foreground='white'><sup></sup></span>",
+      "chat-notification": "󱋊<span foreground='white'><sup></sup></span>",
+      "warning-notification": "󱨪<span foreground='yellow'><sup></sup></span>",
+      "error-notification": "󱨪<span foreground='red'><sup></sup></span>",
+      "network-notification": "󱂇<span foreground='white'><sup></sup></span>",
+      "battery-notification": "󰁺<span foreground='white'><sup></sup></span>",
+      "update-notification": "󰚰<span foreground='white'><sup></sup></span>",
+      "music-notification": "󰝚<span foreground='white'><sup></sup></span>",
+      "volume-notification": "󰕿<span foreground='white'><sup></sup></span>",
+      "notification": "<span foreground='white'><sup></sup></span>",
+      "none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which dunstctl",
+    "on-click": "sleep 0.1 && dunstctl history-pop",
+    "on-click-middle": "dunstctl history-clear",
+    "on-click-right": "dunstctl close-all",
+    //"exec": "~/.config/waybar/scripts/dunst.sh",
+    //"on-click": "dunstctl set-paused toggle",
+    "restart-interval": 1
+  },
+  "custom/file_manager": {
+    "format": " ",
+    "on-click": "xdg-open . &",
+    "tooltip": true,
+    "tooltip-format": "File Manager"
+  },
+  "custom/hyprshade": {
+    "format": "",
+    "on-click": "sleep 0.1; ~/.config/hypr/scripts/hyprshade.sh",
+    "on-click-right": "sleep 0.1; ~/.config/hypr/scripts/hyprshade.sh rofi",
+    "tooltip": false
+  },
+  "custom/kdeconnect": {
+    "format": "{icon}",
+    "format-icons": "  ",
+    "exec-on-event": "true",
+    "on-click": "kdeconnect-app",
+    "tooltip-format": "KDE Connect"
+  },
+  "custom/media": {
+    "format": "{icon} {}",
+    "escape": true,
+    "return-type": "json",
+    "max-length": 40,
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl stop",
+    "smooth-scrolling-threshold": 10, // This value was tested using a trackpad, it should be lowered if using a mouse.
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous",
+    "exec": "bash ~/.config/waybar/scripts/mediaplayer.py 2> /dev/null" //Script in resources/custom_modules folder
+  },
+  "custom/menu": {
+    "format": " ",
+    "on-click": "pkill rofi || rofi -show drun -modi run,drun,filebrowser,window",
+    "tooltip": true
+  },
+  "custom/menu#opensuse": {
+    "format": " ",
+    "tooltip": false,
+    "on-click": "$HOME/.config/waybar/scripts/menu",
+    "on-click-right": "killall wofi"
+  },
+  "custom/notification": {
+    "tooltip": false,
+    "format": "{icon} ",
+    "format-icons": {
+      "notification": "<span foreground='red'><sup></sup></span>",
+      "none": "",
+      "dnd-notification": "<span foreground='red'><sup></sup></span>",
+      "dnd-none": "",
+      "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+      "inhibited-none": "",
+      "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+      "dnd-inhibited-none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+  },
+  "custom/power": {
+    "format": " ⏻ ",
+    //"on-click": "$HOME/.config/hypr/scripts/powermenu",
+    //"on-click": "bash ~/.config/rofi/powermenu.sh",
+    "on-click": "$HOME/.config/rofi/rofi-power.sh",
+    "escape": true,
+    "tooltip-format": "Power Menu"
+  },
+  "custom/rofi": {
+    "format": "",
+    "on-click": "sleep 0.2;rofi -show drun -replace"
+  },
+  "custom/separator": {
+    "format": "{icon}",
+    "format-icons": "|",
+    "tooltip": false
+  },
+  "custom/swayidle": {
+    "format": "{icon}",
+    "format-icons": " ",
+    "interval": "once",
+    "return-type": "json",
+    //"format": "{}",
+    "exec-on-event": "true",
+    "signal": 1,
+    "on-click": "$HOME/.config/river/scripts/swayidle-toggle.sh; pkill -SIGRTMIN+1 waybar"
+  },
+  "custom/tty": {
+    "format": " ",
+    "on-click": "kitty &",
+    "tooltip": true,
+    "tooltip-format": "Launch Terminal"
+  },
+  "custom/update": {
+    "exec": "bash $HOME/.config/waybar/scripts/check-update.sh",
+    "on-click-right": "bash $HOME/.config/waybar/scripts/check-update.sh",
+    "on-click-middle": "swaymsg exec '$term -e sudo zypper dup'",
+    "interval": 86400,
+    "return-type": "json",
+    "format": "{} {icon}",
+    "format-alt": "{icon} {}",
+    "format-icons": {
+      "has-updates": "  ", // icon when updates needed
+      "updated": " 󰂪 "
+    }
+  },
+  "custom/update#1": {
+    "format": "{icon}{}",
+    "return-type": "json",
+    "interval": 3600,
+    "exec": "$HOME/.config/waybar/scripts/opensuse.sh",
+    "exec-if": "ping -c 1 8.8.8.8",
+    "tooltip": true,
+    "exec-on-event": true,
+    "format-icons": {
+      "pending updates": " ",
+      "updated": ""
+    }
+  },
+  "custom/weather": {
+    "format": "{}",
+    "format-alt": "{alt}: {}",
+    "format-alt-click": "click-right",
+    "interval": 1800,
+    "return-type": "json",
+    "exec": "~/.config/waybar/modules/weather.sh",
+    "exec-if": "ping wttr.in -c1"
+  },
+  "custom/wifi": {
+    "format": "{icon}",
+    "format-icons": " ",
+    "exec-on-event": "true",
+    "on-click": "$HOME/.config/rofi/rofi-wifi.sh",
+    "tooltip-format": "Wifi Menu"
+  }
+}

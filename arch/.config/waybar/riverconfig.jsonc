@@ -1,0 +1,65 @@
+{
+  "include": [
+    "$HOME/.config/waybar/Modules.jsonc",
+    "$HOME/.config/waybar/GroupModules.jsonc",
+    "$HOME/.config/waybar/CustomModules.jsonc"
+  ],
+  "layer": "top",
+  "position": "top",
+  "height": 10,
+  "margin-left": 5,
+  "margin-right": 5,
+  "margin-top": 0,
+  "margin-bottom": 0,
+  "spacing": 0,
+  "reload_style_on_change": true,
+  "modules-left": [
+    "river/tags"
+    //"wlr/taskbar"
+  ],
+  "modules-center": [
+    "mpd"
+  ],
+  "modules-right": [
+    //"cava",
+    //"mpris",
+    //"custom/swayidle",
+    //"pulseaudio",
+    "idle_inhibitor",
+    "custom/notification",
+    "wireplumber",
+    //"custom/dunst",
+    "group/system",
+    "group/connection",
+    //"backlight",
+    //"disk",
+    //"memory",
+    //"cpu",
+    //"temperature",
+    //"battery",
+    //"network",
+    "tray",
+    "clock",
+    //"group/custom-group",
+    "custom/power"
+  ],
+  "river/tags": {
+    "num-tags": 10,
+    "tag-labels": [
+      "",
+      "󰈹",
+      "",
+      "",
+      "",
+      "󰖟",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "river/window": {
+    "max-length": 50,
+    "format": " <span style=\"italic\">{}</span>"
+  }
+}

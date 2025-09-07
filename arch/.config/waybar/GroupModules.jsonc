@@ -1,0 +1,39 @@
+{
+  "include": [
+    "$HOME/.config/waybar/Modules.jsonc",
+    "$HOME/.config/waybar/CustomModules.jsonc"
+  ],
+  "group/connection": {
+    "orientation": "horizontal",
+    "modules": [
+      //"bluetooth",
+      "custom/kdeconnect",
+      "network"
+      // "network#speed"
+      //"custom/wifi"
+    ]
+  },
+  "group/system": {
+    "orientation": "horizontal",
+    "modules": [
+      "backlight#screen", 
+      "battery",
+      "cpu",
+      "disk",
+      "memory",
+      "temperature"
+      //"power-profiles-daemon",
+      //"tray"
+    ]
+  },
+  "group/custom-group": {
+    "orientation": "horizontal",
+    "modules": [
+      "idle_inhibitor",
+      "custom/kdeconnect",
+      "cava",
+      "custom/wifi",
+      "custom/bluetooth"
+    ]
+  }
+}
