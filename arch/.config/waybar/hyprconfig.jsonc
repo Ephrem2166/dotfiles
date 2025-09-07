@@ -1,0 +1,272 @@
+{
+  "include": [
+    "$HOME/.config/waybar/CustomModules.jsonc",
+    "$HOME/.config/waybar/Modules.jsonc",
+    "$HOME/.config/waybar/GroupModules.jsonc"
+  ],
+  "layer": "top",
+  "position": "top",
+  "height": 20,
+  "margin-left": 5,
+  "margin-right": 5,
+  "margin-top": 0,
+  "margin-bottom": 0,
+  "spacing": 0,
+  "reload_style_on_change": true,
+  "modules-left": [
+    //"custom/menu",
+    "hyprland/workspaces"
+  ],
+  "modules-center": [
+    "mpd"
+    //"wlr/taskbar"
+  ],
+  "modules-right": [
+    //"hyprland/language",
+    //"pulseaudio",
+    //"mpd",
+    "custom/notification",
+    //    "custom/updates",
+    "wireplumber",
+    //"custom/dunst",/* Waybar Modules - Custom Modules */
+    //"backlight",
+    //"disk",
+    //"memory",
+    //"cpu",
+    //"temperature",
+    //"battery",
+    "group/system",
+    "group/connection",
+    "tray",
+    // "group/custom-group",
+    // "custom/kdeconnect",
+    // "network",
+    "clock",
+    "custom/power"
+  ],
+  "hyprland/language": {
+    "format": "  {}",
+    "format-en": "US",
+    "format-am": "Amharic",
+    "keyboard-name": "at-translated-set-2-keyboard",
+    "on-click": "hyprctl switchxkblayout $SET_KB next"
+  },
+  "hyprland/window": {
+    "format": "{title}",
+    "max-length": 50,
+    "seperate-outputs": true
+  },
+  "hyprland/workspaces": {
+    "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace m+1 > /dev/null",
+    "on-scroll-down": "hyprctl dispatch workspace m-1 > /dev/null",
+    "active-only": false,
+    "all-outputs": true,
+    "show-specials": false,
+    "disable-scroll": false,
+    //"move-to-monitor": true,
+    "format": "{icon}",
+    "format-icons": {
+      "1": " ",
+      "2": "",
+      "3": "󰈹",
+      "4": " ",
+      "5": "",
+      "6": "",
+      "7": "",
+      "8": "󰈦",
+      "9": "",
+      "10": "󰈙 "
+      //"urgent": "",
+      // "active": "",
+      // "default": "",
+      // "focused": "",
+    },
+    "persistent-workspaces": {
+      "*": 10
+    }
+  },
+  "hyprland/workspaces#1": {
+    "active-only": false,
+    "all-outputs": true,
+    "format": "{icon}",
+    "show-special": false,
+    "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "persistent-workspaces": {
+      "*": 5
+    },
+    "format-icons": {
+      "active": "",
+      "default": ""
+    }
+  },
+  // ROMAN Numerals style
+  "hyprland/workspaces#roman": {
+    "active-only": false,
+    "all-outputs": true,
+    "format": "{icon}",
+    "show-special": false,
+    "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "persistent-workspaces": {
+      "*": 5
+    },
+    "format-icons": {
+      "1": "I",
+      "2": "II",
+      "3": "III",
+      "4": "IV",
+      "5": "V",
+      "6": "VI",
+      "7": "VII",
+      "8": "VIII",
+      "9": "IX",
+      "10": "X"
+    }
+  },
+  // PACMAN Style
+  "hyprland/workspaces#pacman": {
+    "active-only": false,
+    "all-outputs": true,
+    "format": "{icon}",
+    "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "show-special": false,
+    "persistent-workspaces": {
+      "*": 5
+    },
+    "format-icons": {
+      "active": "<span font='12'>󰮯</span>",
+      "empty": "<span font='8'></span>",
+      "default": "󰊠"
+    }
+  },
+  // Kanji / Japanese style
+  "hyprland/workspaces#kanji": {
+    "disable-scroll": true,
+    "show-special": false,
+    "all-outputs": true,
+    "format": "{icon}",
+    "persistent-workspaces": {
+      "*": 5
+    },
+    "format-icons": {
+      "1": "一",
+      "2": "二",
+      "3": "三",
+      "4": "四",
+      "5": "五",
+      "6": "六",
+      "7": "七",
+      "8": "八",
+      "9": "九",
+      "10": "十"
+    }
+  },
+  //  NUMBERS and ICONS style
+  "hyprland/workspaces#4": {
+    //"format": "{name}",
+    //"format": " {name} {icon} ",
+    "format": " {icon} ",
+    "show-special": false,
+    "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "all-outputs": true,
+    "sort-by-number": true,
+    "format-icons": {
+      "1": " ",
+      "2": " ",
+      "3": " ",
+      "4": " ",
+      "5": " ",
+      "6": " ",
+      "7": "",
+      "8": " ",
+      "9": "",
+      "10": "10",
+      "focused": "",
+      "default": ""
+    }
+  },
+  // numbers styles
+  "hyprland/workspaces#numbers": {
+    "active-only": false,
+    "all-outputs": true,
+    "format": "{icon}",
+    "show-special": false,
+    "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "persistent-workspaces": {
+      "*": 5
+    },
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10"
+    }
+  },
+  // NUMBERS and ICONS style with window rewrite 
+  "hyprland/workspaces#rw": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "warp-on-scroll": false,
+    "sort-by-number": true,
+    "show-special": false,
+    "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "persistent-workspaces": {
+      "*": 5
+    },
+    "format": "{icon} {windows}",
+    "format-window-separator": " ",
+    "window-rewrite-default": " ",
+    "window-rewrite": {
+      "title<.*youtube.*>": " ",
+      "title<.*amazon.*>": " ",
+      "title<.*reddit.*>": " ",
+      "title<.*Picture-in-Picture.*>": " ",
+      "class<firefox|org.mozilla.firefox|librewolf|floorp|mercury-browser|[Cc]achy-browser>": " ",
+      "class<kitty|konsole>": " ",
+      "class<kitty-dropterm>": " ",
+      "class<Chromium|Thorium>": " ",
+      "class<org.telegram.desktop|io.github.tdesktop_x64.TDesktop>": " ",
+      "class<[Ss]potify>": " ",
+      "class<VSCode|code-url-handler|code-oss|codium|codium-url-handler|VSCodium>": "󰨞 ",
+      "class<thunar>": "󰝰 ",
+      "class<[Tt]hunderbird|[Tt]hunderbird-esr>": " ",
+      "class<eu.betterbird.Betterbird>": " ",
+      "class<discord|[Ww]ebcord|Vesktop>": " ",
+      "class<subl>": "󰅳 ",
+      "class<mpv>": " ",
+      "class<celluloid|Zoom>": " ",
+      "class<Cider>": "󰎆 ",
+      "class<virt-manager>": " ",
+      "class<.virt-manager-wrapped>": " ",
+      "class<codeblocks>": "󰅩 ",
+      "class<mousepad>": " ",
+      "class<libreoffice-writer>": " ",
+      "class<libreoffice-startcenter>": "󰏆 ",
+      "class<com.obsproject.Studio>": " ",
+      "class<polkit-gnome-authentication-agent-1>": "󰒃 ",
+      "class<nwg-look>": " ",
+      "class<zen-alpha>": "󰰷 ", //Zen Browser
+      "class<waterfox|waterfox-bin>": " ",
+      "class<microsoft-edge>": " ",
+      "class<vlc>": "󰕼 "
+    }
+  }
+}
