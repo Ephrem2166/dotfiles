@@ -1,6 +1,4 @@
 gui:
-  scrollHeight: 2
-  tabWidth: 4
   expandFocusedSidePanel: true
   language: en
   mouseEvents: false
