@@ -3,6 +3,7 @@ gui:
   language: en
   mouseEvents: false
   nerdFontsVersion: "3"
+  showBottomLine: true
 git:
   paging:
     colorArg: always
