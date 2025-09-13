@@ -64,8 +64,9 @@ export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 # export LESS_TERMCAP_us=$'\e[1;32m'
 # export MANPAGER="less -MR+Gg"
 
+# Setting VIMINIT Environment Variable
 # Use `vimrc` from config directory
-#export VIMINIT='source $XDG_CONFIG_HOME/vim/vimrc'
+export VIMINIT="$XDG_CONFIG_HOME/vim/vimrc"
 
 
 # General Settings
