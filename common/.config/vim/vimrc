@@ -22,3 +22,26 @@ set spelllang=en_us
 set tabstop=4
 set ttyfast
 set wrap
+
+" KEYMAPPINGS
+let mapleader=" "
+let maplocalleader=","
+
+" General
+nnoremap <leader>q :quit<CR>
+nnoremap <leader>qq :qall<CR>
+nnoremap <leader>h :h option-list<CR>
+" Buffer management
+nnoremap <tab> :bn<CR>
+nnoremap <S-tab> :bp<CR>
+nnoremap <leader>bd :bd<CR>
+" Window management
+nnoremap <leader>wv :vsplit<CR>
+nnoremap <leader>wh :split<CR>
+nnoremap <leader>wq :close<CR>
+nnoremap <leader>wq :close<CR>
+" Insert Mode
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
