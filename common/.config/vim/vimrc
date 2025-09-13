@@ -2,9 +2,23 @@ syntax on
 filetype on
 filetype indent on
 colorscheme slate
-set number
-set nocompatible
+
+set autowrite
+set autoread
+set cursorline
+set cursorcolumn
+set encoding=utf-8
 set hidden
+set hlsearch
+set incsearch
+set mouse=a
+set nocompatible
+set nospell
+set noswapfile
+set number
 set smartindent
-
-
+set softtabstop=4
+set spelllang=en_us
+set tabstop=4
+set ttyfast
+set wrap
