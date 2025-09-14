@@ -6,6 +6,7 @@ colorscheme slate
 set autoindent
 set autowrite
 set autoread
+set nobackup
 set cursorline
 set cursorcolumn
 set encoding=utf-8
@@ -21,6 +22,7 @@ set noswapfile
 set number
 set shiftwidth=4
 set showmatch
+set smartcase
 set smartindent
 set softtabstop=4
 set spelllang=en_us
