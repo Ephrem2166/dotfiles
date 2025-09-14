@@ -39,6 +39,7 @@ let maplocalleader=","
 nnoremap <leader>q :quit<CR>
 nnoremap <leader>qq :qall<CR>
 nnoremap <leader>h :h option-list<CR>
+nnoremap <leader>r :source ~/.config/vim/vimrc<CR>
 " Buffer management
 nnoremap <tab> :bn<CR>
 nnoremap <S-tab> :bp<CR>
