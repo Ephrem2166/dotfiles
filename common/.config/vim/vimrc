@@ -48,7 +48,7 @@ nnoremap <leader>bd :bd<CR>
 nnoremap <leader>wv :vsplit<CR>
 nnoremap <leader>wh :split<CR>
 nnoremap <leader>wq :close<CR>
-nnoremap <leader>wq :close<CR>
+
 " Insert Mode
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
