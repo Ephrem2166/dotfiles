@@ -6,7 +6,10 @@ export XDG_CACHE_HOME="$HOME/.cache"
 
 # For Opensuse Tumbleweed
 export PACKAGE_MANAGER="zypper"
-
+# For Arch
+# export PACKAGE_MANAGER="pacman"
+# For Fedora
+# export PACKAGE_MANAGER="dnf"
 # Bootstrap .zshrc to ~/.config/zsh/.zshrc, any other zsh config files can also reside here
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
@@ -45,14 +48,14 @@ export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
 export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
 
 # colored less + termcap vars
-export LESS="R --use-color -Dd+r -Du+b"
-export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
-export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
-export LESS_TERMCAP_me="$(printf '%b' '[0m')"
-export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
-export LESS_TERMCAP_se="$(printf '%b' '[0m')"
-export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
-export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
+# export LESS="R --use-color -Dd+r -Du+b"
+#export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
+# export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
+# export LESS_TERMCAP_me="$(printf '%b' '[0m')"
+# export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
+# export LESS_TERMCAP_se="$(printf '%b' '[0m')"
+# export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
+# export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 # export MANPAGER="nvim +Man!"
 # export MANPAGER='less -s -M +Gg'
 # export LESS_TERMCAP_mb=$'\e[1;31m'
@@ -70,6 +73,9 @@ export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 #export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 
 # General Settings
+# check `man zshoptions`
+# Use Emacs Keybindings
+# bindkey -e
 # Go to folder path without using CD 
 setopt auto_cd
  # Push the old directory onto the stack on cd.
@@ -79,11 +85,18 @@ setopt PUSHD_IGNORE_DUPS
 # Do not print the directory stack after pushd or popd.
 setopt PUSHD_SILENT         
 
+# Treat metacharcters as part of patterns for filename generation
+setopt EXTENDEDGLOB
+# Print error if no match found 
+setopt NOMATCH
 setopt PROMPT_SUBST     # enable command substitution in prompt
 setopt MENU_COMPLETE    # Automatically highlight first element of completion menu
 setopt LIST_PACKED      # The completion menu takes less space.
 setopt AUTO_LIST        # Automatically list choices on ambiguous completion.
 setopt COMPLETE_IN_WORD # Complete from both ends of a word.
+
+# Do not show error
+unsetopt BEEP
 
 # History Related 
 setopt appendhistory
@@ -97,7 +110,7 @@ setopt hist_find_no_dups
 setopt hist_ignore_dups
 HISTSIZE=1000000
 # SAVEHIST=100000
-HISTFILE="$XDG_CONFIG_HOME/zsh/zsh_history"
+HISTFILE="$XDG_CONFIG_HOME/.zsh_history"
 HISTCONTROL=ignoreboth
 
 
@@ -167,21 +180,21 @@ ZSH_THEME="robbyrussell"
 #         man "$@"
 # }
 
-function man() {
-    env \
-        LESS_TERMCAP_md=$(
-            tput bold
-            tput setaf 4
-        ) \
-        LESS_TERMCAP_me=$(tput sgr0) \
-        LESS_TERMCAP_mb=$(tput blink) \
-        LESS_TERMCAP_us=$(tput setaf 2) \
-        LESS_TERMCAP_ue=$(tput sgr0) \
-        LESS_TERMCAP_so=$(tput smso) \
-        LESS_TERMCAP_se=$(tput rmso) \
-        PAGER="${commands[less]:-$PAGER}" \
-        man "$@"
-}
+# # function man() {
+# #    env \
+#         LESS_TERMCAP_md=$(
+#             tput bold
+#             tput setaf 4
+#         ) \
+#         LESS_TERMCAP_me=$(tput sgr0) \
+#         LESS_TERMCAP_mb=$(tput blink) \
+#         LESS_TERMCAP_us=$(tput setaf 2) \
+#         LESS_TERMCAP_ue=$(tput sgr0) \
+#         LESS_TERMCAP_so=$(tput smso) \
+#         LESS_TERMCAP_se=$(tput rmso) \
+#         PAGER="${commands[less]:-$PAGER}" \
+#         man "$@"
+# }
 
 
 
