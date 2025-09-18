@@ -7,6 +7,7 @@ $XDG_CONFIG_HOME/nvim/lazy-lock.json
 $XDG_CONFIG_HOME/nvim/lazyvim.json 
 common/.config/nvim/lazy-lock.json
 common/.config/nvim/lazyvim.json
+
 # dotenv
 .env
 .venv
@@ -14,6 +15,16 @@ common/.config/nvim/lazyvim.json
 env/
 venv/
 !.env.example
+
+# Elisp
+# Compiled
+*.elc
+
+# Backup files
+*~
+
+# Undo-tree save-files
+*.~undo-tree
 
 # Node
 node_modules
