@@ -1,0 +1,11 @@
+[core]
+	editor = nvim
+	compression = -1
+    excludesfile = $XDG_CONFIG_HOME/git/ignore
+[user]
+	name = Ephrem2166
+	email = ephrem2166@gmail.com
+[http]
+	postBuffer = 524288000
+[color]
+	ui = auto
