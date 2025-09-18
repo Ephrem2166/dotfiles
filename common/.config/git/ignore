@@ -3,11 +3,16 @@
 .tmp
 
 # NVIM Related, specifically related with lazyvim
-lazy-lock.json
-lazyvim.json 
+$XDG_CONFIG_HOME/nvim/lazy-lock.json
+$XDG_CONFIG_HOME/nvim/lazyvim.json 
 
 # dotenv
 .env
+.venv
 .env.*
+env/
+venv/
 !.env.example
 
+# Node
+node_modules
