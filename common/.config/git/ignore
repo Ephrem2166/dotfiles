@@ -1,4 +1,13 @@
+# General
+.log
+.tmp
+
+# NVIM Related, specifically related with lazyvim
+lazy-lock.json
+lazyvim.json 
+
 # dotenv
 .env
 .env.*
 !.env.example
+
