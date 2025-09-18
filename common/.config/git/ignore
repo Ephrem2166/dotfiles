@@ -5,8 +5,8 @@
 # NVIM Related, specifically related with lazyvim
 $XDG_CONFIG_HOME/nvim/lazy-lock.json
 $XDG_CONFIG_HOME/nvim/lazyvim.json 
-common/.config/nvim/lazy-lock.json
-common/.config/nvim/lazyvim.json
+$XDG_CONFIG_HOME/dotfiles/common/.config/nvim/lazy-lock.json
+$XDG_CONFIG_HOME/dotfiles/ommon/.config/nvim/lazyvim.json
 
 # dotenv
 .env
