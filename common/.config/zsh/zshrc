@@ -157,7 +157,7 @@ zstyle ':completion:*' file-list all
 
 # Alias
 [ -f "$XDG_CONFIG_HOME/zsh/alias" ] && source "$XDG_CONFIG_HOME/zsh/alias"
-
+[ -f "$XDG_CONFIG_HOME/zsh/functions" ] && source "$XDG_CONFIG_HOME/zsh/functions"
 # Bindings 
 # Vim Keybindings 
 # bindkey -v
