@@ -7,3 +7,14 @@ function y() {
 	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
 }
+
+# Open file with mupdf
+function o() {
+    if [ -z "$1" ]; then
+        printf "Please specify file to read\n" > /dev/stderr
+        false
+    else
+        mupdf -I "$1"
+        true
+    fi
+}
