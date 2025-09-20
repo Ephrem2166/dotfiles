@@ -17,5 +17,8 @@
     navigate = true  # use n and N to move between diff sections
     dark = true      # or light = true, or omit for auto-detection
     line-numbers = true
+    syntax-theme = Dracula
+    plus-style = syntax "#a3be8c"
+    minus-style = syntax "#bf616a"
 [merge]
     conflictStyle = diff3
