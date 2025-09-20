@@ -2,6 +2,7 @@
 	editor = nvim
 	compression = -1
     excludesfile = $XDG_CONFIG_HOME/git/ignore
+    pager = delta
 [user]
 	name = Ephrem2166
 	email = ephrem2166@gmail.com
@@ -9,3 +10,12 @@
 	postBuffer = 524288000
 [color]
 	ui = auto
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
+    line-numbers = true
+[merge]
+    conflictStyle = diff3
