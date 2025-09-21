@@ -17,3 +17,24 @@
 
 # Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
 --restrict-filenames
+
+# Languages of the subtitle to download 
+--sub-langs "en.*"
+
+#  Embed subtitles in the video (only for mp4, webm and mkv videos)
+--embed-subs
+
+# Embed thumbnail in the video as cover art
+--embed-thumbnail 
+
+#  Add chapter markers to the video file
+--embed-chapters
+
+# Containers that may be used when merging formats 
+--merge-output-format "mkv/mp4"
+
+# Delete downloaded fragments after downloading is finished
+--no-keep-fragments 
+
+# Do not use .part files - write directly into output file
+--no-part 
