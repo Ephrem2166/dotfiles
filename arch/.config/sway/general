@@ -1,0 +1,63 @@
+# Colorscheme
+# Nord
+set $background = #2E3440
+set $foreground = #D8DEE9
+set $color0     = #3B4252
+set $color1     = #BF616A
+set $color2     = #A3BE8C
+set $color3     = #EBCB8B
+set $color4     = #81A1C1
+set $color5     = #B48EAD
+set $color6     = #88C0D0
+set $color7     = #E5E9F0
+set $color8     = #4C566A
+set $color9     = #BF616A
+set $color10    = #A3BE8C
+set $color11    = #EBCB8B
+set $color12    = #81A1C1
+set $color13    = #B48EAD
+set $color14    = #8FBCBB
+set $color15    = #ECEFF4
+
+# Colors                
+client.focused #2E3440 #D8DEE9 #3B4252   
+client.focused_inactive #2E3440 #D8DEE9 #3B4252
+client.unfocused  #2E3440 #D8DEE9 #3B4252
+client.urgent #BF616A #D8DEE9 #BF616A 
+
+#xwayland enable
+
+workspace_layout default 
+
+default_border pixel 2px
+default_floating_border normal
+
+font pango:Berkeley Nerd Font 10
+
+# Focus window when mouse hovers it
+focus_follows_mouse yes
+
+focus_on_window_activation focus 
+
+titlebar_border_thickness 1
+
+# Moves mouse to the newly created window
+# mouse_warping output
+
+# Add gaps in between all application windows
+gaps inner 2 
+gaps outer 2
+# smart_gaps on
+# smart_borders on 
+
+
+# Window Border
+hide_edge_borders smart
+title_align center
+
+# popup_during_fullscreen smart
+
+# Disable the laptop screen when the lid is closed.
+bindswitch --reload --locked lid:on output eDP-1 disable
+bindswitch --reload --locked lid:off output eDP-1 enable
+

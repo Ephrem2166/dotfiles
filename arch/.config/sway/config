@@ -1,0 +1,43 @@
+#  ____                     
+# / ___|_      ____ _ _   _ 
+# \___ \ \ /\ / / _` | | | |
+#  ___) \ V  V / (_| | |_| |
+# |____/ \_/\_/ \__,_|\__, |
+#                     |___/ 
+# For Lenovo
+output "eDP-1" {
+    mode 3840x2160@59.997Hz
+    pos 0 0 
+    transform normal 
+    scale 2.0 
+   # adaptive_sync on 
+    bg ~/Pictures/rune.png fill 
+  }
+
+### Input configuration
+# Disable touchscreen
+input "type:touch" {
+  events disabled 
+  
+}
+
+# Remap Capslock to Escape
+input * xkb_options caps:escape
+# input * xkb_options caps:ctrl_modifier,shift:both_capslock
+
+# Enable touchpad
+input "type:touchpad" {
+      tap enabled
+      natural_scroll enabled
+      middle_emulation enabled
+}
+
+
+### Auto Launchers
+include ./autostart
+include ./bind
+include ./environment
+include ./general
+include ./rules
+#include /etc/sway/config.d/*
+#bar swaybar_command waybar

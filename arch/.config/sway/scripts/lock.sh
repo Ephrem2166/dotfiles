@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+swaylock --daemonize \
+         --ignore-empty-password \
+         --show-failed-attempts \
+         --image "$HOME/Pictures/wallpapers/spacex-81773.jpg" \
+         --scaling stretch \
+         --show-keyboard-layout \
+  --indicator-caps-lock \
+  --caps-lock-bs-hl-color BF616A \
+  --indicator-idle-visible \
+  --indicator-radius 150 \
+  --indicator-thickness 12 \
+  --key-hl-color ECEFF4 \
+  --bs-hl-color BF616A \
+  --separator-color E5E9F0 \
+  --font "Berkeley Nerd Font" \
+  --font-size 14 \
+  --inside-color 2E3440 \
+  --inside-caps-lock-color EBCB8B \
+  --inside-clear-color ECEFF4 \
+  --inside-ver-color A3BE8C \
+  --inside-wrong-color BF616A \
+  --layout-bg-color 2E3440 \
+  --layout-border-color 2E3440 \
+  --layout-text-color D8DEE9 \
+  --line-color 88C0D0 \
+  --line-clear-color ECEFF4 \
+  --line-ver-color A3BE8C \
+  --line-wrong-color BF616A \
+  --ring-color 2E3440 \
+  --ring-clear-color ECEFF4 \
+  --ring-caps-lock-color B48EAD \
+  --ring-ver-color A3BE8C \
+  --ring-wrong-color BF616A \
+  --text-color ECEFF4 \
+  --text-caps-lock-color ECEFF4 \
+  --text-clear-color ECEFF4 \
+  --text-ver-color A3BE8C \
+  --text-wrong-color BF616A
