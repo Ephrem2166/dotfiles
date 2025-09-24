@@ -7,7 +7,7 @@ common/.emacs.d/url/
 common/.emacs.d/bookmarks
 common/.emacs.d/tramp
 common/.emacs.d/transient/
-
+common/.emacs.d/var/*
 
 
 common/.config/nvim/lazyvim.json
