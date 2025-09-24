@@ -1,7 +1,10 @@
 (use-package files
   :ensure nil
-  :custom
-  (make-backup-files nil)
-  (delete-old-version t)
-  (create-lockfiles nil))
+  :config
+  (setq make-backup-files nil)
+  (setq delete-old-version t)
+  (setq auto-save-default nil)
+  (setq create-lockfiles nil))
+
+
 (provide 'ef-core)

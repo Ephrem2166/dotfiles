@@ -1,4 +1,5 @@
 common/.emacs.d/elpa/
+common/.emacs.d/elpaca/
 common/.emacs.d/eln-cache/
 common/.emacs.d/eshell/history
 common/.emacs.d/auto-save-list/
