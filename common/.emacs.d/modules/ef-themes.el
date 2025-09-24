@@ -3,7 +3,7 @@
   :ensure nil
   :demand t
   :custom
-  (modus-themes-italic-constructs t)
+;;  (modus-themes-italic-constructs t)	
   (modus-themes-bold-constructs t)
   (modus-themes-mixed-fonts t)
   (modus-themes-prompts '(bold intense))
