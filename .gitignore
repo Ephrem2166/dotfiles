@@ -1,0 +1,13 @@
+common/.emacs.d/elpa/
+common/.emacs.d/eln-cache/
+common/.emacs.d/eshell/history
+common/.emacs.d/auto-save-list/
+common/.emacs.d/url/
+common/.emacs.d/bookmarks
+common/.emacs.d/tramp
+common/.emacs.d/transient/
+
+
+
+common/.config/nvim/lazyvim.json
+common/.config/nvim/lazy-lock.json 
