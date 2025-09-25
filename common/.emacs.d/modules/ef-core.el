@@ -1,3 +1,10 @@
+;;; ef-core.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
+;;; Commentary:
+;;; Code:
+
+
+
+
 (use-package files
   :ensure nil
   :config
@@ -10,6 +17,24 @@
 (use-package emacs
   :ensure nil
   :config
-  (setq default-input-method nil)
-  (setq use-short-answers t))
+  ;; Personal Information
+  (setopt user-full-name "Ephrem Getachew")
+  (setopt user-login-name "ephrem")
+  (setopt user-mail-address "ephrem2166@gmail.com")
+  ;; Genertal Settings 
+  (setopt default-input-method nil)
+  (setopt use-short-answers t)
+ (setopt undo-limit (* 13 160000)
+      undo-strong-limit (* 13 240000)
+      undo-outer-limit (* 13 24000000))
+ ;; Language
+ (set-language-environment 'utf-8)
+ (set-default-coding-systems 'utf-8)
+
+  )
+
+
 (provide 'ef-core)
+;;; ef-core.el ends here
+
+

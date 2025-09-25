@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: elisp-init
+# key: <el
+# --
+;;; `(file-name-nondirectory (buffer-file-name))` ---  -*- lexical-binding: t; no-byte-compile: t; -*-
+;;; Commentary:
+;;; Code:
+
+$0
+
+(provide '`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`)
+;;; `(file-name-nondirectory (buffer-file-name))` ends here
