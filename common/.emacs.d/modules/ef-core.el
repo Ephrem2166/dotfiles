@@ -867,7 +867,7 @@
   :defer t
   :hook (
          (before-save . whitespace-cleanup)
-         (before-save . delete-trailing-whitespace-except-current-line)
+         ;; (before-save . delete-trailing-whitespace-except-current-line)
          ;; (prog-mode . whitespace-mode)
          )
   :config

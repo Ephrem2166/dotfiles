@@ -1,4 +1,5 @@
 (use-package icomplete
+  :disabled
   :ensure nil
   :config
   (setopt icomplete-delay-completions-threshold 0)
@@ -19,11 +20,12 @@
 (use-package minibuffer
   :ensure nil
   :bind (
-	 :map minibuffer-local-map
-	      ("C-p" . minibuffer-previous-completion)
-	      ("C-n" . minibuffer-next-completion)
-	 )
-  :custom
+     :map minibuffer-local-map
+          ("C-p" . minibuffer-previous-completion)
+          ("C-n" . minibuffer-next-completion)
+     )
+  :config
+  (setopt enable-recursive-minibuffers t)
   (setopt tab-always-indent 'complete)
   (setopt read-buffer-completion-ignore-case t)
   (setopt read-file-name-completion-ignore-case t)
@@ -38,5 +40,27 @@
   (setopt completion-ignore-case t)
   (setopt enable-recursive-minibuffers t)
   (setopt completion-styles '(partial-completion flex substring basic initials))
-)
+  )
+
+
+;; From Doom Emacs
+;; (use-package minibuffer
+;;   :ensure nil
+;;   :hook ((minibuffer-setup . defer-garbage-collection)
+;;          (minibuffer-setup . restore-garbage-collection))
+;;
+;;   :preface
+;;   (defun defer-garbage-collection ()
+;;     (setq gc-cons-threshold most-positive-fixnum))
+;;
+;;   (defvar default-gc-cons-threshold)
+;;   (defun restore-garbage-collection ()
+;;     ;; Deferred so that commands launched immediately after will enjoy the
+;;     ;; benefits.
+;;     (run-at-time
+;;      1 nil (lambda () (setq gc-cons-threshold default-gc-cons-threshold))))
+;;
+;;   )
+
+
 (provide 'ef-minibuffer)
