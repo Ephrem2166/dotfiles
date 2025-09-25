@@ -10,8 +10,8 @@
   :config
   (setq yas-wrap-around-region t)
   (setq yas-verbosity 1)
-  (add-to-list 'yas-snippet-dirs "../etc/snippets/")
-  ;; to load Yasnippet on a per buffer basis
+  (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "/etc/snippets/"))
+  ;; to load Yasnippet on a per bxuffer basis
   (yas-reload-all)
   )
 ;; Yasnippet snippets
@@ -22,3 +22,4 @@
   :after (yasnippet)
   )
 (provide 'ef-yasnippet)
+
