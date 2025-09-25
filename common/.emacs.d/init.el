@@ -17,10 +17,11 @@
 (require 'ef-development)
 (require 'ef-minibuffer)
 (require 'ef-dired)
-
+(require 'ef-keybindings)
 
 ;; External
 (require 'ef-yasnippet)
 (require 'ef-icons)
 (require 'ef-utilities)
 (require 'ef-completion)
+(require 'ef-appearance)
