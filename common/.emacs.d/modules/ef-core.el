@@ -1,17 +1,161 @@
 ;;; ef-core.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
+;; TODO: Abbrev
+
+;; Auto-revert
+;; Auto-Revert Mode is a minor mode that affects only the current
+;; buffer.  When enabled, it reverts the buffer when the file on
+;; disk changes.
+(use-package autorevert
+  :ensure nil
+  :defer t
+  :hook (dired-mode . auto-revert-mode)
+  :custom
+  (auto-revert-interval 3)
+  (auto-revert-avoid-polling t)
+  (auto-revert-check-vc-info t)
+  (auto-revert-verbose nil)
+  (global-auto-revert-non-file-buffers t)
+  (auto-revert-use-notify nil)
+  ;; (setq global-auto-revert-ignore-modes '(Buffer-menu-mode))
+  :config
+  (global-auto-revert-mode)
+  )
+
+;; TODO Bookmarks
+(use-package bookmark
+  :ensure nil  
+  :custom
+  (bookmark-use-annotations nil)
+  (bookmark-automatically-show-annotations nil)
+  (bookmark-default-file (expand-file-name "bookmarks" user-emacs-directory))
+  (bookmark-save-flag 1))
+
+;; Browser Url
+(use-package browse-url
+  :ensure nil
+  :custom
+  ;; Use firefox as the default browser 
+  (browse-url-browser-function 'browse-url-firefox))
+
+
+;; Calendar
+(use-package calendar
+  :ensure nil
+  :commands (calendar)
+  :config
+  (setopt calendar-mark-diary-entries-flag nil)
+  (setopt calendar-mark-holidays-flag t)
+  (setopt calendar-mode-line-format nil)
+  (setopt calendar-time-display-form
+          '(12-hours ":" minutes
+                     (when time-zone (format "(%s)" time-zone))))
+  (setopt calendar-week-start-day 1)
+  (setopt calendar-date-style 'iso)
+  (setopt calendar-time-zone-style 'numeric)
+  (setopt calendar-standard-time-zone-name "+0300")
+  )
 
 
 
-
-(use-package files
+;; Compilation
+(use-package compile
   :ensure nil
   :config
-  (setq make-backup-files nil)
-  (setq delete-old-version t)
-  (setq auto-save-default nil)
-  (setq create-lockfiles nil))
+  (setq compilation-always-kill t)
+  (setq compilation-ask-about-save nil)
+  (setq compilation-auto-jump-to-first-error 'if-location-known)
+  (setq compilation-context-lines 10)
+  (setq compilation-scroll-output 'first-error)
+  (setq compilation-skip-threshold 0)
+  (setq next-error-verbose nil)
+  (setq compilation-window-height 100)
+  (setq compilation-message-face 'default)
+  (setq next-error-message-highlight nil)
+  (setq compilation-read-command nil))
+
+
+;; Cus-edit
+;; (use-package cus-edit
+;;   :ensure nil
+;;   :config
+;;   (setq-default custom-file (concat "custom.el" user-emacs-directory))
+;;   (when (file-exists-p custom-file)
+;;     (load custom-file))
+;;   )
+
+;; Dabbrev
+(use-package dabbrev
+  :ensure nil
+  :defer t
+  :commands (dabbrev-expand dabbrev-completion)
+  ;;  Swap M-/ and C-M-/
+  :bind (("M-/" . dabbrev-expand)
+         ("C-M-/" . dabbrev-completion))
+
+  :config
+  (setq dabbrev-abbrev-char-regexp "\\sw\\|\\s_")
+  (setq dabbrev-abbrev-skip-leading-regexp "[$*/=~']")
+  (setq dabbrev-backward-only nil)
+  (setq dabbrev-case-distinction nil)
+  (setq dabbrev-case-fold-search t)
+  (setq dabbrev-case-replace 'case-replace)
+  (setq dabbrev-check-other-buffers t)
+  (setq dabbrev-eliminate-newlines t)
+  (setq dabbrev-upcase-means-case-search t)
+  (setq dabbrev-ignored-buffer-modes
+        '(archive-mode image-mode docview-mode pdf-view-mode))
+  (add-to-list 'dabbrev-ignored-buffer-regexps "\\` ")
+  ;; Available since Emacs 29 (Use `dabbrev-ignored-buffer-regexps' on older Emacs)
+  (add-to-list 'dabbrev-ignored-buffer-modes 'authinfo-mode)
+  (add-to-list 'dabbrev-ignored-buffer-modes 'doc-view-mode)
+  (add-to-list 'dabbrev-ignored-buffer-modes 'pdf-view-mode)
+  (add-to-list 'dabbrev-ignored-buffer-modes 'tags-table-mode)
+
+  )
+
+
+;; Display Line Numbers
+;;; Line numbers on the side of the window
+(use-package display-line-numbers
+  :ensure nil
+  :defer t
+  :bind ("C-c t l" . display-line-numbers-mode)
+  :hook
+  ((prog-mode . display-line-numbers-mode)
+
+   ;; (text-mode .display-line-numbers-mode)
+   )
+  :config
+  (setq-default display-line-numbers 'visual)
+  (setq-default display-line-numbers-widen t)
+  (setq-default display-line-numbers-width 3)
+  (setq-default display-line-numbers-current-absolute t)
+  )
+
+;;;; `dictionary'
+;; Install dict or dictd for offline use
+(use-package dictionary
+  :ensure nil
+  :defer t
+  :bind ("C-c d" . dictionary-search)
+  :config
+  (setopt dictionary-server "dict.org"
+          dictionary-default-popup-strategy "lev"
+          dictionary-read-word-function 'dictionary-read-word-default
+          dictionary-search-interface nil
+          dictionary-read-dictionary-function 'dictionary-completing-read-dictionary
+          dictionary-create-buttons nil
+          dictionary-use-single-buffer t))
+
+
+;; Delete Selection Mode
+;; Delete the selected text upon the insertion of new text.
+(use-package delsel
+  :ensure nil
+  :defer t
+  :hook (after-init . delete-selection-mode))
 
 ;; General Properties
 (use-package emacs
@@ -21,17 +165,764 @@
   (setopt user-full-name "Ephrem Getachew")
   (setopt user-login-name "ephrem")
   (setopt user-mail-address "ephrem2166@gmail.com")
-  ;; Genertal Settings 
+  (setopt user-emacs-directory "~/dotfiles/common/.emacs.d/")
+  ;; Genertal Settings
+  (setopt visible-bell nil)
+  (setopt ring-bell-function #'ignore)
   (setopt default-input-method nil)
   (setopt use-short-answers t)
- (setopt undo-limit (* 13 160000)
+  (setopt confirm-nonexistent-file-or-buffer nil)
+  (setopt confirm-kill-emacs 'y-or-n-p)
+  (setopt confirm-kill-processes t)
+  (setopt read-answer-short t)
+  (setopt warning-suppress-types '((lexical-binding)))
+  (setopt undo-limit (* 13 160000)
       undo-strong-limit (* 13 240000)
       undo-outer-limit (* 13 24000000))
  ;; Language
  (set-language-environment 'utf-8)
  (set-default-coding-systems 'utf-8)
+;; Improve Emacs' responsiveness by delaying syntax highlighting during input
+ (setopt redisplay-skip-fontification-on-input t)
+;; (setopt ad-redefinition-action 'accept) 
+
+ (setopt resize-mini-windows 'grow-only)
+ (setopt window-divider-default-bottom-width 1)
+ (setopt window-divider-default-places t)
+ (setopt window-divider-default-right-width 1)
+
+ (setopt select-enable-clipboard t)
+
+ (setopt sentence-end-double-space nil)
+
+;; Help Related
+(setopt help-enable-completion-auto nil
+        help-enable-autoload nil
+        help-enable-symbol-autoload nil
+        help-window-select t)
+
+;;(setopt bookmark-save-flag 1)
+(setopt warning-minimum-level :error)
+(setopt word-wrap-by-category t)
+
+;; Debug on error
+(setopt debug-on-error init-file-debug)
+(setopt delete-pair-blink-delay 0.03)
+
+;; warn when opening files bigger than 100MB
+(setopt large-file-warning-threshold 1000000000)
+
+;; Mouse
+(setopt mouse-drag-and-drop-region t
+        mouse-drag-and-drop-region-cross-program t
+        mouse-yank-at-point t)
+
+ (setopt delete-by-moving-to-trash t)
+
+;; Cursor Style Bar
+(setopt cursor-type 'bar)
+
+  ;; Truncate 
+  (setopt truncate-string-ellipsis "...")
+  ;; Position undelines at the descent line
+  (setopt x-underline-at-descent-line t)
+  ;; Auto save options
+  (setopt kill-buffer-delete-auto-save-files t)
+  (setopt mark-even-if-inactive nil)
+  ;; Show keystrokes
+  (setopt echo-keystrokes 0.1)
+ (setopt show-trailing-whitespace nil)
+
+;; Title bar of visible frames
+;; (setopt frame-title-format '("Emacs" emacs-version))
+;; Avoid automatic frame resizing when adjusting settings.
+;;(setopt global-text-scale-adjust-resizes-frames nil)
+
+;; Do not show an arrow at the top/bottomin the fringe and empty lines
+(setq-default indicate-buffer-boundaries nil)
+(setq-default indicate-empty-lines nil)
+
+;;; Remove warnings from narrow-to-region, upcase-region...
+(dolist (cmd '(list-timers narrow-to-region upcase-region downcase-region
+                           erase-buffer scroll-left dired-find-alternate-file))
+  (put cmd 'disabled nil))
+
+(setq-default left-fringe-width 8)
+(setq-default right-fringe-width 8)
+;; Do not show an arrow at the top/bottomin the fringe and empty lines
+(setq-default indicate-buffer-boundaries nil)
+(setq-default indicate-empty-lines nil)
+(setq-default word-wrap t)
+;; Disable wrapping by default due to its performance cost.
+(setq-default truncate-lines t)
+
+;; Various Modes 
+(set-fringe-mode 8)
+(global-prettify-symbols-mode 1)
+(auto-image-file-mode 1)
+;; Enable global syntax highlighting
+(global-font-lock-mode 1)
+
+;; Stop the system from hangind when
+;; visiting files with long lines
+(global-so-long-mode t)
+
+
+;; Show context menu on right click
+(when (display-graphic-p)
+  (context-menu-mode))
+)
+
+
+;; TAB
+(use-package emacs
+  :ensure nil
+  ;; Tab Behavior
+  :config
+  (setopt tab-always-indent 'complete)
+  (setopt tab-first-completion 'word-or-paren-or-punct)
+  (setopt tab-width 4)
+  (setopt indent-tabs-mode nil)  
+  )
+
+
+;; Essential Configuration
+(use-package emacs
+  :ensure nil
+  :demand t
+  :config
+ 
+  (setq delete-pair-blink-delay 0.1)
+  (setq help-window-select t)
+  (setq find-library-include-other-files nil)
+
+
+ 
+  (setq-default truncate-partial-width-windows nil)
+  )
+
+
+;; SAVE SETTINGS
+(use-package emacs
+  :ensure nil
+  :config
+  (setopt auto-save-interval 300
+          auto-save-timeout 30
+          auto-save-no-message t
+          auto-save-include-big-deletions t
+          auto-save-list-file-name nil
+          delete-auto-save-files t
+          kill-buffer-delete-auto-save-files t
+          ))
+
+
+
+
+;; Electric
+;; Toggle automatic parens pairing (Electric Pair mode).
+(use-package electric
+  ;; :disabled
+  :ensure nil
+  :defer t
+  :hook
+  ((on-first-input . electric-pair-mode)
+   (prog-mode . electric-indent-local-mode))
+  :config
+  (electric-pair-mode 1)
+  (electric-quote-mode 1)
+  (electric-indent-mode -1)
+  :custom
+  (electric-pair-inhibit-predicate 'electric-pair-default-inhibit)
+  (electric-quote-comment nil)
+  (electric-quote-string nil)
+  (electric-quote-context-sensitive t)
+  (electric-quote-replace-double t)
+  (electric-quote-inhibit-functions nil))
+
+
+
+(use-package files
+  :ensure nil
+  :config
+  ;; Case insensitive search if case-sensitive search fails.
+  (setq auto-mode-case-fold nil)
+  (setq make-backup-files nil)
+  (setq delete-old-version t)
+  (setq auto-save-default nil)
+  (setq create-lockfiles nil)
+  (setq auto-save-visited-mode t)
+  (setq save-silently t)
+  (setq auto-save-visited-interval 5)
+    ;; Newline at the end of file
+  (setq require-final-newline t)
+    ;; Help
+  (setq apropos-do-all t)
+  ;; Others
+  (setq backup-inhibited t)
+  (setq backup-by-copying t)
+  (setq kept-new-versions 3)
+ 
+  ;; Version Control
+  (setq vc-make-backup-files nil)
+  (setq version-control nil)
+  (setq vc-follow-symlinks t)
+
+  (setq remote-file-name-inhibit-delete-by-moving-to-trash t)
+  (setq mode-require-final-newline 'visit-save)
+  
+  (setq find-file-suppress-same-file-warnings t)
+  (setq find-file-visit-truename t)
+
+  (setq backup-directory-alist
+          `(("." . ,(expand-file-name "etc/backup/" user-emacs-directory))))
+  (setq auto-save-list-file-prefix
+        (expand-file-name "etc/autosave/" user-emacs-directory))
+  )
+
+
+
+
+;; Goto Address
+;; Buttonize URLs and e-mail addresses in the current buffer
+(use-package goto-addr
+  :ensure nil
+  :hook ((compilation-mode prog-mode conf-mode eshell-mode shell-mode) . goto-address-mode))
+
+
+;; ;; Hippie Expand
+(use-package hippie-exp
+  :ensure nil
+  :defer t
+  :init
+  (keymap-global-set "<remap> <dabbrev-expand>" 'hippie-expand)
+
+  :config
+  ;; this will tell us what it's doing:
+  (setq hippie-expand-verbose t)
+  ;; allow for spaces to continue expanding, nice for phrases in writing:
+  (setq hippie-expand-dabbrev-skip-space t)
+
+  ;; change the order it tries things
+  (setq hippie-expand-try-functions-list
+        '(
+          try-expand-dabbrev-visible
+          try-expand-dabbrev
+          try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-from-kill
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol
+          try-expand-list
+          try-expand-line
+          try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-all-abbrevs
+          ))
+  )
+
+
+;; Highlight Line in a Terminal
+(use-package hl-line-mode
+  :ensure nil
+  :when (display-graphic-p)
+  :defer t
+  :hook (( text-mode . hl-line-mode)
+         ( prog-mode . hl-line-mode)))
+
+
+
+;; ibuffer
+(use-package ibuffer
+  :ensure nil
+  :hook
+  (ibuffer-mode . ibuffer-auto-mode)
+  :bind
+  ;; ("C-c i" . ibuffer)
+  ([remap list-buffers] . ibuffer)
+  :config
+  (setq ibuffer-save-with-custom nil)
+  (setq ibuffer-default-sorting-mode 'recency)
+  (setq ibuffer-eliding-string "…")
+  (setq ibuffer-jump-offer-only-visible-buffers t)
+  (setq ibuffer-old-time 48)
+  (setq ibuffer-expert nil)
+  (setq ibuffer-show-empty-filter-groups t)
+  (setq ibuffer-filter-group-name-face '(:inherit (success bold))))
+
+;; imenu
+;; Jump to a place in the buffer chosen using a buffer menu or mouse menu.
+(use-package imenu
+  :ensure nil
+  :config
+  (setq imenu-use-markers t)
+  (setq org-imenu-depth 7)
+  (setq imenu-auto-rescan t)
+  (setq use-package-enable-imenu-support t)
+  (setq imenu-flatten 'group))
+
+
+;; isearch
+(use-package isearch
+  :ensure nil
+  :config
+     ;; Activate character folding in searches i.e. searching for 'a' matches 'ä' as well
+  (setq search-default-mode 'char-fold-to-regexp)
+  (setq search-whitespace-regexp ".*?"
+        isearch-lax-whitespace t
+        isearch-regexp-lax-whitespace nil)
+  ;; Highlight search
+  (setq search-highlight t)
+  (setq isearch-lazy-highlight t)
+  (setq lazy-highlight-initial-delay 0.5)
+  (setq lazy-highlight-no-delay-length 4)
+
+  (setq isearch-allow-motion t)
+  (setq isearch-allow-scroll t)
+  (setq isearch-lax-whitespace t)
+  (setq search-whitespace-regexp ".*?")
+  ;; Match counter
+  (setq isearch-lazy-count t)
+  (setq lazy-count-prefix-format "(%s/%s) ")
+  (setq lazy-count-suffix-format nil)
+  ;; Motion behavior
+  (setq isearch-wrap-pause t) ; `no-ding' makes keyboard macros never quit
+  (setq isearch-repeat-on-direction-change t)
+  ;; Occur buffer
+  (setq list-matching-lines-jump-to-current-line nil)
+  (add-hook 'occur-mode-hook #'hl-line-mode)
+)
+
+;; Man
+(use-package man
+  :ensure nil
+  :defer t
+  :config
+  (setq Man-notify-method 'pushy)
+  :custom-face
+  (Man-overstrike ((t (:inherit 'bold :foreground "orange red"))))
+  (Man-underline ((t (:inherit 'underline :foreground "forest green"))))
+  )
+
+
+;; COMMENT
+(use-package newcomment
+  :ensure nil
+  :config
+  ;; Comment Settings
+  (setopt comment-auto-fill-only-comments t)
+  (setopt comment-empty-lines t)
+  (setopt comment-fill-column nil)
+  (setopt comment-multi-line t)
+  (setopt comment-style 'multi-line)
+  (setopt comment-column 0)
+  (setopt comment-indent-offset 1)
+
+  ;; Better Comment
+  ;; (defun ef-comment (n)
+  ;; "Comment and Uncomment"
+  ;; (interactive "p")
+  ;; (if (use-region-p)
+  ;; (comment-or-uncomment-region (region-beginning) (region-end))
+  ;; (comment-line n)))
+  ;; (bind-key "C-/" #'ef-comment 'global-map)
+  (defun my-comment-or-uncomment-region-or-line ()
+    "Comments or uncomments the region or the current line if there's no active region."
+    (interactive)
+    (let (beg end)
+      (if (region-active-p)
+          (setq beg (region-beginning) end (region-end))
+        (setq beg (line-beginning-position) end (line-end-position)))
+      (comment-or-uncomment-region beg end)
+      (forward-line)))
+  (global-set-key (kbd "C-/") #'my-comment-or-uncomment-region-or-line))
+
+
+
+;; Paren
+(use-package paren
+  :ensure nil
+  :defer t
+  :hook (prog-mode . show-paren-local-mode)
+  :config
+  (setq show-paren-delay 0.1)
+  (setq show-paren-highlight-openparen t)
+  (setq show-paren-when-point-inside-paren t)
+  (setq show-paren-when-point-in-periphery t)
+  (setq show-paren-style 'mixed)
+  (setq show-paren-context-when-offscreen 'overlay)
+  ;;  (set-face-attribute 'show-paren-match-expression nil :background "#363e4a")
+  (show-paren-mode 1))
+
+
+;; Scroll
+(use-package pixel-scroll
+  :ensure nil
+  :defer t
+  :config
+  ;; Scroll settings
+  (setopt scroll-conservatively 10
+          scroll-error-top-bottom nil
+          scroll-preserve-screen-position t
+          next-screen-context-lines 4
+          scroll-minibuffer-conservatively t
+          scroll-up-aggressively nil
+          scroll-down-aggressively nil
+          scroll-margin 0
+          pixel-scroll-precision-mode t
+          scroll-step 1
+          fast-but-imprecise-scrolling t
+          hscroll-margin 2
+          hscroll-step 1
+          auto-window-vscroll nil)  )
+
+;; Profiling
+(use-package profiler
+  :ensure nil
+  :defer t
+  :bind (
+         ("C-c s" . profiler-start)
+         ("C-c r" . profiler-report)
+         ("C-c S" . profiler-stop)
+         )
+  )
+
+;; Proced
+;; Generate a listing of UNIX system processes.
+(use-package proced
+  :ensure nil
+  :defer t
+  :bind
+  ("C-c a p" . proced)
+  :config
+  (setopt proced-enable-color-flag t)
+  (setopt proced-tree-flag t)
+  (setopt proced-descend t)
+  (setq proced-auto-update-flag t)
+  (setq proced-auto-update-interval 1))
+
+
+;; Re-builder
+;; Construct a regexp interactively.
+(use-package re-builder
+:ensure nil
+:commands (re-builder regexp-builder)
+:config
+(setq reb-re-syntax 'read))
+
+
+;; Recentf
+(use-package recentf
+  :ensure nil
+  :defer t
+  :hook
+  (after-init . recentf-mode)
+  :custom
+  (recentf-max-saved-items 100)
+  (recentf-max-menu-items 25) 
+  (recentf-save-file-modes nil)
+  (recentf-keep nil)
+  (recentf-case-fold-search t)
+  (recentf-auto-cleanup nil)
+  (recentf-initialize-file-name-history nil)
+  (recentf-filename-handlers nil)
+  (recentf-show-file-shortcuts-flag nil)
+  :config
+  (setq recentf-save-file (concat user-emacs-directory "etc/recentf"))
+  )
+
+
+;; Register
+(use-package register
+  :ensure nil
+  :config 
+  (setq register-preview-delay 0)
+  (setq register-separator " ")
+  (setq register-use-preview 'traditional)
+  (setq register-preview-display-buffer-alist
+        '(display-buffer-at-bottom
+          (window-height . fit-window-to-buffer)
+          (preserve-size . (nil . t))
+          (window-parameters . ((mode-line-format . none)
+                                (no-other-window . t)))))
+  )
+
+
+;; Repeat
+;; Used to reduce key sequence length
+(use-package repeat
+  :ensure nil
+  :hook (after-init . repeat-mode)
+  :config
+  (setq repeat-on-final-keystroke t)
+  (setq repeat-mode t)
+  (setq repeat-exit-timeout 5)
+  (setq repeat-check-key t)
+  (setq repeat-echo-function 'ignore)
+  (setq repeat-exit-key (kbd "<escape>")))
+
+
+;; Savehist
+;; Savehist Save minibuffer and related histories
+(use-package savehist
+  :ensure nil
+  :defer t
+  :hook (after-init . savehist-mode)
+  :config
+  (setq kill-ring-max 1000)
+  (setq history-length 1000)
+  (setq history-delete-duplicates t)
+  (setq savehist-save-minibuffer-history t)
+  (setq savehist-file (concat user-emacs-directory "etc/savehist"))
+  (setq savehist-autosave-interval 60)
+  (setq savehist-additional-variables '(mark-ring
+                                        command-history
+                                        file-name-history
+                                        minibuffer-history
+                                        read-expression-history
+                                        custom-variable-history
+                                        kill-ring
+                                        set-variable-value-history
+                                        Info-history-list
+                                        last-kbd-macro
+                                        kmacro-ring
+                                        global-mark-ring
+                                        register-alist
+                                        search-ring
+                                        regexp-search-ring
+                                        extended-command-history)))
+
+;; Saveplace
+;; saveplace remembers your location in a file when saving files
+(use-package saveplace
+  :ensure nil
+  :init
+  (save-place-mode 1)
+  :defer t
+  :config
+  (setq save-place-file (concat user-emacs-directory "etc/saveplace"))
+  (setq save-place-limit 600)
+  (setq save-place-forget-unreadable-files t)
+  (setq save-place-ignore-files-regexp
+        "\\(?:COMMIT_EDITMSG\\|hg-editor-[[:alnum:]]+\\.txt\\|elpa\\|svn-commit\\.tmp\\|bzr_log\\.[[:alnum:]]+\\)$")
+  ;; activate it for all buffers
+  (setq-default save-place t))
+
+
+
+;;;; Emacs server (allow emacsclient to connect to running session)
+;; (use-package server
+;;   :ensure nil
+;;   :init
+;;   (setq server-client-instructions nil)
+;;   :config
+;;   (unless (or (daemonp) (server-running-p))
+;;     (server-start)))
+
+
+  
+(use-package simple
+  :ensure nil
+  :config
+  ;; Idle time delay before updating various things on the screen.
+  (setopt idle-update-delay 1.0)
+  (setopt next-error-recenter '(4))
+  (setopt next-error-message-highlight nil)
+  (setopt kill-do-not-save-duplicates t)
+   ;; Repeatedly pop mark with C-u SPC
+  (setopt set-mark-command-repeat-pop t)
+ 
+  (setopt cycle-spacing-actions '(just-one-space (delete-all-space -) restore))
+
+  (setopt delete-active-region nil)
+  (setopt eval-expression-print-level nil)
+  (setopt next-error-message-highlight 'keep)
+  (setopt eval-expression-print-length nil)
+  (setopt kill-do-not-save-duplicates t)
+  (setopt column-number-mode t)
+  (setopt line-number-mode t)
+  (setopt kill-whole-line t)
+  (setopt line-move-visual nil)
+  (setopt track-eol t)
+  (setopt set-mark-command-repeat-pop t)
+  (setopt blink-matching-paren nil)
+
+  (setopt remote-file-name-inhibit-auto-save t)
+  (setopt save-interprogram-paste-before-kill t)
 
   )
+
+
+;; Sppedbar 
+;; Summary: quick access to files and tags in a frame
+(use-package speedbar 
+  :ensure nil 
+  :custom
+  (speedbar-update-flag t) 
+  (speedbar-use-images nil) 
+  (speedbar-frame-parameters 
+   '((name . "speedbar")
+     (title . "speedbar")
+     (minibuffer . nil)
+     (border-width . 2)
+     (menu-bar-lines . 0)
+     (tool-bar-lines . 0)
+     (unsplittable . t)
+     (left-fringe . 10)))
+  :config
+  ;; File Extensions
+  (speedbar-add-supported-extension
+   '(;; Classic Lisp Languages
+     ".cl" ".el" ".scm" ".lisp"
+     ;; Lua/Fennel (Lisp that transpiles to lua)
+     ".lua" ".fnl" ".fennel"
+     ;; JVM languages (Java, Kotlin, Clojure)
+     ".java" ".kt" ".mvn" ".gradle" ".properties" ".clj"
+     ;; C/C++
+     ".c" ".cpp" ".cc" ".h" ".hh" ".hpp"
+     ;; Shell scripts
+     ".sh" ".bash"
+     ;; Web Languages and Markup/Styling
+     ".php" ".js" ".ts" ".html" ".htm" ".css" ".less" ".scss" ".sass"
+     ;; Makefile
+     "makefile" "MAKEFILE" "Makefile"
+     ;; Data formats
+     ".json" ".yaml" ".toml"
+     ;; Notes and Markup
+     ".md" ".markdown" ".org" ".txt" "README")))
+
+;; Subword
+;; Enable builtin packages after init
+;; Recognize camel case as words
+;; (global-subword-mode t)
+(use-package subword
+  :ensure nil
+  :hook ((python-mode yaml-ts-mode conf-mode 
+                      java-mode java-ts-mode js-mode js-ts-mode) . subword-mode))
+
+
+;; So long
+;; (use-package so-long
+;;   :ensure nil
+;;   :hook (after-init . so-long-mode)
+;;   :config
+;;   (setq so-long-threshold 10000))
+
+
+
+;; Display Time
+(use-package time
+  :ensure nil
+  :defer t
+  :hook (after-init . display-time-mode)
+  :config
+  (setq display-time-format " %a %e %b, %H:%M ")
+  (setq display-time-24hr-format t)
+  (setq display-time-day-and-date t)
+  (setq display-time-interval 60)
+  (setq display-time-default-load-average nil)
+  ;; Use M-x shell RET timedatectl list-timezones
+  (setq zoneinfo-style-world-list
+        '(("Africa/Addis_Ababa" "Addis Ababa"))
+        )
+  )
+
+
+;; Text Mode
+(use-package text-mode
+  :ensure nil
+  :defer t
+  :mode "\\`\\(README\\|CHANGELOG\\|COPYING\\|LICENSE\\)\\'"
+  :hook
+  ((text-mode . turn-on-auto-fill)
+   (prog-mode . (lambda () (setq-local sentence-end-double-space t))))
+  :config
+  (setq word-wrap-by-category t)
+  (setq sentence-end-double-space nil)
+  (setq sentence-end-without-period nil)
+  (setq colon-double-space nil)
+  (setq use-hard-newlines nil)
+  (setq adaptive-fill-mode t))
+
+
+;; Unique Buffer Names
+(use-package uniquify
+  :ensure nil
+  :defer t
+  :config
+  (setq uniquify-strip-common-suffix t)
+  (setq uniquify-separator " • ")
+  (setq uniquify-ignore-buffers-re "^\\*")
+  (setq uniquify-after-kill-buffer-p t)
+  (setq uniquify-buffer-name-style 'forward))
+
+;; Respect indentation whein wrapping long lines
+(use-package visual-wrap
+  :ensure nil
+  :when (>= emacs-major-version 30)
+  :hook ((prog-mode conf-mode org-mode) . visual-wrap-prefix-mode)) 
+
+
+;; ;; Clean up White-space on save
+(use-package whitespace
+  :ensure nil
+  :defer t
+  :hook (
+         (before-save . whitespace-cleanup)
+         (before-save . delete-trailing-whitespace-except-current-line)
+         ;; (prog-mode . whitespace-mode)
+         )
+  :config
+  (setq whitespace-action '(cleanup auto-cleanup))
+  (setq whitespace-line-column nil)
+  (setq whitespace-display-mappings '((tab-mark ?\t [?› ?\t])
+                                      (newline-mark ?\n [?¬ ?\n])
+                                      (space-mark ?\  [?·] [?.])))
+  (setq whitespace-style '(empty face newline newline-mark lines-tail trailing tabs tab-mark spaces space-mark indentation missing-newline-at-eof))
+
+  )
+
+
+;; Window
+(use-package window
+  :ensure nil
+  :config
+  ;; Windows: Prefer verticl splitting
+  (setq split-width-threshold 170)
+  (setq split-height-threshold nil)
+  (setq window-sides-vertical t)
+  (setq window-resize-pixelwise t)
+  (setq window-combination-resize t)
+  (setq fit-window-to-buffer-horizontally t)
+  (setq switch-to-buffer-obey-display-actions t)
+  (setq switch-to-buffer-in-dedicated-window 'pop)
+  )
+
+
+;; Woman
+(use-package woman
+  :ensure nil
+  :defer t
+  :hook (woman-mode . olivetti-mode))
+
+;; Xref
+(use-package xref 
+  :ensure nil
+  :init
+  ;; Use faster search tool
+  (when (executable-find "rg")
+    (setq xref-search-program 'ripgrep))
+
+  ;; Select from xref candidates in minibuffer
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read
+        xref-show-xrefs-function #'xref-show-definitions-completing-read)
+  :custom
+  (xref-show-definitions-function #'xref-show-definitions-completing-read)
+  (xref-show-xrefs-function #'xref-show-definitions-buffer)
+  (xref-file-name-display 'project-relative)
+  (xref-search-program 'ripgrep)
+  (xref-history-storage 'xref-window-local-history) ; Per-window history of `xref-go-*'
+  )
+
+
 
 
 (provide 'ef-core)
