@@ -23,3 +23,4 @@
 (require 'ef-yasnippet)
 (require 'ef-icons)
 (require 'ef-utilities)
+(require 'ef-completion)
