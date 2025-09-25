@@ -7,6 +7,9 @@
 (setopt tool-bar-mode nil)
 (setopt scroll-bar-mode nil)
 
+(if (fboundp 'tooltip-mode) (tooltip-mode -1))
+(if (fboundp 'fringe-mode) (fringe-mode -1))
+
 ;; Default Emacs Window Size
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
@@ -34,16 +37,25 @@
 (setopt initial-major-mode 'fundamental-mode)
 (unless (daemonp)
   (advice-add #'display-startup-echo-area-message :override #'ignore))
+(setopt inhibit-compacting-font-caches t)
+
 ;; Declare all themes safe
 (setopt custom-safe-themes t)
 
 
 ;; Package Settings to Use for Elpaca
 ;; Prevent package.el loading packages
-(setopt package-enable-at-startup nil)
-(setopt package-quickstart nil)
-(setopt package-archives nil)
-(setopt load-prefer-newer t)
+(setq package-enable-at-startup nil)
+(setq package-quickstart nil)
+(setq package-archives nil)
+(setq load-prefer-newer t)
+(setq package--init-file-ensured nil)
+
+;; Avoid raising the *Messages* buffer if anything is still without
+;; lexical bindings
+(setopt warning-minimum-level :error)
+(setopt warning-suppress-types '((lexical-binding)))
+
 
 (provide 'early-init)
 ;;; early-init ends here
