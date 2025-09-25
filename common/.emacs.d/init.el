@@ -14,8 +14,12 @@
 (require 'ef-core)
 (require 'ef-themes)
 (require 'ef-fonts)
+(require 'ef-development)
 (require 'ef-minibuffer)
+(require 'ef-dired)
+
 
 ;; External
 (require 'ef-yasnippet)
 (require 'ef-icons)
+(require 'ef-utilities)
