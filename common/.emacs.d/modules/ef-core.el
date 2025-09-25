@@ -25,7 +25,7 @@
 
 ;; TODO Bookmarks
 (use-package bookmark
-  :ensure nil  
+  :ensure nil
   :custom
   (bookmark-use-annotations nil)
   (bookmark-automatically-show-annotations nil)
@@ -36,7 +36,7 @@
 (use-package browse-url
   :ensure nil
   :custom
-  ;; Use firefox as the default browser 
+  ;; Use firefox as the default browser
   (browse-url-browser-function 'browse-url-firefox))
 
 
@@ -184,7 +184,7 @@
  (set-default-coding-systems 'utf-8)
 ;; Improve Emacs' responsiveness by delaying syntax highlighting during input
  (setopt redisplay-skip-fontification-on-input t)
-;; (setopt ad-redefinition-action 'accept) 
+;; (setopt ad-redefinition-action 'accept)
 
  (setopt resize-mini-windows 'grow-only)
  (setopt window-divider-default-bottom-width 1)
@@ -222,7 +222,7 @@
 ;; Cursor Style Bar
 (setopt cursor-type 'bar)
 
-  ;; Truncate 
+  ;; Truncate
   (setopt truncate-string-ellipsis "...")
   ;; Position undelines at the descent line
   (setopt x-underline-at-descent-line t)
@@ -256,7 +256,7 @@
 ;; Disable wrapping by default due to its performance cost.
 (setq-default truncate-lines t)
 
-;; Various Modes 
+;; Various Modes
 (set-fringe-mode 8)
 (global-prettify-symbols-mode 1)
 (auto-image-file-mode 1)
@@ -282,7 +282,7 @@
   (setopt tab-always-indent 'complete)
   (setopt tab-first-completion 'word-or-paren-or-punct)
   (setopt tab-width 4)
-  (setopt indent-tabs-mode nil)  
+  (setopt indent-tabs-mode nil)
   )
 
 
@@ -291,13 +291,13 @@
   :ensure nil
   :demand t
   :config
- 
+
   (setq delete-pair-blink-delay 0.1)
   (setq help-window-select t)
   (setq find-library-include-other-files nil)
 
 
- 
+
   (setq-default truncate-partial-width-windows nil)
   )
 
@@ -361,7 +361,7 @@
   (setq backup-inhibited t)
   (setq backup-by-copying t)
   (setq kept-new-versions 3)
- 
+
   ;; Version Control
   (setq vc-make-backup-files nil)
   (setq version-control nil)
@@ -369,7 +369,7 @@
 
   (setq remote-file-name-inhibit-delete-by-moving-to-trash t)
   (setq mode-require-final-newline 'visit-save)
-  
+
   (setq find-file-suppress-same-file-warnings t)
   (setq find-file-visit-truename t)
 
@@ -617,7 +617,7 @@
   (after-init . recentf-mode)
   :custom
   (recentf-max-saved-items 100)
-  (recentf-max-menu-items 25) 
+  (recentf-max-menu-items 25)
   (recentf-save-file-modes nil)
   (recentf-keep nil)
   (recentf-case-fold-search t)
@@ -633,7 +633,7 @@
 ;; Register
 (use-package register
   :ensure nil
-  :config 
+  :config
   (setq register-preview-delay 0)
   (setq register-separator " ")
   (setq register-use-preview 'traditional)
@@ -718,7 +718,7 @@
 ;;     (server-start)))
 
 
-  
+
 (use-package simple
   :ensure nil
   :config
@@ -729,7 +729,7 @@
   (setopt kill-do-not-save-duplicates t)
    ;; Repeatedly pop mark with C-u SPC
   (setopt set-mark-command-repeat-pop t)
- 
+
   (setopt cycle-spacing-actions '(just-one-space (delete-all-space -) restore))
 
   (setopt delete-active-region nil)
@@ -751,14 +751,14 @@
   )
 
 
-;; Sppedbar 
+;; Sppedbar
 ;; Summary: quick access to files and tags in a frame
-(use-package speedbar 
-  :ensure nil 
+(use-package speedbar
+  :ensure nil
   :custom
-  (speedbar-update-flag t) 
-  (speedbar-use-images nil) 
-  (speedbar-frame-parameters 
+  (speedbar-update-flag t)
+  (speedbar-use-images nil)
+  (speedbar-frame-parameters
    '((name . "speedbar")
      (title . "speedbar")
      (minibuffer . nil)
@@ -795,7 +795,7 @@
 ;; (global-subword-mode t)
 (use-package subword
   :ensure nil
-  :hook ((python-mode yaml-ts-mode conf-mode 
+  :hook ((python-mode yaml-ts-mode conf-mode
                       java-mode java-ts-mode js-mode js-ts-mode) . subword-mode))
 
 
@@ -858,7 +858,52 @@
 (use-package visual-wrap
   :ensure nil
   :when (>= emacs-major-version 30)
-  :hook ((prog-mode conf-mode org-mode) . visual-wrap-prefix-mode)) 
+  :hook ((prog-mode conf-mode org-mode) . visual-wrap-prefix-mode))
+
+;; Which Key
+;; Builtin (Emacs Version 30)
+;; Display available keybindings in popup
+(use-package which-key
+  :ensure nil
+  :init
+  (which-key-mode)
+  :config
+  (setq which-key-side-window-location 'bottom)
+  (setq which-key-side-window-slot -10)
+  (setq which-key-side-window-max-height 0.25)
+  (setq which-key-sort-order #'which-key-key-order-alpha)
+  ;; (setq which-key-sort-order #'which-key-description-order)
+  (setq which-key-allow-imprecise-window-fit nil)
+  ;; Allow a key binding to be modified by multiple elements
+  (setq which-key-allow-multiple-replacements nil)
+  (setq which-key-sort-uppercase-first nil)
+  (setq which-key-add-column-padding 1)
+  (setq which-key-max-display-columns nil)
+  (setq which-key-min-display-lines 6)
+  (setq which-key-idle-delay 0.8)
+  (setq which-key-idle-secondary-delay 1)
+  ;; Show which key is immediately
+  (setq which-key-show-early-on-C-h t)
+  (setq which-key-max-description-length 25)
+  (setq which-key-lighter "")
+  (setq which-key-separator " → ")
+  ;; Set the prefix string that will be inserted in front of prefix commands
+  (setq which-key-prefix-prefix "+" )
+
+  (which-key-add-key-based-replacements
+    "C-c" "mode-and-user"
+    "C-c a" "applications"
+    "C-c b" "buffer"
+    "C-c c" "consult"
+
+    "C-x a" "avy"
+    "C-x t" "tab-bar"
+    )
+
+
+
+  )
+
 
 
 ;; ;; Clean up White-space on save
@@ -867,8 +912,6 @@
   :defer t
   :hook (
          (before-save . whitespace-cleanup)
-         ;; (before-save . delete-trailing-whitespace-except-current-line)
-         ;; (prog-mode . whitespace-mode)
          )
   :config
   (setq whitespace-action '(cleanup auto-cleanup))
@@ -904,7 +947,7 @@
   :hook (woman-mode . olivetti-mode))
 
 ;; Xref
-(use-package xref 
+(use-package xref
   :ensure nil
   :init
   ;; Use faster search tool
@@ -927,5 +970,3 @@
 
 (provide 'ef-core)
 ;;; ef-core.el ends here
-
-
