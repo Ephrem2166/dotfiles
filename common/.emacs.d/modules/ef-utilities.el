@@ -66,7 +66,6 @@
          ("C-x C-j" . consult-dir-jump-file))
   )
 
-
 ;; Consult flycheck
 (use-package consult-flycheck
   :after (:all consult flycheck))
