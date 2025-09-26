@@ -24,6 +24,8 @@
 (global-set-key (kbd "C-0") 'text-scale-adjust)
 
 
+(global-set-key (kbd "M-<tab>") 'completion-at-point)
+
 ;; (use-package emacs
 ;;   :ensure nil
 ;;   :preface

@@ -24,7 +24,6 @@
 (require 'ef-vcs)
 (require 'ef-writing)
 (require 'ef-reading)
-
 (require 'ef-org)
 ;; External
 (require 'ef-yasnippet)

@@ -25,46 +25,45 @@
   "Primary Variable Fonts")
 
 
-(when my/available-mono-font
-  (set-face-attribute 'default nil
-                      :font (font-spec :family my/available-mono-font :size 12.0 :weight 'regular))
-  (set-face-attribute 'fixed-pitch nil
-                      :font (font-spec :family my/available-mono-font :size 12.0 :weight 'regular)))
+;; (when my/available-mono-font
+;;   (set-face-attribute 'default nil
+;;                       :font (font-spec :family my/available-mono-font :size 16.0 :weight 'regular))
+;;   (set-face-attribute 'fixed-pitch nil
+;;                       :font (font-spec :family my/available-mono-font :size 16.0 :weight 'regular)))
+;;
+;;
+;; (when my/available-variable-font
+;;   (set-face-attribute 'variable-pitch nil
+;;                       :font (font-spec :family my/available-variable-font :size 16.0 :weight 'regular)))
 
-
-(when my/available-variable-font
-  (set-face-attribute 'variable-pitch nil
-                      :font (font-spec :family my/available-variable-font :size 12.0 :weight 'regular)))
-
-
-;; Debugging
-;; To show during startup
-;; (message "🧱 Default mono font: %s" my/available-mono-font)
-;; (message "🎨 Variable-pitch font: %s" my/available-variable-font)
 
 (set-frame-font "Berkeley Nerd Font 10")
 
 ;; ;; Default Font
-;; (set-face-attribute
-;;  'default nil
-;;  :family "Berkeley Nerd Font"
-;;  ;; Height = point size x 10 = 12 x 10 = 120
-;;  :height 110
-;;  :weight 'regular)
+
+(when my/available-mono-font
+  (set-face-attribute
+   'default nil
+   :family my/available-mono-font
+   ;; Height = point size x 10 = 12 x 10 = 120
+   :height 110
+   :weight 'regular))
 ;;
 ;; ;; Fixed Font
-;; (set-face-attribute
-;;  'fixed-pitch nil
-;;  :family "Berkeley Nerd Font"
-;;  :height 110
-;;  :weight 'regular)
+(when my/available-mono-font
+  (set-face-attribute
+   'fixed-pitch nil
+   :family my/available-mono-font
+   :height 110
+   :weight 'regular))
 ;;
 ;; ;; Variable Font
-;; (set-face-attribute
-;;  'variable-pitch nil
-;;  :family "Berkeley Nerd Font"
-;;  :height 110
-;;  :weight 'regular)
+(when my/available-variable-font
+  (set-face-attribute
+   'variable-pitch nil
+   :family my/available-variable-font
+   :height 110
+   :weight 'regular))
 
 
 ;; Modeline
@@ -73,6 +72,14 @@
 
 ;; Minibuffer
 (set-face-attribute 'minibuffer-prompt nil :family "Berkeley Nerd Font 9" :weight 'regular)
+
+
+;; Debugging
+;; To show during startup
+;; (message "🧱 Default mono font: %s" my/available-mono-font)
+;; (message "🎨 Variable-pitch font: %s" my/available-variable-font)
+
+
 
 
 (provide 'ef-fonts)

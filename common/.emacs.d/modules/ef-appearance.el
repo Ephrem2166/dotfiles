@@ -9,6 +9,92 @@
   :hook
   (after-init . auto-dark-mode))
 
+
+(use-package emacs
+  :ensure nil
+  :config
+  (setq mode-line-default-help-echo nil
+        show-help-function nil)
+
+  (defvar mode-line-cleaner-alist
+    `((company-mode . " ⇝")
+      (corfu-mode . " ⇝")
+      (yas-minor-mode .  " ")
+      (smartparens-mode . " ()")
+      (evil-smartparens-mode . "")
+      (eldoc-mode . "")
+      (abbrev-mode . "")
+      (evil-snipe-local-mode . "")
+      (evil-owl-mode . "")
+      (evil-rsi-mode . "")
+      (evil-goggles-mode . "")
+      (evil-commentary-mode . "")
+      (evil-collection-unimpaired-mode . "")
+      (highlight-parentheses-mode . "")
+      (ivy-mode . "")
+      (counsel-mode . "")
+      (wrap-region-mode . "")
+      (subword-mode . "")
+      (rainbow-mode . "")
+      (which-key-mode . "")
+      (aggressive-indent-mode . "")
+      (undo-tree-mode . "")
+      ;; (undo-tree-mode . " ⎌")
+      (auto-revert-mode . "")
+      ;; Major modes
+      (lisp-interaction-mode . "λ")
+      (hi-lock-mode . "")
+      (python-mode . "Py")
+      (emacs-lisp-mode . "Eλ")
+      (nxhtml-mode . "nx")
+      (fundamental-mode . "f")
+      (dot-mode . "")
+      (scheme-mode . " SCM")
+      (matlab-mode . "M")
+      (valign-mode . "")
+      (org-mode . "ORG")
+      (eldoc-mode . "")
+      (org-cdlatex-mode . "")
+      (cdlatex-mode . "")
+      (org-indent-mode . "")
+      (org-roam-mode . "")
+      (visual-line-mode . "")
+      (latex-mode . "TeX")
+      (outline-minor-mode . " ֍" ;; " [o]"
+                          )
+      (hs-minor-mode . "")
+      (matlab-functions-have-end-minor-mode . "")
+      (org-roam-ui-mode . " UI")
+      (abridge-diff-mode . "")
+      ;; Evil modes
+      (evil-traces-mode . "")
+      (latex-extra-mode . "")
+      (strokes-mode . "")
+      (flymake-mode . "fly")
+      (sideline-mode . "")
+      (god-mode . ,(propertize "God" 'face 'success))
+      (gcmh-mode . ""))
+    "Alist for `clean-mode-line'.
+
+  ; ;; When you add a new element to the alist, keep in mind that you
+  ; ;; must pass the correct minor/major mode symbol and a string you
+  ; ;; want to use in the modeline *in lieu of* the original.")
+
+  (defun clean-mode-line ()
+    (cl-loop for cleaner in mode-line-cleaner-alist
+             do (let* ((mode (car cleaner))
+                       (mode-str (cdr cleaner))
+                       (old-mode-str (cdr (assq mode minor-mode-alist))))
+                  (when old-mode-str
+                    (setcar old-mode-str mode-str))
+                  ;; major mode
+                  (when (eq mode major-mode)
+                    (setq mode-name mode-str)))))
+
+
+  (add-hook 'after-change-major-mode-hook 'clean-mode-line)
+  )
+
 ;; Doom Modeline
 (use-package doom-modeline
   :ensure t
