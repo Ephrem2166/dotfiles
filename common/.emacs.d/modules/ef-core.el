@@ -948,6 +948,41 @@
   (setq switch-to-buffer-in-dedicated-window 'pop)
   )
 
+;; Winner
+;; Restore old window configurations
+(use-package winner
+  :ensure nil
+  :hook (after-init . winner-mode)
+  :init (setq winner-boring-buffers '("*Completions*"
+                                      "*Compile-Log*"
+                                      "*inferior-lisp*"
+                                      "*Fuzzy Completions*"
+                                      "*Apropos*"
+                                      "*Help*"
+                                      "*cvs*"
+                                      "*Buffer List*"
+                                      "*Ibuffer*"
+                                      "*esh command on file*")))
+
+
+
+(use-package windmove
+  :ensure nil
+  :hook (after-init . windmove-mode)
+  :bind
+  ( :map windmove-mode-map
+     ("C-w h" . windmove-left)
+     ("C-w l" . windmove-right)
+     ("C-w j" . windmove-down)
+     ("C-w k" . windmove-up)
+     ("C-w <left>" . windmove-left)
+     ("C-w <right>" . windmove-right)
+     ("C-w <down>" . windmove-down)
+     ("C-w <up>" . windmove-up)
+
+   )
+)
+
 
 ;; Woman
 (use-package woman

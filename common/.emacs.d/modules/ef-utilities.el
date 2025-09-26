@@ -1,6 +1,38 @@
 ;;; ef-utilities.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
+;; Ace Window
+;; Quickly Switch Windows
+(use-package ace-window
+  :ensure t
+  :bind (("M-o" . ace-window))
+  :config
+  ;; (set-face-attribute
+  ;; 'aw-leading-char-face nil
+  ;; :weight 'bold
+  ;; :height 2.0)
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  (setq aw-scope 'frame)
+  )
+
+;; Winner
+;; Restore old window configurations
+(use-package winner
+  :ensure nil
+  :hook (after-init . winner-mode)
+  :init (setq winner-boring-buffers '("*Completions*"
+                                      "*Compile-Log*"
+                                      "*inferior-lisp*"
+                                      "*Fuzzy Completions*"
+                                      "*Apropos*"
+                                      "*Help*"
+                                      "*cvs*"
+                                      "*Buffer List*"
+                                      "*Ibuffer*"
+                                      "*esh command on file*")))
+
+
+
 ;; Consult
 ;; Provides search and navigation commands
 (use-package consult

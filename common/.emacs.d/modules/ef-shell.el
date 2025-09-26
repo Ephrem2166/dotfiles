@@ -46,6 +46,7 @@
 ;; Vterm
 ;; Fully featured terminal emulator
 (use-package vterm
+  :ensure t
   :defer t
   :bind
   (("M-<RET>" . vterm))
