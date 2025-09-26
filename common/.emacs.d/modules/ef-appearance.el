@@ -3,6 +3,7 @@
 ;;; Code:
 
 
+
 ;; Doom Modeline
 (use-package doom-modeline
   :ensure t
@@ -66,6 +67,19 @@
 ;; Convert buffer text and decorations to html
 (use-package htmlize
   :ensure t)
+
+;; Minions
+;; A minor-mode menu for the mode line
+(use-package minions
+  :ensure t
+  :hook
+  (
+   (after-init . minions-mode)
+   (doom-modeline-mode . minions-mode)
+   )
+  :custom
+  (minions-mode-line-lighter "…")
+  (minions-mode-line-delimiters '("[" . "]")))
 
 
 
