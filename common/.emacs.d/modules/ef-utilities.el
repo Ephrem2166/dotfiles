@@ -77,6 +77,13 @@
   :config
   (progn))
 
+;; Dashboard
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
+
+
 
 ;; Deadgrep
 ;; Fast searching with ripgrep
