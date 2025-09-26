@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+
 ;; Doom Modeline
 (use-package doom-modeline
   :ensure t
@@ -59,6 +60,13 @@
    '(mode-line-active ((t (:family "Berkeley Nerd Font" :height 1.0)))) ; For 29+
    '(mode-line-inactive ((t (:family "Berkeley Nerd Font" :height 1.0)))))
   )
+
+
+;; Htmlize
+;; Convert buffer text and decorations to html
+(use-package htmlize
+  :ensure t)
+
 
 
 (provide 'ef-appearance)

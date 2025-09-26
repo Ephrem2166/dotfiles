@@ -21,6 +21,9 @@
 
 
 ;; (require 'ef-shell)
+(require 'ef-vcs)
+(require 'ef-writing)
+
 
 ;; External
 (require 'ef-yasnippet)

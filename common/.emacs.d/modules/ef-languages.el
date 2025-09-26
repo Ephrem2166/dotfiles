@@ -119,6 +119,20 @@
 ;;   (lua-indent-level 2)
 ;;   )
 
+;; Prevent parenthesis imbalance
+(use-package paredit
+  :disabled
+  :ensure t
+  :defer t
+  :diminish paredit-mode
+  :commands paredit-mode
+  :hook
+  (emacs-lisp-mode . paredit-mode)
+  ;; :config
+  ;; (define-key paredit-mode-map (kbd "RET") nil))
+  )
+
+
 ;; Prettier
 (use-package prettier-js
   :ensure t
