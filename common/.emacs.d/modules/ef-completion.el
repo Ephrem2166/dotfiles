@@ -20,16 +20,24 @@
   ;; (add-hook 'completion-at-point-functions #'cape-sgml)   ;; HTML tags
   ;; (add-to-list 'completion-at-point-functions #'cape-abbrev) ;; Abbreviations
   ;; (add-to-list 'completion-at-point-functions #'cape-line)   ;; Complete whole lines
-  ;; (add-to-list 'completion-at-point-functions #'cape-history) ;; Completion history
   ;; (add-hook 'completion-at-point-functions #'cape-emoji)
-  (add-to-list 'completion-at-point-functions #'cape-emoji)
-  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-  (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
-  (add-to-list 'completion-at-point-functions #'cape-dict) ;; Dict
-  (add-to-list 'completion-at-point-functions #'cape-file)   ;; File paths
   (add-to-list 'completion-at-point-functions #'cape-dabbrev) ;; Dynamic
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+  (add-to-list 'completion-at-point-functions #'cape-history) ;; Completion history
+  (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+  (add-to-list 'completion-at-point-functions #'cape-file)   ;; File paths
+  (add-to-list 'completion-at-point-functions #'cape-dict) ;; Dict
+  (add-to-list 'completion-at-point-functions #'cape-emoji)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
   :config
+  (defun my/eglot-capf ()
+    (setq-local completion-at-point-functions
+                (cons (cape-capf-super
+                       #'cape-file
+                       #'eglot-completion-at-point
+                       #'tempel-complete)
+                      completion-at-point-functions)))
+  (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
   ;; Make capfs composable
   (advice-add #'eglot-completion-at-point :around #'cape-wrap-nonexclusive)
   (advice-add #'comint-completion-at-point :around #'cape-wrap-nonexclusive)

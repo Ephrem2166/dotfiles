@@ -80,6 +80,7 @@
 ;; Dashboard
 (use-package dashboard
   :ensure t
+  :disabled
   :config
   (dashboard-setup-startup-hook))
 
@@ -156,6 +157,13 @@
   (embark-collect-mode . consult-preview-at-point-mode)
   )
 
+
+;; Expand Region
+;; Increase selected region by semantic units
+(use-package expand-region
+  :ensure t
+  :defer t
+  :bind ("C-=" . er/expand-region))
 
 ;; GCMH
 ;; The Garbage Collector Magic Hack
@@ -246,8 +254,8 @@
   :ensure t
   :bind
   (
-   ("M-<UP>" . move-text-up)
-   ("M-<DOWN>" . move-text-down)
+   ("M-<up>" . move-text-up)
+   ("M-<down>" . move-text-down)
    )
   :config
   (move-text-default-bindings)
@@ -262,8 +270,9 @@
          ("C-M-a" . mc/edit-lines)
          ("C-M-/" . mc/mark-all-dwim)
          ("C-M-." . mc/mark-next-like-this)
-         ("C-M-," . mc/mark-previous-like-this))
-
+         ("C-M-," . mc/mark-previous-like-this)
+         )
+  
   )
 
 
