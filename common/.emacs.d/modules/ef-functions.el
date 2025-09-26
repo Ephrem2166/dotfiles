@@ -150,6 +150,153 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
   (when current-prefix-arg
     (my/regenerate-desktop)))
 
+;; Functions from Doom Emacs
+;; Large File Handling
+(defvar-local doom-large-file-p nil)
+(put 'doom-large-file-p 'permanent-local t)
+
+(defvar doom-large-file-size-alist '(("." . 3.0))
+  "An alist mapping regexps (like `auto-mode-alist') to filesize thresholds.
+
+If a file is opened and discovered to be larger than the threshold, Doom
+performs emergency optimizations to prevent Emacs from hanging, crashing or
+becoming unusably slow.
+
+These thresholds are in MB, and is used by `doom--optimize-for-large-files-a'.")
+
+(defvar doom-large-file-excluded-modes
+  '(so-long-mode
+    special-mode archive-mode tar-mode jka-compr
+    git-commit-mode image-mode doc-view-mode doc-view-mode-maybe
+    ebrowse-tree-mode pdf-view-mode tags-table-mode)
+  "Major modes that `doom-check-large-file-h' will ignore.")
+
+(defun doom--optimize-for-large-files-a (orig-fn &rest args)
+  "Set `doom-large-file-p' if the file is too large.
+
+Uses `doom-large-file-size-alist' to determine when a file is too large. When
+`doom-large-file-p' is set, other plugins can detect this and reduce their
+runtime costs (or disable themselves) to ensure the buffer is as fast as
+possible."
+  (if (setq doom-large-file-p
+            (and buffer-file-name
+                 (not doom-large-file-p)
+                 (file-exists-p buffer-file-name)
+                 (ignore-errors
+                   (> (nth 7 (file-attributes buffer-file-name))
+                      (* 1024 1024
+                         (assoc-default buffer-file-name
+                                        doom-large-file-size-alist
+                                        #'string-match-p))))))
+      (prog1 (apply orig-fn args)
+        (if (memq major-mode doom-large-file-excluded-modes)
+            (setq doom-large-file-p nil)
+          (when (fboundp 'so-long-minor-mode) ; in case the user disabled it
+            (so-long-minor-mode))
+          (message "Large file! Cutting corners to improve performance")))
+    (apply orig-fn args)))
+
+(advice-add 'after-find-file :around #'doom--optimize-for-large-files-a)
+
+
+;; Incremenal Loading
+;; https://github.com/hlissner/doom-emacs/blob/42a21dffddeee57d84e82a9f0b65d1b0cba2b2af/core/core.el#L353
+(defvar doom-incremental-packages '(t)
+  "A list of packages to load incrementally after startup. Any large packages
+here may cause noticeable pauses, so it's recommended you break them up into
+sub-packages. For example, `org' is comprised of many packages, and can be
+broken up into:
+  (doom-load-packages-incrementally
+   '(calendar find-func format-spec org-macs org-compat
+     org-faces org-entities org-list org-pcomplete org-src
+     org-footnote org-macro ob org org-clock org-agenda
+     org-capture))
+This is already done by the lang/org module, however.
+If you want to disable incremental loading altogether, either remove
+`doom-load-packages-incrementally-h' from `emacs-startup-hook' or set
+`doom-incremental-first-idle-timer' to nil.")
+
+(defvar doom-incremental-first-idle-timer 2.0
+  "How long (in idle seconds) until incremental loading starts.
+Set this to nil to disable incremental loading.")
+
+(defvar doom-incremental-idle-timer 0.75
+  "How long (in idle seconds) in between incrementally loading packages.")
+
+(defvar doom-incremental-load-immediately nil
+  ;; (daemonp)
+  "If non-nil, load all incrementally deferred packages immediately at startup.")
+
+(defmacro appendq! (sym &rest lists)
+  "Append LISTS to SYM in place."
+  `(setq ,sym (append ,sym ,@lists)))
+
+(defun doom-load-packages-incrementally (packages &optional now)
+  "Registers PACKAGES to be loaded incrementally.
+If NOW is non-nil, load PACKAGES incrementally, in `doom-incremental-idle-timer'
+intervals."
+  (if (not now)
+      (appendq! doom-incremental-packages packages)
+    (while packages
+      (let ((req (pop packages)))
+        (unless (featurep req)
+          (message "Incrementally loading %s" req)
+          (condition-case e
+              (or (while-no-input
+                    ;; If `default-directory' is a directory that doesn't exist
+                    ;; or is unreadable, Emacs throws up file-missing errors, so
+                    ;; we set it to a directory we know exists and is readable.
+                    (let ((default-directory user-emacs-directory)
+                          (gc-cons-threshold most-positive-fixnum)
+                          file-name-handler-alist)
+                      (require req nil t))
+                    t)
+                  (push req packages))
+            ((error debug)
+             (message "Failed to load '%s' package incrementally, because: %s"
+                      req e)))
+          (if (not packages)
+              (message "Finished incremental loading")
+            (run-with-idle-timer doom-incremental-idle-timer
+                                 nil #'doom-load-packages-incrementally
+                                 packages t)
+            (setq packages nil)))))))
+
+(defun doom-load-packages-incrementally-h ()
+  "Begin incrementally loading packages in `doom-incremental-packages'.
+If this is a daemon session, load them all immediately instead."
+  (if doom-incremental-load-immediately
+      (mapc #'require (cdr doom-incremental-packages))
+    (when (numberp doom-incremental-first-idle-timer)
+      (run-with-idle-timer doom-incremental-first-idle-timer
+                           nil #'doom-load-packages-incrementally
+                           (cdr doom-incremental-packages) t))))
+
+(add-hook 'emacs-startup-hook #'doom-load-packages-incrementally-h)
+
+;; Adds two keywords to `use-package' to expand its lazy-loading capabilities:
+;;
+;;   :after-call SYMBOL|LIST
+;;   :defer-incrementally SYMBOL|LIST|t
+;;
+;; Check out `use-package!'s documentation for more about these two.
+(eval-when-compile
+  (dolist (keyword '(:defer-incrementally :after-call))
+    (push keyword use-package-deferring-keywords)
+    (setq use-package-keywords
+          (use-package-list-insert keyword use-package-keywords :after)))
+
+  (defalias 'use-package-normalize/:defer-incrementally #'use-package-normalize-symlist)
+  (defun use-package-handler/:defer-incrementally (name _keyword targets rest state)
+    (use-package-concat
+     `((doom-load-packages-incrementally
+        ',(if (equal targets '(t))
+              (list name)
+            (append targets (list name)))))
+     (use-package-process-keywords name rest state))))
+
+
+
 
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
