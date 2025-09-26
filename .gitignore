@@ -9,9 +9,10 @@ common/.emacs.d/tramp
 common/.emacs.d/transient/
 common/.emacs.d/var/*
 common/.emacs.d/etc/autosave/*
-common/.emacs.d/etc/recentf 
-common/.emacs.d/etc/savehist 
+common/.emacs.d/etc/recentf
+common/.emacs.d/etc/savehist
 common/.emacs.d/etc/saveplace
+common/.emacs.d/tree-sitter/*
 
 common/.config/nvim/lazyvim.json
-common/.config/nvim/lazy-lock.json 
+common/.config/nvim/lazy-lock.json
