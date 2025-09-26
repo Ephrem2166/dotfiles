@@ -19,9 +19,13 @@
 (require 'ef-dired)
 (require 'ef-keybindings)
 
+
+(require 'ef-shell)
+
 ;; External
 (require 'ef-yasnippet)
 (require 'ef-icons)
 (require 'ef-utilities)
 (require 'ef-completion)
 (require 'ef-appearance)
+(require 'ef-programming)
