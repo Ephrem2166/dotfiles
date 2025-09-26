@@ -20,7 +20,7 @@
 (require 'ef-keybindings)
 
 
-(require 'ef-shell)
+;; (require 'ef-shell)
 
 ;; External
 (require 'ef-yasnippet)
@@ -29,3 +29,4 @@
 (require 'ef-completion)
 (require 'ef-appearance)
 (require 'ef-programming)
+(require 'ef-languages)
