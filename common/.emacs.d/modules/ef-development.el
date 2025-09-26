@@ -115,8 +115,8 @@
         '((error   "X" compilation-error)
           (warning "!" compilation-warning)
           (note    "■" compilation-info)))
-  
-  
+
+
   (flymake-mode t)
   )
 
@@ -200,7 +200,7 @@
           (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
           (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
   :config
-  (dolist (lang '(bash c cpp elisp html javascript json lua make yaml css markdown python toml))
+  (dolist (lang '(bash c cpp elisp html javascript json lua make yaml css python toml))
     (unless (treesit-language-available-p lang)
       (treesit-install-language-grammar lang)))
   (setq major-mode-remap-alist
@@ -222,7 +222,7 @@
           (shell-script-mode . bash-ts-mode)
           (toml-mode . toml-ts-mode)
           (yaml-mode . yaml-ts-mode)))
- )
+  )
 
 (provide 'ef-development)
 ;;; ef-development.el ends here

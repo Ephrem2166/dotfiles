@@ -25,6 +25,7 @@
 (require 'ef-writing)
 (require 'ef-reading)
 
+(require 'ef-org)
 ;; External
 (require 'ef-yasnippet)
 (require 'ef-icons)
