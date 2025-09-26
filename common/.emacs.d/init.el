@@ -34,3 +34,5 @@
 (require 'ef-programming)
 (require 'ef-languages)
 (require 'ef-evil)
+;; (require 'ef-general)
+;; (require 'ef-company)

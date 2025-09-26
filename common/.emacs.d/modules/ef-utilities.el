@@ -108,6 +108,47 @@
          )
   )
 
+;; Embark
+;; Embark makes it easy to choose a command to run based on what is near point,
+;; both during a minibuffer completion session and in normal buffers.
+(use-package embark
+  :ensure t
+  :defer t
+  :after vertico
+  :init
+  :bind
+  (("C-," . embark-act)
+   ("C-;" . embark-dwim)
+   ("C-h B" . embark-bindings)
+   :map minibuffer-local-map
+   ("C-d" . embark-act)
+   :map vertico-map
+   ("C-." . embark-act)
+   ("C-/" . embark-become)
+   )
+  :config
+  (setq embark-confirm-all-all nil)
+  (setq embark-mixed-indicator-both nil)
+  (setq embark-indicators '(embark-mixed-indicator embark-highlight-indicator))
+  (setq embark-verbose-indicator-nested nil)
+  (setq embark-verbose-indicator-buffer-sections '(bindings))
+  (setq embark-cycle-key "<XF86Travel>")
+  ;; (setq embark-cycle-key (kbd "C-n"))
+  (setq prefix-help-command #'embark-prefix-help-command)
+  (setq embark-quit-after-action '((kill-buffer . t) (t . nil)))
+  (setq embark-verbose-indicator-excluded-actions
+        '(embark-cycle embark-act-all embark-collect embark-export embark-insert))
+
+  )
+
+;; Embak Consult
+(use-package embark-consult
+  :ensure t
+  :after (embark consult)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode)
+  )
+
 
 ;; GCMH
 ;; The Garbage Collector Magic Hack
