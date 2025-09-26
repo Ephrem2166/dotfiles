@@ -177,50 +177,50 @@
   (setopt read-answer-short t)
   (setopt warning-suppress-types '((lexical-binding)))
   (setopt undo-limit (* 13 160000)
-      undo-strong-limit (* 13 240000)
-      undo-outer-limit (* 13 24000000))
- ;; Language
- (set-language-environment 'utf-8)
- (set-default-coding-systems 'utf-8)
-;; Improve Emacs' responsiveness by delaying syntax highlighting during input
- (setopt redisplay-skip-fontification-on-input t)
-;; (setopt ad-redefinition-action 'accept)
+          undo-strong-limit (* 13 240000)
+          undo-outer-limit (* 13 24000000))
+  ;; Language
+  (set-language-environment 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  ;; Improve Emacs' responsiveness by delaying syntax highlighting during input
+  (setopt redisplay-skip-fontification-on-input t)
+  ;; (setopt ad-redefinition-action 'accept)
 
- (setopt resize-mini-windows 'grow-only)
- (setopt window-divider-default-bottom-width 1)
- (setopt window-divider-default-places t)
- (setopt window-divider-default-right-width 1)
+  (setopt resize-mini-windows 'grow-only)
+  (setopt window-divider-default-bottom-width 1)
+  (setopt window-divider-default-places t)
+  (setopt window-divider-default-right-width 1)
 
- (setopt select-enable-clipboard t)
+  (setopt select-enable-clipboard t)
 
- (setopt sentence-end-double-space nil)
+  (setopt sentence-end-double-space nil)
 
-;; Help Related
-(setopt help-enable-completion-auto nil
-        help-enable-autoload nil
-        help-enable-symbol-autoload nil
-        help-window-select t)
+  ;; Help Related
+  (setopt help-enable-completion-auto nil
+          help-enable-autoload nil
+          help-enable-symbol-autoload nil
+          help-window-select t)
 
-;;(setopt bookmark-save-flag 1)
-(setopt warning-minimum-level :error)
-(setopt word-wrap-by-category t)
+  ;;(setopt bookmark-save-flag 1)
+  (setopt warning-minimum-level :error)
+  (setopt word-wrap-by-category t)
 
-;; Debug on error
-(setopt debug-on-error init-file-debug)
-(setopt delete-pair-blink-delay 0.03)
+  ;; Debug on error
+  (setopt debug-on-error init-file-debug)
+  (setopt delete-pair-blink-delay 0.03)
 
-;; warn when opening files bigger than 100MB
-(setopt large-file-warning-threshold 1000000000)
+  ;; warn when opening files bigger than 100MB
+  (setopt large-file-warning-threshold 1000000000)
 
-;; Mouse
-(setopt mouse-drag-and-drop-region t
-        mouse-drag-and-drop-region-cross-program t
-        mouse-yank-at-point t)
+  ;; Mouse
+  (setopt mouse-drag-and-drop-region t
+          mouse-drag-and-drop-region-cross-program t
+          mouse-yank-at-point t)
 
- (setopt delete-by-moving-to-trash t)
+  (setopt delete-by-moving-to-trash t)
 
-;; Cursor Style Bar
-(setopt cursor-type 'bar)
+  ;; Cursor Style Bar
+  (setopt cursor-type 'bar)
 
   ;; Truncate
   (setopt truncate-string-ellipsis "...")
@@ -231,47 +231,47 @@
   (setopt mark-even-if-inactive nil)
   ;; Show keystrokes
   (setopt echo-keystrokes 0.1)
- (setopt show-trailing-whitespace nil)
+  (setopt show-trailing-whitespace nil)
 
-;; Title bar of visible frames
-;; (setopt frame-title-format '("Emacs" emacs-version))
-;; Avoid automatic frame resizing when adjusting settings.
-;;(setopt global-text-scale-adjust-resizes-frames nil)
+  ;; Title bar of visible frames
+  ;; (setopt frame-title-format '("Emacs" emacs-version))
+  ;; Avoid automatic frame resizing when adjusting settings.
+  ;;(setopt global-text-scale-adjust-resizes-frames nil)
 
-;; Do not show an arrow at the top/bottomin the fringe and empty lines
-(setq-default indicate-buffer-boundaries nil)
-(setq-default indicate-empty-lines nil)
+  ;; Do not show an arrow at the top/bottomin the fringe and empty lines
+  (setq-default indicate-buffer-boundaries nil)
+  (setq-default indicate-empty-lines nil)
 
 ;;; Remove warnings from narrow-to-region, upcase-region...
-(dolist (cmd '(list-timers narrow-to-region upcase-region downcase-region
-                           erase-buffer scroll-left dired-find-alternate-file))
-  (put cmd 'disabled nil))
+  (dolist (cmd '(list-timers narrow-to-region upcase-region downcase-region
+                             erase-buffer scroll-left dired-find-alternate-file))
+    (put cmd 'disabled nil))
 
-(setq-default left-fringe-width 8)
-(setq-default right-fringe-width 8)
-;; Do not show an arrow at the top/bottomin the fringe and empty lines
-(setq-default indicate-buffer-boundaries nil)
-(setq-default indicate-empty-lines nil)
-(setq-default word-wrap t)
-;; Disable wrapping by default due to its performance cost.
-(setq-default truncate-lines t)
+  (setq-default left-fringe-width 8)
+  (setq-default right-fringe-width 8)
+  ;; Do not show an arrow at the top/bottomin the fringe and empty lines
+  (setq-default indicate-buffer-boundaries nil)
+  (setq-default indicate-empty-lines nil)
+  (setq-default word-wrap t)
+  ;; Disable wrapping by default due to its performance cost.
+  (setq-default truncate-lines t)
 
-;; Various Modes
-(set-fringe-mode 8)
-(global-prettify-symbols-mode 1)
-(auto-image-file-mode 1)
-;; Enable global syntax highlighting
-(global-font-lock-mode 1)
+  ;; Various Modes
+  (set-fringe-mode 8)
+  (global-prettify-symbols-mode 1)
+  (auto-image-file-mode 1)
+  ;; Enable global syntax highlighting
+  (global-font-lock-mode 1)
 
-;; Stop the system from hangind when
-;; visiting files with long lines
-(global-so-long-mode t)
+  ;; Stop the system from hangind when
+  ;; visiting files with long lines
+  (global-so-long-mode t)
 
 
-;; Show context menu on right click
-(when (display-graphic-p)
-  (context-menu-mode))
-)
+  ;; Show context menu on right click
+  (when (display-graphic-p)
+    (context-menu-mode))
+  )
 
 
 ;; TAB
@@ -340,7 +340,7 @@
   (electric-pair-open-newline-between-pairs nil)
   (electric-pair-skip-whitespace-chars '(9 10 32))
   (electric-pair-skip-self 'electric-pair-default-skip-self)
-    :config
+  :config
   (electric-pair-mode 1)
   (electric-quote-mode 1)
   (electric-indent-mode -1)
@@ -362,9 +362,9 @@
   (setq auto-save-visited-mode t)
   (setq save-silently t)
   (setq auto-save-visited-interval 5)
-    ;; Newline at the end of file
+  ;; Newline at the end of file
   (setq require-final-newline t)
-    ;; Help
+  ;; Help
   (setq apropos-do-all t)
   ;; Others
   (setq backup-inhibited t)
@@ -383,7 +383,7 @@
   (setq find-file-visit-truename t)
 
   (setq backup-directory-alist
-          `(("." . ,(expand-file-name "etc/backup/" user-emacs-directory))))
+        `(("." . ,(expand-file-name "etc/backup/" user-emacs-directory))))
   (setq auto-save-list-file-prefix
         (expand-file-name "etc/autosave/" user-emacs-directory))
   )
@@ -498,7 +498,7 @@
   ;; Occur buffer
   (setq list-matching-lines-jump-to-current-line nil)
   (add-hook 'occur-mode-hook #'hl-line-mode)
-)
+  )
 
 ;; Man
 (use-package man
@@ -612,10 +612,10 @@
 ;; Re-builder
 ;; Construct a regexp interactively.
 (use-package re-builder
-:ensure nil
-:commands (re-builder regexp-builder)
-:config
-(setq reb-re-syntax 'read))
+  :ensure nil
+  :commands (re-builder regexp-builder)
+  :config
+  (setq reb-re-syntax 'read))
 
 
 ;; Recentf
@@ -736,7 +736,7 @@
   (setopt next-error-recenter '(4))
   (setopt next-error-message-highlight nil)
   (setopt kill-do-not-save-duplicates t)
-   ;; Repeatedly pop mark with C-u SPC
+  ;; Repeatedly pop mark with C-u SPC
   (setopt set-mark-command-repeat-pop t)
 
   (setopt cycle-spacing-actions '(just-one-space (delete-all-space -) restore))
@@ -966,22 +966,22 @@
 
 
 
-(use-package windmove
-  :ensure nil
-  :hook (after-init . windmove-mode)
-  :bind
-  ( :map windmove-mode-map
-     ("C-w h" . windmove-left)
-     ("C-w l" . windmove-right)
-     ("C-w j" . windmove-down)
-     ("C-w k" . windmove-up)
-     ("C-w <left>" . windmove-left)
-     ("C-w <right>" . windmove-right)
-     ("C-w <down>" . windmove-down)
-     ("C-w <up>" . windmove-up)
-
-   )
-)
+;; (use-package windmove
+;;   :ensure nil
+;;   :hook (after-init . windmove-mode)
+;;   :bind
+;;   ( :map windmove-mode-map
+;;      ("C-w h" . windmove-left)
+;;      ("C-w l" . windmove-right)
+;;      ("C-w j" . windmove-down)
+;;      ("C-w k" . windmove-up)
+;;      ("C-w <left>" . windmove-left)
+;;      ("C-w <right>" . windmove-right)
+;;      ("C-w <down>" . windmove-down)
+;;      ("C-w <up>" . windmove-up)
+;;
+;;    )
+;; )
 
 
 ;; Woman
