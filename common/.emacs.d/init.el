@@ -33,3 +33,4 @@
 (require 'ef-appearance)
 (require 'ef-programming)
 (require 'ef-languages)
+(require 'ef-evil)
