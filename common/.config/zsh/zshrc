@@ -26,7 +26,7 @@ export SUDO_EDITOR=nvim
 # Oh My Zsh
 export ZSH="$HOME/.oh-my-zsh"
 
-# export TERM="xterm-256color"     
+# export TERM="xterm-256color"
 
 # Starship
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
@@ -38,6 +38,8 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.npm/bin:$PATH"
 
+# EMACS
+export PATH=/usr/local/bin:/usr/bin:/bin:$HOME/.cargo/bin:$HOME/.local/bin:
 # Ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
 
@@ -76,18 +78,18 @@ export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08
 # check `man zshoptions`
 # Use Emacs Keybindings
 # bindkey -e
-# Go to folder path without using CD 
+# Go to folder path without using CD
 setopt auto_cd
  # Push the old directory onto the stack on cd.
 setopt auto_pushd
 # Do not store duplicates in the stack.
-setopt PUSHD_IGNORE_DUPS    
+setopt PUSHD_IGNORE_DUPS
 # Do not print the directory stack after pushd or popd.
-setopt PUSHD_SILENT         
+setopt PUSHD_SILENT
 
 # Treat metacharcters as part of patterns for filename generation
 setopt EXTENDEDGLOB
-# Print error if no match found 
+# Print error if no match found
 setopt NOMATCH
 setopt PROMPT_SUBST     # enable command substitution in prompt
 setopt MENU_COMPLETE    # Automatically highlight first element of completion menu
@@ -98,12 +100,12 @@ setopt COMPLETE_IN_WORD # Complete from both ends of a word.
 # Do not show error
 unsetopt BEEP
 
-# History Related 
+# History Related
 setopt appendhistory
 setopt share_history
 setopt extended_history
 # Expire a duplicate event first when trimming history.
-setopt HIST_EXPIRE_DUPS_FIRST 
+setopt HIST_EXPIRE_DUPS_FIRST
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_find_no_dups
@@ -149,17 +151,17 @@ zstyle ':completion:*:warnings' format ' %F{red}no matches found %f'
 zstyle ':completion:*:options' list-colors '=^(-- *)=34'
 zstyle ':completion:*:*:-command-:*:*' group-order alias functions builtins commands
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-# Grouping 
+# Grouping
 # zstyle ':completion:*' group-name ''
 zstyle ':completion:*:*:-command-:*:*' group-order alias builtins functions commands
-# Detailed file listing 
+# Detailed file listing
 zstyle ':completion:*' file-list all
 
 # Alias
 [ -f "$XDG_CONFIG_HOME/zsh/alias" ] && source "$XDG_CONFIG_HOME/zsh/alias"
 [ -f "$XDG_CONFIG_HOME/zsh/functions" ] && source "$XDG_CONFIG_HOME/zsh/functions"
-# Bindings 
-# Vim Keybindings 
+# Bindings
+# Vim Keybindings
 # bindkey -v
 # export KEYTIMEOUT=1
 #
