@@ -163,7 +163,12 @@
 (use-package expand-region
   :ensure t
   :defer t
-  :bind ("C-=" . er/expand-region))
+  :bind (("C-=" . er/expand-region)
+         ("C--" . er/contract-region)
+         ("C-(" . er/mark-outside-pairs)
+         ("C-)" . er/mark-inside-pairs)
+         )
+  )
 
 ;; GCMH
 ;; The Garbage Collector Magic Hack
@@ -272,7 +277,7 @@
          ("C-M-." . mc/mark-next-like-this)
          ("C-M-," . mc/mark-previous-like-this)
          )
-  
+
   )
 
 

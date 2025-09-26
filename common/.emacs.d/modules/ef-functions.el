@@ -142,13 +142,15 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
    (list (intern (completing-read "Load custom theme: "
                                   (mapcar #'symbol-name
                                           (custom-available-themes))))))
-  (cl-loop for enabled-theme in custom-enabled-themes
-           if (not (or (eq enabled-theme 'my-theme-1)
-                       (eq enabled-theme theme)))
-           do (disable-theme enabled-theme))
+  (mapc #'disable-theme custom-enabled-themes)
+  ;; (cl-loop for enabled-theme in custom-enabled-themes
+  ;;          if (not (or (eq enabled-theme 'my-theme-1)
+  ;;                      (eq enabled-theme theme)))
+  ;;          do (disable-theme enabled-theme))
   (load-theme theme t)
-  (when current-prefix-arg
-    (my/regenerate-desktop)))
+  ;; (when current-prefix-arg
+  ;;   (my/regenerate-desktop))
+  )
 
 ;; Functions from Doom Emacs
 ;; Large File Handling

@@ -848,7 +848,7 @@
   ((text-mode . turn-on-auto-fill)
    (prog-mode . (lambda () (setq-local sentence-end-double-space t))))
   :config
-  
+
   (setq word-wrap-by-category t)
   (setq sentence-end-double-space nil)
   (setq sentence-end-without-period nil)
@@ -994,6 +994,18 @@
   :ensure nil
   :defer t
   :hook (woman-mode . olivetti-mode))
+
+
+;; Configure use-package
+(use-package use-package
+  :ensure nil
+  :custom
+  (use-package-verbose t)
+  (use-package-always-ensure t)  ; :ensure t by default
+  (use-package-always-defer nil) ; :defer t by default
+  (use-package-expand-minimally t)
+  (use-package-enable-imenu-support t))
+
 
 ;; Xref
 (use-package xref

@@ -22,6 +22,7 @@
    '("PATH" "MANPATH" "NODE_PATH")
    )
   :config
+  (exec-path-from-shell-copy-envs '("PATH" "MANPATH"))
   (exec-path-from-shell-initialize))
 
 
@@ -29,7 +30,7 @@
 ;; Shell
 ;; Built-in shell
 (use-package shell
-  :ensure nill
+  :ensure nil
   :custom
   (async-shell-command-buffer 'confirm-kill-processes)
   (ansi-color-for-comint-mode t)
