@@ -23,7 +23,7 @@
 ;; (require 'ef-shell)
 (require 'ef-vcs)
 (require 'ef-writing)
-
+(require 'ef-reading)
 
 ;; External
 (require 'ef-yasnippet)
