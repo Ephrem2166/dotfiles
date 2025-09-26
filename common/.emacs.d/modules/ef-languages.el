@@ -119,6 +119,57 @@
 ;;   (lua-indent-level 2)
 ;;   )
 
+
+;; MARKDOWN
+;; Markdown Header Configuration
+(defun my/markdown-headers ()
+  (set-face-attribute 'markdown-header-face-1 nil :height 2.0)
+  (set-face-attribute 'markdown-header-face-2 nil :height 1.75)
+  (set-face-attribute 'markdown-header-face-3 nil :height 1.5)
+  (set-face-attribute 'markdown-header-face-4 nil :height 1.3)
+  (set-face-attribute 'markdown-header-face-5 nil :height 1.15)
+  (set-face-attribute 'markdown-header-face-6 nil :height 1.05)
+  (set-face-attribute 'markdown-code-face nil :inherit 'fixed-pitch)
+  ;; '(custom-set-faces!
+  ;;   '(markdown-header-face-1 :height 1.25 :weight extra-bold :inherit markdown-header-face)
+  ;;   '(markdown-header-face-2 :height 1.15 :weight bold       :inherit markdown-header-face)
+  ;;   '(markdown-header-face-3 :height 1.08 :weight bold       :inherit markdown-header-face)
+  ;;   '(markdown-header-face-4 :height 1.00 :weight bold       :inherit markdown-header-face)
+  ;;   '(markdown-header-face-5 :height 0.90 :weight bold       :inherit markdown-header-face)
+  ;;   '(markdown-header-face-6 :height 0.75 :weight extra-bold :inherit markdown-header-face))
+  )
+
+;;; Markdown (markdown-mode)
+(use-package markdown-mode
+  :ensure t
+  :defer t
+  :hook (
+         (markdown-mode . visual-line-mode)
+         (markdown-mode . lsp)
+         (markdown-mode . my/markdown-headers)
+         )
+
+
+  :mode (("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :config
+  (require 'lsp-marksman)
+  (setopt markdown-indent-on-enter 'indent-and-new-item)
+  (setopt markdown-hide-markup t)
+  (setopt markdown-enable-math t)
+  (setopt markdown-fontify-code-blocks-natively t))
+
+;; Markdown Preview Mode
+;; To view markdown files in a browser (firefox)
+(use-package markdown-preview-mode
+  :disabled
+  :ensure t
+  :hook ((markdown-mode . markdown-preview-mode)
+         (gfm-mode . markdown-preview-mode))
+  :custom (browse-url-browser-function 'browse-url-firefox))
+
+
+
 ;; Prevent parenthesis imbalance
 (use-package paredit
   :disabled
