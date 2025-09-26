@@ -111,13 +111,13 @@
   :hook (emacs-lisp-mode . lispy-mode))
 
 ;; LUA
-;; (use-package lua-mode
-;;   :ensure t
-;;   :defer t
-;;   :mode "\\.lua\\'"
-;;   :custom
-;;   (lua-indent-level 2)
-;;   )
+(use-package lua-mode
+  :ensure t
+  :defer t
+  :mode "\\.lua\\'"
+  :custom
+  (lua-indent-level 2)
+  )
 
 
 ;; MARKDOWN

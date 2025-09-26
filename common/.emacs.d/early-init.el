@@ -85,7 +85,7 @@
 (setopt inhibit-startup-screen t)
 (setopt inhibit-x-resources t)
 (setopt inhibit-startup-buffer-menu t)
-(setopt inhibit-startup-echo-area-message user-login-name)
+;; (setopt inhibit-startup-echo-area-message t)
 (setopt inhibit-default-init t)
 (setopt inhibit-startup-message nil)
 (setopt initial-scratch-message nil)
@@ -133,9 +133,9 @@
 (setq bidi-inhibit-bpa t)
 
 ;; Unload jsonrpc (because elpaca can't do it)
-(when (featurep 'jsonrpc)
-  (unload-feature 'jsonrpc)
-  )
+;; (when (featurep 'jsonrpc)
+;;   (unload-feature 'jsonrpc)
+;;   )
 
 ;; Waste time while passing over auto-mode-alist
 (setq auto-mode-case-fold nil)
@@ -151,6 +151,16 @@
 
 (when (boundp 'pgtk-wait-for-event-timeout)
   (setq pgtk-wait-for-event-timeout 0.001))
+
+
+;; Profile emacs startup
+(add-hook 'after-init-hook
+          (lambda ()
+            (message "🚀 Emacs loaded in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract elpaca-after-init-time before-init-time)))
+                     gcs-done)) 98)
 
 (provide 'early-init)
 ;;; early-init ends here

@@ -24,6 +24,24 @@
 (global-set-key (kbd "C-0") 'text-scale-adjust)
 
 
+;; (use-package emacs
+;;   :ensure nil
+;;   :preface
+;;   (defvar my/leader-map (make-sparse-keymap) "key-map for leader key")
+;;   (defvar my/buffer-map (make-sparse-keymap) "key-map for buffer commands")
+;;   (defvar my/file-map (make-sparse-keymap) "key-map for buffer commands")
+;;   :config
+;;   (keymap-set global-map "C-x" my/leader-map)
+;;   (define-key my/leader-map (kbd "b") (cons "buffer" my/buffer-map))
+;;   (define-key my/leader-map (kbd "f") (cons "file" my/file-map))
+;;   :bind
+;;   (
+;;    :map my/buffer-map
+;;    ("e" . eval-buffer)
+;;    ("k" . kill-current-buffer)
+;;    ("K" . kill-buffer)
+;;    ))
+
 
 (provide 'ef-keybindings)
 ;;; ef-keybindings.el ends here

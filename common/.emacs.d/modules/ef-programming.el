@@ -6,7 +6,22 @@
 ;; Code formatters
 (use-package apheleia
   :ensure t
+  :defer t
   :config
+  (setq apheleia-formatters
+        (append
+         '((prettier . ("prettier" "--stdin-filepath" filepath))
+           (black . ("black" "-"))
+           (shfmt . ("shfmt" "-i" "2" "-ci" "-")))
+         apheleia-formatters))
+
+  ;; Customize mode-to-formatter mapping.
+  (setq apheleia-mode-alist
+        '((python-mode . black)
+          (javascript-mode . prettier)
+          (typescript-mode . prettier)
+          (ruby-mode . rubocop)
+          (sh-mode . shfmt)))
   (apheleia-global-mode +1))
 
 ;; Enables automatic indentation of code while typing

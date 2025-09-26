@@ -17,7 +17,8 @@
   (auto-revert-check-vc-info t)
   (auto-revert-verbose nil)
   (global-auto-revert-non-file-buffers t)
-  (auto-revert-use-notify nil)
+  (auto-revert-use-notify t)
+  (auto-revert-avoid-polling t)
   ;; (setq global-auto-revert-ignore-modes '(Buffer-menu-mode))
   :config
   (global-auto-revert-mode)
@@ -128,6 +129,8 @@
    ;; (text-mode .display-line-numbers-mode)
    )
   :config
+  ;; If non-nil, count number of lines to use for line number width.
+  (setq display-line-numbers-width-start t)
   (setq-default display-line-numbers 'visual)
   (setq-default display-line-numbers-widen t)
   (setq-default display-line-numbers-width 3)
@@ -179,6 +182,8 @@
   (setopt undo-limit (* 13 160000)
           undo-strong-limit (* 13 240000)
           undo-outer-limit (* 13 24000000))
+  (setopt use-file-dialog nil)
+  (setopt use-dialog-box nil)
   ;; Language
   (set-language-environment 'utf-8)
   (set-default-coding-systems 'utf-8)
@@ -221,7 +226,9 @@
 
   ;; Cursor Style Bar
   (setopt cursor-type 'bar)
-
+  (setopt blink-cursor-mode nil)
+  (setopt x-stretch-cursor nil)
+  (setopt cursor-intangible-mode t)
   ;; Truncate
   (setopt truncate-string-ellipsis "...")
   ;; Position undelines at the descent line
@@ -232,7 +239,7 @@
   ;; Show keystrokes
   (setopt echo-keystrokes 0.1)
   (setopt show-trailing-whitespace nil)
-
+  (setopt fill-column 80)
   ;; Title bar of visible frames
   ;; (setopt frame-title-format '("Emacs" emacs-version))
   ;; Avoid automatic frame resizing when adjusting settings.
@@ -270,8 +277,8 @@
 
   ;; Show context menu on right click
   (when (display-graphic-p)
-    (context-menu-mode))
-  )
+    (context-menu-mode))  )
+
 
 
 ;; TAB
@@ -291,13 +298,9 @@
   :ensure nil
   :demand t
   :config
-
   (setq delete-pair-blink-delay 0.1)
   (setq help-window-select t)
   (setq find-library-include-other-files nil)
-
-
-
   (setq-default truncate-partial-width-windows nil)
   )
 
@@ -435,6 +438,7 @@
   :when (display-graphic-p)
   :defer t
   :hook (( text-mode . hl-line-mode)
+         (org-mode . hl-line-mode)
          ( prog-mode . hl-line-mode)))
 
 
@@ -550,7 +554,7 @@
 (use-package paren
   :ensure nil
   :defer t
-  :hook (prog-mode . show-paren-local-mode)
+  :hook (prog-mode . show-paren-mode)
   :config
   (setq show-paren-delay 0.1)
   (setq show-paren-highlight-openparen t)
@@ -844,6 +848,7 @@
   ((text-mode . turn-on-auto-fill)
    (prog-mode . (lambda () (setq-local sentence-end-double-space t))))
   :config
+  
   (setq word-wrap-by-category t)
   (setq sentence-end-double-space nil)
   (setq sentence-end-without-period nil)
@@ -1008,7 +1013,6 @@
   (xref-search-program 'ripgrep)
   (xref-history-storage 'xref-window-local-history) ; Per-window history of `xref-go-*'
   )
-
 
 
 

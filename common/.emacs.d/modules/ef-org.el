@@ -34,9 +34,10 @@
 (use-package org
   :ensure nil
   :defer t
+  :init
+  (setq org-directory (expand-file-name "~/Org/"))
   :config
   ;; General Settings
-  (setq org-directory (expand-file-name "~/Org/"))
   (setq org-imenu-depth 7)
   (setq org-startup-folded t)
 
@@ -674,13 +675,12 @@
 ;; Org Auto Tangle
 ;; Automatically and Asynchronously tangles org files on save
 (use-package org-auto-tangle
+  :after org 
   :defer t
   :hook (org-mode . org-auto-tangle-mode)
   :config
   ;; Set it to t if you want it to autotangle
   (setq org-auto-tangle-default nil))
-
-;;
 
 ;; TODO Org-Refile
 ;; Transclude text content via links
@@ -695,15 +695,16 @@
 
 ;; toc-org
 ;; Add table of contents to org mode files
-;; (use-package toc-org
-;;   :after (org markdown-mode)
-;;   :commands toc-org-enable
-;;   :init
-;;   (add-hook 'org-mode-hook 'toc-org-enable)
-;;   (add-to-list 'org-tag-alist '("TOC" . ?T))
-;;   :hook (markdown-mode . toc-org-enable)  )
-(use-package org-make-toc
-  :ensure t)
+(use-package toc-org
+  :after (org markdown-mode)
+  :commands toc-org-enable
+  :init
+  (add-hook 'org-mode-hook 'toc-org-enable)
+  (add-to-list 'org-tag-alist '("TOC" . ?T))
+  :hook (markdown-mode . toc-org-enable)  )
+
+;; (use-package org-make-toc
+;;   :ensure t)
 
 ;; TODO: Org-pdftools (ERRORS)
 ;; Support for links to documents in pdfview mode
@@ -978,6 +979,10 @@
   :hook (org-mode . valign-mode)
   )
 
+;; TODO Org Present
+(use-package org-present
+  :after org
+  )
 
 (provide 'ef-org)
 ;;; ef-org.el ends here

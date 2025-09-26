@@ -2,7 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
-
+(use-package auto-dark
+  :ensure t
+  :custom
+  (auto-dark-themes '((doom-nord) (modus-operandi-deuteranopia)))
+  :hook
+  (after-init . auto-dark-mode))
 
 ;; Doom Modeline
 (use-package doom-modeline
@@ -81,6 +86,24 @@
   (minions-mode-line-lighter "…")
   (minions-mode-line-delimiters '("[" . "]")))
 
+
+(use-package spacious-padding
+  :ensure t
+  :custom
+  (spacious-padding-widths '(
+                             :internal-border-width 10
+                             :header-line-width 0
+                             :mode-line-width 4
+                             :tab-bar-width 4
+                             :tab-line-width 2
+                             :tab-width 2
+                             :right-divider-width 10
+                             ;; :scroll-bar-width 2
+                             :fringe-width 8
+                             ))
+  (spacious-padding-subtle-mode-line t)
+  :hook
+  (after-init . spacious-padding-mode))
 
 
 (provide 'ef-appearance)
