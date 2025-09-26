@@ -66,6 +66,17 @@
     )
 
   (add-hook 'emacs-lisp-mode #'ef-elisp-setup)
+
+  ;; Tempel
+  (defun init-cape-eglot-capf ()
+    (setq-local completion-at-point-functions
+                (list #'cape-file
+                      (cape-capf-super (cape-capf-buster #'eglot-completion-at-point #'string-prefix-p)
+                                       :with #'tempel-complete))))
+  (add-hook 'eglot-managed-mode #'init-cape-eglot-capf)
+
+
+
   ;; Prog Mode
   (defun ef-setup-completion ()
     (setq-local completion-at-point-functions
@@ -277,12 +288,10 @@
   :after vertico
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
-  :custom
-  (marginalia-annotators '(marginalia-annotators-heavy
-                           marginalia-annotators-light
-                           nil))
-
   :config
+  (setq marginalia-annotators '(marginalia-annotators-heavy
+                                marginalia-annotators-light
+                                nil))
   (setq marginalia-max-relative-age 0)
   ;; Alignment of annotations
   (setq marginalia-align 'right)
@@ -361,6 +370,27 @@
   )
 
 
+;; Tempel
+;; Tempo templates/snippets with in-buffer field editing
+(use-package tempel
+  :ensure t
+  :bind
+  (
+   ("M-+" . tempel-complete)
+   ("M-*" . tempel-insert)
+   )
+  :config
+  (setq tempel-path (concat user-emacs-directory "etc/tempel/templates.eld"))
+  :init
+  (defun tempel-setup-capf ()
+    (setq-local completion-at-point-functions
+                (cons #'tempel-expand
+                      completion-at-point-functions)))
+
+  (add-hook 'conf-mode-hook 'tempel-setup-capf)
+  (add-hook 'prog-mode-hook 'tempel-setup-capf)
+  (add-hook 'text-mode-hook 'tempel-setup-capf)
+  )
 
 ;; Vertico
 ;; Vertico provides a performant and minimalistic vertical completion UI
@@ -380,7 +410,7 @@
   :config
   (setq vertico-scroll-margin 0)
   (setq vertico-cycle t)
-  (setq vertico-count 5)
+  (setq vertico-count 10)
   (setq vertico-resize 'grow)
   ;; Hide commands that don't match current mode
   (setq read-extended-command-predicate #'command-completion-default-include-p)

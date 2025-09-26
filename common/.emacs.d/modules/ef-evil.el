@@ -7,7 +7,7 @@
 (setq evil-want-keybinding nil)
 (use-package evil
   :ensure t
-  ;; :demand t
+  :demand t
   :init
   (setq evil-want-keybinding nil)
   (setq evil-overriding-maps nil)

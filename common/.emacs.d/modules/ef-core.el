@@ -1,7 +1,15 @@
 ;;; ef-core.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-;; TODO: Abbrev
+;;  Abbrev
+(use-package abbrev
+  :ensure nil
+  :custom
+  (save-abbrevs 'silently)
+  (abbrev-suggest t)
+  (abbrev-suggest-hint-threshold 2)
+  (setq-default abbrev-mode t))
+
 
 ;; Auto-revert
 ;; Auto-Revert Mode is a minor mode that affects only the current
@@ -951,6 +959,38 @@
   (setq fit-window-to-buffer-horizontally t)
   (setq switch-to-buffer-obey-display-actions t)
   (setq switch-to-buffer-in-dedicated-window 'pop)
+  (setq isplay-buffer-alist
+        '(("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 0))
+          ("\\*\\([Hh]elp\\)\\*"
+           (display-buffer-in-side-window)
+           (window-width . 75)
+           (side . right)
+           (slot . 0))
+          ("\\*\\(Ibuffer\\)\\*"
+           (display-buffer-in-side-window)
+           (window-width . 100)
+           (side . right)
+           (slot . 1))
+          ("\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 1))
+          ("\\*\\(grep\\|find\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 2))
+          ("\\*\\(M3U Playlist\\)"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 3))
+          ))
   )
 
 ;; Winner

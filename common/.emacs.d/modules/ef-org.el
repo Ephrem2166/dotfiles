@@ -675,7 +675,7 @@
 ;; Org Auto Tangle
 ;; Automatically and Asynchronously tangles org files on save
 (use-package org-auto-tangle
-  :after org 
+  :after org
   :defer t
   :hook (org-mode . org-auto-tangle-mode)
   :config
