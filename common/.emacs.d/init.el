@@ -18,7 +18,7 @@
 (require 'ef-minibuffer)
 (require 'ef-dired)
 (require 'ef-keybindings)
-
+(require 'ef-functions)
 
 ;; (require 'ef-shell)
 (require 'ef-vcs)
