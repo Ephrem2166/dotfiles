@@ -13,6 +13,7 @@
   (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "/etc/snippets/"))
   ;; to load Yasnippet on a per bxuffer basis
   (yas-reload-all)
+  :delight "Y"
   )
 ;; Yasnippet snippets
 (use-package yasnippet-snippets
@@ -22,4 +23,3 @@
   :after (yasnippet)
   )
 (provide 'ef-yasnippet)
-

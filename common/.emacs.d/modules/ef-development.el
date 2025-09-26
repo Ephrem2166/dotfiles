@@ -29,6 +29,7 @@
 ;; Eglot (built-in client for the language server protocol)
 (use-package eglot
   :ensure nil
+  :disabled
   :diminish
   :preface
   :defer t
