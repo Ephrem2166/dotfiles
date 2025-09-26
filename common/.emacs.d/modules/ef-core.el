@@ -320,25 +320,34 @@
 
 ;; Electric
 ;; Toggle automatic parens pairing (Electric Pair mode).
-(use-package electric
+(use-package elec-pair
   ;; :disabled
   :ensure nil
   :defer t
   :hook
   ((on-first-input . electric-pair-mode)
    (prog-mode . electric-indent-local-mode))
-  :config
-  (electric-pair-mode 1)
-  (electric-quote-mode 1)
-  (electric-indent-mode -1)
   :custom
   (electric-pair-inhibit-predicate 'electric-pair-default-inhibit)
   (electric-quote-comment nil)
   (electric-quote-string nil)
   (electric-quote-context-sensitive t)
   (electric-quote-replace-double t)
-  (electric-quote-inhibit-functions nil))
-
+  (electric-quote-inhibit-functions nil)
+  (electric-pair-preserve-balance t)
+  (electric-pair-skip-whitespace nil)
+  (electric-pair-delete-adjacent-pairs t)
+  (electric-pair-open-newline-between-pairs nil)
+  (electric-pair-skip-whitespace-chars '(9 10 32))
+  (electric-pair-skip-self 'electric-pair-default-skip-self)
+    :config
+  (electric-pair-mode 1)
+  (electric-quote-mode 1)
+  (electric-indent-mode -1)
+  (setq electric-pair-pairs '(
+                              (?\{ . ?\})
+                              (?\[ . ?\])
+                              )))
 
 
 (use-package files
@@ -464,8 +473,8 @@
 (use-package isearch
   :ensure nil
   :config
-     ;; Activate character folding in searches i.e. searching for 'a' matches 'ä' as well
-  (setq search-default-mode 'char-fold-to-regexp)
+  ;; (setq search-default-mode 'char-fold-to-regexp)
+  (setq search-default-mode nil)
   (setq search-whitespace-regexp ".*?"
         isearch-lax-whitespace t
         isearch-regexp-lax-whitespace nil)
