@@ -20,7 +20,7 @@
 (require 'ef-keybindings)
 (require 'ef-functions)
 
-;; (require 'ef-shell)
+(require 'ef-shell)
 (require 'ef-vcs)
 (require 'ef-writing)
 (require 'ef-reading)
