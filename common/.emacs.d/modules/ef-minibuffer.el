@@ -1,3 +1,18 @@
+;;; ef-minibuffer.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
+;;; Commentary:
+;;; Code:
+;; TODO Completion Preview
+(use-package completion-preview
+  :ensure nil
+  :custom
+  (completion-preview-ignore-case t)
+  (completion-preview-minimum-symbol-length 3)
+  :config
+  (completion-preview-mode 1)
+
+  )
+
+;;; icomplete
 (use-package icomplete
   :disabled
   :ensure nil
@@ -17,6 +32,7 @@
   )
 
 
+;;; Minibuffer
 (use-package minibuffer
   :ensure nil
   :bind (
@@ -68,4 +84,6 @@
 ;;   )
 
 
+
 (provide 'ef-minibuffer)
+;;; ef-minibuffer.el ends here

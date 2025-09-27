@@ -129,6 +129,16 @@
          )
   )
 
+;;; Org Num
+(use-package org-num
+  :ensure nil
+  :custom
+  (org-num-face 'fixed-pitch)
+  (org-num-skip-commented t)
+  (org-num-skip-footnotes t)
+  (org-num-skip-unnumbered t))
+
+
 ;; Org Indent
 (use-package org
   :ensure nil
@@ -354,6 +364,7 @@
   (setq org-edit-src-content-indentation 0))
 
 
+
 ;; Org Footnote
 (use-package org-footnote
   :ensure nil
@@ -432,11 +443,6 @@
   (org-fontify-whole-block-delimiter-line nil)
   (org-fontify-quote-and-verse-blocks t))
 
-;; (defun ef/org-modern-spacing ()
-;;   (setq-local line-spacing
-;;               (if org-modern-mode
-;;                   0.5 0.0)))
-
 ;; Org Modern
 ;; Modern Look for Org
 (use-package org-modern
@@ -445,8 +451,13 @@
   ;; (global-org-modern-mode)
   :hook
   ((org-mode . org-modern-mode)
-   ;;   (org-mode . ef/org-modern-spacing)
+   (org-mode . ef/org-modern-spacing)
    )
+  :config
+  (defun ef/org-modern-spacing ()
+    (setq-local line-spacing
+                (if org-modern-mode
+                    0.1 0.0)))
   :custom
   (org-catch-invisible-edits 'show-and-error)
   (org-modern-block-fringe nil)
@@ -978,7 +989,9 @@
 ;; Valign
 (use-package valign
   :ensure t
-  :hook (org-mode . valign-mode)
+  :hook ((org-mode markdown-mode) . valign-mode)
+  :init
+  (setq valign-fancy-bar t)
   )
 
 ;; TODO Org Present

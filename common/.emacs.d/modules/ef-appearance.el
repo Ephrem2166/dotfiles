@@ -1,15 +1,16 @@
 ;;; ef-appearance.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-
+;;; Auto Dark
+;; Automatically set the dark-mode theme based on system status
 (use-package auto-dark
   :ensure t
   :custom
   (auto-dark-themes '((doom-nord) (modus-operandi-deuteranopia)))
-  :hook
-  (after-init . auto-dark-mode))
+  :init (auto-dark-mode)
+  )
 
-
+;;; Emacs: Modeline
 (use-package emacs
   :ensure nil
   :config
@@ -95,7 +96,7 @@
   (add-hook 'after-change-major-mode-hook 'clean-mode-line)
   )
 
-;; Doom Modeline
+;;; Doom Modeline
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1)
@@ -154,12 +155,12 @@
   )
 
 
-;; Htmlize
+;;; Htmlize
 ;; Convert buffer text and decorations to html
 (use-package htmlize
   :ensure t)
 
-;; Minions
+;;; Minions
 ;; A minor-mode menu for the mode line
 (use-package minions
   :ensure t
@@ -172,22 +173,25 @@
   (minions-mode-line-lighter "…")
   (minions-mode-line-delimiters '("[" . "]")))
 
-
+;;; Spacious Padding
 (use-package spacious-padding
   :ensure t
-  :custom
-  (spacious-padding-widths '(
-                             :internal-border-width 10
-                             :header-line-width 0
-                             :mode-line-width 4
-                             :tab-bar-width 4
-                             :tab-line-width 2
-                             :tab-width 2
-                             :right-divider-width 10
-                             ;; :scroll-bar-width 2
-                             :fringe-width 8
-                             ))
-  (spacious-padding-subtle-mode-line t)
+  :disabled
+  :if (display-graphic-p)
+  :bind (("C-c t s" . spacious-padding-mode))
+  :init
+  (setq spacious-padding-widths '(
+                                  :internal-border-width 15
+                                  :header-line-width 4
+                                  :mode-line-width 6
+                                  :tab-bar-width 4
+                                  :tab-line-width 2
+                                  :tab-width 2
+                                  :right-divider-width 10
+                                  ;; :scroll-bar-width 2
+                                  :fringe-width 20
+                                  ))
+  (setq spacious-padding-subtle-mode-line t)
   :hook
   (after-init . spacious-padding-mode))
 

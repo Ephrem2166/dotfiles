@@ -279,7 +279,6 @@
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
-
 ;; Marginalia: adds marginalia to the minibuffer completions.
 ;; Marginalia are helpful colorful annotations placed at the margin of the
 ;; minibuffer for your completion candidates.
@@ -289,16 +288,17 @@
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
   :config
-  (setq marginalia-annotators '(marginalia-annotators-heavy
-                                marginalia-annotators-light
-                                nil))
-  (setq marginalia-max-relative-age 0)
-  ;; Alignment of annotations
-  (setq marginalia-align 'right)
-  (setq marginalia-field-width 80)
-  (setq marginalia-align-offset -2)
+  ;; (setq marginalia-annotators '(marginalia-annotators-heavy
+  ;;                               marginalia-annotators-light
+  ;;                               nil))
+  ;; (setq marginalia-max-relative-age 0)
+  ;; ;; Alignment of annotations
+  ;; (setq marginalia-align 'right)
+  ;; (setq marginalia-field-width 80)
+  ;; (setq marginalia-align-offset -2)
   :init
   (marginalia-mode))
+
 
 
 ;; Orderless

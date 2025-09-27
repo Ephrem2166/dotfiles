@@ -307,6 +307,7 @@
 ;; Move text
 ;; Move current line or region with M-up or M-down
 (use-package move-text
+  :disabled
   :ensure t
   :bind
   (

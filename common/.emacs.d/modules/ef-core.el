@@ -1,20 +1,19 @@
 ;;; ef-core.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-;;  Abbrev
+;;; Abbrev
 (use-package abbrev
   :ensure nil
   :custom
+  (abbrev-file-name (expand-file-name "etc/abbrev.el" user-emacs-directory))
   (save-abbrevs 'silently)
   (abbrev-suggest t)
   (abbrev-suggest-hint-threshold 2)
   (setq-default abbrev-mode t))
-
-
-;; Auto-revert
-;; Auto-Revert Mode is a minor mode that affects only the current
-;; buffer.  When enabled, it reverts the buffer when the file on
-;; disk changes.
+;;; Auto-revert
+;;;; Auto-Revert Mode is a minor mode that affects only the current
+;;;; buffer.  When enabled, it reverts the buffer when the file on
+;;;; disk changes.
 (use-package autorevert
   :ensure nil
   :defer t
@@ -32,7 +31,7 @@
   (global-auto-revert-mode)
   )
 
-;; TODO Bookmarks
+;;; Bookmarks
 (use-package bookmark
   :ensure nil
   :custom
@@ -41,7 +40,7 @@
   (bookmark-default-file (expand-file-name "bookmarks" user-emacs-directory))
   (bookmark-save-flag 1))
 
-;; Browser Url
+;;; Browser Url
 (use-package browse-url
   :ensure nil
   :custom
@@ -49,7 +48,7 @@
   (browse-url-browser-function 'browse-url-firefox))
 
 
-;; Calendar
+;;; Calendar
 (use-package calendar
   :ensure nil
   :commands (calendar)
@@ -68,7 +67,7 @@
 
 
 
-;; Compilation
+;;; Compilation
 (use-package compile
   :ensure nil
   :config
@@ -85,7 +84,7 @@
   (setq compilation-read-command nil))
 
 
-;; Cus-edit
+;;; Cus-edit
 ;; (use-package cus-edit
 ;;   :ensure nil
 ;;   :config
@@ -94,7 +93,7 @@
 ;;     (load custom-file))
 ;;   )
 
-;; Dabbrev
+;;; Dabbrev
 (use-package dabbrev
   :ensure nil
   :defer t
@@ -125,8 +124,8 @@
   )
 
 
-;; Display Line Numbers
-;;; Line numbers on the side of the window
+;;; Display Line Numbers
+;; Line numbers on the side of the window
 (use-package display-line-numbers
   :ensure nil
   :defer t
@@ -145,7 +144,8 @@
   (setq-default display-line-numbers-current-absolute t)
   )
 
-;;;; `dictionary'
+;;; Dictionary
+;; `dictionary'
 ;; Install dict or dictd for offline use
 (use-package dictionary
   :ensure nil
@@ -161,14 +161,14 @@
           dictionary-use-single-buffer t))
 
 
-;; Delete Selection Mode
+;;; Delete Selection Mode
 ;; Delete the selected text upon the insertion of new text.
 (use-package delsel
   :ensure nil
   :defer t
   :hook (after-init . delete-selection-mode))
 
-;; General Properties
+;;; General Properties
 (use-package emacs
   :ensure nil
   :config
@@ -258,7 +258,7 @@
   (setq-default indicate-buffer-boundaries nil)
   (setq-default indicate-empty-lines nil)
 
-;;; Remove warnings from narrow-to-region, upcase-region...
+;; Remove warnings from narrow-to-region, upcase-region...
   (dolist (cmd '(list-timers narrow-to-region upcase-region downcase-region
                              erase-buffer scroll-left dired-find-alternate-file))
     (put cmd 'disabled nil))
@@ -293,7 +293,7 @@
 
 
 
-;; TAB
+;;; Emacs: TAB
 (use-package emacs
   :ensure nil
   ;; Tab Behavior
@@ -306,7 +306,7 @@
   )
 
 
-;; Essential Configuration
+;;; Emacs: Essential Configuration
 (use-package emacs
   :ensure nil
   :demand t
@@ -318,7 +318,7 @@
   )
 
 
-;; SAVE SETTINGS
+;;; Emacs: SAVE SETTINGS
 (use-package emacs
   :ensure nil
   :config
@@ -331,17 +331,14 @@
           kill-buffer-delete-auto-save-files t
           ))
 
-
-
-
-;; Electric
+;;; Electric Pair
 ;; Toggle automatic parens pairing (Electric Pair mode).
 (use-package elec-pair
   ;; :disabled
   :ensure nil
   :defer t
   :hook
-  ((on-first-input . electric-pair-mode)
+  ((after-init-hook . electric-pair-mode)
    (prog-mode . electric-indent-local-mode))
   :custom
   (electric-pair-inhibit-predicate 'electric-pair-default-inhibit)
@@ -365,7 +362,7 @@
                               (?\[ . ?\])
                               )))
 
-
+;;; Files
 (use-package files
   :ensure nil
   :config
@@ -404,17 +401,14 @@
         (expand-file-name "etc/autosave/" user-emacs-directory))
   )
 
-
-
-
-;; Goto Address
+;;; Goto Address
 ;; Buttonize URLs and e-mail addresses in the current buffer
 (use-package goto-addr
   :ensure nil
   :hook ((compilation-mode prog-mode conf-mode eshell-mode shell-mode) . goto-address-mode))
 
 
-;; ;; Hippie Expand
+;;; Hippie Expand
 (use-package hippie-exp
   :ensure nil
   :defer t
@@ -430,21 +424,22 @@
   ;; change the order it tries things
   (setq hippie-expand-try-functions-list
         '(
+          try-expand-list
           try-expand-dabbrev-visible
           try-expand-dabbrev
+          try-expand-all-abbrevs
           try-expand-dabbrev-all-buffers
-          try-expand-dabbrev-from-kill
-          try-complete-lisp-symbol-partially
-          try-complete-lisp-symbol
-          try-expand-list
-          try-expand-line
           try-complete-file-name-partially
           try-complete-file-name
-          try-expand-all-abbrevs
+          try-expand-dabbrev-from-kill
+          try-expand-whole-kill
+          try-expand-line
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol
           ))
   )
 
-
+;;; hl-line-mode
 ;; Highlight Line in a Terminal
 (use-package hl-line-mode
   :ensure nil
@@ -454,9 +449,7 @@
          (org-mode . hl-line-mode)
          ( prog-mode . hl-line-mode)))
 
-
-
-;; ibuffer
+;;; ibuffer
 (use-package ibuffer
   :ensure nil
   :hook
@@ -474,7 +467,7 @@
   (setq ibuffer-show-empty-filter-groups t)
   (setq ibuffer-filter-group-name-face '(:inherit (success bold))))
 
-;; imenu
+;;; imenu
 ;; Jump to a place in the buffer chosen using a buffer menu or mouse menu.
 (use-package imenu
   :ensure nil
@@ -486,7 +479,7 @@
   (setq imenu-flatten 'group))
 
 
-;; isearch
+;;; isearch
 (use-package isearch
   :ensure nil
   :config
@@ -517,7 +510,7 @@
   (add-hook 'occur-mode-hook #'hl-line-mode)
   )
 
-;; Man
+;;; Man
 (use-package man
   :ensure nil
   :defer t
@@ -529,7 +522,7 @@
   )
 
 
-;; COMMENT
+;;; COMMENT
 (use-package newcomment
   :ensure nil
   :config
@@ -561,9 +554,27 @@
       (forward-line)))
   (global-set-key (kbd "C-/") #'my-comment-or-uncomment-region-or-line))
 
+;;; Outline Mode
+(use-package outline
+  :ensure nil
+  :hook ((prog-mode conf-mode text-mode) . my/prog-outline)
+  :bind (:map ef-toggle-keymap
+              ("o" . outline-toggle-children))
+  :custom
+  (outline-minor-mode-highlight t)
+  (outline-minor-mode-cycle t)
+  (outline-minor-mode-cycle-filter nil)
+  (outline-minor-mode-highlight 'append)
+  (outline-blank-line t)
+  (outline-minor-mode-use-buttons nil)
+  (outline-minor-mode-use-margins nil)
+  :config
+  (defun my/prog-outline ()
+    (outline-minor-mode 1)
+    (outline-hide-sublevels 1))
+  )
 
-
-;; Paren
+;;; Paren
 (use-package paren
   :ensure nil
   :defer t
@@ -579,7 +590,7 @@
   (show-paren-mode 1))
 
 
-;; Scroll
+;;; Scroll
 (use-package pixel-scroll
   :ensure nil
   :defer t
@@ -600,18 +611,27 @@
           hscroll-step 1
           auto-window-vscroll nil)  )
 
-;; Profiling
+;;; Profiling
 (use-package profiler
   :ensure nil
   :defer t
   :bind (
-         ("C-c s" . profiler-start)
-         ("C-c r" . profiler-report)
-         ("C-c S" . profiler-stop)
+         ("C-c e s" . my/run-profiler)
          )
+  :config
+  (defun my/run-profiler ()
+    (interactive)
+    (if (and (fboundp 'profiler-running-p)
+             (profiler-running-p))
+        (prog1 (profiler-stop)
+          (profiler-report))
+      (profiler-reset)
+      (profiler-start 'cpu)
+      (message "CPU Profiler Started"))
+    )
   )
 
-;; Proced
+;;; Proced
 ;; Generate a listing of UNIX system processes.
 (use-package proced
   :ensure nil
@@ -626,7 +646,7 @@
   (setq proced-auto-update-interval 1))
 
 
-;; Re-builder
+;;; Re-builder
 ;; Construct a regexp interactively.
 (use-package re-builder
   :ensure nil
@@ -635,7 +655,7 @@
   (setq reb-re-syntax 'read))
 
 
-;; Recentf
+;;; Recentf
 (use-package recentf
   :ensure nil
   :defer t
@@ -655,8 +675,7 @@
   (setq recentf-save-file (concat user-emacs-directory "etc/recentf"))
   )
 
-
-;; Register
+;;; Register
 (use-package register
   :ensure nil
   :config
@@ -672,7 +691,7 @@
   )
 
 
-;; Repeat
+;;; Repeat
 ;; Used to reduce key sequence length
 (use-package repeat
   :ensure nil
@@ -686,7 +705,7 @@
   (setq repeat-exit-key (kbd "<escape>")))
 
 
-;; Savehist
+;;; Savehist
 ;; Savehist Save minibuffer and related histories
 (use-package savehist
   :ensure nil
@@ -716,7 +735,7 @@
                                         regexp-search-ring
                                         extended-command-history)))
 
-;; Saveplace
+;;; Saveplace
 ;; saveplace remembers your location in a file when saving files
 (use-package saveplace
   :ensure nil
@@ -734,7 +753,8 @@
 
 
 
-;;;; Emacs server (allow emacsclient to connect to running session)
+;;; Emacs server
+;; allow emacsclient to connect to running session)
 ;; (use-package server
 ;;   :ensure nil
 ;;   :init
@@ -744,7 +764,7 @@
 ;;     (server-start)))
 
 
-
+;;; Simple
 (use-package simple
   :ensure nil
   :config
@@ -776,8 +796,7 @@
 
   )
 
-
-;; Sppedbar
+;;; Sppedbar
 ;; Summary: quick access to files and tags in a frame
 (use-package speedbar
   :ensure nil
@@ -815,7 +834,7 @@
      ;; Notes and Markup
      ".md" ".markdown" ".org" ".txt" "README")))
 
-;; Subword
+;;; Subword
 ;; Enable builtin packages after init
 ;; Recognize camel case as words
 ;; (global-subword-mode t)
@@ -825,7 +844,7 @@
                       java-mode java-ts-mode js-mode js-ts-mode) . subword-mode))
 
 
-;; So long
+;;; So long
 ;; (use-package so-long
 ;;   :ensure nil
 ;;   :hook (after-init . so-long-mode)
@@ -834,7 +853,7 @@
 
 
 
-;; Display Time
+;;; Display Time
 (use-package time
   :ensure nil
   :defer t
@@ -852,7 +871,7 @@
   )
 
 
-;; Text Mode
+;;; Text Mode
 (use-package text-mode
   :ensure nil
   :defer t
@@ -869,7 +888,7 @@
   (setq use-hard-newlines nil)
   (setq adaptive-fill-mode t))
 
-
+;;; Uniquify
 ;; Unique Buffer Names
 (use-package uniquify
   :ensure nil
@@ -881,13 +900,14 @@
   (setq uniquify-after-kill-buffer-p t)
   (setq uniquify-buffer-name-style 'forward))
 
+;;; Visual Wrap
 ;; Respect indentation whein wrapping long lines
 (use-package visual-wrap
   :ensure nil
   :when (>= emacs-major-version 30)
   :hook ((prog-mode conf-mode org-mode) . visual-wrap-prefix-mode))
 
-;; Which Key
+;;; Which Key
 ;; Builtin (Emacs Version 30)
 ;; Display available keybindings in popup
 (use-package which-key
@@ -922,14 +942,15 @@
     "C-c a" "applications"
     "C-c b" "buffer"
     "C-c c" "consult"
-
+    "C-c f" "file"
+    "C-c t" "toggle"
     "C-x a" "avy"
     "C-x t" "tab-bar"
     )
   )
 
-;; Whitespace
-;; ;; Clean up White-space on save
+;;; Whitespace
+;;  Clean up White-space on save
 (use-package whitespace
   :ensure nil
   :defer t
@@ -948,102 +969,102 @@
   )
 
 
-;; Window
+;;; Window
 (use-package window
   :ensure nil
   :config
   ;; Windows: Prefer verticl splitting
   (setq split-width-threshold 170)
-  (setq split-height-threshold nil)
+  (setq split-height-threshold 80)
   (setq window-sides-vertical t)
   (setq window-resize-pixelwise t)
   (setq window-combination-resize t)
   (setq fit-window-to-buffer-horizontally t)
   (setq switch-to-buffer-obey-display-actions t)
   (setq switch-to-buffer-in-dedicated-window 'pop)
-  (setq display-buffer-alist
-        '(("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
-           (display-buffer-in-side-window)
-           (window-height . 0.25)
-           (side . bottom)
-           (slot . 0))
-          ;; Diff Mode
-          ((major-mode . diff-mode)
-           (display-buffer-same-window))
-          ("\\*\\([Hh]elp\\)\\*"
-           (display-buffer-in-side-window)
-           (window-width . 75)
-           (side . right)
-           (slot . 0))
-          ("\\*\\(Ibuffer\\)\\*"
-           (display-buffer-in-side-window)
-           (window-width . 100)
-           (side . right)
-           (slot . 1))
-          ("\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
-           (display-buffer-in-side-window)
-           (window-height . 0.25)
-           (side . bottom)
-           (slot . 1))
-          ("\\*\\(grep\\|find\\)\\*"
-           (display-buffer-in-side-window)
-           (window-height . 0.25)
-           (side . bottom)
-           (slot . 2))
-          ("\\*\\(M3U Playlist\\)"
-           (display-buffer-in-side-window)
-           (window-height . 0.25)
-           (side . bottom)
-           (slot . 3))
-          ;; Denote
-          ((major-mode . denote-interface-mode)
-           (display-buffer-same-window))
-          ;; Occur
-          ("\\*Occur"
-           (display-buffer-reuse-mode-window display-buffer-pop-up-window display-buffer-below-selected)
-           (window-height . fit-window-to-buffer)
-           (post-command-select-window . t))
-          ;; Embark
-          ("\\*Embark Actions\\*"
-           (display-buffer-in-direction)
-           (window-height . fit-window-to-buffer)
-           (direction . above)
-           (window-parameters . ((no-other-window . t)
-                                 (mode-line-format . none))))
-          ;; Help Mode Alternative
-          ((major-mode . help-mode)
-           (display-buffer-reuse-window display-buffer-pop-up-window display-buffer-below-selected)
-           (window-height . shrink-window-if-larger-than-buffer))
-          ;; Eldoc
-          ("^\\*eldoc"
-           (display-buffer-at-bottom)
-           (post-command-select-window . t)
-           (window-height . shrink-window-if-larger-than-buffer)
-           (window-parameters . ((mode-line-format . none))))
-          ;; Org and calendar
-          ("\\*\\(?:Org Select\\|Agenda Commands\\)\\*"
-           (display-buffer-in-side-window)
-           (window-height . fit-window-to-buffer)
-           (side . top)
-           (slot . -2)
-           (preserve-size . (nil . t))
-           (window-parameters . ((mode-line-format . none)))
-           (post-command-select-window . t))
-          ("\\*Calendar\\*"
-           (display-buffer-below-selected)
-           (window-height . fit-window-to-buffer))
-          ;; Embark
-          ("\\*Embark Actions\\*"
-           (display-buffer-in-direction)
-           (window-height . fit-window-to-buffer)
-           (direction . above)
-           (window-parameters . ((no-other-window . t)
-                                 (mode-line-format . none))))
-
-          ))
+  ;; (setq display-buffer-alist
+  ;;       '(("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
+  ;;          (display-buffer-in-side-window)
+  ;;          (window-height . 0.25)
+  ;;          (side . bottom)
+  ;;          (slot . 0))
+  ;;         ;; Diff Mode
+  ;;         ((major-mode . diff-mode)
+  ;;          (display-buffer-same-window))
+  ;;         ("\\*\\([Hh]elp\\)\\*"
+  ;;          (display-buffer-in-side-window)
+  ;;          (window-width . 75)
+  ;;          (side . right)
+  ;;          (slot . 0))
+  ;;         ("\\*\\(Ibuffer\\)\\*"
+  ;;          (display-buffer-in-side-window)
+  ;;          (window-width . 100)
+  ;;          (side . right)
+  ;;          (slot . 1))
+  ;;         ("\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
+  ;;          (display-buffer-in-side-window)
+  ;;          (window-height . 0.25)
+  ;;          (side . bottom)
+  ;;          (slot . 1))
+  ;;         ("\\*\\(grep\\|find\\)\\*"
+  ;;          (display-buffer-in-side-window)
+  ;;          (window-height . 0.25)
+  ;;          (side . bottom)
+  ;;          (slot . 2))
+  ;;         ("\\*\\(M3U Playlist\\)"
+  ;;          (display-buffer-in-side-window)
+  ;;          (window-height . 0.25)
+  ;;          (side . bottom)
+  ;;          (slot . 3))
+  ;;         ;; Denote
+  ;;         ((major-mode . denote-interface-mode)
+  ;;          (display-buffer-same-window))
+  ;;         ;; Occur
+  ;;         ("\\*Occur"
+  ;;          (display-buffer-reuse-mode-window display-buffer-pop-up-window display-buffer-below-selected)
+  ;;          (window-height . fit-window-to-buffer)
+  ;;          (post-command-select-window . t))
+  ;;         ;; Embark
+  ;;         ("\\*Embark Actions\\*"
+  ;;          (display-buffer-in-direction)
+  ;;          (window-height . fit-window-to-buffer)
+  ;;          (direction . above)
+  ;;          (window-parameters . ((no-other-window . t)
+  ;;                                (mode-line-format . none))))
+  ;;         ;; Help Mode Alternative
+  ;;         ((major-mode . help-mode)
+  ;;          (display-buffer-reuse-window display-buffer-pop-up-window display-buffer-below-selected)
+  ;;          (window-height . shrink-window-if-larger-than-buffer))
+  ;;         ;; Eldoc
+  ;;         ("^\\*eldoc"
+  ;;          (display-buffer-at-bottom)
+  ;;          (post-command-select-window . t)
+  ;;          (window-height . shrink-window-if-larger-than-buffer)
+  ;;          (window-parameters . ((mode-line-format . none))))
+  ;;         ;; Org and calendar
+  ;;         ("\\*\\(?:Org Select\\|Agenda Commands\\)\\*"
+  ;;          (display-buffer-in-side-window)
+  ;;          (window-height . fit-window-to-buffer)
+  ;;          (side . top)
+  ;;          (slot . -2)
+  ;;          (preserve-size . (nil . t))
+  ;;          (window-parameters . ((mode-line-format . none)))
+  ;;          (post-command-select-window . t))
+  ;;         ("\\*Calendar\\*"
+  ;;          (display-buffer-below-selected)
+  ;;          (window-height . fit-window-to-buffer))
+  ;;         ;; Embark
+  ;;         ("\\*Embark Actions\\*"
+  ;;          (display-buffer-in-direction)
+  ;;          (window-height . fit-window-to-buffer)
+  ;;          (direction . above)
+  ;;          (window-parameters . ((no-other-window . t)
+  ;;                                (mode-line-format . none))))
+  ;;
+  ;;         ))
   )
 
-;; Winner
+;;; Winner
 ;; Restore old window configurations
 (use-package winner
   :ensure nil
@@ -1060,7 +1081,7 @@
                                       "*esh command on file*")))
 
 
-
+;;; Windmove
 ;; (use-package windmove
 ;;   :ensure nil
 ;;   :hook (after-init . windmove-mode)
@@ -1079,13 +1100,13 @@
 ;; )
 
 
-;; Woman
+;;; Woman
 (use-package woman
   :ensure nil
   :defer t
   :hook (woman-mode . olivetti-mode))
 
-
+;;; Use-package
 ;; Configure use-package
 (use-package use-package
   :ensure nil
@@ -1097,7 +1118,7 @@
   (use-package-enable-imenu-support t))
 
 
-;; Xref
+;;; Xref
 (use-package xref
   :ensure nil
   :init

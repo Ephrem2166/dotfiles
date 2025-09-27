@@ -9,7 +9,7 @@
 
 (use-package all-the-icons-ibuffer
   :ensure t
-  :hook ('ibuffer-mode-hook . all-the-icons-ibuffer))
+  :hook (ibuffer-mode . all-the-icons-ibuffer-mode))
 
 ;; prettify dired with icons
 (use-package all-the-icons-dired

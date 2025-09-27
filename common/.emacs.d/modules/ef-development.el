@@ -57,14 +57,14 @@
          (css-ts-mode . eglot-ensure)
          (toml-ts-mode . eglot-ensure)
          (yaml-ts-mode . eglot-ensure)
-         (web-mode . eglot-ensure)         
+         (web-mode . eglot-ensure)
          (before-save . eglot-format-buffer)
          )
   :config
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   (fset #'jsonrpc--log-event #'ignore)
   ;; use eglot-server-programs variable to find out LSP
-  (with-eval-after-load 'eglot 
+  (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs
                  '(markdown-mode . ("marksman")))
     (add-to-list 'eglot-server-programs '((yaml-ts-mode) . ("yaml-language-server" "--stdio")))
@@ -197,6 +197,11 @@
   :config
   (add-hook 'flymake-diagnostic-functions #'package-lint-flymake))
 
+;;; GUD
+(use-package gud
+  :ensure nil
+  :custom
+  (gud-highlight-current-line t))
 
 ;; LSP MODE
 ;; Emacs client/library for the Language Server Protocol
@@ -222,7 +227,7 @@
 
   (lsp-headerline-breadcrumb-enable t)
   (lsp-auto-register-remote-clients nil)
-  
+
   (lsp-enable-imenu t)
   (lsp-enable-links nil)
   (lsp-enable-snippet nil)
@@ -232,7 +237,7 @@
   (lsp-enable-text-document-color t)
   (lsp-enable-which-key-integration t)
   (lsp-enable-on-type-formatting nil)
-  (lsp-enable-xref t)  
+  (lsp-enable-xref t)
 
   (lsp-file-watch-threshold 1000)
   (lsp-go-use-placeholders nil)
