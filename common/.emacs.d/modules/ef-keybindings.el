@@ -1,31 +1,28 @@
 ;;; ef-keybindings.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-
+;;; Global Keybindings
 ;; Restart Emacs
 (global-set-key (kbd "C-c C-q") 'restart-emacs)
 
 ;; Eval Buffer
 (global-set-key (kbd "M-e") 'eval-buffer)
-
 ;; Comment Line
 ;; (global-set-key (kbd "C-/") 'comment-line)
 ;; (global-set-key (kbd "C-x /") 'comment-or-uncomment-region)
-
 ;; BETTER DEFAULTS FOR UPCASE AND DOWNCASE
 (global-set-key (kbd "M-u") 'upcase-dwim)
 (global-set-key (kbd "M-l") 'downcase-dwim)
 (global-set-key (kbd "M-c") 'capitalize-dwim)
 
-
 ;; TEXT SCALE
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "C-0") 'text-scale-adjust)
-
+;; (global-set-key (kbd "C-=") 'text-scale-increase)
+;; (global-set-key (kbd "C--") 'text-scale-decrease)
+;; (global-set-key (kbd "C-0") 'text-scale-adjust)
 
 (global-set-key (kbd "M-<tab>") 'completion-at-point)
 
+;;; Alternative
 ;; (use-package emacs
 ;;   :ensure nil
 ;;   :preface
@@ -44,6 +41,16 @@
 ;;    ("K" . kill-buffer)
 ;;    ))
 
+;;; Global Map Definitions
+
+;;;; File Mapping
+(defvar-keymap ef-file-keymap
+  :doc "Prefix for file-related commands.")
+(bind-key "C-c f" ef-file-keymap 'global-map)
+;;;; Toggle Mapping
+(defvar-keymap ef-toggle-keymap
+  :doc "Prefix for toggling stuff.")
+(bind-key "C-c t" ef-toggle-keymap 'global-map)
 
 
 (provide 'ef-keybindings)

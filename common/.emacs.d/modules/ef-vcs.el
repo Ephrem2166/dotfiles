@@ -27,7 +27,16 @@
   (setq ediff-merge-revisions-with-ancestor t)
   (setq ediff-show-clashes-only t))
 
-
+;;; Log Edit
+(use-package log-edit
+  :ensure nil
+  :custom
+  (log-edit-headers-alist
+   '(("Summary" . log-edit-summary)
+     ("Fixes")
+     ("Author")))
+  (log-edit-setup-add-author nil)
+  )
 ;; VC
 (use-package vc
   :ensure nil
@@ -49,7 +58,13 @@
 (use-package transient)
 (use-package magit
   :ensure t
-  :after transient)
+  :after transient
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+  (magit-bury-buffer-function #'magit-restore-window-configuration)
+  (magit-refs-show-commit-count 'all)
+  (magit-format-file-function #'magit-format-file-nerd-icons)
+  )
 
 
 (provide 'ef-vcs)

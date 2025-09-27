@@ -122,7 +122,9 @@
   :defer t
   :commands global-evil-visualstar-mode
   :hook (after-init . global-evil-visualstar-mode))
+
 ;; Evil Snipe
+;; Emulate vim-sneak & vim-seek
 (use-package evil-snipe
   :ensure t
   :defer t
@@ -141,7 +143,12 @@
   (evil-snipe-auto-disable-substitute nil)
   )
 
-
-
+;; Evil Matchit
+;; Vim matchit ported to Evil
+(use-package evil-matchit
+  :ensure t
+  :after (evil evil-collection)
+  :config
+  (global-evil-matchit-mode 1))
 (provide 'ef-evil)
 ;;; ef-evil.el ends here

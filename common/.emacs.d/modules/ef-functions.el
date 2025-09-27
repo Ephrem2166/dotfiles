@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Better C-g from Prot
+;;; Better C-g from Prot
 (defun ef/keyboard-quit-dwim ()
   "Do-What-I-Mean behaviour for a general `keyboard-quit'.
 
@@ -30,7 +30,7 @@ The DWIM behaviour of this command is as follows:
 (define-key global-map (kbd "C-g") #'ef/keyboard-quit-dwim)
 
 
-;; Reload Emacs
+;;; Reload Emacs
 (defun ef/reload-config ()
   "Reload the Emacs configuration file."
   (interactive)
@@ -39,7 +39,7 @@ The DWIM behaviour of this command is as follows:
 (define-key global-map (kbd "C-x r") #'ef/reload-config)
 
 
-;; ;; Document Centering
+;;; Document Centering
 ;; ;; From David Wilson
 ;; (defvar center-document-desired-width 120
 ;;   "The desired width of a document centered in the window.")
@@ -71,8 +71,8 @@ The DWIM behaviour of this command is as follows:
 ;;
 ;; (add-hook 'org-mode-hook #'center-document-mode)
 
-;; EXIT MESSAGES form doom emacs
-(defvar my-quit-messages
+;;; EXIT MESSAGES form doom emacs
+(defvar my/quit-messages
   `(;; from Doom 1
     "Please don't leave, there's more demons to toast!"
     "Let's beat it -- This is turning into a bloodbath!"
@@ -101,23 +101,23 @@ The DWIM behaviour of this command is as follows:
   "A list of quit messages, picked randomly by `+doom-quit'. Taken from
 http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
 
-(defun my-quit-emacs (&rest _)
+(defun my/quit-emacs (&rest _)
   (yes-or-no-p
    (format "%s  %s"
-           (propertize (nth (random (length my-quit-messages))
-                            my-quit-messages)
+           (propertize (nth (random (length my/quit-messages))
+                            my/quit-messages)
                        'face '(italic default))
            "Really quit Emacs?")))
 
 
 
-( setq confirm-kill-emacs #'my-quit-emacs)
+( setq confirm-kill-emacs #'my/quit-emacs)
 
 ;;(global-set-key "\C-x\C-c" 'save-buffers-kill-emacs-with-confirm)
 
 
-;; Open Files Externally
-(defun my-open-with (arg)
+;;; Open Files Externally
+(defun my/open-with (arg)
   "Open visited file in default external program.
       With a prefix ARG always prompt for command to use."
   (interactive "P")
@@ -130,8 +130,8 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
                     " "
                     (shell-quote-argument buffer-file-name)))))
 
-;; Display time
-(defun my-current-time-as-string ()
+;;; Display time
+(defun my/current-time-as-string ()
   "Return a string of the current time."
   (concat
    (format-time-string "%Y-%m-%dT%H%M%SZ%z")))
@@ -297,7 +297,62 @@ If this is a daemon session, load them all immediately instead."
             (append targets (list name)))))
      (use-package-process-keywords name rest state))))
 
+;;; Move Text Up and Down
+(defun move-text-internal (arg)
+  (cond
+   ((and mark-active transient-mark-mode)
+    (if (> (point) (mark))
+        (exchange-point-and-mark))
+    (let ((column (current-column))
+          (text (delete-and-extract-region (point) (mark))))
+      (forward-line arg)
+      (move-to-column column t)
+      (set-mark (point))
+      (insert text)
+      (exchange-point-and-mark)
+      (setq deactivate-mark nil)))
+   (t
+    (let ((column (current-column)))
+      (beginning-of-line)
+      (when (or (> arg 0) (not (bobp)))
+        (forward-line)
+        (when (or (< arg 0) (not (eobp)))
+          (transpose-lines arg)
+          ;; ;; Account for changes to transpose-lines in Emacs 24.3
+          ;; (when (and (eval-when-compile
+          ;;              (not (version-list-<
+          ;;                    (version-to-list emacs-version)
+          ;;                    '(24 3 50 0))))
+          ;;            (< arg 0))
+          ;;   (forward-line -1))
+          )
+        (forward-line -1))
+      (move-to-column column t)))))
 
+(defun move-text-down (arg)
+  "Move region (transient-mark-mode active) or current line
+  arg lines down."
+  (interactive "*p")
+  (move-text-internal arg))
+
+(defun move-text-up (arg)
+  "Move region (transient-mark-mode active) or current line
+  arg lines up."
+  (interactive "*p")
+  (move-text-internal (- arg)))
+
+(define-key global-map (kbd "M-<up>") #'move-text-up)
+(define-key global-map (kbd "M-<down>") #'move-text-down)
+
+
+;;; Restart or Close Emacs
+(defun my/restart-or-kill-emacs (&optional arg restart)
+  "Kill Emacs.
+If called with RESTART (`universal-argument’ interactively) restart
+Emacs instead. Passes ARG to `save-buffers-kill-emacs'."
+  (interactive "P")
+  (save-buffers-kill-emacs arg (or restart (equal arg '(4)))))
+(bind-key [remap save-buffers-kill-terminal] #'my/restart-or-kill-emacs)
 
 
 (provide 'ef-functions)
