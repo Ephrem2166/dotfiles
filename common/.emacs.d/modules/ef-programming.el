@@ -7,7 +7,10 @@
 (use-package apheleia
   :ensure t
   :defer t
+  :hook (apheleia-post-format . delete-trailing-whitespace)
   :config
+  (setq apheleia-formatters-respect-fill-column t)
+  (setq apheleia-formatters-respect-indent-level t)
   (setq apheleia-formatters
         (append
          '((prettier . ("prettier" "--stdin-filepath" filepath))
@@ -22,6 +25,7 @@
           (typescript-mode . prettier)
           (ruby-mode . rubocop)
           (sh-mode . shfmt)))
+
   (apheleia-global-mode +1))
 
 ;; Enables automatic indentation of code while typing

@@ -20,10 +20,10 @@
 (use-package minibuffer
   :ensure nil
   :bind (
-     :map minibuffer-local-map
-          ("C-p" . minibuffer-previous-completion)
-          ("C-n" . minibuffer-next-completion)
-     )
+         :map minibuffer-local-map
+         ("C-p" . minibuffer-previous-completion)
+         ("C-n" . minibuffer-next-completion)
+         )
   :config
   (setopt enable-recursive-minibuffers t)
   (setopt tab-always-indent 'complete)
@@ -40,6 +40,11 @@
   (setopt completion-ignore-case t)
   (setopt enable-recursive-minibuffers t)
   (setopt completion-styles '(partial-completion flex substring basic initials))
+;;;; Keep the cursor out of the read-only portions of the minibuffer
+  (setopt minibuffer-prompt-properties
+          '( read-only t
+             cursor-intangible t
+             face minibuffer-prompt))
   )
 
 
