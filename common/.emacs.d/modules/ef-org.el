@@ -26,6 +26,8 @@
   (org-indent-mode -1)
   ;; (truncate-lines 1)
   ;; (center-document-mode 1)
+  (variable-pitch-mode)
+  (lambda () (setq-local line-spacing 0.2 fill-column 100))
   )
 
 (add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))

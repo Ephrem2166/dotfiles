@@ -229,8 +229,9 @@
   (setopt mouse-drag-and-drop-region t
           mouse-drag-and-drop-region-cross-program t
           mouse-yank-at-point t)
-
+;;;; Trash
   (setopt delete-by-moving-to-trash t)
+
 
   ;; Cursor Style Bar
   (setopt cursor-type 'bar)
@@ -281,11 +282,14 @@
   ;; Stop the system from hangind when
   ;; visiting files with long lines
   (global-so-long-mode t)
-
-
+  ;; Avoid collision of mouse at point
+  (mouse-avoidance-mode t)
   ;; Show context menu on right click
   (when (display-graphic-p)
-    (context-menu-mode))  )
+    (context-menu-mode))
+  ;; Visual line mode in Messages buffer
+  (add-hook 'messages-buffer-mode-hook #'visual-line-mode)
+  )
 
 
 
@@ -295,7 +299,8 @@
   ;; Tab Behavior
   :config
   (setopt tab-always-indent 'complete)
-  (setopt tab-first-completion 'word-or-paren-or-punct)
+  ;; (setopt tab-first-completion 'word-or-paren-or-punct)
+  (setopt tab-first-completion 'word)
   (setopt tab-width 4)
   (setopt indent-tabs-mode nil)
   )
@@ -921,18 +926,15 @@
     "C-x a" "avy"
     "C-x t" "tab-bar"
     )
-
-
-
   )
 
-
-
+;; Whitespace
 ;; ;; Clean up White-space on save
 (use-package whitespace
   :ensure nil
   :defer t
   :hook (
+         (prog-mode . whitespace-mode)
          (before-save . whitespace-cleanup)
          )
   :config
@@ -959,12 +961,15 @@
   (setq fit-window-to-buffer-horizontally t)
   (setq switch-to-buffer-obey-display-actions t)
   (setq switch-to-buffer-in-dedicated-window 'pop)
-  (setq isplay-buffer-alist
+  (setq display-buffer-alist
         '(("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
            (display-buffer-in-side-window)
            (window-height . 0.25)
            (side . bottom)
            (slot . 0))
+          ;; Diff Mode
+          ((major-mode . diff-mode)
+           (display-buffer-same-window))
           ("\\*\\([Hh]elp\\)\\*"
            (display-buffer-in-side-window)
            (window-width . 75)
@@ -990,6 +995,51 @@
            (window-height . 0.25)
            (side . bottom)
            (slot . 3))
+          ;; Denote
+          ((major-mode . denote-interface-mode)
+           (display-buffer-same-window))
+          ;; Occur
+          ("\\*Occur"
+           (display-buffer-reuse-mode-window display-buffer-pop-up-window display-buffer-below-selected)
+           (window-height . fit-window-to-buffer)
+           (post-command-select-window . t))
+          ;; Embark
+          ("\\*Embark Actions\\*"
+           (display-buffer-in-direction)
+           (window-height . fit-window-to-buffer)
+           (direction . above)
+           (window-parameters . ((no-other-window . t)
+                                 (mode-line-format . none))))
+          ;; Help Mode Alternative
+          ((major-mode . help-mode)
+           (display-buffer-reuse-window display-buffer-pop-up-window display-buffer-below-selected)
+           (window-height . shrink-window-if-larger-than-buffer))
+          ;; Eldoc
+          ("^\\*eldoc"
+           (display-buffer-at-bottom)
+           (post-command-select-window . t)
+           (window-height . shrink-window-if-larger-than-buffer)
+           (window-parameters . ((mode-line-format . none))))
+          ;; Org and calendar
+          ("\\*\\(?:Org Select\\|Agenda Commands\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . fit-window-to-buffer)
+           (side . top)
+           (slot . -2)
+           (preserve-size . (nil . t))
+           (window-parameters . ((mode-line-format . none)))
+           (post-command-select-window . t))
+          ("\\*Calendar\\*"
+           (display-buffer-below-selected)
+           (window-height . fit-window-to-buffer))
+          ;; Embark
+          ("\\*Embark Actions\\*"
+           (display-buffer-in-direction)
+           (window-height . fit-window-to-buffer)
+           (direction . above)
+           (window-parameters . ((no-other-window . t)
+                                 (mode-line-format . none))))
+
           ))
   )
 

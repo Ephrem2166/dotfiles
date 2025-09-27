@@ -21,7 +21,7 @@
 
 
 (defvar my/available-variable-font
-  (my/available-font "Atkinson Hyperlegible" "Avenir" "PragmataPro" "Iosevka Nerd Font" "PragmataPro Nerd Font" "Sans")
+  (my/available-font "Iosevka Aile" "PragmataPro" "Atkinson Hyperlegible" "Avenir" "Iosevka Nerd Font" "PragmataPro Nerd Font" "Sans")
   "Primary Variable Fonts")
 
 
@@ -62,7 +62,7 @@
   (set-face-attribute
    'variable-pitch nil
    :family my/available-variable-font
-   :height 110
+   :height 120
    :weight 'regular))
 
 
