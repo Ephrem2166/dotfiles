@@ -27,7 +27,7 @@ The DWIM behaviour of this command is as follows:
    (t
     (keyboard-quit))))
 
-(define-key global-map (kbd "C-g") #'ef/keyboard-quit-dwim)
+;; (define-key global-map (kbd "C-g") #'ef/keyboard-quit-dwim)
 
 
 ;;; Reload Emacs
@@ -354,6 +354,236 @@ Emacs instead. Passes ARG to `save-buffers-kill-emacs'."
   (save-buffers-kill-emacs arg (or restart (equal arg '(4)))))
 (bind-key [remap save-buffers-kill-terminal] #'my/restart-or-kill-emacs)
 
+
+
+;;; Toggle line truncate without message
+;; Truncate lines by default in a number of places and do not produce
+;; a message about the fact
+(defun my/common-truncate-lines-silently ()
+  "Toggle line truncation without printing messages."
+  (let ((inhibit-message t))
+    (toggle-truncate-lines t)))
+(add-hook 'text-mode-hook #'my/common-truncate-lines-silently)
+(add-hook 'prog-mode-hook #'my/common-truncate-lines-silently)
+
+;;; FIXME Mark Symbolic Expressions
+(defun my/simple-mark (bounds)
+  "Mark between BOUNDS as a cons cell of beginning and end positions."
+  (push-mark (car bounds))
+  (goto-char (cdr bounds))
+  (activate-mark))
+(defun my/simple-mark-sexp ()
+  "Mark symbolic expression at or near point.
+Repeat to extend the region forward to the next symbolic
+expression."
+  (interactive)
+  (if (and (region-active-p)
+           (eq last-command this-command))
+      (ignore-errors (forward-sexp 1))
+    (when-let* ((thing (cond
+                        ((thing-at-point 'url) 'url)
+                        ((thing-at-point 'sexp) 'sexp)
+                        ((thing-at-point 'string) 'string)
+                        ((thing-at-point 'word) 'word))))
+      (my/simple-mark (bounds-of-thing-at-point thing)))))
+
+;; (define-key global-map (kbd "C-}") #'my/simple-mark-sexp)
+
+;;; Move half screen above and below
+(defun my/simple-multi-line-below ()
+  "Move half a screen below."
+  (interactive)
+  (forward-line (floor (window-height) 2))
+  (setq this-command 'scroll-up-command))
+
+(defun my/simple-multi-line-above ()
+  "Move half a screen above."
+  (interactive)
+  (forward-line (- (floor (window-height) 2)))
+  (setq this-command 'scroll-down-command))
+
+(define-key global-map (kbd "C-M-,") #'my/simple-multi-line-above)
+(define-key global-map (kbd "C-M-.") #'my/simple-multi-line-below)
+
+
+
+
+;;; Create Scratch Buffer
+(defun my/create-scratch-buffer ()
+  "Create a scratch buffer."
+  (interactive)
+  (switch-to-buffer (get-buffer-create "*scratch*"))
+  (lisp-interaction-mode))
+
+;;; Delete this file
+(defun my/delete-this-file ()
+  "Delete the current file, and kill the buffer."
+  (interactive)
+  (unless (buffer-file-name)
+    (error "No file is currently being edited"))
+  (when (yes-or-no-p (format "Really delete '%s'?"
+                             (file-name-nondirectory buffer-file-name)))
+    (delete-file (buffer-file-name))
+    (kill-this-buffer)))
+;;; Rename this file
+(defun my/rename-this-file (new-name)
+  "Renames both current buffer and file it's visiting to NEW-NAME."
+  (interactive "sNew name: ")
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (unless filename
+      (error "Buffer '%s' is not visiting a file!" name))
+    (progn
+      (when (file-exists-p filename)
+        (rename-file filename new-name 1))
+      (set-visited-file-name new-name)
+      (rename-buffer new-name))))
+
+;;; Comment DWIM
+;; (defun my/comment-dwim ()
+;;   "Comment region if active, else comment line.
+;;
+;; This avoids the excess region commenting of `comment-line' while also avoiding the weird single-line
+;; behavior of `comment-dwim'."
+;;   (interactive)
+;;   (save-excursion
+;;     (if (use-region-p)
+;;         (call-interactively #'comment-or-uncomment-region)
+;;       (call-interactively #'comment-line))))
+
+
+;;; Better `keyboard-quit'
+(defun my/keyboard-quit-context ()
+  "Quit current context.
+
+This function is a combination of `keyboard-quit' and `keyboard-escape-quit'
+with some parts omitted and some custom behavior added."
+  ;; Adapted from https://with-emacs.com/posts/tips/quit-current-context/
+  (interactive)
+  (cond
+   ((region-active-p)
+    ;; Avoid adding the region to the window selection.
+    (setq saved-region-selection nil)
+    (let (select-active-regions)
+      (deactivate-mark)))
+
+   ((eq last-command 'mode-exited)
+    nil)
+
+   (current-prefix-arg
+    nil)
+
+   (defining-kbd-macro
+    (message
+     (substitute-command-keys
+      "Quit is ignored during macro defintion, use \\[kmacro-end-macro] if you want to stop macro definition"))
+    (cancel-kbd-macro-events))
+
+   ((active-minibuffer-window)
+    (when (get-buffer-window "*Completions*")
+      ;; hide completions first so point stays in active window when
+      ;; outside the minibuffer
+      (minibuffer-hide-completions))
+    (abort-recursive-edit))
+
+   (t
+    (keyboard-quit))))
+(define-key global-map (kbd "C-g") #'my/keyboard-quit-context)
+;; (global-set-key [remap keyboard-quit] #'my/keyboard-quit-context)
+
+
+;;; Toggle Maximize Buffer
+(defun my/toggle-maximize-buffer ()
+  "Maximize buffer."
+  (interactive)
+  (save-excursion
+    (if (and (= 1 (length (window-list)))
+             (assoc ?_ register-alist))
+        (jump-to-register ?_)
+      (progn
+        (window-configuration-to-register ?_)
+        (delete-other-windows)))))
+(define-key ef-buffer-keymap (kbd "m") #'my/toggle-maximize-buffer)
+
+;; Indent Region or Buffer
+(defun my/indent-region-or-buffer (&optional arg)
+  "Indent a region if selected, otherwise the whole buffer.
+if prefix argument ARG is given, `untabify' first."
+  (interactive)
+  (save-excursion
+    (if (region-active-p)
+        (progn
+          (when arg
+            (untabify (region-beginning) (region-end)))
+          (indent-region (region-beginning) (region-end))
+          (message "Indented selected region."))
+      (progn
+        (when arg
+          (untabify (region-beginning) (region-end)))
+        (indent-region (point-min) (point-max))
+        (message "Indented buffer.")))))
+(define-key ef-buffer-keymap (kbd "i") #'my/indent-region-or-buffer)
+
+;;; Switch to scratch buffer
+(defun my/switch-to-scratch-buffer (&optional arg)
+  "Switch to the `*scratch*' buffer, creating it first if needed.
+if prefix argument ARG is given, switch to it in an other, possibly new window."
+  (interactive "P")
+  (if arg
+      (switch-to-buffer-other-window (get-buffer-create "*scratch*"))
+    (switch-to-buffer (get-buffer-create "*scratch*"))))
+(define-key ef-buffer-keymap (kbd "s") #'my/switch-to-scratch-buffer)
+
+
+;;; Message Buffer
+(defun my/switch-to-messages-buffer (&optional arg)
+  "Switch to the `*Messages*' buffer in an other window.
+if prefix argument ARG is given, switch to it directly."
+  (interactive "P")
+  (with-current-buffer (messages-buffer)
+    (goto-char (point-max))
+    (if arg
+        (switch-to-buffer (current-buffer))
+      (switch-to-buffer-other-window (current-buffer)))))
+(define-key ef-buffer-keymap (kbd "0") #'my/switch-to-messages-buffer)
+
+;;; Minibuffer Window
+(defun my/switch-to-minibuffer-window ()
+  "Switch to minibuffer window (if active)."
+  (interactive)
+  (when (active-minibuffer-window)
+    (select-window (active-minibuffer-window))))
+(define-key ef-buffer-keymap (kbd ",") #'my/switch-to-minibuffer-window)
+
+;;; Window Split
+(defun my/split-window-vertically-and-focus ()
+  "Split the window vertically and focus the new window."
+  (interactive)
+  (split-window-vertically)
+  (windmove-down))
+
+(defun my/split-window-horizontally-and-focus ()
+  "Split the window horizontally and focus the new window."
+  (interactive)
+  (split-window-horizontally)
+  (windmove-right))
+
+;;; Server Shutdown
+(defun my/server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs)
+  )
+
+;;; Make Directory
+(defun my/make-directory-maybe ()
+  "Create parent directory if not exists while visiting file."
+  (let ((dir (file-name-directory buffer-file-name)))
+    (unless (file-exists-p dir)
+      (if (y-or-n-p (format "Directory %s does not exist,do you want you create it? " dir))
+          (make-directory dir t)
+        (keyboard-quit)))))
 
 (provide 'ef-functions)
 ;;; ef-functions.el ends here

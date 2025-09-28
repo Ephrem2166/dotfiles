@@ -2,9 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;;;;;;;;;;;;;
-;; ;; Cape ;;
-;;;;;;;;;;;;;
+;;; Cape
 ;; Cape provides Completion At Point Extensions
 (use-package cape
   :ensure t
@@ -30,6 +28,7 @@
   (add-to-list 'completion-at-point-functions #'cape-emoji)
   (add-to-list 'completion-at-point-functions #'cape-keyword)
   :config
+  (setq cape-dict-file (concat user-emacs-directory "etc/dict.txt"))
   (defun my/eglot-capf ()
     (setq-local completion-at-point-functions
                 (cons (cape-capf-super
@@ -75,7 +74,18 @@
                                        :with #'tempel-complete))))
   (add-hook 'eglot-managed-mode #'init-cape-eglot-capf)
 
-
+  ;; Writing
+  (defun ef-writing-capf ()
+    (setq-local completion-at-point-functions
+                (list (cape-capf-super
+                       #'cape-dict
+                       #'cape-dabbrev
+                       #'cape-file
+                       #'cape-history
+                       #'cape-keyword
+                       )))
+    )
+  (add-hook 'org-mode-hook #'ef-writing-capf)
 
   ;; Prog Mode
   (defun ef-setup-completion ()
@@ -370,7 +380,7 @@
   )
 
 
-;; Tempel
+;;; Tempel
 ;; Tempo templates/snippets with in-buffer field editing
 (use-package tempel
   :ensure t
@@ -390,6 +400,14 @@
   (add-hook 'conf-mode-hook 'tempel-setup-capf)
   (add-hook 'prog-mode-hook 'tempel-setup-capf)
   (add-hook 'text-mode-hook 'tempel-setup-capf)
+  ;; Hippie Exapand Integration
+  (defun tempel-hippie-try-expand (old)
+    "Integrate with hippie expand. Just put this function in `hippie-expand-try-functions-list'."
+    (if (not old)
+        (tempel-expand t)
+      (undo 1)))
+
+  (add-to-list 'hippie-expand-try-functions-list #'tempel-hippie-try-expand t)
   )
 
 ;; Vertico

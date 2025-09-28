@@ -300,6 +300,8 @@
 (use-package sh-script
   :ensure nil
   :defer t
+  :bind (:map sh-mode-map
+              ([remap display-local-help] . man))
   :custom
   (sh-basic-offset 2)
   (sh-indentation  2)

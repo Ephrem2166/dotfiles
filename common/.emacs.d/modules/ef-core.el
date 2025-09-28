@@ -552,7 +552,10 @@
         (setq beg (line-beginning-position) end (line-end-position)))
       (comment-or-uncomment-region beg end)
       (forward-line)))
-  (global-set-key (kbd "C-/") #'my-comment-or-uncomment-region-or-line))
+  (global-set-key (kbd "C-/") #'my-comment-or-uncomment-region-or-line)
+
+  )
+
 
 ;;; Outline Mode
 (use-package outline

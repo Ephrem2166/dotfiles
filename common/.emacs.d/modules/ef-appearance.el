@@ -186,14 +186,15 @@
                                   :mode-line-width 6
                                   :tab-bar-width 4
                                   :tab-line-width 2
-                                  :tab-width 2
+                                  :tab-width 4
                                   :right-divider-width 10
                                   ;; :scroll-bar-width 2
                                   :fringe-width 20
                                   ))
   (setq spacious-padding-subtle-mode-line t)
-  :hook
-  (after-init . spacious-padding-mode))
+  :init
+  (spacious-padding-mode)
+  )
 
 
 (provide 'ef-appearance)
