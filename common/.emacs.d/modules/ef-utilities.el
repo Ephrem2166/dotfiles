@@ -375,23 +375,50 @@
 (use-package popper
   :ensure t
   :bind (("C-c b p"   . popper-toggle)
-         ("C-c C-p"   . popper-cycle)
-         ("C-c b ," . popper-toggle-type))
+         ("C-<tab>"   . popper-cycle)
+         ("C-M-," . popper-toggle-type))
   :init
   (setq popper-reference-buffers
         '("\\*Messages\\*"
           "Output\\*$"
           "\\*Warnings\\*"
           "\\*xref\\*"
+          "\\*Apropos\\*$"
           "\\*Backtrace\\*"
           "*Flymake diagnostics.*"
           "\\*eldoc\\*"
           "\\*Async Shell Command\\*"
+          "\\*Compile-Log\\*$"
+          "\\*Completions\\*$"
+          "\\*Calendar\\*$"
+          "\\*Fd\\*$" "\\*Find\\*$" "\\*Finder\\*$"
+          "\\*Kill Ring\\*$"
+          "\\*Embark \\(Collect\\|Live\\):.*\\*$"
+          "\\*[Wo]*Man.*\\*$"
+          "\\*lsp-help\\*$" "\\*lsp session\\*$"
+          "\\*quickrun\\*$"
+          "\\*tldr\\*$"
+          "\\*vc-.*\\**"
+          "\\*diff-hl\\**"
+          "^\\*macro expansion\\**"
+          "^\\*.*eat.*\\*.*$"
+          "^\\*.*eshell.*\\*.*$"
+          "^\\*.*shell.*\\*.*$"
+          "^\\*.*terminal.*\\*.*$"
+          "^\\*.*vterm[inal]*.*\\*.*$"
           help-mode
           compilation-mode
           vterm-mode
           helpful-mode
+          flymake-diagnostics-buffer-mode
+          flycheck-error-list-mode
+          flycheck-verify-mode
+          grep-mode
+          occur-mode
           ))
+  :config
+  (setq popper-group-by-directory t)
+  (setq popper-echo-dispatch-actions t)
   (setq popper-display-control t)
   (setq popper-window-height 12)
   (popper-mode +1)

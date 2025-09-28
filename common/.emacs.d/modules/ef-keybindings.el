@@ -42,7 +42,10 @@
 ;;    ))
 
 ;;; Global Map Definitions
-
+;; Buffer Mapping
+(defvar-keymap ef-buffer-keymap
+  :doc "Prefix for toggling stuff.")
+(bind-key "C-c b" ef-buffer-keymap 'global-map)
 ;;;; File Mapping
 (defvar-keymap ef-file-keymap
   :doc "Prefix for file-related commands.")
@@ -51,6 +54,8 @@
 (defvar-keymap ef-toggle-keymap
   :doc "Prefix for toggling stuff.")
 (bind-key "C-c t" ef-toggle-keymap 'global-map)
+
+
 
 
 (provide 'ef-keybindings)
