@@ -757,16 +757,16 @@ The original function deletes trailing whitespace of the current line."
 (define-key ef-file-keymap (kbd "o") #'my/delete-blank-lines-dwim)
 
 ;;; Set initial frame size and position
-(defun my/set-initial-frame ()
-  (let* ((base-factor 0.70)
-         (a-width (* (display-pixel-width) base-factor))
-         (a-height (* (display-pixel-height) base-factor))
-         (a-left (truncate (/ (- (display-pixel-width) a-width) 2)))
-         (a-top (truncate (/ (- (display-pixel-height) a-height) 2))))
-    (set-frame-position (selected-frame) a-left a-top)
-    (set-frame-size (selected-frame) (truncate a-width)  (truncate a-height) t)))
-(setq frame-resize-pixelwise t)
-(my/set-initial-frame)
+;; (defun my/set-initial-frame ()
+;;   (let* ((base-factor 0.70)
+;;          (a-width (* (display-pixel-width) base-factor))
+;;          (a-height (* (display-pixel-height) base-factor))
+;;          (a-left (truncate (/ (- (display-pixel-width) a-width) 2)))
+;;          (a-top (truncate (/ (- (display-pixel-height) a-height) 2))))
+;;     (set-frame-position (selected-frame) a-left a-top)
+;;     (set-frame-size (selected-frame) (truncate a-width)  (truncate a-height) t)))
+;; (setq frame-resize-pixelwise t)
+;; (my/set-initial-frame)
 
 ;;;; Alternative
 ;; (add-hook 'window-setup-hook 'toggle-frame-maximized t)
@@ -952,6 +952,16 @@ buffer is not visiting a file."
 
 (global-set-key (kbd "M-#") 'lookup-word)
 
+
+
+
+;;; Delete backward from Point
+(defun my/backward-kill-line (arg)
+  "Kill ARG lines backward, but does not put it in the `kill-ring'."
+  (interactive "p")
+  (kill-line (- 1 arg))
+  (setq kill-ring (cdr kill-ring)))
+(global-set-key (kbd "C-<backspace>") 'my/backward-kill-line)
 
 
 
