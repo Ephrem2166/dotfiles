@@ -162,5 +162,12 @@
                               (time-subtract elpaca-after-init-time before-init-time)))
                      gcs-done)) 98)
 
+;;; Initial Scratch Message
+;; (setq-default
+;;  initial-scratch-message
+;;  (let ((emacs-version (replace-regexp-in-string "\s\(.*\)\n" "" (emacs-version))))
+;;    (format ";; %s, initialization in %s\n\n"
+;;            emacs-version (emacs-init-time "%.3fs"))))
+
 (provide 'early-init)
 ;;; early-init ends here

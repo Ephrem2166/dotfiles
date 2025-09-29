@@ -545,13 +545,13 @@
   :ensure t
   :defer 1
   :bind
-  (("C-x u" . vundo))
+  (("C-x /" . vundo))
   :config
+  (setq vundo-window-side 'bottom)
   (setq vundo-window-max-height 4)
   (setq vundo-compact-display t)
   (setq vundo-highlight-saved-nodes t)
   (setq vundo-glyph-alist vundo-unicode-symbols))
-
 
 
 

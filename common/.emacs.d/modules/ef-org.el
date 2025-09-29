@@ -23,11 +23,13 @@
   (setq evil-auto-indent nil)
   (setq-local fill-column 120)
   ;; It conflicts with org-modern block prettification
-  (org-indent-mode -1)
+  ;; Use it with org-modern-indent
+  (org-indent-mode 1)
   ;; (truncate-lines 1)
   ;; (center-document-mode 1)
+  (org-display-inline-images)
   (variable-pitch-mode)
-  (lambda () (setq-local line-spacing 0.2 fill-column 100))
+  ;; (lambda () (setq-local line-spacing 0.2 fill-column 100))
   )
 
 (add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))
@@ -128,6 +130,22 @@
          ;; (org-mode . (lambda () (electric-indent-local-mode -1)))
          )
   )
+
+;;; ;; FIXME  Autoinsertion for Org
+(use-package org
+  :ensure nil
+  :after org
+  :config
+  (define-auto-insert 'org-mode
+    '(t
+      "#+title: " (read-string "Title: ") "\n"
+      "#+author: " (user-full-name) "\n"
+      (if (y-or-n-p "Add Date? ") (concat "#+date: " (format-time-string "%Y-%m-%d") "\n"))
+      ;; Startup options completion
+      "#+startup: " ((completing-read "Startup: " org-startup-options nil t) str " ") "\n"
+      )    )
+  )
+
 
 ;;; Org Num
 (use-package org-num
@@ -443,7 +461,7 @@
   (org-fontify-whole-block-delimiter-line nil)
   (org-fontify-quote-and-verse-blocks t))
 
-;; Org Modern
+;;; Org Modern
 ;; Modern Look for Org
 (use-package org-modern
   :after org
@@ -457,10 +475,11 @@
   (defun ef/org-modern-spacing ()
     (setq-local line-spacing
                 (if org-modern-mode
-                    0.1 0.0)))
+                    0.3 0.0)))
   :custom
   (org-catch-invisible-edits 'show-and-error)
   (org-modern-block-fringe nil)
+  ;; Needed for org-modern-indent
   (org-modern-hide-stars nil)
   ;; Todo
   (org-modern-todo nil)
@@ -562,6 +581,14 @@
      ("results" . "🠶")))
   ;; Miscellaneous
   (org-modern-timestamp t)  )
+
+;;; Org Modern Indent
+(use-package org-modern-indent
+  :ensure (:host github :repo "jdtsmith/org-modern-indent")
+  :defer t
+  :init
+  ;; Add late to hook
+  (add-hook 'org-mode-hook #'org-modern-indent-mode))
 
 ;; Org Appear
 ;; Shows emphasis markers when the cursor is the emphasized
@@ -948,7 +975,7 @@
   :ensure t
   :after org
   :config
-  (setq org-journal-dir (concat org-directory "my_journal"))
+  (setq org-journal-dir (expand-file-name (concat org-directory "my_journal/")))
   (setq org-journal-file-type 'weekly)
   (setq org-journal-file-format "%Y-%m-%d.org")
   (setq org-journal-date-format "%A, %Y-%m-%d")
@@ -998,6 +1025,120 @@
 (use-package org-present
   :after org
   )
+
+;;; Better Org-Return
+(use-package org
+  :ensure nil
+  :bind (:map org-mode-map
+              ("RET" . my/org-return-dwim))
+  :config
+
+  (defun my/org-element-descendant-of (type element)
+    "Return non-nil if ELEMENT is a descendant of TYPE.
+TYPE should be an element type, like `item' or `paragraph'.
+ELEMENT should be a list like that returned by `org-element-context'."
+    ;; MAYBE: Use `org-element-lineage'.
+    (when-let* ((parent (org-element-property :parent element)))
+      (or (eq type (car parent))
+          (my/org-element-descendant-of type parent))))
+
+  (defun my/org-return-dwim (&optional default)
+    "A helpful replacement for `org-return'.  With prefix, call `org-return'.
+
+On headings, move point to position after entry content.  In
+lists, insert a new item or end the list, with checkbox if
+appropriate.  In tables, insert a new row or end the table."
+    ;; Inspired by John Kitchin:
+    ;; http://kitchingroup.cheme.cmu.edu/blog/2017/04/09/A-better-return-in-org-mode/
+    (interactive "P")
+    (if default
+        (org-return)
+      (cond
+       ;; Act depending on context around point.
+
+       ((and (eq 'link (car (org-element-context)))
+             org-return-follows-link)
+        ;; Link: Open it.
+        (org-open-at-point-global))
+
+       ;; ((or (eq
+       ;;       (get-char-property (min (1+ (point)) (point-max)) 'org-overlay-type)
+       ;;       'org-latex-overlay)
+       ;;      (let ((context (org-element-context)))
+       ;;        (and (memq (org-element-type context)
+       ;;                   '(latex-fragment latex-environment))
+       ;;             (eq (point)
+       ;;                 (save-excursion
+       ;;                   (goto-char (org-element-property :end context))
+       ;;                   (skip-chars-backward "\n\r\t ")
+       ;;                   (point))))))
+       ;;  (org-latex-preview))
+
+       ((org-at-heading-p)
+        ;; Heading: Move to position after entry content.
+        ;; NOTE: This is probably the most interesting feature of this function.
+        (let ((heading-start (org-entry-beginning-position)))
+          (goto-char (org-entry-end-position))
+          (cond ((and (org-at-heading-p)
+                      (= heading-start (org-entry-beginning-position)))
+                 ;; Entry ends on its heading; add newline after
+                 (end-of-line)
+                 (insert "\n\n"))
+                (t
+                 ;; Entry ends after its heading; back up
+                 (forward-line -1)
+                 (end-of-line)
+                 (when (org-at-heading-p)
+                   ;; At the same heading
+                   (forward-line)
+                   (insert "\n")
+                   (forward-line -1))
+                 ;; FIXME: looking-back is supposed to be called with more arguments.
+                 (while (not (looking-back (rx (repeat 3 (seq (optional blank) "\n")))))
+                   (insert "\n"))
+                 (forward-line -1)))))
+
+       ((org-in-item-p)
+        ;; Plain list.  Yes, this gets a little complicated...
+        (let ((context (org-element-context)))
+          (if (or (eq 'plain-list (car context))  ; First item in list
+                  (and (eq 'item (car context))
+                       (not (eq (org-element-property :contents-begin context)
+                                (org-element-property :contents-end context))))
+                  (my/org-element-descendant-of 'item context))  ; Element in list item, e.g. a link
+              ;; Non-empty item: Add new item.
+              (if (org-at-item-checkbox-p)
+                  (org-insert-todo-heading nil)
+                (org-insert-item))
+            ;; Empty item: Close the list.
+            ;; TODO: Do this with org functions rather than operating on the
+            ;; text. Can't seem to find the right function.
+            (delete-region (line-beginning-position) (line-end-position))
+            (insert "\n"))))
+
+       ((when (fboundp 'org-inlinetask-in-task-p)
+          (org-inlinetask-in-task-p))
+        ;; Inline task: Don't insert a new heading.
+        (org-return))
+
+       ((org-at-table-p)
+        (cond ((save-excursion
+                 (beginning-of-line)
+                 ;; See `org-table-next-field'.
+                 (cl-loop with end = (line-end-position)
+                          for cell = (org-element-table-cell-parser)
+                          always (equal (org-element-property :contents-begin cell)
+                                        (org-element-property :contents-end cell))
+                          while (re-search-forward "|" end t)))
+               ;; Empty row: end the table.
+               (delete-region (line-beginning-position) (line-end-position))
+               (org-return))
+              (t
+               ;; Non-empty row: call `org-return'.
+               (org-return))))
+       (t
+        ;; All other cases: call `org-return'.
+        (org-return))))))
 
 
 (provide 'ef-org)
