@@ -540,6 +540,20 @@
     "Increase the font size of text in Info buffers."
     (face-remap-set-base 'default `(:height 1.0))))
 
+;;; Info Look
+(use-package info-look
+  :commands (info-lookup-symbol
+             info-lookup-maybe-add-help)
+  :config
+  ;; (add-to-list 'Info-directory-list "~/.emacs.d/info")
+
+  (defun my/format-info-mode ()
+    "Opening .info files does not automatically set things up. Give it a little help."
+    (interactive)
+    (let ((file-name (buffer-file-name)))
+      (kill-buffer (current-buffer))
+      (info file-name))))
+
 ;;; isearch
 (use-package isearch
   :ensure nil
