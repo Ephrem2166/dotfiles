@@ -34,10 +34,43 @@ The DWIM behaviour of this command is as follows:
 (defun ef/reload-config ()
   "Reload the Emacs configuration file."
   (interactive)
-  (load-file (expand-file-name "init.el" user-emacs-directory)))
+  (message "Reloading init.el ...")
+  (load-file (expand-file-name "init.el" user-emacs-directory))
+  ;; (load user-init-file nil 'nomessage)
+  (message "Reloading init.el Done!!!")
+
+  )
 
 (define-key global-map (kbd "C-x r") #'ef/reload-config)
 
+
+;;; Eval Buffer or Region
+(defun my/eval-buffer-or-region (&optional start end)
+  "Evaluate the current region, or the whole buffer if no region is active.
+It uses `ef/reload-config'
+"
+  (interactive)
+  (if (and buffer-file-name
+           (member (file-truename buffer-file-name)
+                   (list
+                    (when (bound-and-true-p early-init-file)
+                      (file-truename early-init-file))
+                    (file-truename user-init-file)))
+           (not (region-active-p)))
+      (ef/reload-config)
+    (let ((name nil))
+      (if (region-active-p)
+          (progn
+            (setq start (region-beginning))
+            (setq end (region-end))
+            (setq name "region"))
+        (setq start (point-min))
+        (setq end (point-max))
+        (setq name (buffer-name)))
+      (let ((load-file-name (buffer-file-name)))
+        (message "Evaluating %s..." name)
+        (eval-region start end)
+        (message "Evaluating %s...done" name)))))
 
 ;;; Document Centering
 ;; ;; From David Wilson
@@ -389,7 +422,8 @@ expression."
 
 ;; (define-key global-map (kbd "C-}") #'my/simple-mark-sexp)
 
-;;; Move half screen above and below
+;;; Scrolling
+;;;; Move half screen above and below
 (defun my/simple-multi-line-below ()
   "Move half a screen below."
   (interactive)
@@ -405,7 +439,20 @@ expression."
 (define-key global-map (kbd "C-M-,") #'my/simple-multi-line-above)
 (define-key global-map (kbd "C-M-.") #'my/simple-multi-line-below)
 
+;;;; Scrolling Alternative
+(defun my/window-half-height ()
+  (max 1 (/ (1- (window-height (selected-window))) 2)))
 
+(defun my/scroll-up-half ()
+  (interactive)
+  (scroll-up (my/window-half-height)))
+
+(defun my/scroll-down-half ()
+  (interactive)
+  (scroll-down (my/window-half-height)))
+
+(global-set-key (kbd "C-p") 'my/scroll-down-half)
+(global-set-key (kbd "C-n") 'my/scroll-up-half)
 
 
 ;;; Create Scratch Buffer
@@ -425,6 +472,7 @@ expression."
                              (file-name-nondirectory buffer-file-name)))
     (delete-file (buffer-file-name))
     (kill-this-buffer)))
+
 ;;; Rename this file
 (defun my/rename-this-file (new-name)
   "Renames both current buffer and file it's visiting to NEW-NAME."
@@ -488,6 +536,7 @@ with some parts omitted and some custom behavior added."
 
    (t
     (keyboard-quit))))
+
 (define-key global-map (kbd "C-g") #'my/keyboard-quit-context)
 ;; (global-set-key [remap keyboard-quit] #'my/keyboard-quit-context)
 
@@ -535,7 +584,7 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
 (define-key ef-buffer-keymap (kbd "s") #'my/switch-to-scratch-buffer)
 
 
-;;; Message Buffer
+;;; Switch Message Buffer
 (defun my/switch-to-messages-buffer (&optional arg)
   "Switch to the `*Messages*' buffer in an other window.
 if prefix argument ARG is given, switch to it directly."
@@ -568,6 +617,9 @@ if prefix argument ARG is given, switch to it directly."
   (split-window-horizontally)
   (windmove-right))
 
+(bind-key "C-x 2" 'my/split-window-horizontally-and-focus)
+(bind-key "C-x 3" 'my/split-window-vertically-and-focus)
+
 ;;; Server Shutdown
 (defun my/server-shutdown ()
   "Save buffers, Quit, and Shutdown (kill) server"
@@ -584,6 +636,324 @@ if prefix argument ARG is given, switch to it directly."
       (if (y-or-n-p (format "Directory %s does not exist,do you want you create it? " dir))
           (make-directory dir t)
         (keyboard-quit)))))
+
+;;; Make Temporary Buffer
+(defvar temp-buffer-count 0)
+(defun my/make-temp-buffer ()
+  (interactive)
+  (let ((temp-buffer-name (format "*temp-%d*" temp-buffer-count)))
+    (switch-to-buffer temp-buffer-name)
+    (message "New temp buffer (%s) created." temp-buffer-name))
+  (setq temp-buffer-count (1+ temp-buffer-count)))
+
+(define-key ef-buffer-keymap (kbd "n") #'my/make-temp-buffer)                                       ; Key Bindings
+
+
+;;; Transparency
+(defun my/transparency (value)
+  "Sets the transparency of the frame window. 0=transparent/100=opaque"
+  (interactive "nTransparency Value 0 - 100 opaque:")
+  (set-frame-parameter (selected-frame) 'alpha-background value))
+
+;;; Toggle Transparency
+(defun my/toggle-transparency ()
+  "Toggle transparency."
+  (interactive)
+  (let ((alpha-background (frame-parameter nil 'alpha-background)))
+    (set-frame-parameter
+     nil 'alpha-background
+     (if (eql (cond ((numberp alpha-background) alpha-background)
+                    ((numberp (cdr alpha-background)) (cdr alpha-background))
+                    ;; Also handle undocumented (<active> <inactive>) form.
+                    ((numberp (cadr alpha-background)) (cadr alpha-background)))
+              100)
+         70
+       100))))
+
+;;; Invisible window dividers for themes
+(defun my/invisible-window-dividers (_theme)
+  "Make windows dividers for THEME invisible."
+  (let ((bg (face-background 'default)))
+    (custom-set-faces
+     `(fringe ((t :background ,bg :foreground ,bg)))
+     ;; `(vertical-border ((t :background ,bg :foreground ,bg)))
+     `(window-divider ((t :background ,bg :foreground ,bg)))
+     `(window-divider-first-pixel ((t :background ,bg :foreground ,bg)))
+     `(window-divider-last-pixel ((t :background ,bg :foreground ,bg))))))
+
+(add-hook 'enable-theme-functions #'my/invisible-window-dividers)
+
+
+;;; Insert Current Date
+(defun my/insert-current-date ()
+  "Insert current date."
+  (interactive)
+  (insert (shell-command-to-string "echo -n $(date +'%b %d, %Y')")))
+
+;;; Insert Current File Name
+(defun my/insert-current-filename ()
+  "Insert current buffer filename."
+  (interactive)
+  (insert (file-relative-name buffer-file-name)))
+
+
+;;; Kill Buffer and Windows
+(defun my/kill-buffer-and-windows (buffer)
+  "Kill the buffer and delete all the windows it's displayed in."
+  (dolist (window (get-buffer-window-list buffer))
+    (unless (one-window-p t)
+      (delete-window window)))
+  (kill-buffer buffer))
+
+
+;;; FIXME Delete Whitespace
+;; Remove useless whitespace before saving a file
+(defun delete-trailing-whitespace-except-current-line ()
+  "An alternative to `delete-trailing-whitespace'.
+The original function deletes trailing whitespace of the current line."
+  (interactive)
+  (let ((begin (line-beginning-position))
+        (end (line-end-position)))
+    (save-excursion
+      (when (< (point-min) (1- begin))
+        (save-restriction
+          (narrow-to-region (point-min) (1- begin))
+          (delete-trailing-whitespace)
+          (widen)))
+      (when (> (point-max) (+ end 2))
+        (save-restriction
+          (narrow-to-region (+ end 2) (point-max))
+          (delete-trailing-whitespace)
+          (widen))))))
+
+(defun smart-delete-trailing-whitespace ()
+  "Invoke `delete-trailing-whitespace-except-current-line' on selected major modes only."
+  (unless (member major-mode '(diff-mode))
+    (delete-trailing-whitespace-except-current-line)))
+
+(defun toggle-auto-trailing-ws-removal ()
+  "Toggle trailing whitespace removal."
+  (interactive)
+  (if (member #'smart-delete-trailing-whitespace before-save-hook)
+      (progn
+        (remove-hook 'before-save-hook #'smart-delete-trailing-whitespace)
+        (message "Disabled auto remove trailing whitespace."))
+    (add-hook 'before-save-hook #'smart-delete-trailing-whitespace)
+    (message "Enabled auto remove trailing whitespace.")))
+;; Add to hook during startup
+(add-hook 'before-save-hook #'smart-delete-trailing-whitespace)
+
+;;; Delete Blank Lines
+(defun my/delete-blank-lines-dwim ()
+  "Delete all blank lines surrounding point or, between point and mark."
+  (interactive)
+  (let ((regexp "^[ \t]*$")
+        (col (current-column)))
+    (if (region-active-p)
+        (flush-lines regexp (region-beginning) (region-end) nil)
+      (delete-blank-lines)
+      (if (looking-at regexp) (delete-blank-lines)))
+    (move-to-column col)))
+(define-key ef-file-keymap (kbd "o") #'my/delete-blank-lines-dwim)
+
+;;; Set initial frame size and position
+(defun my/set-initial-frame ()
+  (let* ((base-factor 0.70)
+         (a-width (* (display-pixel-width) base-factor))
+         (a-height (* (display-pixel-height) base-factor))
+         (a-left (truncate (/ (- (display-pixel-width) a-width) 2)))
+         (a-top (truncate (/ (- (display-pixel-height) a-height) 2))))
+    (set-frame-position (selected-frame) a-left a-top)
+    (set-frame-size (selected-frame) (truncate a-width)  (truncate a-height) t)))
+(setq frame-resize-pixelwise t)
+(my/set-initial-frame)
+
+;;;; Alternative
+;; (add-hook 'window-setup-hook 'toggle-frame-maximized t)
+
+;;;;; start the initial frame maximized
+;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+
+;;;;; start every frame maximized
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+
+;;; Fill or Unfill Paragraph
+;; (defun my/fill-or-unfill ()
+;;   "Like `fill-paragraph', but unfill if used twice."
+;;   (interactive)
+;;   (let ((fill-column
+;;          (if (eq last-command 'my-fill-or-unfill)
+;;              (progn (setq this-command nil)
+;;                     (point-max))
+;;            fill-column)))
+;;     (call-interactively 'fill-paragraph nil (vector nil t))))
+;;
+;; ;; (global-set-key [remap fill-paragraph] 'my/fill-or-unfill)
+;; (global-set-key (kbd "M-q") 'my/fill-or-unfill)
+
+;;;; Unfill paragraph
+;; Protesilaos's `prot-simple-unfill-region-or-paragraph'
+(defun my/unfill-region-or-paragraph (&optional beg end)
+  "Unfill paragraph or, when active, the region.
+Join all lines in region delimited by BEG and END, if active, while
+respecting any empty lines (so multiple paragraphs are not joined, just
+unfilled).  If no region is active, operate on the paragraph.  The idea
+is to produce the opposite effect of both `fill-paragraph' and
+`fill-region'."
+  (interactive "r")
+  (let ((fill-column most-positive-fixnum))
+    (if (use-region-p)
+        (fill-region beg end)
+      (fill-paragraph))))
+(bind-key "M-Q" #'my/unfill-region-or-paragraph)
+
+;;; Better Comment Box
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; example:                                                                ;;
+;; from http://irreal.org/blog/?p=374                                      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun my/comment-box (b e)
+  "Draw a box comment around the region but arrange for the region to extend to at least the fill column. Place the point after the comment box."
+
+  (interactive "r")
+
+  (let ((e (copy-marker e t)))
+    (goto-char b)
+    (end-of-line)
+    (insert-char ?  (- fill-column (current-column)))
+    (comment-box b e 1)
+    (goto-char e)
+    (set-marker e nil)))
+(global-set-key (kbd "C-c e b") 'my/comment-box)
+
+;;; Toggle Dark and Bright Theme
+(defvar my-toggle-dark-bright-theme-status nil
+  "Toggle between dark emacs theme and bright emacs theme; nil means initial switch to dark theme, t means initial switch to bright theme")
+
+(defun my-toggle-dark-bright-theme ()
+  "Toggle between dark emacs theme and bright emacs theme"
+  (interactive)
+  (cond (my-toggle-dark-bright-theme-status
+         (message "Loading bright theme")
+         (disable-theme 'doom-nord)
+         (load-theme 'modus-operandi-deuteranopia t)
+         (setq my-toggle-dark-bright-theme-status nil)
+         )
+        (t
+         (message "Loading dark theme")
+         (disable-theme 'modus-operandi-deuteranopia)
+         (load-theme 'doom-nord t) ;; dark theme
+         (setq my-toggle-dark-bright-theme-status t)
+         )
+        )
+  )
+
+(global-set-key [(shift f12)] 'my-toggle-dark-bright-theme)
+
+;;; Indent Whole Buffer
+(defun my/indent-whole-buffer ()
+  "Indent the entire buffer without affecting point or mark."
+  (interactive)
+  (save-excursion
+    (save-restriction
+      (indent-region (point-min) (point-max)))))
+
+(global-set-key (kbd "C-c TAB") 'my/indent-whole-buffer)
+
+;;; Minibuffer and Mouse
+(defun abort-minibuffer-using-mouse ()
+  "Abort the minibuffer when using the mouse."
+  (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
+    (abort-recursive-edit)))
+
+(add-hook 'mouse-leave-buffer-hook 'abort-minibuffer-using-mouse)
+
+;; keep the point out of the minibuffer
+(setq-default minibuffer-prompt-properties '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
+
+;;; Delete Word Backward
+;; (defun my/delete-backward-word (arg)
+;;   "Like `backward-kill-word', but doesn't affect the kill-ring."
+;;   (interactive "p")
+;;   (let (kill-ring)
+;;     (backward-kill-word arg)))
+(defun backward-kill-word-or-region (&optional arg)
+  "Kill word backward if region is inactive; else kill region"
+  (interactive "p")
+  (if (region-active-p)
+      (kill-region (region-beginning) (region-end))
+    (if (looking-back "^[ \t]+" (line-beginning-position))
+        (delete-region (line-beginning-position) (point))
+      (backward-kill-word arg))))
+
+(global-set-key (kbd "C-w") 'backward-kill-word-or-region)
+
+;;; Replace text in buffer
+(defun my/replace-in-buffer ()
+  (interactive)
+  (save-excursion
+    (if (equal mark-active nil) (mark-word))
+    (setq curr-word (buffer-substring-no-properties (mark) (point)))
+    (setq old-string (read-string "OLD string:\n" curr-word))
+    (setq new-string (read-string "NEW string:\n" old-string))
+    (query-replace old-string new-string nil (point-min) (point-max))
+    )
+  )
+
+(global-set-key (kbd "C-c s w") 'replace-in-buffer)
+
+
+;;; Multiple Search and Replace
+(defun my/batch-replace-strings (replacement-alist)
+  "Prompt user for pairs of strings to search/replace, then do so in the current buffer"
+  (interactive (list (batch-replace-strings-prompt)))
+  (dolist (pair replacement-alist)
+    (save-excursion
+      (replace-string (car pair) (cdr pair) nil (region-beginning) (region-end)))))
+
+(defun batch-replace-strings-prompt ()
+  "prompt for string pairs and return as an association list"
+  (let (from-string
+        ret-alist)
+    (while (not (string-equal "" (setq from-string (read-string "String to search (RET to stop): "))))
+      (setq ret-alist
+            (cons (cons from-string (read-string (format "Replace %s with: " from-string)))
+                  ret-alist)))
+    ret-alist))
+
+(global-set-key (kbd "C-c s r") 'my/batch-replace-strings)
+
+;;; Open File in Sudo
+(defun my/simple-sudo ()
+  "Find the current file or directory using `sudo'."
+  (interactive)
+  (let ((destination (or buffer-file-name default-directory))
+        (auto-save-default nil))
+    (if (string= (file-remote-p destination 'method) "sudo")
+        (user-error "Already using `sudo'")
+      (find-file (format "/sudo::/%s" destination)))))
+
+;;;; Sudo Edit
+(defun sudo-edit (&optional arg)
+  "Edit currently visited file as root.
+With a prefix ARG prompt for a file to visit.
+Will also prompt for a file to visit if current
+buffer is not visiting a file."
+  (interactive "P")
+  (if (or arg (not buffer-file-name))
+      (find-file (concat "/sudo:root@localhost:"
+                         (ido-read-file-name "Find file(as root): ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+;;; Dictionary Lookup
+(defun my/lookup-word (word)
+  (interactive (list (thing-at-point 'word)))
+  (browse-url (format "http://en.wiktionary.org/wiki/%s" word)))
+
+(global-set-key (kbd "M-#") 'lookup-word)
+
+
+
 
 (provide 'ef-functions)
 ;;; ef-functions.el ends here

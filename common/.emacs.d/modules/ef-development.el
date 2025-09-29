@@ -296,10 +296,11 @@
 
          ) )
 
-;; Sh-Script
+;;; Sh-Script
 (use-package sh-script
   :ensure nil
   :defer t
+  :hook (after-save . executable-make-buffer-file-executable-if-script-p)
   :bind (:map sh-mode-map
               ([remap display-local-help] . man))
   :custom

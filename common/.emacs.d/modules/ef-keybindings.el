@@ -1,6 +1,14 @@
 ;;; ef-keybindings.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
+;;; Unset Unnecessary Bindings
+;; Unbind unneeded keys
+(global-set-key (kbd "C-z") nil)
+(global-set-key (kbd "M-z") nil)
+(global-set-key (kbd "M-m") nil)
+(global-set-key (kbd "C-x C-z") nil)
+(global-set-key (kbd "M-/") nil)
+
 ;;; Global Keybindings
 ;; Restart Emacs
 (global-set-key (kbd "C-c C-q") 'restart-emacs)
@@ -22,6 +30,15 @@
 
 (global-set-key (kbd "M-<tab>") 'completion-at-point)
 
+
+;; Truncate lines
+(global-set-key (kbd "C-x C-l") #'toggle-truncate-lines)
+
+;; Remap Home and End Keys
+(global-set-key [home] 'beginning-of-buffer)
+(global-set-key [end]  'end-of-buffer)
+
+
 ;;; Alternative
 ;; (use-package emacs
 ;;   :ensure nil
@@ -40,21 +57,48 @@
 ;;    ("k" . kill-current-buffer)
 ;;    ("K" . kill-buffer)
 ;;    ))
+;; (define-key ctl-x-x-map "z" 'bury-buffer)
 
 ;;; Global Map Definitions
 ;; Buffer Mapping
 (defvar-keymap ef-buffer-keymap
-  :doc "Prefix for toggling stuff.")
+  :doc "Prefix for toggling stuff."
+  )
 (bind-key "C-c b" ef-buffer-keymap 'global-map)
+
 ;;;; File Mapping
 (defvar-keymap ef-file-keymap
   :doc "Prefix for file-related commands.")
 (bind-key "C-c f" ef-file-keymap 'global-map)
+
+
+(defvar-keymap ef-help-keymap
+  :doc "Prefix for file-related commands."
+  )
+(bind-key "C-c h" ef-help-keymap 'global-map)
+
 ;;;; Toggle Mapping
 (defvar-keymap ef-toggle-keymap
   :doc "Prefix for toggling stuff.")
 (bind-key "C-c t" ef-toggle-keymap 'global-map)
 
+
+
+;;; Alternative
+;; bind-keys is used to bind multiple keys at once
+;; (bind-keys &rest args)
+;; It can be used to add mapping to already existing mappings.
+;; such as help-map. Example:
+(bind-keys :map help-map
+           ("u" . apropos-user-option))
+
+;; Or to create user defined keymaps
+(bind-keys
+ :prefix-map ef-window-keymap
+ :prefix "C-c w"
+ :prefix-docstring "Window management keymaps"
+ ;; :menu-name "windows"
+ ("q" . quit-window))
 
 
 

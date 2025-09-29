@@ -1,4 +1,4 @@
-;;; ef-writing.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
+    ;;; ef-writing.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -56,13 +56,25 @@
 ;; A distraction-free writing mode
 (use-package writeroom-mode
   :ensure t
-  :bind ("C-c t w" . writeroom-mode)
+  :bind (
+         :map ef-toggle-keymap
+         ("w" . writeroom-mode))
   :defer t
   :hook
   (writeroom-mode-enable . set-buffer-writing-font)
   (writeroom-mode-disable . unset-buffer-writing-font)
   :custom
   (writeroom-width 80)
+  (writeroom-maximize-window nil)
+  (writeroom-fullscreen-effect 'maximized)
+  (writeroom-global-effects
+   '(
+     writeroom-set-alpha
+     ;; writeroom-set-fullscreen
+     writeroom-set-vertical-scroll-bars
+     writeroom-set-bottom-divider-width
+     )
+   )
   :preface
   (defface my-writing-face
     '((t (:height 1.5 :family "ia Writer Duo S")))

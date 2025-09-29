@@ -66,7 +66,7 @@
    :weight 'regular))
 
 
-;; Modeline
+;;; Modeline
 (set-face-attribute 'mode-line nil :family "Berkeley Nerd Font 9" :weight 'bold)
 (set-face-attribute 'mode-line-inactive nil :family "Berkeley Nerd Font 9" :weight 'bold)
 
@@ -74,11 +74,48 @@
 (set-face-attribute 'minibuffer-prompt nil :family "Berkeley Nerd Font 9" :weight 'regular)
 
 
-;; Debugging
+;;; Debugging
 ;; To show during startup
 ;; (message "🧱 Default mono font: %s" my/available-mono-font)
 ;; (message "🎨 Variable-pitch font: %s" my/available-variable-font)
 
+;;; Change Fonts Interactively
+(defvar font-list '(
+                    ("Berkeley Nerd Font" . 11)
+                    ("JetBrainsMono Nerd Font" . 12.5)
+                    ("PragmataProMono Nerd Font" . 13)
+                    ("Input" . 11)
+                    ("Hack" . 12)
+                    ("Consolas" . 12)
+                    ("UbuntuMono Nerd Font" . 12.5))
+  "List of fonts and sizes.  The first one available will be used.")
+
+
+(defun get-available-fonts ()
+  "Get list of available fonts from font-list."
+  (let (available-fonts)
+    (dolist (font font-list (nreverse available-fonts))
+      (when (member (car font) (font-family-list))
+        (push font available-fonts)))))
+
+(defun change-font ()
+  "Interactively change a font from a list a available fonts."
+  (interactive)
+  (let* ((available-fonts (get-available-fonts))
+         font-name font-size font-setting)
+    (if (not available-fonts)
+        (message "No fonts from the chosen set are available")
+      (if (called-interactively-p 'interactive)
+          (let* ((chosen (assoc-string (completing-read "What font to use? " available-fonts nil t) available-fonts)))
+            (setq font-name (car chosen) font-size (read-number "Font size: " (cdr chosen))))
+        (setq font-name (caar available-fonts) font-size (cdar available-fonts)))
+      (setq font-setting (format "%s-%d" font-name font-size))
+      (set-frame-font font-setting nil t)
+      (add-to-list 'default-frame-alist (cons 'font font-setting)))))
+
+;; To automatically change fonts
+;; (when (display-graphic-p)
+;;   (change-font))
 
 
 

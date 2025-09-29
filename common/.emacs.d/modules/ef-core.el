@@ -140,7 +140,8 @@
   (setq display-line-numbers-width-start t)
   (setq-default display-line-numbers 'visual)
   (setq-default display-line-numbers-widen t)
-  (setq-default display-line-numbers-width 3)
+  ;; Dynamically manage line-number size
+  (setq-default display-line-numbers-width nil)
   (setq-default display-line-numbers-current-absolute t)
   )
 
@@ -236,7 +237,7 @@
   ;; Cursor Style Bar
   (setopt cursor-type 'bar)
   (setopt blink-cursor-mode nil)
-  (setopt x-stretch-cursor nil)
+  (setopt x-stretch-cursor t)
   (setopt cursor-intangible-mode t)
   ;; Truncate
   (setopt truncate-string-ellipsis "...")
@@ -258,7 +259,7 @@
   (setq-default indicate-buffer-boundaries nil)
   (setq-default indicate-empty-lines nil)
 
-;; Remove warnings from narrow-to-region, upcase-region...
+  ;; Remove warnings from narrow-to-region, upcase-region...
   (dolist (cmd '(list-timers narrow-to-region upcase-region downcase-region
                              erase-buffer scroll-left dired-find-alternate-file))
     (put cmd 'disabled nil))
@@ -362,6 +363,18 @@
                               (?\[ . ?\])
                               )))
 
+;;; Face Remap
+;; Variable Pitch Mode Setup
+(use-package face-remap
+  :ensure nil
+  :bind (:map ef-toggle-keymap
+              ("v" . variable-pitch-mode))
+  :hook ((text-mode org-mode) . my/enable-variable-pitch)
+  :config
+  (defun my/enable-variable-pitch ()
+    (unless (derived-mode-p 'mhtml-mode 'prog-mode 'nxml-mode 'yaml-mode)
+      (variable-pitch-mode 1))))
+
 ;;; Files
 (use-package files
   :ensure nil
@@ -399,6 +412,13 @@
         `(("." . ,(expand-file-name "etc/backup/" user-emacs-directory))))
   (setq auto-save-list-file-prefix
         (expand-file-name "etc/autosave/" user-emacs-directory))
+
+  (setq write-file-functions '(my/maybe-check-parens))
+  ;;; Check Parens in Emacs Mode Before Closing
+  (defun my/maybe-check-parens ()
+    "If derived-mode is Lisp data, check for parenthesis correcteness."
+    (if (derived-mode-p 'lisp-data-mode) (check-parens)))
+
   )
 
 ;;; Goto Address
@@ -408,13 +428,32 @@
   :hook ((compilation-mode prog-mode conf-mode eshell-mode shell-mode) . goto-address-mode))
 
 
+;;; Help
+(use-package help
+  :ensure nil
+  :custom
+  (help-window-select t)
+  (help-window-keep-selected t)
+  (help-enable-variable-value-editing t)
+  (help-clean-buttons t)
+  (help-enable-symbol-autoload t)
+  (describe-bindings-outline t)
+  (describe-bindings-show-prefix-commands t)
+  )
+
+;;; Hideshow
+(use-package hideshow
+  :ensure nil
+  :config
+  (setq hs-hide-comments-when-hiding-all nil)
+  (setq hs-set-up-overlay #'hideshow-set-up-overlay-fn)
+  )
+
 ;;; Hippie Expand
 (use-package hippie-exp
   :ensure nil
   :defer t
-  :init
-  (keymap-global-set "<remap> <dabbrev-expand>" 'hippie-expand)
-
+  :bind ([remap dabbrev-expand] . hippie-expand)
   :config
   ;; this will tell us what it's doing:
   (setq hippie-expand-verbose t)
@@ -452,6 +491,17 @@
 ;;; ibuffer
 (use-package ibuffer
   :ensure nil
+  :preface
+  ;; Keep Message and Scratch Buffers from being deleted
+  (defvar protected-buffers '("*scratch*" "*Messages*")
+    "Buffer that cannot be killed.")
+
+  (defun my/protected-buffers ()
+    "Protect some buffers from being killed."
+    (dolist (buffer protected-buffers)
+      (with-current-buffer buffer
+        (emacs-lock-mode 'kill))))
+  :init (my/protected-buffers)
   :hook
   (ibuffer-mode . ibuffer-auto-mode)
   :bind
@@ -479,10 +529,79 @@
   (setq imenu-flatten 'group))
 
 
+;;; `Info
+(use-package info
+  :ensure nil
+  :hook ((Info-selection . my/info-font-resize))
+  :custom
+  (Info-isearch-search nil)
+  :config
+  (defun my/info-font-resize ()
+    "Increase the font size of text in Info buffers."
+    (face-remap-set-base 'default `(:height 1.0))))
+
 ;;; isearch
 (use-package isearch
   :ensure nil
   :config
+  (defun my/isearch-hungry-delete ()
+    "Delete the failed portion of the search string, or the last
+char if successful."
+    (interactive)
+    (if (isearch-fail-pos)
+        (while (isearch-fail-pos)
+          (isearch-delete-char))
+      (isearch-delete-char)))
+  (define-key isearch-mode-map (kbd "<backspace>") #'my/isearch-hungry-delete)
+  ;; Isearch Repeat Map
+  (defvar isearch-repeat-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map "s" 'isearch-repeat-forward)
+      (define-key map "r" 'isearch-repeat-backward)
+      map))
+  (put 'isearch-repeat-forward  'repeat-map 'isearch-repeat-map)
+  (put 'isearch-repeat-backward 'repeat-map 'isearch-repeat-map)
+
+  (defun my/isearch-mark-and-exit ()
+    "Mark the current search string and exit the search."
+    (interactive)
+    (push-mark isearch-other-end t 'activate)
+    (setq deactivate-mark nil)
+    (activate-mark)
+    (isearch-done))
+  (define-key isearch-mode-map (kbd "C-SPC") #'my/isearch-mark-and-exit)
+
+  (defun my/isearch-other-end ()
+    "End current search in the opposite side of the match.
+Particularly useful when the match does not fall within the
+confines of word boundaries (e.g. multiple words)."
+    (interactive)
+    (isearch-done)
+    (when isearch-other-end
+      (goto-char isearch-other-end)))
+  (define-key isearch-mode-map (kbd "<C-return>") #'my/isearch-other-end)
+
+  (defun my/isearch-forward-symbol-at-point (&optional arg)
+    (interactive "p")
+    (let ((arg (or arg 1)))
+      (isearch-forward-symbol-at-point arg)))
+
+  (defun my/isearch-backward-symbol-at-point (&optional arg)
+    (interactive "p")
+    (let ((arg (or arg 1)))
+      (isearch-forward-symbol-at-point (- arg))))
+  (define-key isearch-mode-map (kbd "M-s .") #'my/isearch-forward-symbol-at-point)
+  (define-key isearch-mode-map (kbd "M-s ,") #'my/isearch-backward-symbol-at-point)
+  ;; Abort Isearch
+  (defun my/abort-isearch-dwim ()
+    (interactive)
+    (if (eq (length isearch-string) 0)
+        (isearch-cancel)
+      (isearch-del-char)
+      (while (or (not isearch-success) isearch-error)
+        (isearch-pop-state)))
+    (isearch-update))
+  (define-key isearch-mode-map (kbd "<backspace>") #'my/abort-isearch-dwim)
   ;; (setq search-default-mode 'char-fold-to-regexp)
   (setq search-default-mode nil)
   (setq search-whitespace-regexp ".*?"
@@ -950,6 +1069,10 @@
     "C-x a" "avy"
     "C-x t" "tab-bar"
     )
+  (add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil)))
   )
 
 ;;; Whitespace
@@ -968,7 +1091,7 @@
                                       (newline-mark ?\n [?¬ ?\n])
                                       (space-mark ?\  [?·] [?.])))
   (setq whitespace-style '(empty face newline newline-mark lines-tail trailing tabs tab-mark spaces space-mark indentation missing-newline-at-eof))
-
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
   )
 
 
@@ -1065,6 +1188,8 @@
   ;;                                (mode-line-format . none))))
   ;;
   ;;         ))
+  ;; Only one window on startup
+  (add-hook 'emacs-startup-hook 'delete-other-windows t)
   )
 
 ;;; Winner
