@@ -118,6 +118,19 @@
 ;;   (change-font))
 
 
+;;; List Available Fonts on a new buffer
+(defun my/list-available-fonts ()
+  "Display a list of available fonts in a new buffer."
+  (interactive)
+  (let ((font-list (sort (font-family-list) 'string<))
+        (buffer-name "*Available Fonts*"))
+    (with-output-to-temp-buffer buffer-name
+      (with-current-buffer buffer-name
+        (dolist (font font-list)
+          (insert font "\n"))
+        (special-mode)))
+    (pop-to-buffer buffer-name)))
+
 
 (provide 'ef-fonts)
 ;;; ef-fonts.el ends here

@@ -300,12 +300,25 @@
 (use-package sh-script
   :ensure nil
   :defer t
+  :mode
+  ("/\\.env\\'" . sh-mode)
+  ("/\\.env\\." . sh-mode)
+  ("/\\.envrc\\'" . sh-mode)
+  ("/\\.envrc\\." . sh-mode)
+  ("\\.zsh\\'" . sh-mode)
+  ("/zshenv\\'" . sh-mode)
+  ("/zshrc\\'" . sh-mode)
+  ("\\.tmux\\'" . sh-mode)
+  ("\\.tmuxsh\\'" . sh-mode)
+  ("\\.tmuxtheme\\'" . sh-mode)
+
   :hook (after-save . executable-make-buffer-file-executable-if-script-p)
   :bind (:map sh-mode-map
               ([remap display-local-help] . man))
   :custom
   (sh-basic-offset 2)
   (sh-indentation  2)
+  (sh-indent-for-continuation 'always)
   )
 
 

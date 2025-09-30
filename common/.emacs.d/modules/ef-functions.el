@@ -722,6 +722,22 @@ if prefix argument ARG is given, switch to it directly."
   (kill-buffer buffer))
 
 
+;;; Delete Whitespace backward
+(defun my/backward-delete-whitespace ()
+  (interactive)
+  (save-match-data
+    (let ((st (point))
+          (en (progn
+                (re-search-backward "[^ \t\r\n]+" nil t)
+                (forward-char 1)
+                (point))))
+      (if (= st en)
+          (progn
+            (while (looking-back ")")
+              (backward-char))
+            (backward-kill-word 1))
+        (delete-region st en)))))
+
 ;;; FIXME Delete Whitespace
 ;; Remove useless whitespace before saving a file
 (defun delete-trailing-whitespace-except-current-line ()
@@ -1083,6 +1099,95 @@ exists. If BACKWARDP is non-nil it jumps backward."
 ;;   (if region
 ;;       (kill-region (region-beginning) (region-end) t)
 ;;     (backward-kill-sexp arg)))
+
+
+;;; Sort Symbols
+(defun sort-symbols (reverse beg end)
+  "Sort symbols in region alphabetically, in REVERSE if negative.
+See `sort-symbols'."
+  (interactive "*P\nr")
+  (sort-regexp-fields reverse "\\(\\sw\\|\\s_\\)+" "\\&" beg end))
+
+;;; Sort Words Alphabetically
+(defun sort-words (reverse beg end)
+  "Sort words in region alphabetically, in REVERSE if negative.
+Prefixed with negative \\[universal-argument], sorts in reverse.
+
+The variable `sort-fold-case' determines whether alphabetic case
+affects the sort order.
+
+See `sort-regexp-fields'."
+  (interactive "*P\nr")
+  (sort-regexp-fields reverse "\\w+" "\\&" beg end))
+
+;;; Window Related
+;;;; Toggle Window Split
+(defun my/toggle-window-split ()
+  (interactive)
+  "Toggles the window split between horizontal and vertical when
+the fram has exactly two windows."
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+             (next-win-buffer (window-buffer (next-window)))
+             (this-win-edges (window-edges (selected-window)))
+             (next-win-edges (window-edges (next-window)))
+             (this-win-2nd (not (and (<= (car this-win-edges)
+                                         (car next-win-edges))
+                                     (<= (cadr this-win-edges)
+                                         (cadr next-win-edges)))))
+             (splitter
+              (if (= (car this-win-edges)
+                     (car (window-edges (next-window))))
+                  'split-window-horizontally
+                'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd (other-window 1))
+          (set-window-buffer (selected-window) this-win-buffer)
+          (set-window-buffer (next-window) next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd (other-window 1))))))
+
+;;; Erase the Contents of a buffer
+(defun my/safe-erase-buffer (&optional prefix)
+  "prompts to really erase and then erases the current buffer"
+  (interactive "P")
+  (barf-if-buffer-read-only)
+  (when (or prefix
+            (y-or-n-p (concat "Erase content of buffer "
+                              (buffer-name)
+                              " ?")))
+    (erase-buffer)))
+
+
+;;; Lists faces at point
+;;;; Good for testing faces
+(defun my/list-faces (&optional point)
+  (interactive "d")
+  (or point (setq point (point)))
+  (let ((faces (remq nil
+                     `(,(get-char-property point 'read-face-name)
+                       ,(get-char-property point 'face)
+                       ,(plist-get (text-properties-at point) 'face)))))
+    (and (called-interactively-p 'any) (message (format "%s" faces)))
+    faces))
+
+
+;;; Toggle Relative Line Numbers
+(defun my/toggle-relative-linum (&optional arg)
+  "toggle relative line numbers in the current buffer
+when ARG is given and is 0, then relative line numbers are disabled,
+otherwise if ARG is greater than 0 then they're enabled and if ARG is
+nil then relative line-numbers are toggled."
+  (interactive "P")
+  (setq display-line-numbers
+        (cond
+         ((and arg (zerop (prefix-numeric-value arg)))
+          t)
+         (arg 'relative)
+         (t
+          (if (eq display-line-numbers 'relative) t 'relative)))))
 
 
 (provide 'ef-functions)
