@@ -276,6 +276,7 @@
   (hl-todo-keyword-faces
    '(("TODO"   . "#BF616A")
      ("FIXME"  . "#FF0000")
+     ("TRY" . "#EBCB9B")
      ("NOTE"  error bold)
      ("DEBUG"  . "#EBCB9B")
      ("BUG" error italic)

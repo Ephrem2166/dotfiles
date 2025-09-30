@@ -57,7 +57,15 @@
 
 (ef/avoid-initial-flash-of-light)
 
-;; Disable GUI Elements
+;;;; Another option to avoid white light before start
+;; (add-to-list 'default-frame-alist '(alpha-background . 0))
+;; (add-hook
+;;  'after-init-hook
+;;  (lambda ()
+;;    (add-to-list 'default-frame-alist '(alpha-background . nil))
+;;    (set-frame-parameter nil 'alpha-background nil)))
+
+;;; Disable GUI Elements
 (setopt menu-bar-mode nil)
 (setopt tool-bar-mode nil)
 (setopt scroll-bar-mode nil)

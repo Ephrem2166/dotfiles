@@ -163,13 +163,14 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
                     " "
                     (shell-quote-argument buffer-file-name)))))
 
-;;; Display time
-(defun my/current-time-as-string ()
-  "Return a string of the current time."
-  (concat
-   (format-time-string "%Y-%m-%dT%H%M%SZ%z")))
+;;; Insert Current Time As a String
+;; (defun my/current-time-as-string ()
+;;   "Return a string of the current time."
+;;   (concat
+;;    (format-time-string "%Y-%m-%dT%H%M%SZ%z")))
 
-;; Better Theme Switcher
+
+;;; Better Theme Switcher
 (defun my/switch-theme (theme)
   (interactive
    (list (intern (completing-read "Load custom theme: "
@@ -184,6 +185,12 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
   ;; (when current-prefix-arg
   ;;   (my/regenerate-desktop))
   )
+
+;;; Advice for a better load-theme
+;; This will make load-theme disable old theme before loading new one
+(defadvice load-theme
+    (before disable-before-load (theme &optional no-confirm no-enable) activate)
+  (mapc 'disable-theme custom-enabled-themes))
 
 ;; Functions from Doom Emacs
 ;; Large File Handling
@@ -387,6 +394,15 @@ Emacs instead. Passes ARG to `save-buffers-kill-emacs'."
   (save-buffers-kill-emacs arg (or restart (equal arg '(4)))))
 (bind-key [remap save-buffers-kill-terminal] #'my/restart-or-kill-emacs)
 
+
+;;; Close Frame If Not the Last, Kill Emacs Otherwise
+(defun my/delete-frame-or-kill-emacs ()
+  "Delete frame or kill Emacs if there is only one frame."
+  (interactive)
+  (if (> (length (frame-list)) 1)
+      (delete-frame)
+    (save-buffers-kill-terminal)))
+(global-set-key (kbd "C-c 0") 'my/delete-frame-or-kill-emacs)
 
 
 ;;; Toggle line truncate without message
@@ -964,6 +980,111 @@ buffer is not visiting a file."
 (global-set-key (kbd "C-<backspace>") 'my/backward-kill-line)
 
 
+;;; Delete Empty Lines Around a Point
+(defun my/spacing-delete-newlines ()
+  "Removes whitespace before and after the point."
+  (interactive)
+  (if (version< emacs-version "24.4")
+      (just-one-space -1)
+    (cycle-spacing -1)))
+(define-key ef-file-keymap (kbd "x") 'my/spacing-delete-newlines)
+
+
+;;; Search Backward and Forward for Word Under Cursor
+;;; From https://github.com/larstvei/dot-emacs
+(defun my/jump-to-symbol-internal (&optional backwardp)
+  "Jumps to the next symbol near the point if such a symbol
+exists. If BACKWARDP is non-nil it jumps backward."
+  (let* ((point (point))
+         (bounds (find-tag-default-bounds))
+         (beg (car bounds)) (end (cdr bounds))
+         (str (isearch-symbol-regexp (find-tag-default)))
+         (search (if backwardp 'search-backward-regexp
+                   'search-forward-regexp)))
+    (goto-char (if backwardp beg end))
+    (funcall search str nil t)
+    (cond ((<= beg (point) end) (goto-char point))
+          (backwardp (forward-char (- point beg)))
+          (t  (backward-char (- end point))))))
+
+(defun my/jump-to-previous-like-this ()
+  "Jumps to the previous occurrence of the symbol at point."
+  (interactive)
+  (my/jump-to-symbol-internal t))
+
+(defun my/jump-to-next-like-this ()
+  "Jumps to the next occurrence of the symbol at point."
+  (interactive)
+  (my/jump-to-symbol-internal))
+
+(define-key ef-file-keymap (kbd ",") 'my/jump-to-previous-like-this)
+
+(define-key ef-file-keymap (kbd ".") 'my/jump-to-next-like-this)
+
+
+
+;;; Insert Random Strings and Password
+(defun random-string (chars len)
+  "Return a string of LEN random characters from CHARS."
+  (apply #'string (make-list* len #'seq-random-elt chars)))
+
+(defun make-list* (n fun &rest args)
+  "Call FUN with ARGS N times and return a list of the results."
+  (let ((res '()))
+    (dotimes (_ n)
+      (push (apply fun args) res))
+    res))
+
+(defun insert-random-password (len)
+  "Insert a password-friendly random string of length LEN."
+  (interactive "NLength: ")
+  (insert
+   (random-string
+    "!#%+23456789:=?@ABCDEFGHJKLMNPRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+    len)))
+
+(defun insert-random-string (len)
+  "Insert a random alphanumeric ASCII-string of length LEN."
+  (interactive "NLength: ")
+  (insert
+   (random-string
+    (append (number-sequence ?0 ?9)
+            (number-sequence ?a ?z)
+            (number-sequence ?A ?Z))
+    len)))
+
+;;; Create New Frame
+;; M-n for new frame (M-n is unbound in vanilla emacs)
+(defun my/new-frame ()
+  (interactive)
+  (select-frame (make-frame))
+  (switch-to-buffer "*scratch*"))
+(global-set-key (kbd "M-n") 'my/new-frame)
+(global-set-key (kbd "M-`") 'other-frame)
+
+;;; TRY Delete
+;; (defun kill-region-or-backward-delete-sexp (&optional arg region)
+;;   "Kill region if active, else backward delete sexp."
+;;   (interactive
+;;    (list (prefix-numeric-value current-prefix-arg) (use-region-p)))
+;;   (if region
+;;       (kill-region (region-beginning) (region-end) t)
+;;     (let ((end (point)))
+;;       (save-excursion
+;;         (backward-sexp)
+;;         (delete-region (point) end)))))
+;;
+;;
+;; (defun kill-region-or-backward-kill-sexp (&optional arg region)
+;;   "`kill-region' if the region is active, otherwise
+;; `backward-kill-sexp'"
+;;   (interactive
+;;    (list (prefix-numeric-value current-prefix-arg) (use-region-p)))
+;;   (if region
+;;       (kill-region (region-beginning) (region-end) t)
+;;     (backward-kill-sexp arg)))
+
 
 (provide 'ef-functions)
+
 ;;; ef-functions.el ends here
