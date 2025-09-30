@@ -1,6 +1,35 @@
 ;;; ef-core.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
+;;; Alias
+;; Text Manipulation
+(defalias 'rs 'replace-string)
+(defalias 'al 'align-regexp)
+(defalias 'sl 'sort-lines)
+(defalias 'rr 'reverse-region)
+(defalias 'wc 'whitespace-cleanup)
+
+(defalias 'lml 'list-matching-lines)
+(defalias 'dml 'delete-matching-lines)
+(defalias 'dnml 'delete-non-matching-lines)
+(defalias 'dtw 'delete-trailing-whitespace)
+
+;; Buffer Manipulation
+(defalias 'rb 'revert-buffer)
+
+;; Emacs Lisp
+(defalias 'eb 'eval-buffer)
+(defalias 'er 'eval-region)
+(defalias 'ed 'eval-defun)
+(defalias 'eis 'elisp-index-search)
+(defalias 'lf 'load-file)
+
+;; Dired
+(defalias 'wd 'wdired-change-to-wdired-mode)
+
+;; Modes
+(defalias 'sh 'shell-script-mode)
+
 ;;; Abbrev
 (use-package abbrev
   :ensure nil
@@ -10,6 +39,7 @@
   (abbrev-suggest t)
   (abbrev-suggest-hint-threshold 2)
   (setq-default abbrev-mode t))
+
 ;;; Auto-revert
 ;;;; Auto-Revert Mode is a minor mode that affects only the current
 ;;;; buffer.  When enabled, it reverts the buffer when the file on
@@ -1014,9 +1044,14 @@ confines of word boundaries (e.g. multiple words)."
   :mode "\\`\\(README\\|CHANGELOG\\|COPYING\\|LICENSE\\)\\'"
   :hook
   ((text-mode . turn-on-auto-fill)
-   (prog-mode . (lambda () (setq-local sentence-end-double-space t))))
+   (text-mode my/text-mode-setup)
+   (prog-mode . (lambda () (setq-local sentence-end-double-space t)))
+   )
   :config
-
+  (defun my/text-mode-setup ()
+    (setq-local fill-column 80)
+    (hl-line-mode t)
+    (visual-line-mode))
   (setq word-wrap-by-category t)
   (setq sentence-end-double-space nil)
   (setq sentence-end-without-period nil)

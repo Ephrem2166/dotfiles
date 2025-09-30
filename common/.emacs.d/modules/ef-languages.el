@@ -232,7 +232,7 @@
 
 
 
-;; TOML
+;;; TOML
 (use-package toml-ts-mode
   :ensure nil
   :defer t
@@ -243,6 +243,7 @@
   :mode "\\.toml\\'"
   :mode "/\\(Cargo.lock\\|\\.cargo/config\\)\\'"
   )
+
 
 ;; Vimrc
 (use-package vimrc-mode

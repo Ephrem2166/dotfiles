@@ -540,21 +540,21 @@
   )
 
 
-;; Vundo
-;; Visualize Undo Tree
+;;; vundo
+;;; Visualize Undo Tree
 (use-package vundo
   :ensure t
   :defer 1
   :bind
-  (("C-x /" . vundo))
+  (("C-x /" . vundo)
+
+   )
   :config
   (setq vundo-window-side 'bottom)
   (setq vundo-window-max-height 4)
   (setq vundo-compact-display t)
   (setq vundo-highlight-saved-nodes t)
   (setq vundo-glyph-alist vundo-unicode-symbols))
-
-
 
 (provide 'ef-utilities)
 ;;; ef-utilities.el ends here
