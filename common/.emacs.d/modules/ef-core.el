@@ -199,6 +199,7 @@
   :defer t
   :hook (after-init . delete-selection-mode))
 
+
 ;;; General Properties
 (use-package emacs
   :ensure nil
@@ -213,6 +214,7 @@
   (setopt ring-bell-function #'ignore)
   (setopt default-input-method nil)
   (setopt use-short-answers t)
+  (fset 'yes-or-no-p 'y-or-n-p)
   (setopt confirm-nonexistent-file-or-buffer nil)
   (setopt confirm-kill-emacs 'y-or-n-p)
   (setopt confirm-kill-processes t)
@@ -321,7 +323,6 @@
   ;; Visual line mode in Messages buffer
   (add-hook 'messages-buffer-mode-hook #'visual-line-mode)
   )
-
 
 
 ;;; Emacs: TAB
@@ -531,7 +532,11 @@
     (dolist (buffer protected-buffers)
       (with-current-buffer buffer
         (emacs-lock-mode 'kill))))
-  :init (my/protected-buffers)
+  :init
+  (my/protected-buffers)
+  (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
   :hook
   (ibuffer-mode . ibuffer-auto-mode)
   :bind
@@ -544,8 +549,70 @@
   (setq ibuffer-jump-offer-only-visible-buffers t)
   (setq ibuffer-old-time 48)
   (setq ibuffer-expert nil)
-  (setq ibuffer-show-empty-filter-groups t)
-  (setq ibuffer-filter-group-name-face '(:inherit (success bold))))
+  (setq ibuffer-use-other-window t)
+  (setq ibuffer-show-empty-filter-groups nil)
+  (setq ibuffer-shrink-to-minimum-size  t)
+  (setq ibuffer-filter-group-name-face '(:inherit (success bold)))
+  (setq ibuffer-default-display-maybe-show-predicates t)
+  (setq ibuffer-saved-filter-groups
+        '(("default"
+           ("Magit"
+            (or
+             (mode . magit-status-mode)
+             (mode . magit-log-mode)
+             (name . "\\*magit")
+             (name . "magit-")
+             (name . "git-monitor")
+             ))
+           ("Commands"
+            (or
+             (mode . shell-mode)
+             (mode . eshell-mode)
+             (mode . term-mode)
+             (mode . compilation-mode)))
+           ("Lisp"
+            (mode . emacs-lisp-mode))
+           ("Dired"
+            (mode . dired-mode))
+           ("Org"
+            (or
+             (name . "^\\*Calendar\\*$")
+             (name . "^\\*Org Agenda")
+             (name . "^ \\*Agenda")
+             (mode . org-mode)))
+           ("Emacs"
+            (or
+             (name . "^\\*scratch\\*$")
+             (name . "^\\*Messages\\*$")
+             (name . "^\\*\\(Customize\\|Help\\)")
+             (name . "\\*\\(Echo\\|Minibuf\\)")))
+
+           ("Code" (or (mode . emacs-lisp-mode)
+                       (mode . cperl-mode)
+                       (mode . c-mode)
+                       (mode . java-mode)
+                       (mode . idl-mode)
+                       (mode . web-mode)
+                       (mode . lisp-mode)
+                       (mode . js2-mode)
+                       (mode . c++-mode)
+                       (mode . lua-mode)
+                       (mode . cmake-mode)
+                       (mode . ruby-mode)
+                       (mode . css-mode)
+                       (mode . objc-mode)
+                       (mode . sql-mode)
+                       (mode . python-mode)
+                       (mode . php-mode)
+                       (mode . sh-mode)
+                       (mode . json-mode)
+                       (mode . scala-mode)
+                       (mode . go-mode)
+                       (mode . erlang-mode)))
+
+           )))
+
+  )
 
 ;;; imenu
 ;; Jump to a place in the buffer chosen using a buffer menu or mouse menu.
@@ -571,18 +638,18 @@
     (face-remap-set-base 'default `(:height 1.0))))
 
 ;;; Info Look
-(use-package info-look
-  :commands (info-lookup-symbol
-             info-lookup-maybe-add-help)
-  :config
-  ;; (add-to-list 'Info-directory-list "~/.emacs.d/info")
+;; (use-package info-look
+;;   :commands (info-lookup-symbol
+;;              info-lookup-maybe-add-help)
+;;   :config
+;;   ;; (add-to-list 'Info-directory-list "~/.emacs.d/info")
 
-  (defun my/format-info-mode ()
-    "Opening .info files does not automatically set things up. Give it a little help."
-    (interactive)
-    (let ((file-name (buffer-file-name)))
-      (kill-buffer (current-buffer))
-      (info file-name))))
+;;   (defun my/format-info-mode ()
+;;     "Opening .info files does not automatically set things up. Give it a little help."
+;;     (interactive)
+;;     (let ((file-name (buffer-file-name)))
+;;       (kill-buffer (current-buffer))
+;;       (info file-name))))
 
 ;;; isearch
 (use-package isearch
@@ -646,6 +713,20 @@ confines of word boundaries (e.g. multiple words)."
         (isearch-pop-state)))
     (isearch-update))
   (define-key isearch-mode-map (kbd "<backspace>") #'my/abort-isearch-dwim)
+  ;; Search under the cursor
+  (defun my/isearch-yank-symbol ()
+    "*Put symbol at current point into search string."
+    (interactive)
+    (let ((sym (thing-at-point 'symbol)))
+      (if sym
+          (progn
+            (setq isearch-regexp t
+                  isearch-string (concat "\\_<" (regexp-quote sym) "\\_>")
+                  isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
+                  isearch-yank-flag t))
+        (ding)))
+    (isearch-search-and-update))
+  ;; (define-key ef-file-keymap (kbd "s") #'my/isearch-yank-symbol)
   ;; (setq search-default-mode 'char-fold-to-regexp)
   (setq search-default-mode nil)
   (setq search-whitespace-regexp ".*?"
@@ -724,8 +805,13 @@ confines of word boundaries (e.g. multiple words)."
 (use-package outline
   :ensure nil
   :hook ((prog-mode conf-mode text-mode) . my/prog-outline)
-  :bind (:map ef-toggle-keymap
-              ("o" . outline-toggle-children))
+  :bind ((:map ef-toggle-keymap
+               ("o" . outline-toggle-children))
+         :map outline-minor-mode-map
+         ("TAB" . my/outline-cycle)
+         ("<tab>" . my/outline-cycle)
+         ("<backtab>" . outline-cycle-buffer)
+         )
   :custom
   (outline-minor-mode-highlight t)
   (outline-minor-mode-cycle t)
@@ -735,6 +821,17 @@ confines of word boundaries (e.g. multiple words)."
   (outline-minor-mode-use-buttons nil)
   (outline-minor-mode-use-margins nil)
   :config
+  (defun my/outline-cycle ()
+    (interactive)
+    (if (save-excursion (forward-line 0)
+                        (looking-at-p outline-regexp))
+        (call-interactively #'outline-cycle)
+      (let* ((outline-minor-mode nil)
+             (cmd (or (key-binding (this-command-keys-vector))
+                      (key-binding (key-parse "TAB")))))
+        (when cmd
+          (setq this-command cmd)
+          (call-interactively cmd)))))
   (defun my/prog-outline ()
     (outline-minor-mode 1)
     (outline-hide-sublevels 1))
@@ -1037,21 +1134,16 @@ confines of word boundaries (e.g. multiple words)."
   )
 
 
-;;; Text Mode
+;;; FIXME Text Mode
 (use-package text-mode
   :ensure nil
   :defer t
   :mode "\\`\\(README\\|CHANGELOG\\|COPYING\\|LICENSE\\)\\'"
   :hook
   ((text-mode . turn-on-auto-fill)
-   (text-mode my/text-mode-setup)
    (prog-mode . (lambda () (setq-local sentence-end-double-space t)))
    )
   :config
-  (defun my/text-mode-setup ()
-    (setq-local fill-column 80)
-    (hl-line-mode t)
-    (visual-line-mode))
   (setq word-wrap-by-category t)
   (setq sentence-end-double-space nil)
   (setq sentence-end-without-period nil)
@@ -1144,7 +1236,7 @@ confines of word boundaries (e.g. multiple words)."
   )
 
 
-;;; Window
+;;; FIXME Window
 (use-package window
   :ensure nil
   :config
@@ -1237,6 +1329,11 @@ confines of word boundaries (e.g. multiple words)."
   ;;                                (mode-line-format . none))))
   ;;
   ;;         ))
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
+                 (display-buffer-no-window)
+                 (allow-no-window . t)))
+
   ;; Only one window on startup
   (add-hook 'emacs-startup-hook 'delete-other-windows t)
   )
