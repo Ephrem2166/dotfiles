@@ -1190,6 +1190,66 @@ nil then relative line-numbers are toggled."
           (if (eq display-line-numbers 'relative) t 'relative)))))
 
 
-(provide 'ef-functions)
+;;; Delete to the end of the buffer
+(defun delete-to-end-of-buffer ()
+  (interactive)
+  (kill-region (point) (point-max)))
 
+
+;;; View Clipboard
+(defun my/view-clipboard ()
+  (interactive)
+  (delete-other-windows)
+  (switch-to-buffer "*Clipboard*")
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (clipboard-yank)
+    (goto-char (point-min))))
+
+;;; Query man pages by keyword at point
+(defun my/use-selected-string-or-ask (&optional hint)
+  "Use selected region or ask for input.
+If HINT is empty, use symbol at point."
+  (cond
+   ((region-active-p)
+    (my-selected-str))
+   ((or (not hint) (string= "" hint))
+    (thing-at-point 'symbol))
+   (t
+    (read-string hint))))
+(defun my/lookup-doc-in-man ()
+  "Read man by querying keyword at point."
+  (interactive)
+  (man (concat "-k " (my/use-selected-string-or-ask))))
+
+;;; Kill All Buffers Except Current Buffer
+(defun my/kill-all-but-current-buffer ()
+  "Kill all other buffers, but not current buffer."
+  (interactive)
+  (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
+  "All other buffers have been killed!")
+
+;;; Advice to `kill-region'
+;; With this it can either kill region or line
+(defadvice kill-region (before slick-cut activate compile)
+  "When called interactively with no active region, kill a single line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
+
+;;; Check for Agenda
+(defun my/org-check-agenda ()
+  "Peek at agenda."
+  (interactive)
+  (cond
+   ((derived-mode-p 'org-agenda-mode)
+    (if (window-parent) (delete-window) (bury-buffer)))
+   ((get-buffer "*Org Agenda*")
+    (switch-to-buffer-other-window "*Org Agenda*"))
+   (t (org-agenda nil "a"))))
+
+
+
+(provide 'ef-functions)
 ;;; ef-functions.el ends here

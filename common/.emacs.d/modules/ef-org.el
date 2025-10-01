@@ -30,9 +30,31 @@
   (org-display-inline-images)
   (variable-pitch-mode)
   ;; (lambda () (setq-local line-spacing 0.2 fill-column 100))
+  (auto-insert-mode 1)
   )
 
-(add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))
+;; (add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))
+
+
+(defun org-mode-hook-setup ()
+  (unless (my-buffer-file-temp-p)
+    (setq-local evil-auto-indent nil)
+
+    ;; org-mime setup, run this command in org-file, than yank in `message-mode'
+    ;; (local-set-key (kbd "C-c M-o") 'org-mime-org-buffer-htmlize)
+
+    ;; don't spell check double words
+    ;; (setq-local wucuo-flyspell-check-doublon nil)
+
+    ;; create updated table of contents of org file
+    ;; @see https://github.com/snosov1/toc-org
+    (toc-org-enable)
+    ;; default `org-indent-line' inserts extra spaces at the beginning of lines
+    (setq-local indent-line-function 'indent-relative)
+    ;; display wrapped lines instead of truncated lines
+    (setq truncate-lines nil)
+    (setq word-wrap t)))
+(add-hook 'org-mode-hook 'org-mode-hook-setup)
 
 ;; Org General Settings
 (use-package org
@@ -144,6 +166,7 @@
       ;; Startup options completion
       "#+startup: " ((completing-read "Startup: " org-startup-options nil t) str " ") "\n"
       )    )
+
   )
 
 
