@@ -37,23 +37,22 @@
 
 
 (defun org-mode-hook-setup ()
-  (unless (my-buffer-file-temp-p)
-    (setq-local evil-auto-indent nil)
+  (setq-local evil-auto-indent nil)
 
-    ;; org-mime setup, run this command in org-file, than yank in `message-mode'
-    ;; (local-set-key (kbd "C-c M-o") 'org-mime-org-buffer-htmlize)
+  ;; org-mime setup, run this command in org-file, than yank in `message-mode'
+  ;; (local-set-key (kbd "C-c M-o") 'org-mime-org-buffer-htmlize)
 
-    ;; don't spell check double words
-    ;; (setq-local wucuo-flyspell-check-doublon nil)
+  ;; don't spell check double words
+  ;; (setq-local wucuo-flyspell-check-doublon nil)
 
-    ;; create updated table of contents of org file
-    ;; @see https://github.com/snosov1/toc-org
-    (toc-org-enable)
-    ;; default `org-indent-line' inserts extra spaces at the beginning of lines
-    (setq-local indent-line-function 'indent-relative)
-    ;; display wrapped lines instead of truncated lines
-    (setq truncate-lines nil)
-    (setq word-wrap t)))
+  ;; create updated table of contents of org file
+  ;; @see https://github.com/snosov1/toc-org
+  (toc-org-enable)
+  ;; default `org-indent-line' inserts extra spaces at the beginning of lines
+  (setq-local indent-line-function 'indent-relative)
+  ;; display wrapped lines instead of truncated lines
+  (setq truncate-lines nil)
+  (setq word-wrap t))
 (add-hook 'org-mode-hook 'org-mode-hook-setup)
 
 ;; Org General Settings

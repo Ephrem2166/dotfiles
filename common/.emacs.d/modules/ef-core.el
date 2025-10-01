@@ -1329,6 +1329,25 @@ confines of word boundaries (e.g. multiple words)."
   ;;                                (mode-line-format . none))))
   ;;
   ;;         ))
+  ;; Set up the display buffer alist for a select window.
+  (defun my/give-buffer-focus (window)
+    "Select WINDOW for 'display-buffer-alist'."
+    (select-window window))
+  ;; window-height seems to have no effect. it's always huge.
+  (setq display-buffer-alist
+        '((;;"\\*Occur\\*"
+           (or . ((derived-mode . occur-mode)))
+         ;;; placement functions
+           (display-buffer-reuse-mode-window
+            display-buffer-below-selected)
+         ;;; Parameters
+           (body-function . my/give-buffer-focus)
+           ;;(window-height . 10)
+           (window-height . fit-window-to-buffer)
+           (dedicated . t)
+           )))
+
+
   (add-to-list 'display-buffer-alist
                '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
                  (display-buffer-no-window)
