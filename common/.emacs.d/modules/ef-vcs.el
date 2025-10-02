@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Builtin
+;;; Diff
 (use-package diff
   :ensure nil
   :defer t
@@ -14,7 +14,7 @@
   (setq diff-font-lock-syntax 'hunk-also)
   (setq diff-font-lock-prettify t))
 
-;;;; `ediff'
+;;; Ediff
 (use-package ediff
   :ensure nil
   :commands (ediff-buffers ediff-files ediff-buffers3 ediff-files3)
@@ -37,7 +37,8 @@
      ("Author")))
   (log-edit-setup-add-author nil)
   )
-;; VC
+
+;;; VC
 (use-package vc
   :ensure nil
   :defer 60
@@ -56,6 +57,7 @@
 ;; Since magit requires a newer version of transient
 ;; we need to install it on top of the built-in transient
 (use-package transient)
+
 (use-package magit
   :ensure t
   :after transient

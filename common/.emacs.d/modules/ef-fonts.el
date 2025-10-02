@@ -2,9 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Maximum decoration level for fontification.
+;;; Maximum decoration level for fontification.
 (setq font-lock-maximum-decoration t)
 
+;;; Change Font Functions
 (defun my/font-available-p (font-name)
   " Check for available fonts"
   (when (stringp font-name)
@@ -13,17 +14,14 @@
 (defun my/available-font (&rest fonts)
   "Return available fonts"
   (seq-find #'my/font-available-p fonts))
-
 (defvar my/available-mono-font
   (my/available-font "Berkeley Nerd Font" "PragmataProMono Nerd Font" "PragmataPro Mono" "Iosevka Nerd Font Mono" "JetBrains Nerd Font" "Ubuntu Mono Nerd Font" "Monospace")
   "Primary monospaced fonts"
   )
 
-
 (defvar my/available-variable-font
   (my/available-font "Iosevka Aile" "PragmataPro" "Atkinson Hyperlegible" "Avenir" "Iosevka Nerd Font" "PragmataPro Nerd Font" "Sans")
   "Primary Variable Fonts")
-
 
 ;; (when my/available-mono-font
 ;;   (set-face-attribute 'default nil
@@ -36,11 +34,9 @@
 ;;   (set-face-attribute 'variable-pitch nil
 ;;                       :font (font-spec :family my/available-variable-font :size 16.0 :weight 'regular)))
 
-
 (set-frame-font "Berkeley Nerd Font 10")
 
-;; ;; Default Font
-
+;;; Set Default Font
 (when my/available-mono-font
   (set-face-attribute
    'default nil
@@ -48,16 +44,16 @@
    ;; Height = point size x 10 = 12 x 10 = 120
    :height 110
    :weight 'regular))
-;;
-;; ;; Fixed Font
+
+;;; Set Fixed Font
 (when my/available-mono-font
   (set-face-attribute
    'fixed-pitch nil
    :family my/available-mono-font
    :height 110
    :weight 'regular))
-;;
-;; ;; Variable Font
+
+;;; Set Variable Font
 (when my/available-variable-font
   (set-face-attribute
    'variable-pitch nil
@@ -70,7 +66,7 @@
 (set-face-attribute 'mode-line nil :family "Berkeley Nerd Font 9" :weight 'bold)
 (set-face-attribute 'mode-line-inactive nil :family "Berkeley Nerd Font 9" :weight 'bold)
 
-;; Minibuffer
+;;; Minibuffer
 (set-face-attribute 'minibuffer-prompt nil :family "Berkeley Nerd Font 9" :weight 'regular)
 
 
@@ -89,7 +85,6 @@
                     ("Consolas" . 12)
                     ("UbuntuMono Nerd Font" . 12.5))
   "List of fonts and sizes.  The first one available will be used.")
-
 
 (defun get-available-fonts ()
   "Get list of available fonts from font-list."
@@ -116,8 +111,6 @@
 ;; To automatically change fonts
 ;; (when (display-graphic-p)
 ;;   (change-font))
-
-
 ;;; List Available Fonts on a new buffer
 (defun my/list-available-fonts ()
   "Display a list of available fonts in a new buffer."

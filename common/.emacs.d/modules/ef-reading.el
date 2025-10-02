@@ -2,14 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Adaptive Wrap
+;;; Adaptive Wrap
 (use-package adaptive-wrap
   :ensure t
   :hook (visual-line-mode . adaptive-wrap-prefix-mode))
 
-;; Logos
+;;; Logos
 ;; Simple focus mode and extras
 (use-package logos
+  :disabled
   :ensure t
   :bind
   (("C-x n n" . logos-narrow-dwim)
@@ -38,7 +39,7 @@
   (setq-default logos-olivetti t)
   )
 
-;; Nov
+;;; Nov
 ;; Featureful EPUB reader mode
 (use-package nov
   :ensure t
@@ -63,7 +64,7 @@
               ("t" . nov-goto-toc)
               ("<end>" . nov-goto-end)))
 
-;; Olivetti
+;;; Olivetti
 ;; Minor mode to automatically balance window margins
 (use-package olivetti
   :ensure t
@@ -78,7 +79,7 @@
   (setq olivetti-recall-visual-line-mode-entry-state t))
 
 
-;; Pdf Tools
+;;; Pdf Tools
 (use-package pdf-tools
   :ensure t
   ;;:defer t

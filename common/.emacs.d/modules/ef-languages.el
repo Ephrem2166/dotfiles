@@ -1,7 +1,7 @@
 ;;; ef-languages.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-;; LATEX
+;;; LATEX
 (use-package auctex
   :ensure nil
   :hook ((LaTeX-mode . LaTeX-preview-setup)
@@ -17,7 +17,8 @@
         TeX-source-correlate-mode t
         TeX-source-correlate-method 'auto
         TeX-source-correlate-start-server t))
-;; TODO C
+
+;;; TODO C
 ;; (use-package cc-mode
 ;;   :ensure nil
 ;;   :mode (("\\.c\\'" . c-mode)
@@ -25,25 +26,26 @@
 ;;          ("\\.cpp\\'" . cpp-mode)
 ;;          ("\\.hpp\\'" . cpp-mode))
 ;;   )
-;; TODO C++
 
-;; Conf Mode
+;;; TODO C++
+
+;;; Conf Mode
 ;; Simple major mode for editing conf/ini/properties files
 (use-package conf-mode
   :ensure nil
   :mode ("\\*.conf\\'" "\\config\\'" "\\.env\\..*\\'" "\\.env\\'"))
 
-;; CSS
+;;; CSS
 (use-package css-ts-mode
   :ensure nil
   :mode ("\\*.css\\'"))
 
-;; Emacslisp
+;;; Emacslisp
 (use-package emacs-lisp-mode
   :ensure nil
   :mode ("\\.el\\'" "\\.el.tmpl\\'"))
 
-;; Elisp Autofmt
+;;; Elisp Autofmt
 ;; Emacs lisp auto-format
 (use-package elisp-autofmt
   :ensure t
@@ -52,6 +54,7 @@
             elisp-autofmt-buffer
             elisp-autofmt-region))
 
+;;; Elisp Refs
 ;; Provides functions to find references to functions, macros, variables,
 ;; special forms, and symbols in Emacs Lisp
 (use-package elisp-refs
@@ -63,7 +66,7 @@
              elisp-refs-special
              elisp-refs-symbol))
 
-;; Elpy
+;;; Elpy
 ;; Elpy is an Emacs package to bring powerful
 ;; Python editing to Emacs.
 (use-package elpy
@@ -73,27 +76,28 @@
   :init
   (elpy-enable))
 
-;; Emmet
+;;; Emmet
 ;; (use-package emmet-mode
 ;;   :ensure t
 ;;   :hook ((web-mode . emmet-mode)
 ;;          (html-mode . emmet-mode)
 ;;          (css-mode . emmet-mode)))
 
-;; TODO HTML
-;; JSON
+;;; TODO HTML
+;;; JSON
 (use-package json-ts-mode
   :ensure nil
   :mode ("\\.json\\'" "\\.jsonc\\'" "\\.jsonc.tmpl\\'")
   )
 
+;;; Jsonrpc
 (use-package jsonrpc
   :ensure nil
   :config
   (fset #'jsonrpc--log-event #'ignore) ;; speed up lsp output.
   )
 
-;; JavaScript
+;;; JavaScript
 (use-package js-json-mode
   :ensure nil
   :defer t
@@ -104,13 +108,13 @@
   :mode ("\\.json\\’" "\\.jsonc\\’")
   )
 
-;; Lispy
+;;; Lispy
 (use-package lispy
   :disabled
   :ensure t
   :hook (emacs-lisp-mode . lispy-mode))
 
-;; LUA
+;;; LUA
 (use-package lua-mode
   :ensure t
   :defer t
@@ -119,8 +123,7 @@
   (lua-indent-level 2)
   )
 
-
-;; MARKDOWN
+;;; MARKDOWN
 ;; Markdown Header Configuration
 (defun my/markdown-headers ()
   (set-face-attribute 'markdown-header-face-1 nil :height 2.0)
@@ -139,7 +142,7 @@
   ;;   '(markdown-header-face-6 :height 0.75 :weight extra-bold :inherit markdown-header-face))
   )
 
-;;; Markdown (markdown-mode)
+;;;; Markdown (markdown-mode)
 (use-package markdown-mode
   :ensure t
   :defer t
@@ -148,7 +151,6 @@
          (markdown-mode . lsp)
          (markdown-mode . my/markdown-headers)
          )
-
 
   :mode (("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
@@ -159,7 +161,7 @@
   (setopt markdown-enable-math t)
   (setopt markdown-fontify-code-blocks-natively t))
 
-;; Markdown Preview Mode
+;;; Markdown Preview Mode
 ;; To view markdown files in a browser (firefox)
 (use-package markdown-preview-mode
   :disabled
@@ -168,8 +170,7 @@
          (gfm-mode . markdown-preview-mode))
   :custom (browse-url-browser-function 'browse-url-firefox))
 
-
-
+;;; Paredit
 ;; Prevent parenthesis imbalance
 (use-package paredit
   :disabled
@@ -183,14 +184,13 @@
   ;; (define-key paredit-mode-map (kbd "RET") nil))
   )
 
-
-;; Prettier
+;;; Prettier
 (use-package prettier-js
   :ensure t
   :hook
   ((json-mode js2-mode inferior-js-mode typescript-mode css-mode) . prettier-js-mode))
 
-;; TODO Python
+;;; TODO Python
 (use-package python-ts-mode
   :ensure nil
   :mode "\\.py\\'"
@@ -201,7 +201,7 @@
   (setq-default python-shell-interpreter "python3")
   (setq-default python-indent-offset 4))
 
-;; TODO Rust
+;;; TODO Rust
 ;; (use-package rust-ts-mode
 ;;   :ensure nil
 ;;   :defer t
@@ -211,9 +211,7 @@
 ;;   (rust-format-on-save t)
 ;;   )
 
-
-;; Shell Related
-;; Shell Mode
+;;; Shell Mode
 (use-package sh-mode
   :ensure nil
   :defer t
@@ -229,9 +227,6 @@
    ("zshrc" . sh-mode)
    ("runcoms/[a-zA-Z]+$" . sh-mode)))
 
-
-
-
 ;;; TOML
 (use-package toml-ts-mode
   :ensure nil
@@ -244,14 +239,13 @@
   :mode "/\\(Cargo.lock\\|\\.cargo/config\\)\\'"
   )
 
-
-;; Vimrc
+;;; Vimrc
 (use-package vimrc-mode
   :ensure t
   :mode (".vi\\(mrc\\|mperatorrc\\|fmrc\\|ebrc\\)?$")
   )
 
-;; Web Mode
+;;; Web Mode
 (use-package web-mode
   :ensure t
   :mode
@@ -284,15 +278,13 @@
   (setq web-mode-enable-css-colorization t)
   )
 
-;; YAML
+;;; YAML
 (use-package yaml-ts-mode
   :ensure nil
   :mode
   ("\\.yml\\'" "\\.yaml\\'")
 
   )
-
-
 
 (provide 'ef-languages)
 ;;; ef-languages.el ends here

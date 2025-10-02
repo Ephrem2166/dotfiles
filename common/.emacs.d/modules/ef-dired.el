@@ -1,7 +1,7 @@
 ;;; ef-dired.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-;; Dired
+;;; Dired
 (use-package dired
   :ensure nil
   :bind
@@ -31,41 +31,41 @@
   (setq dired-guess-shell-alist-user
         (list
          (list "\\.pptx?$" "libreoffice &")
-	     (list "\\.odf$" "libreoffice &")
-	     (list "\\.odt$" "libreoffice &")
-	     (list "\\.odt$" "libreoffice &")
+         (list "\\.odf$" "libreoffice &")
+         (list "\\.odt$" "libreoffice &")
+         (list "\\.odt$" "libreoffice &")
          (list "\\.svg$" "gimp")
-	     (list "\\.csv$" "libreoffice &")
-	     (list "\\.sla$" "scribus")
-	     (list "\\.od[sgpt]$" "libreoffice &")
-	     (list "\\.xls$" "libreoffice &")
-	     (list "\\.xlsx$" "libreoffice &")
+         (list "\\.csv$" "libreoffice &")
+         (list "\\.sla$" "scribus")
+         (list "\\.od[sgpt]$" "libreoffice &")
+         (list "\\.xls$" "libreoffice &")
+         (list "\\.xlsx$" "libreoffice &")
          (list "\\.jpe?g$" "sxiv")
-	     (list "\\.png$" "sxiv")
-	     (list "\\.gif$" "sxiv")
-	     (list "\\.psd$" "gimp")
-	     (list "\\.xcf" "gimp")
+         (list "\\.png$" "sxiv")
+         (list "\\.gif$" "sxiv")
+         (list "\\.psd$" "gimp")
+         (list "\\.xcf" "gimp")
          (list "\\.3gp$" "vlc")
-	     (list "\\.mp3$" "vlc")
-	     (list "\\.flac$" "vlc")
-	     (list "\\.avi$" "vlc")
-	     ;; (list "\\.og[av]$" "vlc")
-	     (list "\\.wm[va]$" "vlc")
-	     (list "\\.flv$" "vlc")
-	     (list "\\.mov$" "vlc")
-	     (list "\\.divx$" "vlc")
-	     (list "\\.mp4$" "vlc")
-	     (list "\\.webm$" "vlc")
-	     (list "\\.mkv$" "vlc")
-	     (list "\\.mpe?g$" "vlc")
-	     (list "\\.m4[av]$" "vlc")
-	     (list "\\.mp2$" "vlc")
-	     (list "\\.pp[st]$" "libreoffice &")
-	     (list "\\.ogg$" "vlc")
-	     (list "\\.ogv$" "vlc")
-	     (list "\\.rtf$" "libreoffice &")
+         (list "\\.mp3$" "vlc")
+         (list "\\.flac$" "vlc")
+         (list "\\.avi$" "vlc")
+         ;; (list "\\.og[av]$" "vlc")
+         (list "\\.wm[va]$" "vlc")
+         (list "\\.flv$" "vlc")
+         (list "\\.mov$" "vlc")
+         (list "\\.divx$" "vlc")
+         (list "\\.mp4$" "vlc")
+         (list "\\.webm$" "vlc")
+         (list "\\.mkv$" "vlc")
+         (list "\\.mpe?g$" "vlc")
+         (list "\\.m4[av]$" "vlc")
+         (list "\\.mp2$" "vlc")
+         (list "\\.pp[st]$" "libreoffice &")
+         (list "\\.ogg$" "vlc")
+         (list "\\.ogv$" "vlc")
+         (list "\\.rtf$" "libreoffice &")
          (list "\\.mp3$" "play")
-	     (list "\\.wav$" "vlc")
+         (list "\\.wav$" "vlc")
          ))
   (setq dired-free-space nil)
   (setq dired-vc-rename-file t)
@@ -74,7 +74,7 @@
   )
 
 
-;; Dired-git
+;;; Dired-git
 ;; Git Integration for dired
 ;; Show git info in dired
 (use-package dired-git
@@ -85,13 +85,13 @@
   (dired-git-disable-dirs '("~/"))
   (dired-git-parallel 7))               ; Number of parallel processes
 
-;; Diredfil
+;;; Diredfil
 ;; Extra font lock rules for a more colorful dired
 ;; Colorful dired
 (use-package diredfl
   :hook (dired-mode . diredfl-mode))
 
-;; Dired-subtree
+;;; Dired-subtree
 ;; Insert subdirectories in a tree like fashion
 ;; toggle subtree visibility with 'TAB'
 ;; makes dired a much more pleasant file manager
@@ -110,7 +110,7 @@
   )
 
 
-;; Wdired (Writable dired
+;;; Wdired (Writable dired
 (use-package wdired
   :ensure nil
   :commands (wdired-change-to-wdired-mode)
@@ -118,7 +118,7 @@
   (setq wdired-allow-to-change-permissions t)
   (setq wdired-create-parent-directories t))
 
-;;Dired Open
+;;; Dired Open
 ;;Open Files from dired using custom actions
 (use-package dired-open
   :ensure t
@@ -132,13 +132,13 @@
                                 ("mkv" . "mpv")
                                 ("mp4" . "mpv"))))
 
-;; Dired Filter
+;;; Dired Filter
 ;; Ibuffer like filtering for dired
 ;; (use-package dired-filter
 ;;   :ensure nil
 ;;   :after dired)
 
-;; ;; Dired Aux
+;;; Dired Aux
 (use-package dired-aux
   :ensure nil
   ;; :disabled
@@ -157,7 +157,7 @@
   (setq dired-do-revert-buffer (lambda (dir) (not ))) ; Emacs 28
   (setq dired-create-destination-dirs-on-trailing-dirsep t)) ; Emacs 29
 
-;; Dired-x
+;;; Dired-x
 (use-package dired-x
   :ensure nil
   :after dired
@@ -171,7 +171,7 @@
   (setq dired-bind-man nil)
   (setq dired-bind-info nil))
 
-;; Image Dired
+;;; Image Dired
 (use-package image-dired
   :ensure nil
   :commands (image-dired)
@@ -186,7 +186,7 @@
   (setq image-dired-thumb-relief 0)
   (setq image-dired-thumbs-per-row 4))
 
-;; Peep-dired
+;;; Peep-dired
 ;; Peep at files in another window from dired buffers
 ;; Preview files before loading them.
 (use-package peep-dired
@@ -194,7 +194,7 @@
   :defer t
   )
 
-;; Trashed
+;;; Trashed
 ;; Viewing/editing system trash can
 (use-package trashed
   :ensure t
@@ -204,7 +204,8 @@
   (setq trashed-use-header-line t)
   (setq trashed-sort-key '("Date deleted" . t))
   (setq trashed-date-format "%Y-%m-%d %H:%M:%S"))
-;; Dirvish
+
+;;; Dirvish
 ;; A modern file manager based on dired mode
 (use-package dirvish
   :disabled
@@ -280,7 +281,7 @@
 
   )
 
-;; Keybindings
+;;; Dired Keybindings
 (use-package dired
   :ensure nil
   :bind (

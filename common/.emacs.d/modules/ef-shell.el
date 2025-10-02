@@ -1,17 +1,23 @@
 ;;; ef-shell.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-;; Eshell
-;; Capf autosuggest
+;;; Capf autosuggest
 ;; History autosuggestions for comint and eshell
 (use-package capf-autosuggest
   :ensure t
   :hook
   (eshell-mode . capf-autosuggest-mode))
 
-;; TODO: ESHELL
+;; Eat
+;; Emulate a terminal, in a region, in a buffer and in eshell
+;; (use-package eat
+;;   :ensure t
+;;   :config
+;;   (eat-eshell-visual-command-mode 1))
 
-;; Exec Path from Shell
+;;; TODO: ESHELL
+
+;;; Exec Path from Shell
 ;; Get Environment variables such as $PATH from the shell
 (use-package exec-path-from-shell
   :ensure t
@@ -25,9 +31,7 @@
   (exec-path-from-shell-copy-envs '("PATH" "MANPATH"))
   (exec-path-from-shell-initialize))
 
-
-
-;; Shell
+;;; Shell
 ;; Built-in shell
 (use-package shell
   :ensure nil
@@ -42,9 +46,7 @@
   (shell-kill-buffer-on-exit t)
   )
 
-
-
-;; Vterm
+;;; Vterm
 ;; Fully featured terminal emulator
 (use-package vterm
   :ensure t
@@ -56,14 +58,6 @@
   (setq vterm-timer-delay nil)
   (setq vterm-shell "/usr/bin/fish"
         vterm-always-compile-module t))
-
-;; Eat
-;; Emulate a terminal, in a region, in a buffer and in eshell
-;; (use-package eat
-;;   :ensure t
-;;   :config
-;;   (eat-eshell-visual-command-mode 1))
-
 
 (provide 'ef-shell)
 ;;; ef-shell.el ends here

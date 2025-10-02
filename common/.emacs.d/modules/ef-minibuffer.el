@@ -1,7 +1,7 @@
 ;;; ef-minibuffer.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-;; TODO Completion Preview
+;;; TODO Completion Preview
 (use-package completion-preview
   :ensure nil
   :custom
@@ -30,7 +30,6 @@
   (fido-mode 1)
   (fido-vertical-mode 1)
   )
-
 
 ;;; Minibuffer
 (use-package minibuffer
@@ -63,8 +62,7 @@
              face minibuffer-prompt))
   )
 
-
-;; From Doom Emacs
+;;; From Doom Emacs
 ;; (use-package minibuffer
 ;;   :ensure nil
 ;;   :hook ((minibuffer-setup . defer-garbage-collection)
@@ -82,8 +80,6 @@
 ;;      1 nil (lambda () (setq gc-cons-threshold default-gc-cons-threshold))))
 ;;
 ;;   )
-
-
 
 (provide 'ef-minibuffer)
 ;;; ef-minibuffer.el ends here

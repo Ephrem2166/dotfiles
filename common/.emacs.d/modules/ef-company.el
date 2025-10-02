@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+;;; Company
 (use-package company
   :ensure t
   :defer t
@@ -44,6 +45,7 @@
   (setq company-transformers '(delete-consecutive-dups company-sort-by-occurrence company-sort-prefer-same-case-prefix))
   )
 
+;;; Company Box
 ;; A nicer way to show company completions with icons and doc popup where available (lsp etc.)
 ;; Also doesn't clutter up the screen with super-big multiline truncated lines
 (use-package company-box
@@ -67,7 +69,7 @@
                           box-frame
                           :height 180))))
 
-;; Functions
+;;; Company Helper Functions
 ;; Text Mode Expansion
 (defun ef/my-text-mode-hook ()
   (setq-local company-backends

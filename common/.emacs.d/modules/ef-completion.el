@@ -101,6 +101,7 @@
   (text-mode-ispell-word-completion nil)
   )
 
+;;;
 ;; Corfu Corfu enhances in-buffer completion with a small complet ion
 ;; popup.
 (use-package corfu
@@ -167,11 +168,11 @@
   )
 
 
-;; Corfu Info
+;;; Corfu Info
 ;; (use-package corfu-info
 ;;   :ensure nil)
 
-;; Corfu-history
+;;; Corfu-history
 ;; Save the history across Emacs sessions
 ;; (use-package corfu-history
 ;;   :ensure nil
@@ -183,7 +184,7 @@
 ;;
 ;;   )
 
-;; Core Popup Info
+;;; Corfu Popup Info
 (use-package corfu-popupinfo
   :ensure nil
   :after corfu
@@ -199,7 +200,7 @@
   (corfu-popupinfo-min-height 1)
   (corfu-popupinfo-min-width 30))
 
-;; Corfu Terminal
+;;; Corfu Terminal
 (use-package corfu-terminal
   :ensure t
   :after corfu
@@ -208,7 +209,7 @@
     (corfu-terminal-mode +1))
   )
 
-;; Corfu Prescient
+;;; Corfu Prescient
 (use-package corfu-prescient
   :ensure t
   :after corfu prescient
@@ -228,7 +229,7 @@
   )
 
 
-;; Kind Icon
+;;; Kind Icon
 ;; Completion kind icons
 (use-package kind-icon
   :disabled
@@ -281,7 +282,7 @@
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
-;; Nerd Icons Corfu
+;;; Nerd Icons Corfu
 (use-package nerd-icons-corfu
   :ensure t
   :if (display-graphic-p)
@@ -289,7 +290,7 @@
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
-;; Marginalia: adds marginalia to the minibuffer completions.
+;;; Marginalia: adds marginalia to the minibuffer completions.
 ;; Marginalia are helpful colorful annotations placed at the margin of the
 ;; minibuffer for your completion candidates.
 (use-package marginalia
@@ -311,7 +312,7 @@
 
 
 
-;; Orderless
+;;; Orderless
 ;; It provides an orderless completion style that divides the pattern
 ;; into space-separated components, and matches candidates that match
 ;; all of the components in any order
@@ -364,7 +365,7 @@
 
   )
 
-;; Prescient
+;;; Prescient
 (use-package prescient
   :ensure t
   :custom
@@ -410,7 +411,7 @@
   (add-to-list 'hippie-expand-try-functions-list #'tempel-hippie-try-expand t)
   )
 
-;; Vertico
+;;; Vertico
 ;; Vertico provides a performant and minimalistic vertical completion UI
 ;; based on the default completion system.
 (use-package vertico
@@ -444,7 +445,7 @@
   (vertico-mode)
   )
 
-;; Vertico Prescient
+;;; Vertico Prescient
 (use-package vertico-prescient
   :ensure t
   :after vertico
@@ -465,7 +466,7 @@
   (vertico-prescient-mode 1)
   )
 
-;;;;; Vertico-directory
+;;; Vertico-directory
 (use-package vertico-directory
   :after vertico
   :ensure nil
@@ -478,7 +479,7 @@
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
-;; Vertico Posframe
+;;; Vertico Posframe
 ;; Using posframe to show Vertico
 (use-package vertico-posframe
   :disabled
@@ -490,7 +491,7 @@
   (setq vertico-posframe-parameters '((internal-border-width . 2)))
   )
 
-;;;;; Vertico-buffer
+;;; Vertico-buffer
 (use-package vertico-buffer
   :requires vertico
   :ensure nil
@@ -499,6 +500,8 @@
   (vertico-buffer-hide-prompt nil)
   (vertico-buffer-display-action '(display-buffer-reuse-window)))
 
+
+;;; Vertico Multiform
 (use-package vertico-multiform
   :requires vertico
   :ensure nil
