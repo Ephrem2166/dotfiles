@@ -900,7 +900,8 @@ confines of word boundaries (e.g. multiple words)."
   :ensure nil
   :defer t
   :bind
-  ("C-c a p" . proced)
+  (:map applications-map
+        ("p" . proced))
   :config
   (setopt proced-enable-color-flag t)
   (setopt proced-tree-flag t)
@@ -1249,86 +1250,86 @@ confines of word boundaries (e.g. multiple words)."
   (setq fit-window-to-buffer-horizontally t)
   (setq switch-to-buffer-obey-display-actions t)
   (setq switch-to-buffer-in-dedicated-window 'pop)
-  ;; (setq display-buffer-alist
-  ;;       '(("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
-  ;;          (display-buffer-in-side-window)
-  ;;          (window-height . 0.25)
-  ;;          (side . bottom)
-  ;;          (slot . 0))
-  ;;         ;; Diff Mode
-  ;;         ((major-mode . diff-mode)
-  ;;          (display-buffer-same-window))
-  ;;         ("\\*\\([Hh]elp\\)\\*"
-  ;;          (display-buffer-in-side-window)
-  ;;          (window-width . 75)
-  ;;          (side . right)
-  ;;          (slot . 0))
-  ;;         ("\\*\\(Ibuffer\\)\\*"
-  ;;          (display-buffer-in-side-window)
-  ;;          (window-width . 100)
-  ;;          (side . right)
-  ;;          (slot . 1))
-  ;;         ("\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
-  ;;          (display-buffer-in-side-window)
-  ;;          (window-height . 0.25)
-  ;;          (side . bottom)
-  ;;          (slot . 1))
-  ;;         ("\\*\\(grep\\|find\\)\\*"
-  ;;          (display-buffer-in-side-window)
-  ;;          (window-height . 0.25)
-  ;;          (side . bottom)
-  ;;          (slot . 2))
-  ;;         ("\\*\\(M3U Playlist\\)"
-  ;;          (display-buffer-in-side-window)
-  ;;          (window-height . 0.25)
-  ;;          (side . bottom)
-  ;;          (slot . 3))
-  ;;         ;; Denote
-  ;;         ((major-mode . denote-interface-mode)
-  ;;          (display-buffer-same-window))
-  ;;         ;; Occur
-  ;;         ("\\*Occur"
-  ;;          (display-buffer-reuse-mode-window display-buffer-pop-up-window display-buffer-below-selected)
-  ;;          (window-height . fit-window-to-buffer)
-  ;;          (post-command-select-window . t))
-  ;;         ;; Embark
-  ;;         ("\\*Embark Actions\\*"
-  ;;          (display-buffer-in-direction)
-  ;;          (window-height . fit-window-to-buffer)
-  ;;          (direction . above)
-  ;;          (window-parameters . ((no-other-window . t)
-  ;;                                (mode-line-format . none))))
-  ;;         ;; Help Mode Alternative
-  ;;         ((major-mode . help-mode)
-  ;;          (display-buffer-reuse-window display-buffer-pop-up-window display-buffer-below-selected)
-  ;;          (window-height . shrink-window-if-larger-than-buffer))
-  ;;         ;; Eldoc
-  ;;         ("^\\*eldoc"
-  ;;          (display-buffer-at-bottom)
-  ;;          (post-command-select-window . t)
-  ;;          (window-height . shrink-window-if-larger-than-buffer)
-  ;;          (window-parameters . ((mode-line-format . none))))
-  ;;         ;; Org and calendar
-  ;;         ("\\*\\(?:Org Select\\|Agenda Commands\\)\\*"
-  ;;          (display-buffer-in-side-window)
-  ;;          (window-height . fit-window-to-buffer)
-  ;;          (side . top)
-  ;;          (slot . -2)
-  ;;          (preserve-size . (nil . t))
-  ;;          (window-parameters . ((mode-line-format . none)))
-  ;;          (post-command-select-window . t))
-  ;;         ("\\*Calendar\\*"
-  ;;          (display-buffer-below-selected)
-  ;;          (window-height . fit-window-to-buffer))
-  ;;         ;; Embark
-  ;;         ("\\*Embark Actions\\*"
-  ;;          (display-buffer-in-direction)
-  ;;          (window-height . fit-window-to-buffer)
-  ;;          (direction . above)
-  ;;          (window-parameters . ((no-other-window . t)
-  ;;                                (mode-line-format . none))))
-  ;;
-  ;;         ))
+  (setq display-buffer-alist
+        '(("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 0))
+          ;; Diff Mode
+          ((major-mode . diff-mode)
+           (display-buffer-same-window))
+          ("\\*\\([Hh]elp\\)\\*"
+           (display-buffer-in-side-window)
+           (window-width . 75)
+           (side . right)
+           (slot . 0))
+          ("\\*\\(Ibuffer\\)\\*"
+           (display-buffer-in-side-window)
+           (window-width . 100)
+           (side . right)
+           (slot . 1))
+          ("\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 1))
+          ("\\*\\(grep\\|find\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 2))
+          ("\\*\\(M3U Playlist\\)"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 3))
+          ;; Denote
+          ((major-mode . denote-interface-mode)
+           (display-buffer-same-window))
+          ;; Occur
+          ("\\*Occur"
+           (display-buffer-reuse-mode-window display-buffer-pop-up-window display-buffer-below-selected)
+           (window-height . fit-window-to-buffer)
+           (post-command-select-window . t))
+          ;; Embark
+          ("\\*Embark Actions\\*"
+           (display-buffer-in-direction)
+           (window-height . fit-window-to-buffer)
+           (direction . above)
+           (window-parameters . ((no-other-window . t)
+                                 (mode-line-format . none))))
+          ;; Help Mode Alternative
+          ((major-mode . help-mode)
+           (display-buffer-reuse-window display-buffer-pop-up-window display-buffer-below-selected)
+           (window-height . shrink-window-if-larger-than-buffer))
+          ;; Eldoc
+          ("^\\*eldoc"
+           (display-buffer-at-bottom)
+           (post-command-select-window . t)
+           (window-height . shrink-window-if-larger-than-buffer)
+           (window-parameters . ((mode-line-format . none))))
+          ;; Org and calendar
+          ("\\*\\(?:Org Select\\|Agenda Commands\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . fit-window-to-buffer)
+           (side . top)
+           (slot . -2)
+           (preserve-size . (nil . t))
+           (window-parameters . ((mode-line-format . none)))
+           (post-command-select-window . t))
+          ("\\*Calendar\\*"
+           (display-buffer-below-selected)
+           (window-height . fit-window-to-buffer))
+          ;; Embark
+          ("\\*Embark Actions\\*"
+           (display-buffer-in-direction)
+           (window-height . fit-window-to-buffer)
+           (direction . above)
+           (window-parameters . ((no-other-window . t)
+                                 (mode-line-format . none))))
+
+          ))
   ;; Set up the display buffer alist for a select window.
   (defun my/give-buffer-focus (window)
     "Select WINDOW for 'display-buffer-alist'."
@@ -1351,7 +1352,7 @@ confines of word boundaries (e.g. multiple words)."
   (add-to-list 'display-buffer-alist
                '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
                  (display-buffer-no-window)
-                 (allow-no-window . t)))
+                 (dedicated . t)))
 
   ;; Only one window on startup
   (add-hook 'emacs-startup-hook 'delete-other-windows t)
