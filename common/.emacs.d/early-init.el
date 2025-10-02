@@ -1,7 +1,7 @@
 ;;; early-init.el --- Emacs Early Startup -*- no-byte-compile: t; lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-;; Garbage Collection Settings
+;;; Garbage Collection Settings
 (setq read-process-output-max (* 1024 1024 3))
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
@@ -11,7 +11,7 @@
             (setq gc-cons-threshold (* 16 1024 1024))) 99)
 
 
-;; File Name Handler List
+;;; File Name Handler List
 ;; Every file opened and
 ;; loaded by Emacs will run through this list to check for a proper handler for
 ;; the file, but during startup, it won’t need any of them.
@@ -22,7 +22,7 @@
             (setq file-name-handler-alist file-name-handler-alist-old)))
 
 
-;; Native Compilation
+;;; Native Compilation
 ;; Ensure JIT compilation is enabled for improved performance by
 ;; native-compiling loaded .elc files asynchronously
 (setq native-comp-jit-compilation t)
@@ -73,7 +73,7 @@
 (if (fboundp 'tooltip-mode) (tooltip-mode -1))
 (if (fboundp 'fringe-mode) (fringe-mode -1))
 
-;; Default Emacs Window Size
+;;; Default Emacs Window Size
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 (push '(horizontal-scroll-bars) default-frame-alist)
@@ -81,7 +81,7 @@
 (push '(width . 80) default-frame-alist)
 (push '(height . 44) default-frame-alist)
 
-;; Frame
+;;; Frame
 (setopt frame-resize-pixelwise t)
 (setopt frame-inhibit-implied-resize t)
 (setopt frame-title-format '("Emacs - %b"))
@@ -89,7 +89,7 @@
 
 (setopt icon-title-format '("Emacs - %b"))
 
-;; Inhibit Startup Properties
+;;; Inhibit Startup Properties
 (setopt inhibit-splash-screen t)
 (setopt inhibit-startup-screen t)
 (setopt inhibit-x-resources t)
@@ -99,7 +99,6 @@
 (setopt inhibit-startup-message nil)
 (setopt initial-scratch-message nil)
 (setopt initial-major-mode 'fundamental-mode)
-
 
 
 (unless (daemonp)
@@ -121,14 +120,14 @@
 ;; Disable warnings from the legacy advice API.
 (setq ad-redefinition-action 'accept)
 
-;; Package Settings to Use for Elpaca
+;;; Package Settings to Use for Elpaca
 ;; Prevent package.el loading packages
 (setq package-enable-at-startup nil)
 (setq package-quickstart nil)
 (setq package-archives nil)
 (setq load-prefer-newer t)
 (setq package--init-file-ensured nil)
-;; Avoid raising the *Messages* buffer if anything is still without
+;;; Avoid raising the *Messages* buffer if anything is still without
 ;; lexical bindings
 (setopt warning-minimum-level :error)
 (setopt warning-suppress-types '((defvaralias) (lexical-binding)))
@@ -162,7 +161,7 @@
   (setq pgtk-wait-for-event-timeout 0.001))
 
 
-;; Profile emacs startup
+;;; Profile emacs startup
 (add-hook 'after-init-hook
           (lambda ()
             (message "🚀 Emacs loaded in %s with %d garbage collections."

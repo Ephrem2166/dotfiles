@@ -1,9 +1,8 @@
 ;;; ef-functions.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-
-
-;;; Better C-g from Prot
+;;; General Configuration
+;;;; Better C-g from Prot
 (defun ef/keyboard-quit-dwim ()
   "Do-What-I-Mean behaviour for a general `keyboard-quit'.
 
@@ -30,13 +29,11 @@ The DWIM behaviour of this command is as follows:
 
 ;; (define-key global-map (kbd "C-g") #'ef/keyboard-quit-dwim)
 
-;;; Better `keyboard-quit'
+;;;; Better `keyboard-quit'
 (defun my/keyboard-quit-context ()
   "Quit current context.
-
 This function is a combination of `keyboard-quit' and `keyboard-escape-quit'
 with some parts omitted and some custom behavior added."
-  ;; Adapted from https://with-emacs.com/posts/tips/quit-current-context/
   (interactive)
   (cond
    ((region-active-p)
@@ -70,9 +67,7 @@ with some parts omitted and some custom behavior added."
 (define-key global-map (kbd "C-g") #'my/keyboard-quit-context)
 ;; (global-set-key [remap keyboard-quit] #'my/keyboard-quit-context)
 
-
-
-;;; Reload Emacs
+;;;; Reload Emacs
 (defun ef/reload-config ()
   "Reload the Emacs configuration file."
   (interactive)
@@ -85,67 +80,8 @@ with some parts omitted and some custom behavior added."
 
 (define-key global-map (kbd "C-x r") #'ef/reload-config)
 
-;;; Eval Buffer or Region
-(defun my/eval-buffer-or-region (&optional start end)
-  "Evaluate the current region, or the whole buffer if no region is active.
-It uses `ef/reload-config'
-"
-  (interactive)
-  (if (and buffer-file-name
-           (member (file-truename buffer-file-name)
-                   (list
-                    (when (bound-and-true-p early-init-file)
-                      (file-truename early-init-file))
-                    (file-truename user-init-file)))
-           (not (region-active-p)))
-      (ef/reload-config)
-    (let ((name nil))
-      (if (region-active-p)
-          (progn
-            (setq start (region-beginning))
-            (setq end (region-end))
-            (setq name "region"))
-        (setq start (point-min))
-        (setq end (point-max))
-        (setq name (buffer-name)))
-      (let ((load-file-name (buffer-file-name)))
-        (message "Evaluating %s..." name)
-        (eval-region start end)
-        (message "Evaluating %s...done" name)))))
-
-;;; Document Centering
-;; ;; From David Wilson
-;; (defvar center-document-desired-width 120
-;;   "The desired width of a document centered in the window.")
-;;
-;; (defun center-document--adjust-margins ()
-;;   "Reset margins first before recalculating"
-;;   (set-window-parameter nil 'min-margins nil)
-;;   (set-window-margins nil nil)
-;;
-;;   ;; Adjust margins if the mode is on
-;;   (when center-document-mode
-;;     (let ((margin-width (max 0
-;;                              (truncate
-;;                               (/ (- (window-width)
-;;                                     center-document-desired-width)
-;;                                  2.0)))))
-;;       (when (> margin-width 0)
-;;         (set-window-parameter nil 'min-margins '(0 . 0))
-;;         (set-window-margins nil margin-width margin-width)))))
-;;
-;; (define-minor-mode center-document-mode
-;;   "Toggle centered text layout in the current buffer."
-;;   :lighter " Centered"
-;;   :group 'editing
-;;   (if center-document-mode
-;;       (add-hook 'window-configuration-change-hook #'center-document--adjust-margins 'append 'local)
-;;     (remove-hook 'window-configuration-change-hook #'center-document--adjust-margins 'local))
-;;   (center-document--adjust-margins))
-;;
-;; (add-hook 'org-mode-hook #'center-document-mode)
-
-;;; EXIT MESSAGES form doom emacs
+;;; Quit Emacs
+;; EXIT MESSAGES form doom emacs
 (defvar my/quit-messages
   `(;; from Doom 1
     "Please don't leave, there's more demons to toast!"
@@ -187,7 +123,7 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
 
 ;;(global-set-key "\C-x\C-c" 'save-buffers-kill-emacs-with-confirm)
 
-;;; Open Files Externally
+;;;; Open Files Externally
 (defun my/open-with (arg)
   "Open visited file in default external program.
       With a prefix ARG always prompt for command to use."
@@ -201,13 +137,78 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
                     " "
                     (shell-quote-argument buffer-file-name)))))
 
-;;; Insert Current Time As a String
+;;;; Eval Buffer or Region
+(defun my/eval-buffer-or-region (&optional start end)
+  "Evaluate the current region, or the whole buffer if no region is active.
+It uses `ef/reload-config'
+"
+  (interactive)
+  (if (and buffer-file-name
+           (member (file-truename buffer-file-name)
+                   (list
+                    (when (bound-and-true-p early-init-file)
+                      (file-truename early-init-file))
+                    (file-truename user-init-file)))
+           (not (region-active-p)))
+      (ef/reload-config)
+    (let ((name nil))
+      (if (region-active-p)
+          (progn
+            (setq start (region-beginning))
+            (setq end (region-end))
+            (setq name "region"))
+        (setq start (point-min))
+        (setq end (point-max))
+        (setq name (buffer-name)))
+      (let ((load-file-name (buffer-file-name)))
+        (message "Evaluating %s..." name)
+        (eval-region start end)
+        (message "Evaluating %s...done" name)))))
+
+;;;; Insert Current Time As a String
 ;; (defun my/current-time-as-string ()
 ;;   "Return a string of the current time."
 ;;   (concat
 ;;    (format-time-string "%Y-%m-%dT%H%M%SZ%z")))
 
-;;; Better Theme Switcher
+;;; Buffer
+
+;;; Windows
+;;; Editing
+;;;; Document Centering
+;; ;; From David Wilson
+;; (defvar center-document-desired-width 120
+;;   "The desired width of a document centered in the window.")
+;;
+;; (defun center-document--adjust-margins ()
+;;   "Reset margins first before recalculating"
+;;   (set-window-parameter nil 'min-margins nil)
+;;   (set-window-margins nil nil)
+;;
+;;   ;; Adjust margins if the mode is on
+;;   (when center-document-mode
+;;     (let ((margin-width (max 0
+;;                              (truncate
+;;                               (/ (- (window-width)
+;;                                     center-document-desired-width)
+;;                                  2.0)))))
+;;       (when (> margin-width 0)
+;;         (set-window-parameter nil 'min-margins '(0 . 0))
+;;         (set-window-margins nil margin-width margin-width)))))
+;;
+;; (define-minor-mode center-document-mode
+;;   "Toggle centered text layout in the current buffer."
+;;   :lighter " Centered"
+;;   :group 'editing
+;;   (if center-document-mode
+;;       (add-hook 'window-configuration-change-hook #'center-document--adjust-margins 'append 'local)
+;;     (remove-hook 'window-configuration-change-hook #'center-document--adjust-margins 'local))
+;;   (center-document--adjust-margins))
+;;
+;; (add-hook 'org-mode-hook #'center-document-mode)
+
+;;; Appearance
+;;;; Better Theme Switcher
 (defun my/switch-theme (theme)
   (interactive
    (list (intern (completing-read "Load custom theme: "
@@ -222,12 +223,12 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
   ;; (when current-prefix-arg
   ;;   (my/regenerate-desktop))
   )
-
 ;;; Advice for a better load-theme
 ;; This will make load-theme disable old theme before loading new one
 (defadvice load-theme
     (before disable-before-load (theme &optional no-confirm no-enable) activate)
   (mapc 'disable-theme custom-enabled-themes))
+
 
 ;;; Functions from Doom Emacs
 ;;;; Large File Handling
@@ -533,15 +534,37 @@ expression."
   (lisp-interaction-mode))
 
 ;;; Delete this file
-(defun my/delete-this-file ()
-  "Delete the current file, and kill the buffer."
-  (interactive)
-  (unless (buffer-file-name)
-    (error "No file is currently being edited"))
-  (when (yes-or-no-p (format "Really delete '%s'?"
-                             (file-name-nondirectory buffer-file-name)))
-    (delete-file (buffer-file-name))
-    (kill-this-buffer)))
+;; (defun my/delete-this-file ()
+;;   "Delete the current file, and kill the buffer."
+;;   (interactive)
+;;   (unless (buffer-file-name)
+;;     (error "No file is currently being edited"))
+;;   (when (yes-or-no-p (format "Really delete '%s'?"
+;;                              (file-name-nondirectory buffer-file-name)))
+;;     (delete-file (buffer-file-name))
+;;     (kill-this-buffer)))
+
+;;;; Better
+(defun my/delete-this-file (&optional path force-p)
+  "Delete PATH. If PATH is not specified, default to the current buffer's file.
+If FORCE-P, delete without confirmation."
+  (interactive
+   (list (buffer-file-name (buffer-base-buffer)) current-prefix-arg))
+  (let* ((path (or path (buffer-file-name (buffer-base-buffer))))
+         (short-path (abbreviate-file-name path)))
+    (unless (and path (file-exists-p path))
+      (user-error "Buffer is not visiting any file"))
+    (unless (file-exists-p path)
+      (error "File doesn't exist: %s" path))
+    (unless (or force-p (y-or-n-p (format "Really delete %S?" short-path)))
+      (user-error "Aborted"))
+    (unwind-protect
+        (progn (delete-file path delete-by-moving-to-trash) t)
+      (when (file-exists-p path)
+        (error "Failed to delete %S" short-path)))
+    )
+  (kill-this-buffer)
+  )
 
 ;;; Rename this file
 (defun my/rename-this-file (new-name)
@@ -795,6 +818,39 @@ The original function deletes trailing whitespace of the current line."
       (if (looking-at regexp) (delete-blank-lines)))
     (move-to-column col)))
 (define-key ef-file-keymap (kbd "o") #'my/delete-blank-lines-dwim)
+
+;;; Delete Backward Whitespace or Word
+(defun my/kill-whitespace-or-word (arg)
+  "Kill forward whitespace or word.
+With argument ARG, do this that many times.
+Restricts the effect of `kill-word' to the current line."
+  (interactive "p")
+  (if (looking-at-p "[ \t\n]")
+      (let ((pt (point)))
+        (re-search-forward "[^ \t\n]" nil :no-error)
+        (backward-char)
+        (kill-region pt (point)))
+    (save-restriction
+      (narrow-to-region (line-beginning-position) (line-end-position))
+      (kill-word arg)
+      (widen))))
+
+(defun my/backward-kill-whitespace-or-word (arg)
+  "Kill backward whitespace or word.
+With argument ARG, do this that many times.
+Restricts the effect of `backward-kill-word' to the current line."
+  (interactive "p")
+  (if (save-excursion (backward-char) (looking-at-p "[ \t\n]"))
+      (let ((pt (point)))
+        (re-search-backward "[^ \t\n]" nil :no-error)
+        (forward-char)
+        (kill-region pt (point)))
+    (save-restriction
+      (narrow-to-region (line-beginning-position) (line-end-position))
+      (backward-kill-word arg)
+      (widen))))
+
+
 
 ;;; Set initial frame size and position
 ;; (defun my/set-initial-frame ()
@@ -1650,12 +1706,121 @@ This command is intended to replace key C-g , but not always work. Sometimes you
     (save-buffer)
     (delete-window)))
 
+
+;;; Server Restart
+(defun my/server-restart ()
+  "Restart the Emacs server."
+  (interactive)
+  (server-force-delete)
+  (while (server-running-p)
+    (sleep-for 1))
+  (server-start))
+
+
+;;; Describe at Point
+(defun my/describe-at-point ()
+  "Show help for the symbol at point."
+  (interactive)
+  (if-let* ((sym (symbol-at-point))
+            (fn (cond ((and (fboundp sym) (boundp sym))
+                       (if (= ?v (read-char-choice (format "Ambiguous `%s', describe [v]ariable or [c]allable? " sym) '(?v ?c)))
+                           'describe-variable
+                         'describe-function))
+                      ((fboundp sym) 'describe-function)
+                      ((boundp sym) 'describe-variable)
+                      ((symbolp sym) 'describe-symbol))))
+      (funcall fn sym)
+    (user-error "There is no symbol at point")))
+
+
+;;; Open Default Config Folder For Emacs
+(defun my/user-config (ask)
+  "Open MinEmacs user configuration.
+
+When ASK is non-nil (\\[universal-argument]), ask about which file to open."
+  (interactive "P")
+  (if ask
+      (find-file (read-file-name "Select which file to open: " user-emacs-directory))
+    (dired user-emacs-directory)))
+
+;;; Font Increase, Decrease, Reset and Code View
+(defvar my/default-font-height 110
+  "The default font height to use.")
+
+(defvar my/height-modifier 5
+  "Default value to increment the size of font based on the screen size")
+
+(defun my/font-size-increase ()
+  "Increase the font size by `my/height-modifier' amount."
+  (interactive)
+  (dolist (face '(default
+                  mode-line
+                  mode-line-inactive
+                  minibuffer-prompt
+                  variable-pitch))
+    (set-face-attribute face nil :height (+ (face-attribute face :height)
+                                            my/height-modifier))))
+
+(defun my/font-size-decrease ()
+  "Decreas the font size by `my/height-modifier' amount."
+  (interactive)
+  (dolist (face '(default
+                  mode-line
+                  mode-line-inactive
+                  minibuffer-prompt
+                  variable-pitch))
+    (set-face-attribute face nil :height (- (face-attribute face :height)
+                                            my/height-modifier))))
+
+(defun my/font-size-reset ()
+  "Go back to the default font size and `line-spacing'"
+  (interactive)
+  (dolist (face '(default
+                  mode-line
+                  mode-line-inactive
+                  minibuffer-prompt
+                  variable-pitch))
+    (set-face-attribute face nil :height my/default-font-height))
+  (text-scale-adjust 0)
+  (when (fboundp 'minimap-mode)
+    (condition-case err
+        (minimap-mode 0)
+      ('error 0)))
+  (setq line-spacing 0))
+
+(defun my/code-reading-mode ()
+  "Do a bunch of fancy stuff to make reading/browsing code
+easier. When you're done, `my/font-size-decrease' is a great way
+to go back to a normal setup."
+  (interactive)
+  (delete-other-windows)
+  (text-scale-increase 1)
+  (setq line-spacing 5)
+  (use-package minimap :ensure t)
+  (when (not minimap-mode)
+    (minimap-mode 1)))
+
+
+;;; Jump between functions
+(defun my/previous-function ()
+  (interactive)
+  (beginning-of-defun))
+
+(defun my/next-function ()
+  (interactive)
+  (beginning-of-defun -1))
+
+
 ;;; First Attempt: Delete the Content of a Buffer
+
 (defun my/empty-buffer ()
   "Kill the content of a buffer"
   (interactive)
   (kill-region (point-min) (point-max))
   )
+
+
+
 
 
 (provide 'ef-functions)
