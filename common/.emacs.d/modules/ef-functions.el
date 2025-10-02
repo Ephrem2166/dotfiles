@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+
 ;;; Better C-g from Prot
 (defun ef/keyboard-quit-dwim ()
   "Do-What-I-Mean behaviour for a general `keyboard-quit'.
@@ -420,13 +421,35 @@ If this is a daemon session, load them all immediately instead."
 (define-key global-map (kbd "M-<down>") #'move-text-down)
 
 ;;; Restart or Close Emacs
+;; Better Exit
+(defun my/clean-exit ()
+  "Exit Emacs cleanly.
+If there are unsaved buffer, pop up a list for them to be saved
+before existing. Replaces ‘save-buffers-kill-terminal’.
+From https://archive.casouri.cc/note/2021/clean-exit/index.html"
+  (interactive)
+  (if (frame-parameter nil 'client)
+      (server-save-buffers-kill-terminal nil)
+    (if-let* ((buf-list (seq-filter (lambda (buf)
+                                      (and (buffer-modified-p buf)
+                                           (buffer-file-name buf)))
+                                    (buffer-list))))
+        (progn
+          (pop-to-buffer (list-buffers-noselect t buf-list))
+          (message "s to save, C-k to kill, x to execute"))
+      (save-buffers-kill-terminal))))
+
+;;;; Old Version
 (defun my/restart-or-kill-emacs (&optional arg restart)
   "Kill Emacs.
 If called with RESTART (`universal-argument’ interactively) restart
 Emacs instead. Passes ARG to `save-buffers-kill-emacs'."
   (interactive "P")
   (save-buffers-kill-emacs arg (or restart (equal arg '(4)))))
-(bind-key [remap save-buffers-kill-terminal] #'my/restart-or-kill-emacs)
+
+(bind-key [remap save-buffers-kill-terminal] #'my/clean-exit)
+
+
 
 ;;; Close Frame If Not the Last, Kill Emacs Otherwise
 (defun my/delete-frame-or-kill-emacs ()
@@ -1286,7 +1309,7 @@ If HINT is empty, use symbol at point."
 
 ;;; Screeshot
 (defvar my-picture-dir "Pictures/")
-(defun my/screenshot-svg ()
+(defun my/screenshot ()
   "Save a screenshot of the current frame as an SVG image.
 Saves to a temp file and puts the filename in the kill ring."
   (interactive)
@@ -1294,12 +1317,12 @@ Saves to a temp file and puts the filename in the kill ring."
           (expand-file-name
            (format-time-string "%Y-%m-%d-%H-%M-%S.svg")
            my-picture-dir))
-         (data (x-export-frames nil 'svg)))
+         (data (x-export-frames nil 'png)))
     (with-temp-file filename
       (insert data))
     (kill-new filename)
     (message filename)))
-(keymap-global-set "C-c C-s" #'my/screenshot-svg)
+(keymap-global-set "C-c C-s" #'my/screenshot)
 
 ;;; Cycle through different paragraph formats
 (defvar my-repeat-counter '()
@@ -1584,6 +1607,7 @@ This command is intended to replace key C-g , but not always work. Sometimes you
         (progn (deactivate-mark))
       (progn (keyboard-quit)))))
 
+(define-key ef-functions-keymap (kbd "c") 'my/cancel)
 ;;; Display Keymappings For the Current Buffer
 (defun my/locate-key-binding (key)
   "Determine in which keymap KEY is defined."
@@ -1610,6 +1634,28 @@ This command is intended to replace key C-g , but not always work. Sometimes you
                                             (overlays-at (point)))
                                     (get-text-property (point) 'keymap)
                                     (get-text-property (point) 'local-map)))))
+
+
+;;; Save and Kill Buffer
+(defun my/save-and-kill-buffer ()
+  (interactive)
+  (progn
+    (save-buffer)
+    (kill-current-buffer)))
+
+;;; Save and Delete Window
+(defun my/save-and-delete-window ()
+  (interactive)
+  (progn
+    (save-buffer)
+    (delete-window)))
+
+;;; First Attempt: Delete the Content of a Buffer
+(defun my/empty-buffer ()
+  "Kill the content of a buffer"
+  (interactive)
+  (kill-region (point-min) (point-max))
+  )
 
 
 (provide 'ef-functions)

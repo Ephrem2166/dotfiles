@@ -76,5 +76,6 @@
 (add-hook 'text-mode-hook #'ef/my-text-mode-hook)
 
 
+
 (provide 'ef-company)
 ;;; ef-company.el ends here
