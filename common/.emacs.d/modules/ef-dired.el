@@ -9,7 +9,6 @@
   :hook (
          (dired-mode . dired-hide-details-mode)
          (dired-mode . hl-line-mode)
-         (dired-mode . toggle-truncate-lines)
          )
   :config
   (setq dired-deletion-confirmer 'y-or-n-p)
@@ -71,6 +70,10 @@
   (setq dired-vc-rename-file t)
   (setq dired-clean-confirm-killing-deleted-buffers nil)
   (setq dired-mouse-drag-files t)
+  ;;; Function
+  (defun my/dired-mode-hook ()
+    (setq-local truncate-lines t))
+  (add-hook 'dired-mode-hook #'my/dired-mode-hook)
   )
 
 

@@ -8,6 +8,11 @@
   :hook
   (eshell-mode . capf-autosuggest-mode))
 
+;;; TODO Comint
+(use-package comint
+  :ensure nil
+  )
+
 ;; Eat
 ;; Emulate a terminal, in a region, in a buffer and in eshell
 ;; (use-package eat

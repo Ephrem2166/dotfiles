@@ -859,14 +859,14 @@ confines of word boundaries (e.g. multiple words)."
   :defer t
   :config
   ;; Scroll settings
-  (setopt scroll-conservatively 10
+  (setopt scroll-conservatively 101
           scroll-error-top-bottom nil
           scroll-preserve-screen-position t
           next-screen-context-lines 4
           scroll-minibuffer-conservatively t
           scroll-up-aggressively nil
           scroll-down-aggressively nil
-          scroll-margin 0
+          scroll-margin 2
           pixel-scroll-precision-mode t
           scroll-step 1
           fast-but-imprecise-scrolling t
@@ -1060,8 +1060,8 @@ confines of word boundaries (e.g. multiple words)."
 
   )
 
-;;; Sppedbar
-;; Summary: quick access to files and tags in a frame
+;;; Speedbar
+;; Quick access to files and tags in a frame
 (use-package speedbar
   :ensure nil
   :custom
@@ -1167,6 +1167,7 @@ confines of word boundaries (e.g. multiple words)."
 ;;; Visual Wrap
 ;; Respect indentation whein wrapping long lines
 (use-package visual-wrap
+  :disabled
   :ensure nil
   :when (>= emacs-major-version 30)
   :hook ((prog-mode conf-mode org-mode) . visual-wrap-prefix-mode))
@@ -1351,9 +1352,11 @@ confines of word boundaries (e.g. multiple words)."
 
   (add-to-list 'display-buffer-alist
                '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
-                 (display-buffer-no-window)
+                 (display-buffer-same-window)
                  (dedicated . t)))
 
+  (add-to-list 'display-buffer-alist '("\\*shell\\*"
+                                       display-buffer-same-window))
   ;; Only one window on startup
   (add-hook 'emacs-startup-hook 'delete-other-windows t)
   )
