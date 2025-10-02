@@ -1,4 +1,8 @@
-;; Yasnippet
+;;; ef-yasnippet.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
+;;; Commentary:
+;;; Code:
+
+;;; Yasnippet
 ;; Yet another snippet extension for Emacs
 (use-package yasnippet
   :ensure t
@@ -15,11 +19,14 @@
   (yas-reload-all)
   :delight "Y"
   )
-;; Yasnippet snippets
+;;; Yasnippet snippets
 (use-package yasnippet-snippets
   :disabled
   :ensure t
   :defer t
   :after (yasnippet)
   )
+
+
 (provide 'ef-yasnippet)
+;;; ef-yasnippet.el ends here

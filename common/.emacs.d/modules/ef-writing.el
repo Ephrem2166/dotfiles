@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Flyspell
+;;; Flyspell
 ;; Builtin Alternative
 (use-package flyspell
   :disabled
@@ -26,7 +26,7 @@
   )
 
 
-;; Jinx
+;;; Jinx
 ;; JIT spell checker that uses `enchant'.
 ;; Enchant
 ;; Enchant is a library (and command-line program) that wraps
@@ -52,7 +52,7 @@
     (add-hook hook #'jinx-mode)))
 
 
-;; Writeroom
+;;; Writeroom
 ;; A distraction-free writing mode
 (use-package writeroom-mode
   :ensure t

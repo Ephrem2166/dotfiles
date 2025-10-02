@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Eldoc
+;;; Eldoc
 ;;;; Eldoc (Emacs live documentation feedback)
 ;; Document thing at point.
 (use-package eldoc
@@ -23,9 +23,7 @@
   (global-eldoc-mode)
   )
 
-
-
-;; Eglot
+;;; Eglot
 ;; Eglot (built-in client for the language server protocol)
 (use-package eglot
   :ensure nil
@@ -83,6 +81,7 @@
   (setq completion-category-overrides '((eglot (styles orderless))))
   )
 
+;;; Eglot Booster
 ;; eglot-booster: Boost eglot using lsp-booster
 ;; (use-package eglot-booster
 ;;   :ensure t
@@ -90,38 +89,7 @@
 ;;   :config
 ;;   (eglot-booster-mode))
 
-;; Flycheck
-;; Use Flymake
-(use-package flycheck
-  :disabled
-  :ensure t
-  :bind (
-         ("C-c t f" . flycheck-mode)
-         )
-  :defer t
-  :init (global-flycheck-mode)
-  (setq flycheck-idle-change-delay 1.0)
-  ;; Display errors a little quicker (default is 0.9s))
-  (setq flycheck-display-errors-delay 0.25)
-  ;; Replace with `sideline-flycheck'
-  (setq flycheck-display-errors-function nil)
-  ;; (message-clean-mode-add-echo-commands '( flycheck-display-error-messages))
-  (setq flycheck-highlighting-mode 'columns)
-  (setq flycheck-help-echo-function nil)
-  (setq-default left-fringe-width 1 right-fringe-width 8
-                left-margin-width 1 right-margin-width 0)
-  ;; Show indicators in the left margin
-  (setq flycheck-indication-mode 'left-margin)
-  (setq flycheck-display-errors-function
-        #'flycheck-display-error-messages-unless-error-list)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled idle-change))
-  ;; Elisp related
-  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-  (setq flycheck-emacs-lisp-load-path 'inherit)
-  )
-
-
-;; Flymake
+;;; Flymake
 (use-package flymake
   :disabled
   :ensure nil
@@ -158,11 +126,10 @@
           (warning "!" compilation-warning)
           (note    "■" compilation-info)))
 
-
   (flymake-mode t)
   )
 
-;; Flymake Colletction
+;;; Flymake Colletction
 ;; Collection of checkers for flymake, bringing flymake to the level of flycheck
 (use-package flymake-collection
   :disabled
@@ -174,6 +141,7 @@
   (flymake-collection-hook-ignore-modes nil)
   )
 
+;;; Flymake Flycheck
 ;; Use flycheck backends with flymake
 (use-package flymake-flycheck
   :disabled
@@ -184,11 +152,12 @@
   :config
   (add-hook 'flymake-mode-hook 'flymake-flycheck-auto))
 
-;; Shell Support
+;;; Flymake Shellcheck
 (use-package flymake-shellcheck
   :disabled
   :ensure t)
 
+;;; Package Lint Flymake
 ;; Elisp packaging requirements
 (use-package package-lint-flymake
   :disabled
@@ -203,7 +172,7 @@
   :custom
   (gud-highlight-current-line t))
 
-;; LSP MODE
+;;; LSP MODE
 ;; Emacs client/library for the Language Server Protocol
 ;; Install language servers using lsp-install-server
 (use-package lsp-mode
@@ -264,7 +233,8 @@
          )
   :commands (lsp lsp-deferred)
   )
-;; LSP UI
+
+;;; LSP UI
 (use-package lsp-ui
   :ensure t
   :defer t
@@ -287,8 +257,7 @@
   (lsp-ui-sideline-show-hover nil)
   :commands lsp-ui-mode)
 
-
-;; Prog Mode
+;;; Prog Mode
 (use-package prog-mode
   :ensure nil
   :hook (
@@ -321,8 +290,7 @@
   (sh-indent-for-continuation 'always)
   )
 
-
-;; TODO Treesiter
+;;; Treesiter
 (use-package treesit
   :ensure nil
   :defer t

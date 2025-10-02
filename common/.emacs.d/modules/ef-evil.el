@@ -1,7 +1,7 @@
 ;;; ef-evil.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-;; Evil
+;;; Evil
 ;; Extensible evil layer
 ;; evil-want-keybinding must be declared before Evil and Evil Collection
 (setq evil-want-keybinding nil)
@@ -50,7 +50,7 @@
   (evil-mode 1))
 
 
-;; Evil Collection
+;;; Evil Collection
 ;; A set of keybindings for evil mode
 (use-package evil-collection
   :after evil
@@ -61,7 +61,7 @@
   :config
   (evil-collection-init))
 
-;; Evil Surround
+;;; Evil Surround
 ;; Emulate surround.vim
 (use-package evil-surround
   :ensure t
@@ -84,7 +84,7 @@
   )
 
 
-;; Evil Commentary
+;;; Evil Commentary
 ;; Comment stuff out.
 ;; A Port of vim-commentary.
 (use-package evil-commentary
@@ -100,7 +100,7 @@
 ;;     (comment-or-uncomment-region beg end))
 ;;   (evil-define-key 'normal 'global (kbd "gc") 'my-evil-comment-or-uncomment))
 
-;; Evil Goggles
+;;; Evil Goggles
 ;; Add a visual hint to evil operations
 (use-package evil-goggles
   :ensure t
@@ -108,7 +108,7 @@
   (evil-goggles-mode)
   (evil-goggles-use-diff-faces))
 
-;; Evil  Org
+;;; Evil  Org
 ;; Evil keybindings for org-mode
 (use-package evil-org
   :ensure t
@@ -122,7 +122,7 @@
   (setq evil-want-C-i-jump nil)
   )
 
-;; Evil Visualizer
+;;; Evil Visualizer
 ;; Starts a * or # search from the visual selection
 (use-package evil-visualstar
   :after evil
@@ -131,7 +131,7 @@
   :commands global-evil-visualstar-mode
   :hook (after-init . global-evil-visualstar-mode))
 
-;; Evil Snipe
+;;; Evil Snipe
 ;; Emulate vim-sneak & vim-seek
 (use-package evil-snipe
   :ensure t
@@ -151,12 +151,13 @@
   (evil-snipe-auto-disable-substitute nil)
   )
 
-;; Evil Matchit
+;;; Evil Matchit
 ;; Vim matchit ported to Evil
 (use-package evil-matchit
   :ensure t
   :after (evil evil-collection)
   :config
   (global-evil-matchit-mode 1))
+
 (provide 'ef-evil)
 ;;; ef-evil.el ends here

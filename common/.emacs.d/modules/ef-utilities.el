@@ -1,7 +1,7 @@
 ;;; ef-utilities.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-;; Ace Window
+;;; Ace Window
 ;; Quickly Switch Windows
 (use-package ace-window
   :ensure t
@@ -15,7 +15,7 @@
   (setq aw-scope 'frame)
   )
 
-;; Anzu
+;;; Anzu
 ;; Show number of matches in mode-line while searching
 (use-package  anzu
   :ensure t
@@ -24,7 +24,7 @@
   (global-anzu-mode 1))
 
 
-;;  AVY
+;;;  AVY
 (use-package avy
   :ensure t
   :bind (
@@ -50,7 +50,7 @@
   (setq avy-single-candidate-jump nil)
   )
 
-;; Consult
+;;; Consult
 ;; Provides search and navigation commands
 (use-package consult
   :ensure t
@@ -101,9 +101,7 @@
 
   )
 
-
-
-;; Consult Dir
+;;; Consult Dir
 ;; Insert paths into the minibuffer prompt
 (use-package consult-dir
   :ensure t
@@ -115,11 +113,11 @@
          ("C-x C-j" . consult-dir-jump-file))
   )
 
-;; Consult flycheck
+;;; Consult flycheck
 (use-package consult-flycheck
   :after (:all consult flycheck))
 
-;; Consult Flyspell
+;;; Consult Flyspell
 (use-package consult-flyspell
   :after (:all consult flyspell)
   :bind
@@ -128,7 +126,7 @@
   :config
   (progn))
 
-;; Dashboard
+;;; Dashboard
 (use-package dashboard
   :ensure t
   :disabled
@@ -136,19 +134,18 @@
   (dashboard-setup-startup-hook))
 
 
-
-;; Deadgrep
+;;; Deadgrep
 ;; Fast searching with ripgrep
 (use-package deadgrep
   :ensure t)
 
 
-;; Diminish
+;;; Diminish
 ;; Diminished modes are minor modes with no modeline display
 (use-package diminish
   :ensure t)
 
-;; Dumb Jump
+;;; Dumb Jump
 (use-package dumb-jump
   :ensure t
   :config
@@ -167,7 +164,7 @@
          )
   )
 
-;; Embark
+;;; Embark
 ;; Embark makes it easy to choose a command to run based on what is near point,
 ;; both during a minibuffer completion session and in normal buffers.
 (use-package embark
@@ -200,7 +197,7 @@
 
   )
 
-;; Embak Consult
+;;; Embak Consult
 (use-package embark-consult
   :ensure t
   :after (embark consult)
@@ -209,7 +206,7 @@
   )
 
 
-;; Expand Region
+;;; Expand Region
 ;; Increase selected region by semantic units
 (use-package expand-region
   :ensure t
@@ -221,7 +218,7 @@
          )
   )
 
-;; GCMH
+;;; GCMH
 ;; The Garbage Collector Magic Hack
 (use-package gcmh
   ;; :disabled
@@ -240,7 +237,7 @@
 
 
 
-;; Helpful
+;;; Helpful
 ;; Alternative to builtin Emacs help
 ;; Provides contextual information
 (use-package helpful
@@ -261,7 +258,7 @@
   ;; (keymap-global-set "C-c C-d" #'helpful-at-point)
   )
 
-;; Hl-TODO
+;;; Hl-TODO
 ;; Highlight TODO and similar keywords
 (use-package hl-todo
   :ensure t
@@ -283,7 +280,7 @@
      ("GOTCHA" . "#FF4500")
      ("STUB"   . "#1E90FF"))))
 
-;; Info-colors
+;;; Info-colors
 ;; Extra colors for info mode
 (use-package info-colors
   :ensure t
@@ -293,10 +290,7 @@
   ;; :hook (Info-mode      . mixed-pitch-mode)
   )
 
-
-
-
-;; Lin
+;;; Lin
 ;; Make `hl-line-mode' more suitable for selection UIs
 (use-package lin
   :ensure t
@@ -305,7 +299,7 @@
   (setq lin-face 'lin-cyan))
 
 
-;; Move text
+;;; Move text
 ;; Move current line or region with M-up or M-down
 (use-package move-text
   :disabled
@@ -319,7 +313,7 @@
   (move-text-default-bindings)
   )
 
-;; Multiple cursors
+;;; Multiple cursors
 ;; Multiple Cursors for Emacs
 (use-package multiple-cursors
   :ensure t
@@ -329,12 +323,10 @@
          ("C-M-/" . mc/mark-all-dwim)
          ("C-M-." . mc/mark-next-like-this)
          ("C-M-," . mc/mark-previous-like-this)
-         )
-
-  )
+         )  )
 
 
-;; No Littering
+;;; No Littering
 ;; Help Keeping ~/.config/emacs clean
 (use-package no-littering
   :ensure t
@@ -352,9 +344,10 @@
     (add-to-list 'recentf-exclude no-littering-etc-directory)))
 
 
-;; Outline Indent
+;;; Outline Indent
 ;; Folding text based on indentation (origami alternative)
 (use-package outline-indent
+  :disabled
   :ensure t
   :defer t
   :commands outline-indent-minor-mode
@@ -371,7 +364,7 @@
 
 
 
-;; Popper
+;;; Popper
 ;; Summon and dismiss buffers as popups
 (use-package popper
   :ensure t
@@ -426,7 +419,7 @@
   (popper-echo-mode +1))
 
 
-;; Smartparens
+;;; Smartparens
 ;; Automatic Insertion, wrapping and paredit-like navigation
 ;; (use-package smartparens
 ;;   :disabled
@@ -512,7 +505,7 @@
 
 
 
-;; TLDR
+;;; TLDR
 ;; TLDR cients for Emacs
 (use-package tldr
   :ensure t
@@ -523,7 +516,7 @@
   )
 
 
-;; Visual Fill Column
+;;; Visual Fill Column
 (use-package visual-fill-column
   :ensure t
   :hook ((markdown-mode org-mode) . my/activate-visual-fill-column)

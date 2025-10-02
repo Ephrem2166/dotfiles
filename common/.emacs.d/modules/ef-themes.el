@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Doom Themes
+;;; Doom Themes
 (use-package doom-themes
   :ensure t
   :config

@@ -2,8 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Apheleia
-;; Code formatters
+;;; Apheleia
 (use-package apheleia
   :ensure t
   :defer t
@@ -28,6 +27,7 @@
 
   (apheleia-global-mode +1))
 
+;;; Aggressive Indent
 ;; Enables automatic indentation of code while typing
 (use-package aggressive-indent
   :ensure t
@@ -36,7 +36,7 @@
   :hook
   (emacs-lisp-mode . aggressive-indent-mode))
 
-;; Flycheck
+;;; Flycheck
 ;; Use Flymake
 (use-package flycheck
   :disabled
@@ -66,30 +66,24 @@
   (setq flycheck-emacs-lisp-load-path 'inherit)
   )
 
-;; Use Flycheck backends with flymake
-(use-package flymake-flycheck
-  :disabled
-  :ensure t
-  :after flymake
-  :hook (flymake-mode  . flymake-flycheck-auto))
-
-
-;; Format All
+;;; Format All
 ;; Auto Format for C, C++, JS, Python, and other languages.
 (use-package format-all
   :disabled
   :hook
   (after-save . (lambda () (if (derived-mode-p 'prog-mode) (format-all-buffer)))))
 
+;;; Highlight Defintion
 ;; Highlights function and variable definitions in Emacs Lisp mode
 (use-package highlight-defined
   :ensure t
+  :disabled
   :defer t
   :commands highlight-defined-mode
   :hook
   (emacs-lisp-mode . highlight-defined-mode))
 
-;; Rainbow mode
+;;; Rainbow mode
 ;; Colorize color names in buffers
 (use-package rainbow-mode
   :ensure t
@@ -107,8 +101,6 @@
     typescript-mode
     js2-mode) . rainbow-mode )
   )
-
-
 
 (provide 'ef-programming)
 ;;; ef-programming.el ends here

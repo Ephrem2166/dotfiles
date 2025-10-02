@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Function
+;;; Functions
 (defun ef/org-mode-hooks ()
   "Various modes to run in org mode."
   (abbrev-mode)
@@ -32,10 +32,10 @@
   ;; (lambda () (setq-local line-spacing 0.2 fill-column 100))
   (auto-insert-mode 1)
   )
-
 ;; (add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))
+(add-hook 'org-mode-hook #'ef/org-mode-hooks)
 
-
+;;; Org Mode Hook Setup 2
 (defun org-mode-hook-setup ()
   (setq-local evil-auto-indent nil)
 
@@ -55,7 +55,7 @@
   (setq word-wrap t))
 (add-hook 'org-mode-hook 'org-mode-hook-setup)
 
-;; Org General Settings
+;;; Org General Settings
 (use-package org
   :ensure nil
   :defer t
@@ -126,7 +126,7 @@
   (setq org-image-actual-width 600)
   (setq org-image-align 'center))
 
-;; Fontify
+;;; Org Faces
 (use-package org-faces
   :ensure nil
   :config
@@ -136,23 +136,8 @@
   (setq org-fontify-whole-heading-line t)
   (setq org-fontify-whole-block-delimiter-line t))
 
-;; Org Hooks
-(use-package org
-  :ensure nil
-  :hook (
-         ;; (org-mode . abbrev-mode)
-         ;; (org-mode . turn-on-auto-fill)
-         ;; (org-mode . variable-pitch-mode)
-         ;; (org-mode . visual-line-mode)
-         ;; (org-mode . prettify-symbols-mode)
-         ;; (org-mode . olivetti-mode)
-         (org-mode . ef/org-mode-hooks)
-         ;; (org-mode . (lambda () (setq-local line-spacing 0.3 fill-column 120)))
-         ;; (org-mode . (lambda () (electric-indent-local-mode -1)))
-         )
-  )
 
-;;; ;; FIXME  Autoinsertion for Org
+;;;  FIXME  Autoinsertion for Org
 (use-package org
   :ensure nil
   :after org
@@ -168,7 +153,6 @@
 
   )
 
-
 ;;; Org Num
 (use-package org-num
   :ensure nil
@@ -179,7 +163,7 @@
   (org-num-skip-unnumbered t))
 
 
-;; Org Indent
+;;; Org Indent
 (use-package org
   :ensure nil
   :config
@@ -187,7 +171,7 @@
   (setq org-indent-mode-turns-on-hiding-stars nil)
   (setq org-indent-indentation-per-level 4))
 
-;; Org Todo and Refile
+;;; Org Todo and Refile
 (use-package org
   :ensure nil
   :config
@@ -205,7 +189,7 @@
   (setq org-enforce-todo-checkbox-dependencies t)
   )
 
-;; ORG TODO Appearance
+;;; ORG TODO Appearance
 (use-package org
   :ensure nil
   :config
@@ -232,7 +216,9 @@
         )   ;; Deep Blue
   (setq org-use-fast-todo-selection t)
   )
-;; Org Structure Template List
+
+
+;;; Org Structure Template List
 ;; A list of keys and block types
 ;; <s[TAB]
 (use-package org
@@ -254,7 +240,7 @@
           ("q" . "quote")))
   )
 
-;; Pretty Symbol List
+;;; Pretty Symbol List
 (use-package org
   :ensure nil
   :config
@@ -268,7 +254,7 @@
 
   (setq prettify-symbols-unprettify-at-point 'right-edge))
 
-;;;; Org-archive
+;;; Org-archive
 (use-package org-archive
   :ensure nil
   :custom
@@ -276,7 +262,7 @@
   (org-archive-subtree-add-inherited-tags t))
 
 
-;; Org Custom Heading Faces
+;;; Org Custom Heading Faces
 (use-package org
   :ensure nil
   :config
@@ -291,16 +277,7 @@
    '(org-level-7 ((t (:inherit outline-5 :height 1.1)))))
   )
 
-;; Org Links
-(use-package org
-  :ensure nil
-  :config
-  (setq org-link-context-for-files t)
-  (setq org-link-keep-stored-after-insertion nil)
-  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
-
-
-;; Org Attach
+;;; Org Attach
 ;; The dispatcher for attachment commands
 (use-package org-attach
   :ensure nil
@@ -317,67 +294,7 @@
      org-attach-id-uuid-folder-format
      org-attach-id-fallback-folder-format)))
 
-;; Org Export (ox)
-(use-package ox
-  :ensure nil
-  :init
-  (setq org-export-backends '(html latex odt icalendar texinfo md ascii))
-  :config
-  (setq org-export-with-broken-links t)
-  (setq org-export-default-language "en")
-  (setq org-export-coding-system "utf-8")
-  (setq org-export-with-tags t)
-  (setq org-export-with-smart-quotes t)
-  (setq org-export-with-sub-superscripts '{})
-  (setq org-export-async-debug t)
-  (setq org-export-with-section-numbers nil)
-  (setq org-time-stamp-formats
-        '("%Y-%m-%d %a" . "%Y-%m-%d %a %H:%M"))
-  (setq org-display-custom-times t)
-  (setq org-time-stamp-custom-formats
-        '("%a, %b %-d" . "%a, %b %-d (%-H:%M%p)"))
-  (setq org-image-actual-width 700)
-  (setq org-export-in-background nil)
-
-  (setq org-export-with-toc t)
-  (setopt org-export-with-priority t)
-  (setopt org-export-dispatch-use-expert-ui t)
-  (setopt org-export-use-babel t)
-  (setq org-export-headline-levels 8)
-  (setq org-export-dispatch-use-expert-ui nil)
-  (setq org-html-htmlize-output-type nil)
-  (setq org-html-head-include-default-style nil)
-  (setq org-html-head-include-scripts nil))
-
-;; Ox-ODT
-(use-package ox-odt
-  :ensure nil
-  :config
-  (setq org-odt-preferred-output-format "docx"))
-
-;; TODO ox-epub
-;; OX-Latex
-(use-package ox-latex
-  :ensure nil
-  :after org
-  :custom
-  (org-latex-compiler "lualatex")
-  (org-latex-src-block-backend 'engraved)
-  (org-latex-pdf-process
-   (list "latexmk -shell-escape  -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"))
-  (org-export-with-toc t)
-  )
-;;;; Ox-pandoc
-;; Export to whatever file format pandoc can export to
-(use-package ox-pandoc
-  :ensure t
-  :after org
-  )
-
-
-
-
-;; Org Text Colors
+;;; Org Text Colors
 (use-package org
   :ensure nil
   :config
@@ -388,7 +305,7 @@
                              ("~" (:foreground "#d08770" :family "Berkeley Nerd Font"))
                              )))
 
-;; Org SRC Blocks
+;;; Org SRC Blocks
 (use-package org
   :ensure nil
   :config
@@ -403,9 +320,7 @@
   (setq org-edit-src-auto-save-idle-delay 3)
   (setq org-edit-src-content-indentation 0))
 
-
-
-;; Org Footnote
+;;; Org Footnote
 (use-package org-footnote
   :ensure nil
   :after org
@@ -414,7 +329,7 @@
   (org-footnote-auto-adjust t)
   (org-footnote-define-inline nil))
 
-;; Org Tags
+;;; Org Tags
 (use-package org
   :ensure nil
   :config
@@ -441,7 +356,7 @@
 
   (setq org-tags-column 0))
 
-;; ORG-ID
+;;; ORG-ID
 (use-package org-id
   :ensure nil
   :after org
@@ -450,30 +365,19 @@
   (org-id-method 'ts)
   (org-id-link-to-org-use-id 'use-existing))
 
-;; ORG-CLIPLINK
-;; Insert org-mode links from the clipboard
-(use-package org-cliplink
-  :ensure t
-  :after org)
 
-;; Org Download
-;; Image drag-and-drop for org-mode
-(use-package org-download
-  :ensure t
+;;; Org Links
+(use-package org
+  :ensure nil
   :after org
-  ;; :ensure-system-package (scrot)
-  :hook (org-mode . org-download-enable)
-  :custom
-  (org-image-actual-width 400)
-  (org-download-method 'attach)
-  (org-download-screenshot-method "scrot -s %s") ; Use scrot
-  (org-download-image-dir (progn (require 'org-attach) org-attach-id-dir))
-  (org-download-heading-lvl nil)
-  (org-download-timestamp "%Y-%m-%d_%H-%M-%S_") ; Default
-  (org-download-image-html-width 700))
+  :config
+  (setq org-link-context-for-files t)
+  (setq org-link-keep-stored-after-insertion nil)
+  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 
 
-;;;;; Org-faces
+
+;;; Org-faces
 (use-package org-faces
   :ensure nil
   :after org
@@ -483,298 +387,7 @@
   (org-fontify-whole-block-delimiter-line nil)
   (org-fontify-quote-and-verse-blocks t))
 
-;;; Org Modern
-;; Modern Look for Org
-(use-package org-modern
-  :after org
-  ;; :config
-  ;; (global-org-modern-mode)
-  :hook
-  ((org-mode . org-modern-mode)
-   (org-mode . ef/org-modern-spacing)
-   )
-  :config
-  (defun ef/org-modern-spacing ()
-    (setq-local line-spacing
-                (if org-modern-mode
-                    0.3 0.0)))
-  :custom
-  (org-catch-invisible-edits 'show-and-error)
-  (org-modern-block-fringe nil)
-  ;; Needed for org-modern-indent
-  (org-modern-hide-stars nil)
-  ;; Todo
-  (org-modern-todo nil)
-  (org-modern-todo-faces
-   '(("NEXT" :inherit (bold success org-modern-todo))
-     ("TODO" :inherit (org-todo org-modern-todo))
-     ("HOLD" :inherit (shadow error org-modern-todo))
-     ("MAYBE" :inherit (shadow org-todo org-modern-todo))
-     ("DONE" :inherit (bold org-done org-modern-todo))
-     ("CANCELED" :inherit (error org-modern-todo))))
-  (org-modern-horizontal-rule (make-string 36 ?─))
-  ;; Label
-  (org-modern-label-border 3)
-  ;; (org-modern-label  ((t :height 0.9 :width condensed :weight regular :underline nil)))
-  ;; Footnote
-  (org-modern-footnote '(nil (raise 0.15) (height 0.9)))
-  ;; Tag
-  (org-modern-tag nil)
-  (org-modern-tag-faces
-   `(("project"
-      :foreground ,(face-background 'default nil t)
-      :background ,(face-foreground 'default nil t))))
-  ;; Priority
-  (org-modern-priority t)
-  (org-modern-priority-faces
-   '((?A :inverse-video t :inherit (bold org-priority))
-     (?B :inverse-video t :inherit (bold org-priority))
-     (?C :inverse-video t :inherit org-priority)
-     (?D :inverse-video t :inherit org-priority)
-     (?E :inverse-video t :inherit (shadow org-priority))
-     (?F :inverse-video t :inherit (shadow org-priority))))
-  ;; Table
-  (org-modern-table t)
-  (org-modern-table-vertical 5)
-  (org-modern-table-horizontal 2)
-  (org-modern-horizontal-rule t)
-  ;; List
-  (org-modern-list '((?+ . "+")
-                     (?- . "-")
-                     (?* . "•")))
-  (org-modern-star '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
-  (org-modern-checkbox
-   '((?X . " ")
-     (?- . "▣")
-     (?\s . "")))
-  ;;org-modern-star '("◉" "○" "◎" "▣" "▢" "◈" "◇")
-  ;; (org-modern-fold-stars
-  ;; '(("▶" . "▼")
-  ;;   ("▷" . "▽")
-  ;;   ("⯈" . "⯆")
-  ;;   ("▹" . "▿")
-  ;;   ("▸" . "▾")))
-  (org-modern-block-name
-   '((t . t)
-     ("src" "»" "«")
-     ("example" "»–" "–«")
-     ("quote" "❝" "❞")
-     ("export" "⏩" "⏪")))
-  ;; Keyword
-  (org-modern-keyword "‣ ")
-  (org-modern-keyword
-   '((t . t)
-     ("title" . "𝙏")
-     ("subtitle" . "𝙩")
-     ("author" . "𝘼")
-     ("email" . "")
-     ("date" . "𝘿")
-     ("property" . "󰠳")
-     ("options" . #("󰘵" 0 1 (display (height 0.75))))
-     ("startup" . "⏻")
-     ("macro" . "𝓜")
-     ("bind" . "󰌷")
-     ("bibliography" . "")
-     ("print_bibliography" . "󰌱")
-     ("cite_export" . "⮭")
-     ("print_glossary" . "󰌱ᴬᶻ")
-     ("glossary_sources" . "󰒻")
-     ("include" . "⇤")
-     ("setupfile" . "⇚")
-     ("html_head" . "🅷")
-     ("html" . "🅗")
-     ("latex_class" . "🄻")
-     ("latex_class_options" . "🄻󰒓")
-     ("latex_header" . "🅻")
-     ("latex_header_extra" . "🅻⁺")
-     ("latex" . "🅛")
-     ("beamer_theme" . "🄱")
-     ("beamer_color_theme" . "🄱󰏘")
-     ("beamer_font_theme" . "🄱𝐀")
-     ("beamer_header" . "🅱")
-     ("beamer" . "🅑")
-     ("attr_latex" . "🄛")
-     ("attr_html" . "🄗")
-     ("attr_org" . "⒪")
-     ("call" . "󰜎")
-     ("name" . "⁍")
-     ("header" . "›")
-     ("caption" . "☰")
-     ("results" . "🠶")))
-  ;; Miscellaneous
-  (org-modern-timestamp t)  )
-
-;;; Org Modern Indent
-(use-package org-modern-indent
-  :ensure (:host github :repo "jdtsmith/org-modern-indent")
-  :defer t
-  :init
-  ;; Add late to hook
-  (add-hook 'org-mode-hook #'org-modern-indent-mode))
-
-;; Org Appear
-;; Shows emphasis markers when the cursor is the emphasized
-;; Region
-(use-package org-appear
-  :after org
-  :ensure t
-  :hook (org-mode . org-appear-mode)
-  :config
-  (setq org-appear-autoemphasis   t
-        org-hide-emphasis-markers t
-        org-appear-autolinks      'just-brackets
-        org-appear-autoentities   t
-        org-appear-autosubmarkers t
-        org-appear-delay 0.0
-        org-appear-autokeywords t
-        org-appear-inside-latex t
-        org-appear-triggger 'always
-        )
-  (run-at-time nil nil #'org-appear--set-elements))
-
-
-
-
-;; Org Noter
-;; A synchronized org-mode document annotator
-;; Just press i
-(use-package org-noter
-  ;;  :ensure nil
-  :defer
-  :after org
-  :custom
-  (org-noter-always-create-frame nil)
-  (org-noter-kill-frame-at-session-end nil)
-  (org-noter-use-indirect-buffer t)
-  (org-noter-disable-narrowing nil)
-  (org-noter-hide-other t)
-  (org-noter-auto-save-last-location nil)
-  (org-noter-separate-notes-from-heading t)
-  (org-noter-highlight-selected-text t) ; Always leave highlights from annotations
-  (org-noter-arrow-foreground-color "red")
-  (org-noter-arrow-background-color "black")
-  (org-noter-doc-property-in-notes nil)
-  (org-noter-insert-note-no-questions nil) ; Activate this setting if I rarely type my own titles
-  (org-noter-max-short-selected-text-length 0) ; Always enclose in quote block
-  )
-
-;; Org Remark
-;; Org-remark lets you highlight and annotate text files, websites,
-;; EPUB books and Info documentation with using Org mode.
-(use-package org-remark
-  :hook (on-first-file . org-remark-global-tracking-mode)
-  :after org
-  :bind (;; :bind keyword also implicitly defers org-remark itself.
-         ;; Keybindings before :map is set for global-map. Adjust the keybinds
-         ;; as you see fit.
-         ("C-c o m" . org-remark-mark)
-         ("C-c o l" . org-remark-mark-line)
-         :map org-remark-mode-map
-         ("C-c o o" . org-remark-open)
-         ("C-c o ]" . org-remark-view-next)
-         ("C-c o [" . org-remark-view-prev)
-         ("C-c o r" . org-remark-remove)
-         ("C-c o d" . org-remark-delete))
-  :custom
-  (org-remark-source-file-name 'abbreviate-file-name)
-  (org-remark-notes-file-name
-   (no-littering-expand-var-file-name "org-remark/marginalia.org"))
-  (org-remark-notes-display-buffer-action `((display-buffer-in-side-window)
-                                            (side . right)
-                                            (slot . 1)))
-  (org-remark-create-default-pen-set nil)
-  (org-remark-notes-auto-delete nil)
-  :config
-  (with-eval-after-load 'eww
-    (org-remark-eww-mode 1))
-  (with-eval-after-load 'nov
-    (org-remark-nov-mode 1))
-  (with-eval-after-load 'info
-    (org-remark-info-mode 1))
-
-  (with-eval-after-load 'all-the-icons
-    (setopt org-remark-icon-notes (all-the-icons-material "details")
-            org-remark-icon-position-adjusted (all-the-icons-material "error")
-            org-remark-line-icon (all-the-icons-faicon "sticky-note"))))
-
-
-;; Org Superstar
-;; Prettify headings and plain lists in org mode
-(use-package org-superstar
-  :disabled t
-  :hook (org-mode . org-superstar-mode)
-  :init
-  (setq org-superstar-headline-bullets-list '("✖" "✚" "◉" "○" "▶")
-        ;; org-superstar-special-todo-items t
-        org-ellipsis " ↴ ")
-  :custom
-  (org-hide-leading-stars nil)
-  (org-indent-mode-turns-on-hiding-stars nil)
-  (org-superstar-remove-leading-stars nil)
-
-  ;; Headlines
-  (org-superstar-leading-bullet ?·)
-  ;; Todos
-  (org-superstar-special-todo-items nil)
-  ;; Update when I change `org-todo-keywords'
-  (org-superstar-todo-bullet-alist
-   '(("NEXT" . ?☐)
-     ("TODO" . ?☐)
-     ("HOLD" . ?☐)
-     ("DONE" . ?☑)
-     ("CANCELED" . ?☑)
-     ("[ ]"  . ?☐)
-     ("[X]"  . ?☑)))
-
-  ;; Plain lists
-  (org-superstar-prettify-item-bullets t)
-  (org-superstar-first-inlinetask-bullet ?▶)
-  (org-superstar-item-bullet-alist
-   '((?+ . "◦")                         ; List taken from `org-modern'
-     (?- . "–")
-     (?* . "‣"))) )
-
-;; Org Auto Tangle
-;; Automatically and Asynchronously tangles org files on save
-(use-package org-auto-tangle
-  :after org
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode)
-  :config
-  ;; Set it to t if you want it to autotangle
-  (setq org-auto-tangle-default nil))
-
-;; TODO Org-Refile
-;; Transclude text content via links
-;; (use-package org-transclusion
-;;   :ensure nil
-;;   :after org
-;;   :hook
-;;   (org-mode . org-transclusion-mode)
-;;     :custom
-;;   (org-transclusion-include-first-section t)
-;;   (org-transclusion-exclude-elements '(property-drawer)))
-
-;; toc-org
-;; Add table of contents to org mode files
-(use-package toc-org
-  :after (org markdown-mode)
-  :commands toc-org-enable
-  :init
-  (add-hook 'org-mode-hook 'toc-org-enable)
-  (add-to-list 'org-tag-alist '("TOC" . ?T))
-  :hook (markdown-mode . toc-org-enable)  )
-
-;; (use-package org-make-toc
-;;   :ensure t)
-
-;; TODO: Org-pdftools (ERRORS)
-;; Support for links to documents in pdfview mode
-                                        ;(use-package org-pdftools
-                                        ;  :hook (org-mode . org-pdftools-setup-link))
-
-;; TODO Org-noter-pdftools
-;; Org-babel
+;;; Org-babel
 (use-package ob
   :ensure nil
   :after org
@@ -801,19 +414,126 @@
           (:comments . "link")))
   (setq org-confirm-babel-evaluate t))
 
-
-;; Ob-mermaid
-;; Org-babel support for mermaid evaluation
-(defconst mermaid-folder "$HOME/.npm/bin/mmdc")
-(use-package ob-mermaid
-  :ensure t
-  :defer t
-  :after org
+;;; Better Org-Return
+(use-package org
+  :ensure nil
+  :bind (:map org-mode-map
+              ("RET" . my/org-return-dwim))
   :config
-  (setq ob-mermaid-cli-path mermaid-folder))
 
+  (defun my/org-element-descendant-of (type element)
+    "Return non-nil if ELEMENT is a descendant of TYPE.
+TYPE should be an element type, like `item' or `paragraph'.
+ELEMENT should be a list like that returned by `org-element-context'."
+    ;; MAYBE: Use `org-element-lineage'.
+    (when-let* ((parent (org-element-property :parent element)))
+      (or (eq type (car parent))
+          (my/org-element-descendant-of type parent))))
+
+  (defun my/org-return-dwim (&optional default)
+    "A helpful replacement for `org-return'.  With prefix, call `org-return'.
+
+On headings, move point to position after entry content.  In
+lists, insert a new item or end the list, with checkbox if
+appropriate.  In tables, insert a new row or end the table."
+    ;; Inspired by John Kitchin:
+    ;; http://kitchingroup.cheme.cmu.edu/blog/2017/04/09/A-better-return-in-org-mode/
+    (interactive "P")
+    (if default
+        (org-return)
+      (cond
+       ;; Act depending on context around point.
+
+       ((and (eq 'link (car (org-element-context)))
+             org-return-follows-link)
+        ;; Link: Open it.
+        (org-open-at-point-global))
+
+       ;; ((or (eq
+       ;;       (get-char-property (min (1+ (point)) (point-max)) 'org-overlay-type)
+       ;;       'org-latex-overlay)
+       ;;      (let ((context (org-element-context)))
+       ;;        (and (memq (org-element-type context)
+       ;;                   '(latex-fragment latex-environment))
+       ;;             (eq (point)
+       ;;                 (save-excursion
+       ;;                   (goto-char (org-element-property :end context))
+       ;;                   (skip-chars-backward "\n\r\t ")
+       ;;                   (point))))))
+       ;;  (org-latex-preview))
+
+       ((org-at-heading-p)
+        ;; Heading: Move to position after entry content.
+        ;; NOTE: This is probably the most interesting feature of this function.
+        (let ((heading-start (org-entry-beginning-position)))
+          (goto-char (org-entry-end-position))
+          (cond ((and (org-at-heading-p)
+                      (= heading-start (org-entry-beginning-position)))
+                 ;; Entry ends on its heading; add newline after
+                 (end-of-line)
+                 (insert "\n\n"))
+                (t
+                 ;; Entry ends after its heading; back up
+                 (forward-line -1)
+                 (end-of-line)
+                 (when (org-at-heading-p)
+                   ;; At the same heading
+                   (forward-line)
+                   (insert "\n")
+                   (forward-line -1))
+                 ;; FIXME: looking-back is supposed to be called with more arguments.
+                 (while (not (looking-back (rx (repeat 3 (seq (optional blank) "\n")))))
+                   (insert "\n"))
+                 (forward-line -1)))))
+
+       ((org-in-item-p)
+        ;; Plain list.  Yes, this gets a little complicated...
+        (let ((context (org-element-context)))
+          (if (or (eq 'plain-list (car context))  ; First item in list
+                  (and (eq 'item (car context))
+                       (not (eq (org-element-property :contents-begin context)
+                                (org-element-property :contents-end context))))
+                  (my/org-element-descendant-of 'item context))  ; Element in list item, e.g. a link
+              ;; Non-empty item: Add new item.
+              (if (org-at-item-checkbox-p)
+                  (org-insert-todo-heading nil)
+                (org-insert-item))
+            ;; Empty item: Close the list.
+            ;; TODO: Do this with org functions rather than operating on the
+            ;; text. Can't seem to find the right function.
+            (delete-region (line-beginning-position) (line-end-position))
+            (insert "\n"))))
+
+       ((when (fboundp 'org-inlinetask-in-task-p)
+          (org-inlinetask-in-task-p))
+        ;; Inline task: Don't insert a new heading.
+        (org-return))
+
+       ((org-at-table-p)
+        (cond ((save-excursion
+                 (beginning-of-line)
+                 ;; See `org-table-next-field'.
+                 (cl-loop with end = (line-end-position)
+                          for cell = (org-element-table-cell-parser)
+                          always (equal (org-element-property :contents-begin cell)
+                                        (org-element-property :contents-end cell))
+                          while (re-search-forward "|" end t)))
+               ;; Empty row: end the table.
+               (delete-region (line-beginning-position) (line-end-position))
+               (org-return))
+              (t
+               ;; Non-empty row: call `org-return'.
+               (org-return))))
+       (t
+        ;; All other cases: call `org-return'.
+        (org-return))))))
+
+
+
+;;; TODO Org-Refile
 ;; (defconst my-org-todos "~/Org/Capture/")
-;; Org Agenda
+
+;;; Org Agenda
 (use-package org
   :ensure nil
   :bind ("C-c C-a" . org-agenda)
@@ -945,7 +665,7 @@
 
   )
 
-;; Org Log
+;;; Org Log
 (use-package org
   :ensure nil
   :config
@@ -956,7 +676,7 @@
   (setopt org-log-reschedule 'time)
   )
 
-;; Org Capture
+;;; Org Capture
 (use-package org-capture
   :ensure nil
   :bind ("C-c C-c" . org-capture)
@@ -992,7 +712,7 @@
         )
   )
 
-;; ORG JOURNAL
+;;; ORG JOURNAL
 (use-package org-journal
   :ensure t
   :after org
@@ -1004,7 +724,7 @@
   )
 
 
-;; Strikethrough DONE headlines
+;;; Strikethrough DONE headlines
 (use-package org
   :ensure nil
   :config
@@ -1023,7 +743,7 @@
 (add-hook 'text-mode-hook #'auto-fill-mode)
 
 
-;; Performance Tweaks for Org Agenda
+;;; Performance Tweaks for Org Agenda
 (use-package org-agenda
   :ensure nil
   :after org
@@ -1035,7 +755,396 @@
   (setq-default org-agenda-skip-scheduled-if-deadline-is-shown 'not-today)
   )
 
-;; Valign
+
+
+
+;;; Org Export
+;;;; Org OX
+(use-package ox
+  :ensure nil
+  :init
+  (setq org-export-backends '(html latex odt icalendar texinfo md ascii))
+  :config
+  (setq org-export-with-broken-links t)
+  (setq org-export-default-language "en")
+  (setq org-export-coding-system "utf-8")
+  (setq org-export-with-tags t)
+  (setq org-export-with-smart-quotes t)
+  (setq org-export-with-sub-superscripts '{})
+  (setq org-export-async-debug t)
+  (setq org-export-with-section-numbers nil)
+  (setq org-time-stamp-formats
+        '("%Y-%m-%d %a" . "%Y-%m-%d %a %H:%M"))
+  (setq org-display-custom-times t)
+  (setq org-time-stamp-custom-formats
+        '("%a, %b %-d" . "%a, %b %-d (%-H:%M%p)"))
+  (setq org-image-actual-width 700)
+  (setq org-export-in-background nil)
+
+  (setq org-export-with-toc t)
+  (setopt org-export-with-priority t)
+  (setopt org-export-dispatch-use-expert-ui t)
+  (setopt org-export-use-babel t)
+  (setq org-export-headline-levels 8)
+  (setq org-export-dispatch-use-expert-ui nil)
+  (setq org-html-htmlize-output-type nil)
+  (setq org-html-head-include-default-style nil)
+  (setq org-html-head-include-scripts nil))
+
+;;;; Ox-ODT
+(use-package ox-odt
+  :ensure nil
+  :config
+  (setq org-odt-preferred-output-format "docx"))
+
+;;;; TODO ox-epub
+;;;; OX-Latex
+(use-package ox-latex
+  :ensure nil
+  :after org
+  :custom
+  (org-latex-compiler "lualatex")
+  (org-latex-src-block-backend 'engraved)
+  (org-latex-pdf-process
+   (list "latexmk -shell-escape  -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"))
+  (org-export-with-toc t)
+  )
+;;;; Ox-pandoc
+;; Export to whatever file format pandoc can export to
+(use-package ox-pandoc
+  :ensure t
+  :after org
+  )
+
+
+;;; Org External Tools
+
+;;; Org Download
+;; Image drag-and-drop for org-mode
+(use-package org-download
+  :ensure t
+  :after org
+  ;; :ensure-system-package (scrot)
+  :hook (org-mode . org-download-enable)
+  :custom
+  (org-image-actual-width 400)
+  (org-download-method 'attach)
+  (org-download-screenshot-method "scrot -s %s") ; Use scrot
+  (org-download-image-dir (progn (require 'org-attach) org-attach-id-dir))
+  (org-download-heading-lvl nil)
+  (org-download-timestamp "%Y-%m-%d_%H-%M-%S_") ; Default
+  (org-download-image-html-width 700))
+
+;;; Org Modern
+;; Modern Look for Org
+(use-package org-modern
+  :after org
+  ;; :config
+  ;; (global-org-modern-mode)
+  :hook
+  ((org-mode . org-modern-mode)
+   (org-mode . ef/org-modern-spacing)
+   )
+  :config
+  (defun ef/org-modern-spacing ()
+    (setq-local line-spacing
+                (if org-modern-mode
+                    0.3 0.0)))
+  :custom
+  (org-catch-invisible-edits 'show-and-error)
+  (org-modern-block-fringe nil)
+  ;; Needed for org-modern-indent
+  (org-modern-hide-stars nil)
+  ;; Todo
+  (org-modern-todo nil)
+  (org-modern-todo-faces
+   '(("NEXT" :inherit (bold success org-modern-todo))
+     ("TODO" :inherit (org-todo org-modern-todo))
+     ("HOLD" :inherit (shadow error org-modern-todo))
+     ("MAYBE" :inherit (shadow org-todo org-modern-todo))
+     ("DONE" :inherit (bold org-done org-modern-todo))
+     ("CANCELED" :inherit (error org-modern-todo))))
+  (org-modern-horizontal-rule (make-string 36 ?─))
+  ;; Label
+  (org-modern-label-border 3)
+  ;; (org-modern-label  ((t :height 0.9 :width condensed :weight regular :underline nil)))
+  ;; Footnote
+  (org-modern-footnote '(nil (raise 0.15) (height 0.9)))
+  ;; Tag
+  (org-modern-tag nil)
+  (org-modern-tag-faces
+   `(("project"
+      :foreground ,(face-background 'default nil t)
+      :background ,(face-foreground 'default nil t))))
+  ;; Priority
+  (org-modern-priority t)
+  (org-modern-priority-faces
+   '((?A :inverse-video t :inherit (bold org-priority))
+     (?B :inverse-video t :inherit (bold org-priority))
+     (?C :inverse-video t :inherit org-priority)
+     (?D :inverse-video t :inherit org-priority)
+     (?E :inverse-video t :inherit (shadow org-priority))
+     (?F :inverse-video t :inherit (shadow org-priority))))
+  ;; Table
+  (org-modern-table t)
+  (org-modern-table-vertical 5)
+  (org-modern-table-horizontal 2)
+  (org-modern-horizontal-rule t)
+  ;; List
+  (org-modern-list '((?+ . "+")
+                     (?- . "-")
+                     (?* . "•")))
+  (org-modern-star '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
+  (org-modern-checkbox
+   '((?X . " ")
+     (?- . "▣")
+     (?\s . "")))
+  ;;org-modern-star '("◉" "○" "◎" "▣" "▢" "◈" "◇")
+  ;; (org-modern-fold-stars
+  ;; '(("▶" . "▼")
+  ;;   ("▷" . "▽")
+  ;;   ("⯈" . "⯆")
+  ;;   ("▹" . "▿")
+  ;;   ("▸" . "▾")))
+  (org-modern-block-name
+   '((t . t)
+     ("src" "»" "«")
+     ("example" "»–" "–«")
+     ("quote" "❝" "❞")
+     ("export" "⏩" "⏪")))
+  ;; Keyword
+  (org-modern-keyword "‣ ")
+  (org-modern-keyword
+   '((t . t)
+     ("title" . "𝙏")
+     ("subtitle" . "𝙩")
+     ("author" . "𝘼")
+     ("email" . "")
+     ("date" . "𝘿")
+     ("property" . "󰠳")
+     ("options" . #("󰘵" 0 1 (display (height 0.75))))
+     ("startup" . "⏻")
+     ("macro" . "𝓜")
+     ("bind" . "󰌷")
+     ("bibliography" . "")
+     ("print_bibliography" . "󰌱")
+     ("cite_export" . "⮭")
+     ("print_glossary" . "󰌱ᴬᶻ")
+     ("glossary_sources" . "󰒻")
+     ("include" . "⇤")
+     ("setupfile" . "⇚")
+     ("html_head" . "🅷")
+     ("html" . "🅗")
+     ("latex_class" . "🄻")
+     ("latex_class_options" . "🄻󰒓")
+     ("latex_header" . "🅻")
+     ("latex_header_extra" . "🅻⁺")
+     ("latex" . "🅛")
+     ("beamer_theme" . "🄱")
+     ("beamer_color_theme" . "🄱󰏘")
+     ("beamer_font_theme" . "🄱𝐀")
+     ("beamer_header" . "🅱")
+     ("beamer" . "🅑")
+     ("attr_latex" . "🄛")
+     ("attr_html" . "🄗")
+     ("attr_org" . "⒪")
+     ("call" . "󰜎")
+     ("name" . "⁍")
+     ("header" . "›")
+     ("caption" . "☰")
+     ("results" . "🠶")))
+  ;; Miscellaneous
+  (org-modern-timestamp t)  )
+
+;;; Org Modern Indent
+(use-package org-modern-indent
+  :ensure (:host github :repo "jdtsmith/org-modern-indent")
+  :defer t
+  :init
+  ;; Add late to hook
+  (add-hook 'org-mode-hook #'org-modern-indent-mode))
+
+;;; Org Appear
+;; Shows emphasis markers when the cursor is the emphasized
+;; Region
+(use-package org-appear
+  :after org
+  :ensure t
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autoemphasis   t
+        org-hide-emphasis-markers t
+        org-appear-autolinks      'just-brackets
+        org-appear-autoentities   t
+        org-appear-autosubmarkers t
+        org-appear-delay 0.0
+        org-appear-autokeywords t
+        org-appear-inside-latex t
+        org-appear-triggger 'always
+        )
+  (run-at-time nil nil #'org-appear--set-elements))
+
+;;; Org Noter
+;; A synchronized org-mode document annotator
+;; Just press i
+(use-package org-noter
+  ;;  :ensure nil
+  :defer
+  :after org
+  :custom
+  (org-noter-always-create-frame nil)
+  (org-noter-kill-frame-at-session-end nil)
+  (org-noter-use-indirect-buffer t)
+  (org-noter-disable-narrowing nil)
+  (org-noter-hide-other t)
+  (org-noter-auto-save-last-location nil)
+  (org-noter-separate-notes-from-heading t)
+  (org-noter-highlight-selected-text t) ; Always leave highlights from annotations
+  (org-noter-arrow-foreground-color "red")
+  (org-noter-arrow-background-color "black")
+  (org-noter-doc-property-in-notes nil)
+  (org-noter-insert-note-no-questions nil) ; Activate this setting if I rarely type my own titles
+  (org-noter-max-short-selected-text-length 0) ; Always enclose in quote block
+  )
+
+;;; ORG-CLIPLINK
+;; Insert org-mode links from the clipboard
+(use-package org-cliplink
+  :ensure t
+  :after org)
+
+
+;;; Org Remark
+;; Org-remark lets you highlight and annotate text files, websites,
+;; EPUB books and Info documentation with using Org mode.
+(use-package org-remark
+  :hook (on-first-file . org-remark-global-tracking-mode)
+  :after org
+  :bind (;; :bind keyword also implicitly defers org-remark itself.
+         ;; Keybindings before :map is set for global-map. Adjust the keybinds
+         ;; as you see fit.
+         ("C-c o m" . org-remark-mark)
+         ("C-c o l" . org-remark-mark-line)
+         :map org-remark-mode-map
+         ("C-c o o" . org-remark-open)
+         ("C-c o ]" . org-remark-view-next)
+         ("C-c o [" . org-remark-view-prev)
+         ("C-c o r" . org-remark-remove)
+         ("C-c o d" . org-remark-delete))
+  :custom
+  (org-remark-source-file-name 'abbreviate-file-name)
+  (org-remark-notes-file-name
+   (no-littering-expand-var-file-name "org-remark/marginalia.org"))
+  (org-remark-notes-display-buffer-action `((display-buffer-in-side-window)
+                                            (side . right)
+                                            (slot . 1)))
+  (org-remark-create-default-pen-set nil)
+  (org-remark-notes-auto-delete nil)
+  :config
+  (with-eval-after-load 'eww
+    (org-remark-eww-mode 1))
+  (with-eval-after-load 'nov
+    (org-remark-nov-mode 1))
+  (with-eval-after-load 'info
+    (org-remark-info-mode 1))
+
+  (with-eval-after-load 'all-the-icons
+    (setopt org-remark-icon-notes (all-the-icons-material "details")
+            org-remark-icon-position-adjusted (all-the-icons-material "error")
+            org-remark-line-icon (all-the-icons-faicon "sticky-note"))))
+
+
+;;; Org Superstar
+;; Prettify headings and plain lists in org mode
+(use-package org-superstar
+  :disabled t
+  :hook (org-mode . org-superstar-mode)
+  :init
+  (setq org-superstar-headline-bullets-list '("✖" "✚" "◉" "○" "▶")
+        ;; org-superstar-special-todo-items t
+        org-ellipsis " ↴ ")
+  :custom
+  (org-hide-leading-stars nil)
+  (org-indent-mode-turns-on-hiding-stars nil)
+  (org-superstar-remove-leading-stars nil)
+
+  ;; Headlines
+  (org-superstar-leading-bullet ?·)
+  ;; Todos
+  (org-superstar-special-todo-items nil)
+  ;; Update when I change `org-todo-keywords'
+  (org-superstar-todo-bullet-alist
+   '(("NEXT" . ?☐)
+     ("TODO" . ?☐)
+     ("HOLD" . ?☐)
+     ("DONE" . ?☑)
+     ("CANCELED" . ?☑)
+     ("[ ]"  . ?☐)
+     ("[X]"  . ?☑)))
+
+  ;; Plain lists
+  (org-superstar-prettify-item-bullets t)
+  (org-superstar-first-inlinetask-bullet ?▶)
+  (org-superstar-item-bullet-alist
+   '((?+ . "◦")                         ; List taken from `org-modern'
+     (?- . "–")
+     (?* . "‣"))) )
+
+;;; Org Auto Tangle
+;; Automatically and Asynchronously tangles org files on save
+(use-package org-auto-tangle
+  :after org
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode)
+  :config
+  ;; Set it to t if you want it to autotangle
+  (setq org-auto-tangle-default nil))
+
+
+;;; Org-Transclusion
+;; Transclude text content via links
+;; (use-package org-transclusion
+;;   :ensure nil
+;;   :after org
+;;   :hook
+;;   (org-mode . org-transclusion-mode)
+;;     :custom
+;;   (org-transclusion-include-first-section t)
+;;   (org-transclusion-exclude-elements '(property-drawer)))
+
+;;; toc-org
+;; Add table of contents to org mode files
+(use-package toc-org
+  :after (org markdown-mode)
+  :commands toc-org-enable
+  :init
+  (add-hook 'org-mode-hook 'toc-org-enable)
+  (add-to-list 'org-tag-alist '("TOC" . ?T))
+  :hook (markdown-mode . toc-org-enable)  )
+
+;;; Org Make TOC
+;; (use-package org-make-toc
+;;   :ensure t)
+
+;; TODO: Org-pdftools (ERRORS)
+;; Support for links to documents in pdfview mode
+                                        ;(use-package org-pdftools
+                                        ;  :hook (org-mode . org-pdftools-setup-link))
+
+;;; TODO Org-noter-pdftools
+
+
+;; Ob-mermaid
+;; Org-babel support for mermaid evaluation
+(defconst mermaid-folder "$HOME/.npm/bin/mmdc")
+(use-package ob-mermaid
+  :ensure t
+  :defer t
+  :after org
+  :config
+  (setq ob-mermaid-cli-path mermaid-folder))
+
+;;; Valign
 (use-package valign
   :ensure t
   :hook ((org-mode markdown-mode) . valign-mode)
@@ -1043,124 +1152,11 @@
   (setq valign-fancy-bar t)
   )
 
-;; TODO Org Present
+;;; TODO Org Present
 (use-package org-present
   :after org
   )
 
-;;; Better Org-Return
-(use-package org
-  :ensure nil
-  :bind (:map org-mode-map
-              ("RET" . my/org-return-dwim))
-  :config
-
-  (defun my/org-element-descendant-of (type element)
-    "Return non-nil if ELEMENT is a descendant of TYPE.
-TYPE should be an element type, like `item' or `paragraph'.
-ELEMENT should be a list like that returned by `org-element-context'."
-    ;; MAYBE: Use `org-element-lineage'.
-    (when-let* ((parent (org-element-property :parent element)))
-      (or (eq type (car parent))
-          (my/org-element-descendant-of type parent))))
-
-  (defun my/org-return-dwim (&optional default)
-    "A helpful replacement for `org-return'.  With prefix, call `org-return'.
-
-On headings, move point to position after entry content.  In
-lists, insert a new item or end the list, with checkbox if
-appropriate.  In tables, insert a new row or end the table."
-    ;; Inspired by John Kitchin:
-    ;; http://kitchingroup.cheme.cmu.edu/blog/2017/04/09/A-better-return-in-org-mode/
-    (interactive "P")
-    (if default
-        (org-return)
-      (cond
-       ;; Act depending on context around point.
-
-       ((and (eq 'link (car (org-element-context)))
-             org-return-follows-link)
-        ;; Link: Open it.
-        (org-open-at-point-global))
-
-       ;; ((or (eq
-       ;;       (get-char-property (min (1+ (point)) (point-max)) 'org-overlay-type)
-       ;;       'org-latex-overlay)
-       ;;      (let ((context (org-element-context)))
-       ;;        (and (memq (org-element-type context)
-       ;;                   '(latex-fragment latex-environment))
-       ;;             (eq (point)
-       ;;                 (save-excursion
-       ;;                   (goto-char (org-element-property :end context))
-       ;;                   (skip-chars-backward "\n\r\t ")
-       ;;                   (point))))))
-       ;;  (org-latex-preview))
-
-       ((org-at-heading-p)
-        ;; Heading: Move to position after entry content.
-        ;; NOTE: This is probably the most interesting feature of this function.
-        (let ((heading-start (org-entry-beginning-position)))
-          (goto-char (org-entry-end-position))
-          (cond ((and (org-at-heading-p)
-                      (= heading-start (org-entry-beginning-position)))
-                 ;; Entry ends on its heading; add newline after
-                 (end-of-line)
-                 (insert "\n\n"))
-                (t
-                 ;; Entry ends after its heading; back up
-                 (forward-line -1)
-                 (end-of-line)
-                 (when (org-at-heading-p)
-                   ;; At the same heading
-                   (forward-line)
-                   (insert "\n")
-                   (forward-line -1))
-                 ;; FIXME: looking-back is supposed to be called with more arguments.
-                 (while (not (looking-back (rx (repeat 3 (seq (optional blank) "\n")))))
-                   (insert "\n"))
-                 (forward-line -1)))))
-
-       ((org-in-item-p)
-        ;; Plain list.  Yes, this gets a little complicated...
-        (let ((context (org-element-context)))
-          (if (or (eq 'plain-list (car context))  ; First item in list
-                  (and (eq 'item (car context))
-                       (not (eq (org-element-property :contents-begin context)
-                                (org-element-property :contents-end context))))
-                  (my/org-element-descendant-of 'item context))  ; Element in list item, e.g. a link
-              ;; Non-empty item: Add new item.
-              (if (org-at-item-checkbox-p)
-                  (org-insert-todo-heading nil)
-                (org-insert-item))
-            ;; Empty item: Close the list.
-            ;; TODO: Do this with org functions rather than operating on the
-            ;; text. Can't seem to find the right function.
-            (delete-region (line-beginning-position) (line-end-position))
-            (insert "\n"))))
-
-       ((when (fboundp 'org-inlinetask-in-task-p)
-          (org-inlinetask-in-task-p))
-        ;; Inline task: Don't insert a new heading.
-        (org-return))
-
-       ((org-at-table-p)
-        (cond ((save-excursion
-                 (beginning-of-line)
-                 ;; See `org-table-next-field'.
-                 (cl-loop with end = (line-end-position)
-                          for cell = (org-element-table-cell-parser)
-                          always (equal (org-element-property :contents-begin cell)
-                                        (org-element-property :contents-end cell))
-                          while (re-search-forward "|" end t)))
-               ;; Empty row: end the table.
-               (delete-region (line-beginning-position) (line-end-position))
-               (org-return))
-              (t
-               ;; Non-empty row: call `org-return'.
-               (org-return))))
-       (t
-        ;; All other cases: call `org-return'.
-        (org-return))))))
 
 
 (provide 'ef-org)

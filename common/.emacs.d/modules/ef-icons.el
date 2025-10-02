@@ -1,28 +1,31 @@
 ;;; ef-icons.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-
+;;; All the icons
 (use-package all-the-icons
   :ensure t
   :demand t
   :if (display-graphic-p))
 
+;;;; All the icons ibuffer
 (use-package all-the-icons-ibuffer
   :ensure t
   :hook (ibuffer-mode . all-the-icons-ibuffer-mode))
 
-;; prettify dired with icons
+;;;; All the icons dired
 (use-package all-the-icons-dired
   :demand t
   :hook
   (dired-mode . all-the-icons-dired-mode))
 
+;;;; All the icons completion
 (use-package all-the-icons-completion
   :after (marginalia all-the-icons)
   :demand t
   :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
   :init (all-the-icons-completion-mode))
 
+;;; Nerd Icons
 (use-package nerd-icons
   :ensure t
   :custom
@@ -30,6 +33,7 @@
 
   )
 
+;;;; Nerd Icons Completion
 (use-package nerd-icons-completion
   :ensure t
   ;; To use it with marginalia
@@ -40,16 +44,14 @@
   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
   )
 
-
-
-
+;;;; Nerd Icons Dired
 (use-package nerd-icons-dired
   :ensure t
   :if (display-graphic-p)
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
-
+;;;; Nerd Icnos Ibuffer
 (use-package nerd-icons-ibuffer
   :ensure t
   :hook (ibuffer-mode . nerd-icons-ibuffer-mode)
@@ -66,7 +68,6 @@
            " " (mode 16 16 :left :elide)
            " " filename-and-process)
      (mark " " (name 16 -1) " " filename))))
-
 
 (provide 'ef-icons)
 ;;; ef-icons.el ends here
