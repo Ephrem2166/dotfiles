@@ -532,8 +532,22 @@
 
   )
 
+;;; Undo-fu
+(use-package undo-fu
+  :ensure t
+  :config
+  ;; Increase undo history limits to reduce likelihood of data loss
+  (setq undo-limit 400000           ; 400kb (default is 160kb)
+        undo-strong-limit 3000000   ; 3mb   (default is 240kb)
+        undo-outer-limit 48000000)  ; 48mb  (default is 24mb)
 
-;;; vundo
+  :bind (([remap undo] . undo-fu-only-undo)
+         ([remap redo] . undo-fu-only-redo)
+         ("C-_" . undo-fu-only-undo)
+         ("M-_" . undo-fu-only-redo)
+         ("C-M-_" . undo-fu-only-redo-all)))
+
+;;; Vundo
 ;;; Visualize Undo Tree
 (use-package vundo
   :ensure t

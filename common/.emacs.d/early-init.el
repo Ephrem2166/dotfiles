@@ -21,7 +21,6 @@
           (lambda ()
             (setq file-name-handler-alist file-name-handler-alist-old)))
 
-
 ;;; Native Compilation
 ;; Ensure JIT compilation is enabled for improved performance by
 ;; native-compiling loaded .elc files asynchronously

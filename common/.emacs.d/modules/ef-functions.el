@@ -175,7 +175,7 @@ It uses `ef/reload-config'
 
 ;;; Windows
 ;;; Editing
-;;;; Document Centering
+;;; Document Centering
 ;; ;; From David Wilson
 ;; (defvar center-document-desired-width 120
 ;;   "The desired width of a document centered in the window.")
@@ -1203,6 +1203,7 @@ the fram has exactly two windows."
           (set-window-buffer (next-window) next-win-buffer)
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
+(global-set-key (kbd "C-x -") 'my/toggle-window-split)
 
 ;;; Erase the Contents of a buffer
 (defun my/safe-erase-buffer (&optional prefix)
@@ -1841,6 +1842,35 @@ selection of all minor-modes, active or not."
         (fn (if (fboundp symbol) #'describe-function #'describe-variable)))
     (funcall (or (command-remapping fn) fn)
              symbol)))
+
+
+;;; Offer to create parent directories if they do not exist
+(defun my/create-non-existent-directory ()
+  (let ((parent-directory (file-name-directory buffer-file-name)))
+    (when (and (not (file-exists-p parent-directory))
+               (y-or-n-p (format "Directory `%s' does not exist! Create it?" parent-directory)))
+      (make-directory parent-directory t))))
+
+(add-to-list 'find-file-not-found-functions 'my/create-non-existent-directory)
+
+
+
+;;; Function for using tab for autocompletion
+(defun my/auto-complete-at-point ()
+  (when (and (not (minibufferp))
+             auto-complete-mode
+             (looking-back "\\(\\sw\\|\\s_\\)")
+             (not (looking-at "\\sw\\|\\s_")))
+    (auto-complete)))
+
+(defun my/set-auto-complete-as-completion-at-point-function ()
+  (setq completion-at-point-functions
+        (cons 'my/auto-complete-at-point
+              (remove 'my/auto-complete-at-point completion-at-point-functions))))
+
+(add-hook 'auto-complete-mode-hook 'my/set-auto-complete-as-completion-at-point-function)
+
+
 
 
 (provide 'ef-functions)

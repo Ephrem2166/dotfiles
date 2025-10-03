@@ -543,6 +543,18 @@
   ;; ("C-c i" . ibuffer)
   ([remap list-buffers] . ibuffer)
   :config
+  ;; Include VC Status in ibuffer-list
+  (setq ibuffer-formats
+        '((mark modified read-only vc-status-mini " "
+                (name 18 18 :left :elide)
+                " "
+                (size 9 -1 :right)
+                " "
+                (mode 16 16 :left :elide)
+                " "
+                (vc-status 16 16 :left)
+                " "
+                filename-and-process)))
   (setq ibuffer-save-with-custom nil)
   (setq ibuffer-default-sorting-mode 'recency)
   (setq ibuffer-eliding-string "…")
