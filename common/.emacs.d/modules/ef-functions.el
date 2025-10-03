@@ -174,6 +174,65 @@ It uses `ef/reload-config'
 ;;; Buffer
 
 ;;; Windows
+;;;; Switch or Rotate Window
+(defun my/switch-or-rotate-buffer ()
+  "Switch to the previous buffer or rotate window configuration.
+
+If there is only one window in the frame, this function switches
+to the previous buffer, cycling through the buffer list in the
+current window.
+
+If there are multiple windows in the frame, this function rotates
+the window configuration, moving to the previous window in the
+cyclic order."
+  (interactive)
+  (if (one-window-p t)
+      ;; Switch to the previous buffer.
+      (switch-to-buffer (other-buffer (current-buffer) 1))
+    ;; Move to the previous window in a multi-window configuration.
+    (other-window -1)))
+
+(global-set-key (kbd "C-z 0") #'my/switch-or-rotate-buffer)
+
+;;; Toggle or Delete Window Layout
+(defun my/toggle-or-delete-window-layout ()
+  "Toggle or delete the window layout.
+If there is only one window in the frame, this function will split the window
+either horizontally or vertically, depending on the frame's width, as defined by
+`split-width-threshold' variable. If the frame width is greater than
+`split-width-threshold', it will split the window horizontally, otherwise
+vertically.
+
+If there are multiple windows in the frame, this function will delete all other
+windows, leaving only the currently active window visible."
+  (interactive)
+  (cond ((one-window-p t)
+         (select-window
+          (if (> (frame-width) split-width-threshold)
+              (split-window-right)
+            (split-window-below))))
+        (t
+         (delete-other-windows))))
+
+(global-set-key (kbd "<f5>") #'my/toggle-or-delete-window-layout)
+
+;;; Sticky Window
+;; Make the current window stick
+(defun my/sticky-window ()
+  "Toggle whether the current active window is dedicated or not."
+  (interactive)
+  (let* ((window (selected-window))
+         (dedicated (window-dedicated-p window)))
+    (set-window-dedicated-p window (not dedicated))
+    (message "[Window %sdedicated to %s]"
+             (if dedicated "no longer " "")
+             (buffer-name))))
+
+;; Press [pause] key in each window you want to "freeze".
+(global-set-key (kbd "C-z ;") #'my/sticky-window)
+
+
+
 ;;; Editing
 ;;; Document Centering
 ;; ;; From David Wilson
@@ -705,6 +764,7 @@ if prefix argument ARG is given, switch to it directly."
   (interactive "nTransparency Value 0 - 100 opaque:")
   (set-frame-parameter (selected-frame) 'alpha-background value))
 
+
 ;;; Toggle Transparency
 (defun my/toggle-transparency ()
   "Toggle transparency."
@@ -719,6 +779,33 @@ if prefix argument ARG is given, switch to it directly."
               100)
          70
        100))))
+
+;;; Better Transparency
+(defun my/set-opacity (opacity &optional frames)
+  "Interactively change the current frame's opacity.
+
+OPACITY is an integer between 0 to 100, inclusive. FRAMES is a list of frames to
+apply the change to or `t' (meaning all open and future frames). If called
+interactively, FRAMES defaults to the current frame (or `t' with the prefix
+arg)."
+  (interactive
+   (list 'interactive (if current-prefix-arg t (list (selected-frame)))))
+  (let* ((parameter
+          (if (eq window-system 'pgtk)
+              'alpha-background
+            'alpha))
+         (opacity
+          (if (eq opacity 'interactive)
+              (read-number "Opacity (0-100): "
+                           (or (frame-parameter nil parameter)
+                               100))
+            opacity))
+         (alist `((,parameter . ,opacity))))
+    (if (eq frames t)
+        (modify-all-frames-parameters alist)
+      (dolist (frame frames)
+        (modify-frame-parameters frame alist)))))
+
 
 ;;; Invisible window dividers for themes
 (defun my/invisible-window-dividers (_theme)
@@ -901,7 +988,33 @@ is to produce the opposite effect of both `fill-paragraph' and
     (if (use-region-p)
         (fill-region beg end)
       (fill-paragraph))))
-(bind-key "M-Q" #'my/unfill-region-or-paragraph)
+;; (bind-key "M-Q" #'my/unfill-region-or-paragraph)
+
+;;; Better Fill and Unfill Paragraph
+;; Toggle paragraph filling/unfilling with optional custom width.
+(defun my/toggle-paragraph-fill (arg)
+  "Fill or unfill paragraph/region with customizable column width.
+  With numeric ARG (e.g., C-u 80), set fill column width explicitly.
+  When called twice consecutively without prefix, unfills the paragraph.
+  In Org mode, uses `org-fill-paragraph` for specialized formatting."
+  (interactive "P")
+  (let ((fill-column (cond
+                      (arg
+                       (prefix-numeric-value arg))
+                      ((eq last-command 'my/toggle-paragraph-fill)
+                       (setq this-command nil)
+                       (point-max))
+                      (t
+                       fill-column))))
+    (if (derived-mode-p 'org-mode)
+        (org-fill-paragraph)
+      (fill-paragraph))))
+
+;; M-q.
+(global-set-key [remap fill-paragraph] #'my/toggle-paragraph-fill)
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "M-q") #'my/toggle-paragraph-fill))
+
 
 ;;; Better Comment Box
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1029,6 +1142,7 @@ is to produce the opposite effect of both `fill-paragraph' and
       (find-file (format "/sudo::/%s" destination)))))
 
 ;;;; Sudo Edit
+;; The simplest solution is C-x C-f /sudo:user@localhost:/etc/motd RET
 (defun sudo-edit (&optional arg)
   "Edit currently visited file as root.
 With a prefix ARG prompt for a file to visit.
@@ -1243,6 +1357,35 @@ nil then relative line-numbers are toggled."
          (t
           (if (eq display-line-numbers 'relative) t 'relative)))))
 
+
+;;; Better Toggle line numbers
+(defun my/toggle-line-numbers ()
+  "Toggle line numbers.
+
+Cycles through regular, relative and no line numbers. The order depends on what
+`display-line-numbers-type' is set to. If you're using Emacs 26+, and
+visual-line-mode is on, this skips relative and uses visual instead.
+
+See `display-line-numbers' for what these values mean."
+  (interactive)
+  (defvar doom--line-number-style display-line-numbers-type)
+  (let* ((styles `(t ,(if visual-line-mode 'visual 'relative) nil))
+         (order (cons display-line-numbers-type (remq display-line-numbers-type styles)))
+         (queue (memq doom--line-number-style order))
+         (next (if (= (length queue) 1)
+                   (car order)
+                 (car (cdr queue)))))
+    (setq doom--line-number-style next)
+    (setq display-line-numbers next)
+    (message "Switched to %s line numbers"
+             (pcase next
+               (`t "normal")
+               (`nil "disabled")
+               (_ (symbol-name next))))))
+
+
+
+
 ;;; Delete to the end of the buffer
 (defun my/delete-to-end-of-buffer ()
   (interactive)
@@ -1283,12 +1426,54 @@ If HINT is empty, use symbol at point."
 
 ;;; Advice to `kill-region'
 ;; With this it can either kill region or line
-(defadvice kill-region (before slick-cut activate compile)
-  "When called interactively with no active region, kill a single line instead."
-  (interactive
-   (if mark-active (list (region-beginning) (region-end))
-     (list (line-beginning-position)
-           (line-beginning-position 2)))))
+;; (defadvice kill-region (before slick-cut activate compile)
+;;   "When called interactively with no active region, kill a single line instead."
+;;   (interactive
+;;    (if mark-active (list (region-beginning) (region-end))
+;;      (list (line-beginning-position)
+;;            (line-beginning-position 2)))))
+(defun my/better-cut-region (orig-fn beg end &rest args)
+  "Cut the selected region or the current line if no region is active and
+called interactively."
+  (interactive (if (use-region-p)
+                   (list (region-beginning) (region-end))
+                 (list (line-beginning-position) (line-beginning-position 2))))
+  (if (called-interactively-p 'any)
+      (let ((region-active (and (mark t) (use-region-p))))
+        (if region-active
+            ;; Region is active and mark is set, use the region bounds.
+            (apply orig-fn (region-beginning) (region-end) args)
+          ;; No active region or mark not set, cut the current line.
+          (progn
+            (message "[Cut the current line]")
+            (apply orig-fn (line-beginning-position) (line-beginning-position 2) args))))
+    ;; If not called interactively, pass the original arguments unchanged.
+    (apply orig-fn beg end args)))
+
+(advice-add 'kill-region :around #'my/better-cut-region)
+
+;;; Advice for copy region
+;; Function to perform slick copy for the kill-ring-save command.
+(defun my/better-copy-region (orig-fn beg end &rest args)
+  "Copy the selected region or the current line if no region is active and
+called interactively."
+  (interactive (if (use-region-p)
+                   (list (region-beginning) (region-end))
+                 (list (line-beginning-position) (line-beginning-position 2))))
+  (if (called-interactively-p 'any)
+      (let ((region-active (and (mark t) (use-region-p))))
+        (if region-active
+            ;; Region is active and mark is set, use the region bounds.
+            (apply orig-fn (region-beginning) (region-end) args)
+          ;; No active region or mark not set, copy the current line.
+          (progn
+            (message "[Copied the current line]")
+            (apply orig-fn (line-beginning-position) (line-beginning-position 2) args))))
+    ;; If not called interactively, pass the original arguments unchanged.
+    (apply orig-fn beg end args)))
+
+(advice-add 'kill-ring-save :around #'my/better-copy-region)
+
 
 ;;; Check for Agenda
 (defun my/org-check-agenda ()
@@ -1877,6 +2062,52 @@ selection of all minor-modes, active or not."
     (hs-minor-mode)))
 
 (add-hook 'prog-mode-hook 'my/enable-hs)
+
+;;; Better Goto line
+(defun my/goto-line-with-line-numbers ()
+  "Go to a specific line while temporarily enabling line numbers.
+
+  This function prompts the user to enter a line number to navigate to.
+  It temporarily enables line numbers, moves the point to the specified line,
+  and then restores the original state of line numbers after navigation."
+  (interactive)
+  (let ((line-numbers-enabled (display-line-numbers-mode))
+        (line-number (read-number "Goto line: ")))
+    (unwind-protect
+        (progn
+          (display-line-numbers-mode 1)
+          (let ((line-count (count-lines (point-min) (point-max))))
+            (if (or (< line-number 1) (> line-number line-count))
+                (error "Line number must be between 1 and %d" line-count)
+              (goto-char (point-min))
+              (forward-line (1- line-number))
+              (message "[Moved to line %d]" line-number))))
+      (display-line-numbers-mode line-numbers-enabled))))
+
+;; Remap goto-line.
+(global-set-key [remap goto-line] #'my/goto-line-with-line-numbers)
+
+
+;;; Describe minor modes available in a buffer
+(defun my/active-minor-modes ()
+  "Return a list of active minor-mode symbols."
+  (cl-loop for mode in minor-mode-list
+           if (and (boundp mode) (symbol-value mode))
+           collect mode))
+
+
+(defun my/describe-active-minor-mode (mode)
+  "Get information on an active minor mode. Use `describe-minor-mode' for a
+selection of all minor-modes, active or not."
+  (interactive
+   (list (completing-read "Describe active mode: " (my/active-minor-modes))))
+  (let ((symbol
+         (cond ((stringp mode) (intern mode))
+               ((symbolp mode) mode)
+               ((error "Expected a symbol/string, got a %s" (type-of mode)))))
+        (fn (if (fboundp symbol) #'describe-function #'describe-variable)))
+    (funcall (or (command-remapping fn) fn)
+             symbol)))
 
 (provide 'ef-functions)
 ;;; ef-functions.el ends here

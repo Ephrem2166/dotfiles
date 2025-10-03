@@ -29,6 +29,8 @@
 
 ;; Modes
 (defalias 'sh 'shell-script-mode)
+;; Alias man to woman globally
+(defalias 'man 'woman)
 
 ;;; Abbrev
 (use-package abbrev
@@ -47,18 +49,18 @@
 (use-package autorevert
   :ensure nil
   :defer t
-  :hook (dired-mode . auto-revert-mode)
   :custom
   (auto-revert-interval 3)
   (auto-revert-avoid-polling t)
   (auto-revert-check-vc-info t)
   (auto-revert-verbose nil)
   (global-auto-revert-non-file-buffers t)
-  (auto-revert-use-notify t)
+  (auto-revert-use-notify nil)
   (auto-revert-avoid-polling t)
   ;; (setq global-auto-revert-ignore-modes '(Buffer-menu-mode))
   :config
   (global-auto-revert-mode)
+
   )
 
 ;;; Bookmarks
@@ -480,6 +482,7 @@
   (setq hs-isearch-open t)
   (setq hs-hide-comments-when-hiding-all nil)
   (setq hs-set-up-overlay #'hideshow-set-up-overlay-fn)
+  (add-hook 'prog-mode-hook  #'hs-minor-mode)
   )
 
 ;;; Hippie Expand
@@ -811,7 +814,19 @@ confines of word boundaries (e.g. multiple words)."
       (comment-or-uncomment-region beg end)
       (forward-line)))
   (global-set-key (kbd "C-/") #'my-comment-or-uncomment-region-or-line)
+  ;; Smart Comment Advice
+  (defun my/comment-advice (orig-fun &rest args)
+    "Comment or uncomment lines intelligently.
 
+  When called interactively with no active region, comment a single
+  line instead."
+    (if (or (use-region-p) (not (called-interactively-p 'any)))
+        (apply orig-fun args)
+      (comment-or-uncomment-region (line-beginning-position)
+                                   (line-end-position))
+      (message "[Commented line]")))
+
+  (advice-add 'comment-dwim :around #'my/comment-advice)
   )
 
 
@@ -849,6 +864,10 @@ confines of word boundaries (e.g. multiple words)."
   (defun my/prog-outline ()
     (outline-minor-mode 1)
     (outline-hide-sublevels 1))
+  (add-hook 'outline-minor-mode-hook
+            (lambda ()
+              (when (and outline-minor-mode (derived-mode-p 'emacs-lisp-mode))
+                (hide-sublevels 1000))))
   )
 
 ;;; Paren
@@ -945,13 +964,33 @@ confines of word boundaries (e.g. multiple words)."
   (recentf-save-file-modes nil)
   (recentf-keep nil)
   (recentf-case-fold-search t)
-  (recentf-auto-cleanup nil)
   (recentf-initialize-file-name-history nil)
   (recentf-filename-handlers nil)
   (recentf-show-file-shortcuts-flag nil)
   :config
+  ;; When to cleanup recentf
+  (setq recentf-auto-cleanup (if (daemonp) 300))
+  (add-hook 'kill-emacs-hook #'recentf-cleanup)
   (setq recentf-save-file (concat user-emacs-directory "etc/recentf"))
+  ;; Remove non-existent files from the recent files list automatically.
+  (defun my/recentf-cleanup ()
+    "Clean up recentf list by removing non-existent files."
+    (interactive)
+    (setq recentf-list (cl-remove-if-not 'file-exists-p recentf-list))
+    (recentf-cleanup))
+
+  ;; Advice recentf-load-list to perform cleanup after loading the recentf
+  ;; list.
+  (advice-add 'recentf-load-list :after #'my/recentf-cleanup)
+  ;; Anything in runtime folders
+  (add-to-list 'recentf-exclude
+               (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")
+                                             "/run"))))
+  ;; For perfromance
+  (add-to-list 'recentf-filename-handlers #'substring-no-properties)
   )
+
+
 
 ;;; Register
 (use-package register
@@ -1249,6 +1288,14 @@ confines of word boundaries (e.g. multiple words)."
                                       (space-mark ?\  [?·] [?.])))
   (setq whitespace-style '(empty face newline newline-mark lines-tail trailing tabs tab-mark spaces space-mark indentation missing-newline-at-eof))
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  ;; Remove trailing whitespace before saving, with exceptions.
+  (add-hook 'before-save-hook
+            (lambda ()
+              "Remove trailing whitespace before save, skipping message-mode and diff-mode."
+              (let ((buffer-undo-list buffer-undo-list))
+                (unless (or (derived-mode-p 'message-mode)
+                            (derived-mode-p 'diff-mode))
+                  (delete-trailing-whitespace)))))
   )
 
 
@@ -1415,7 +1462,11 @@ confines of word boundaries (e.g. multiple words)."
 (use-package woman
   :ensure nil
   :defer t
-  :hook (woman-mode . olivetti-mode))
+  :hook (woman-mode . olivetti-mode)
+  :config
+  (setq woman-imenu t)
+  )
+
 
 ;;; Use-package
 ;; Configure use-package

@@ -60,7 +60,7 @@
   :ensure nil
   :defer t
   :init
-  (setq org-directory (expand-file-name "~/Org/"))
+  (setq-default org-directory "~/Org/")
   :config
   ;; General Settings
   (setq org-imenu-depth 7)
@@ -678,13 +678,19 @@ appropriate.  In tables, insert a new row or end the table."
   )
 
 ;;; Org Capture
-(defvar my/capture-folder "~/Org/Capture/" )
+(defvar test-file "~/Org/Capture/tests.org" )
 (use-package org-capture
   :ensure nil
   :bind ("C-c C-c" . org-capture)
   :config
+  ;; Default `org-capture-templates' key to use.
+  (setq org-protocol-default-template-key "w")
   (setq org-capture-templates
         '(
+          ;; Appointments
+          ("a" "Appointment" entry
+           (file+headline "~/Org/Capture/appt.org" "Appointment")
+           "* TODO %? %^g\n SCHEDULED: <%(org-read-date)>")
           ;; Tasks
           ("t" "Tasks" entry
            (file+headline "~/Org/Capture/tasks.org" "My tasks")
@@ -712,6 +718,22 @@ appropriate.  In tables, insert a new row or end the table."
            "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
 
           )        )
+  ;; Another way to add templates
+  ;; Appointments
+  (add-to-list 'org-capture-templates
+               `("A" "New appt" entry
+                 (file+headline "~/Org/Capture/appt.org" "Events")
+                 "* %^{Appointment}%?
+%^T
+
+%i"
+                 :empty-lines 1) :append)
+  ;; New note with timestamps
+  (add-to-list 'org-capture-templates
+               `("N" "New quick note (with timestamp)" entry
+                 (file+headline ,test-file "Notes")
+                 "* %^{Note}%?\n   CREATED: %U\n  %a\n%i"
+                 :empty-lines 1) :append)
 
   )
 
@@ -869,7 +891,7 @@ appropriate.  In tables, insert a new row or end the table."
      ("CANCELED" :inherit (error org-modern-todo))))
   (org-modern-horizontal-rule (make-string 36 ?─))
   ;; Label
-  (org-modern-label-border 3)
+  (org-modern-label-border 1)
   ;; (org-modern-label  ((t :height 0.9 :width condensed :weight regular :underline nil)))
   ;; Footnote
   (org-modern-footnote '(nil (raise 0.15) (height 0.9)))
@@ -890,14 +912,19 @@ appropriate.  In tables, insert a new row or end the table."
      (?F :inverse-video t :inherit (shadow org-priority))))
   ;; Table
   (org-modern-table t)
-  (org-modern-table-vertical 5)
-  (org-modern-table-horizontal 2)
+  (org-modern-table-vertical 2)
+  (org-modern-table-horizontal 1)
   (org-modern-horizontal-rule t)
   ;; List
   (org-modern-list '((?+ . "+")
                      (?- . "-")
                      (?* . "•")))
+  ;; Org Modern Star Options
   (org-modern-star '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
+  ;; (org-modern-star ["◉" "○" "✸" "✳" "◈" "◇" "✿" "❀" "✜"])
+  ;; (org-modern-star ["◉" "·○" "··◈" "···◇" "····✳"]) ; OK.
+  ;; (org-modern-star ["◈" "·◈" "··◇" "···◇" "·····"]) ; OK.
+
   (org-modern-checkbox
    '((?X . " ")
      (?- . "▣")
@@ -909,12 +936,23 @@ appropriate.  In tables, insert a new row or end the table."
   ;;   ("⯈" . "⯆")
   ;;   ("▹" . "▿")
   ;;   ("▸" . "▾")))
+
+  ;; Block Names Options
+  ;;
+  ;; (org-modern-block-name
+  ;;  '((t . t)
+  ;;    ("src" "»" "«")
+  ;;    ("example" "»–" "–«")
+  ;;    ("quote" "❝" "❞")
+  ;;    ("export" "⏩" "⏪")))
+
   (org-modern-block-name
    '((t . t)
-     ("src" "»" "«")
-     ("example" "»–" "–«")
-     ("quote" "❝" "❞")
-     ("export" "⏩" "⏪")))
+     ("src" "»" "∥")
+     ("example" "»–" "∥")
+     ("quote" "❝" "❞")))
+
+
   ;; Keyword
   (org-modern-keyword "‣ ")
   (org-modern-keyword
@@ -936,26 +974,16 @@ appropriate.  In tables, insert a new row or end the table."
      ("glossary_sources" . "󰒻")
      ("include" . "⇤")
      ("setupfile" . "⇚")
-     ("html_head" . "🅷")
-     ("html" . "🅗")
-     ("latex_class" . "🄻")
-     ("latex_class_options" . "🄻󰒓")
-     ("latex_header" . "🅻")
-     ("latex_header_extra" . "🅻⁺")
-     ("latex" . "🅛")
-     ("beamer_theme" . "🄱")
-     ("beamer_color_theme" . "🄱󰏘")
-     ("beamer_font_theme" . "🄱𝐀")
-     ("beamer_header" . "🅱")
-     ("beamer" . "🅑")
-     ("attr_latex" . "🄛")
-     ("attr_html" . "🄗")
-     ("attr_org" . "⒪")
      ("call" . "󰜎")
      ("name" . "⁍")
      ("header" . "›")
      ("caption" . "☰")
-     ("results" . "🠶")))
+     ("results" . "∴")
+
+
+     )
+
+   )
   ;; Miscellaneous
   (org-modern-timestamp t)  )
 

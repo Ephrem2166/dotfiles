@@ -35,6 +35,6 @@
 (require 'ef-languages)
 (require 'ef-evil)
 
-
+(require 'ef-experiment)
 ;; (require 'ef-general)
 ;; (require 'ef-company)

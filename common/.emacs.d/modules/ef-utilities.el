@@ -269,7 +269,7 @@
   (hl-todo-text-modes '(markdown-mode org-mode text-mode))
   (hl-todo-exclude-modes nil)
   (hl-todo-require-punctuation t)
-  (hl-todo-highlight-punctuation ": ")
+  (hl-todo-highlight-punctuation ":")
   (hl-todo-keyword-faces
    '(("TODO"   . "#BF616A")
      ("FIXME"  . "#FF0000")
@@ -278,6 +278,9 @@
      ("DEBUG"  . "#EBCB9B")
      ("BUG" error italic)
      ("GOTCHA" . "#FF4500")
+     ;; Documentation and closure.
+     ("NOTE"       . "#1E90FF")    ; Dodger blue - Informational notes.
+     ("DEPRECATED" . "#B22222")    ; Fire brick - Deprecated code.
      ("STUB"   . "#1E90FF"))))
 
 ;;; Info-colors
