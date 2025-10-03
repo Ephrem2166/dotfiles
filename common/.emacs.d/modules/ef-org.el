@@ -30,7 +30,7 @@
   (org-display-inline-images)
   (variable-pitch-mode)
   ;; (lambda () (setq-local line-spacing 0.2 fill-column 100))
-  (auto-insert-mode 1)
+  ;; (auto-insert-mode 1)
   )
 ;; (add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))
 (add-hook 'org-mode-hook #'ef/org-mode-hooks)
@@ -195,7 +195,7 @@
   :config
   (setq org-todo-keywords
         '((sequence "TODO" "|" "IN-PROGRESS" "|" "DONE" "|" "CANCELED")
-          (sequence "READ" "|" "DONE")
+          (sequence "UNREAD" "|" "READ")
           (sequence "WATCH" "|" "WATCHED")
           ))
 
@@ -543,6 +543,7 @@ appropriate.  In tables, insert a new row or end the table."
   ;; (setopt org-agenda-files (list org-directory))
   (setq org-agenda-files
         (list
+         "~/Org/Capture/appt.org"
          "~/Org/Capture/links.org"
          "~/Org/Capture/today.org"
          "~/Org/Capture/links.org"
@@ -677,6 +678,7 @@ appropriate.  In tables, insert a new row or end the table."
   )
 
 ;;; Org Capture
+(defvar my/capture-folder "~/Org/Capture/" )
 (use-package org-capture
   :ensure nil
   :bind ("C-c C-c" . org-capture)
@@ -708,8 +710,9 @@ appropriate.  In tables, insert a new row or end the table."
           ("c" "Code Snippet" entry
            (file+headline "~/Org/Capture/codes.org" "Snippets")
            "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
-          )
-        )
+
+          )        )
+
   )
 
 ;;; ORG JOURNAL

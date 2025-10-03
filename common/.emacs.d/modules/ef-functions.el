@@ -1870,8 +1870,13 @@ selection of all minor-modes, active or not."
 
 (add-hook 'auto-complete-mode-hook 'my/set-auto-complete-as-completion-at-point-function)
 
+;;; Enable `hs-minor-mode' in supported modes
+;; Minor mode to selectively hide/show code and comment blocks.
+(defun my/enable-hs ()
+  (ignore-errors
+    (hs-minor-mode)))
 
-
+(add-hook 'prog-mode-hook 'my/enable-hs)
 
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
