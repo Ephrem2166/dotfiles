@@ -5,6 +5,7 @@
 ;; Automatically set the dark-mode theme based on system status
 (use-package auto-dark
   :ensure t
+  :disabled
   :custom
   (auto-dark-themes '((doom-nord) (modus-operandi-deuteranopia)))
   :init (auto-dark-mode)

@@ -57,11 +57,12 @@
 ;; Since magit requires a newer version of transient
 ;; we need to install it on top of the built-in transient
 (use-package transient)
-
+;;; Magit
 (use-package magit
   :ensure t
   :after transient
   :custom
+  (magit-auto-revert-mode nil)
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (magit-bury-buffer-function #'magit-restore-window-configuration)
   (magit-refs-show-commit-count 'all)
