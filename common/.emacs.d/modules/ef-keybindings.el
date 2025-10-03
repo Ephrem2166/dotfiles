@@ -134,5 +134,18 @@
 (bind-keys :map ef-window-keymap
            ("q" . quit-window))
 
+
+
+;;; Another Options
+(define-prefix-command 'Apropos-Prefix nil "Apropos (a,d,f,l,v,C-v)")
+(global-set-key (kbd "C-z h") 'Apropos-Prefix)
+(define-key Apropos-Prefix (kbd "a")   'apropos)
+(define-key Apropos-Prefix (kbd "C-a") 'apropos)
+(define-key Apropos-Prefix (kbd "d")   'apropos-documentation)
+(define-key Apropos-Prefix (kbd "f")   'apropos-command)
+(define-key Apropos-Prefix (kbd "l")   'apropos-library)
+(define-key Apropos-Prefix (kbd "v")   'apropos-variable)
+(define-key Apropos-Prefix (kbd "C-v") 'apropos-value)
+
 (provide 'ef-keybindings)
 ;;; ef-keybindings.el ends here

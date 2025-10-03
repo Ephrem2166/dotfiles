@@ -443,7 +443,7 @@
         `(("." . ,(expand-file-name "etc/backup/" user-emacs-directory))))
   (setq auto-save-list-file-prefix
         (expand-file-name "etc/autosave/" user-emacs-directory))
-
+  (setq view-read-only t)
   (setq write-file-functions '(my/maybe-check-parens))
   ;;; Check Parens in Emacs Mode Before Closing
   (defun my/maybe-check-parens ()
@@ -476,6 +476,8 @@
 (use-package hideshow
   :ensure nil
   :config
+  ;; Unfold code when searching
+  (setq hs-isearch-open t)
   (setq hs-hide-comments-when-hiding-all nil)
   (setq hs-set-up-overlay #'hideshow-set-up-overlay-fn)
   )
