@@ -1823,5 +1823,25 @@ to go back to a normal setup."
 
 
 
+;;; Describe modes in the current buffer
+(defun my/active-minor-modes ()
+  "Return a list of active minor-mode symbols."
+  (cl-loop for mode in minor-mode-list
+           if (and (boundp mode) (symbol-value mode))
+           collect mode))
+(defun my/describe-active-minor-mode (mode)
+  "Get information on an active minor mode. Use `describe-minor-mode' for a
+selection of all minor-modes, active or not."
+  (interactive
+   (list (completing-read "Describe active mode: " (my/active-minor-modes))))
+  (let ((symbol
+         (cond ((stringp mode) (intern mode))
+               ((symbolp mode) mode)
+               ((error "Expected a symbol/string, got a %s" (type-of mode)))))
+        (fn (if (fboundp symbol) #'describe-function #'describe-variable)))
+    (funcall (or (command-remapping fn) fn)
+             symbol)))
+
+
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
