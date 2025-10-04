@@ -92,6 +92,41 @@
       (my/auto-revert-buffer-h))))
 (add-hook 'after-save-hook #'my/auto-revert-buffers-h)
 
+;;; TEST
+;; (defconst my-preferred-fonts (list
+;;                               "Berkeley Nerd Font"
+;;                               "UbuntuMono Nerd Font"
+;;                               "PragmataProMono Nerd Font"
+;;                               "JetBrainsMono NErd Font"
+;;                               "Office Code Pro D-10")
+;;   "Fonts to try to use as the default if they exist(in order of priority).")
+;;
+;; (defun my-maybe-set-default-font (&optional frame)
+;;   (let ((current-font (assq 'font default-frame-alist)))
+;;     (cl-dolist (font my-preferred-fonts)
+;;       (when (equal font current-font)
+;;         (cl-return))
+;;       (when (find-font (font-spec :name font) frame)
+;;         (push (cons 'font font) default-frame-alist)
+;;         (with-temp-buffer
+;;           (write-file (expand-file-name font user-emacs-directory)))
+;;         (cl-return)))))
+;;
+;; (defun my-known-font ()
+;;   "Return a font from `noct-preferred-fonts' that has been previously found.
+;; If no fonts have been found, return nil."
+;;   (cl-dolist (font my-preferred-fonts)
+;;     (when (file-exists-p (expand-file-name font user-emacs-directory))
+;;       (cl-return font))))
+;;
+;; (let ((known-font (my-known-font)))
+;;   (when known-font
+;;     (push (cons 'font known-font) default-frame-alist))
+;;   (unless (and known-font
+;;                ;; still check if #1 preferred font exists after init
+;;                (equal known-font (car my-preferred-fonts)))
+;;     ;; this is too late when using the server
+;;     (add-hook 'after-make-frame-functions #'my-maybe-set-default-font)))
 
 
 

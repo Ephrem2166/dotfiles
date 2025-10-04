@@ -735,6 +735,21 @@ appropriate.  In tables, insert a new row or end the table."
                  "* %^{Note}%?\n   CREATED: %U\n  %a\n%i"
                  :empty-lines 1) :append)
 
+  ;; Test
+  (add-to-list 'org-capture-templates
+               '("h" "Person" entry
+                 (file+headline "~/Org/Capture/tests.org" "Person ")
+                 "* %?
+:PROPERTIES:
+:ORG:      ?
+:EMAIL:    ?
+:PHONE:    ?
+:NOTE:     ?
+:ADDRESS:  ?
+:END:"
+
+                 :empty-lines  2           ):prepend nil)
+
   )
 
 ;;; ORG JOURNAL
