@@ -39,6 +39,21 @@
 (setq native-comp-async-jobs-number 1) ;; Slower but also quieter
 
 ;;; Hack to avoid being flashbanged
+(defun my/emacs-no-minibuffer-scroll-bar (frame)
+  "Remove the minibuffer scroll bars from FRAME."
+  (when scroll-bar-mode
+    (set-window-scroll-bars (minibuffer-window frame) nil nil nil nil :persistent)))
+
+(add-hook 'after-make-frame-functions #'my/emacs-no-minibuffer-scroll-bar)
+
+(defun my/emacs-re-enable-frame-theme (_frame)
+  "Re-enable active theme, if any, upon FRAME creation.
+Add this to `after-make-frame-functions' so that new frames do
+not retain the generic background set by the function
+`prot-emacs-avoid-initial-flash-of-light'."
+  (when-let* ((theme (car custom-enabled-themes)))
+    (enable-theme theme)))
+
 (defun ef/avoid-initial-flash-of-light ()
   "Avoid flash of light when starting Emacs."
   (setq mode-line-format nil)
@@ -52,7 +67,9 @@
   ;; Note that for catppuccin whenever we create a new frame or open it on terminal
   ;; it is necessary to reload the theme.
   (set-face-attribute 'default nil :background "#282C34" :foreground "#FFFFFF")
-  (set-face-attribute 'mode-line nil :background "#282C34" :foreground "#FFFFFF" :box 'unspecified))
+  (set-face-attribute 'mode-line nil :background "#282C34" :foreground "#FFFFFF" :box 'unspecified)
+  (add-hook 'after-make-frame-functions #'my/emacs-re-enable-frame-theme)
+  )
 
 (ef/avoid-initial-flash-of-light)
 
@@ -173,7 +190,7 @@
   (defconst emacs-start-time (current-time))
 
   (defun report-time-since-load (&optional suffix)
-    (message "🦧 Loading init...done (%.3fs)%s"
+    (message " Loading init...done (%.3fs)%s"
              (float-time (time-subtract (current-time) emacs-start-time))
              suffix)))
 
@@ -187,7 +204,6 @@
 ;;  (let ((emacs-version (replace-regexp-in-string "\s\(.*\)\n" "" (emacs-version))))
 ;;    (format ";; %s, initialization in %s\n\n"
 ;;            emacs-version (emacs-init-time "%.3fs"))))
-
 
 
 

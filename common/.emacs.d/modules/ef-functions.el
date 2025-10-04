@@ -1201,7 +1201,7 @@ buffer is not visiting a file."
 (define-key ef-file-keymap (kbd "x") 'my/spacing-delete-newlines)
 
 ;;; Search Backward and Forward for Word Under Cursor
-;;; From https://github.com/larstvei/dot-emacs
+;;;; From https://github.com/larstvei/dot-emacs
 (defun my/jump-to-symbol-internal (&optional backwardp)
   "Jumps to the next symbol near the point if such a symbol
 exists. If BACKWARDP is non-nil it jumps backward."
@@ -2141,6 +2141,7 @@ selection of all minor-modes, active or not."
         (fn (if (fboundp symbol) #'describe-function #'describe-variable)))
     (funcall (or (command-remapping fn) fn)
              symbol)))
+
 
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
