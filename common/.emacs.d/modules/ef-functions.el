@@ -1955,9 +1955,10 @@ When ASK is non-nil (\\[universal-argument]), ask about which file to open."
 (defvar my/default-font-height 110
   "The default font height to use.")
 
-(defvar my/height-modifier 5
+(defvar my/height-modifier 2
   "Default value to increment the size of font based on the screen size")
 
+;; BUG:
 (defun my/font-size-increase ()
   "Increase the font size by `my/height-modifier' amount."
   (interactive)

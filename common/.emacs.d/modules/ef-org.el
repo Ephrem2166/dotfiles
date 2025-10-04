@@ -1,7 +1,6 @@
 ;;; ef-org.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-
 ;;; Functions
 (defun ef/org-mode-hooks ()
   "Various modes to run in org mode."
@@ -28,7 +27,8 @@
   ;; (truncate-lines 1)
   ;; (center-document-mode 1)
   (org-display-inline-images)
-  (variable-pitch-mode)
+  ;; It messes with org-table
+  ;; (variable-pitch-mode)
   ;; (lambda () (setq-local line-spacing 0.2 fill-column 100))
   ;; (auto-insert-mode 1)
   )
@@ -71,7 +71,7 @@
   (setq org-hide-emphasis-markers t)
 
   ;;(setq org-odd-levels-only nil)
-  (setq org-special-ctrl-a/e nil)
+  (setq org-special-ctrl-a/e t)
   (setq org-special-ctrl-k nil)
   (setq org-return-follows-link t)
   ;; (setq org-blank-before-new-entry t)
@@ -162,22 +162,22 @@
   )
 
 ;;; Org Num
-(use-package org-num
-  :ensure nil
-  :custom
-  (org-num-face 'fixed-pitch)
-  (org-num-skip-commented t)
-  (org-num-skip-footnotes t)
-  (org-num-skip-unnumbered t))
+;; (use-package org-num
+;;   :ensure nil
+;;   :custom
+;;   (org-num-face 'fixed-pitch)
+;;   (org-num-skip-commented t)
+;;   (org-num-skip-footnotes t)
+;;   (org-num-skip-unnumbered t))
 
 
 ;;; Org Indent
-(use-package org
-  :ensure nil
-  :config
-  (setq org-adapt-indentation nil)
-  (setq org-indent-mode-turns-on-hiding-stars nil)
-  (setq org-indent-indentation-per-level 2))
+;; (use-package org
+;;   :ensure nil
+;;   :config
+;;   (setq org-adapt-indentation nil)
+;;   (setq org-indent-mode-turns-on-hiding-stars nil)
+;;   (setq org-indent-indentation-per-level 2))
 
 ;;; Org Todo and Refile
 (use-package org
@@ -423,6 +423,7 @@
   (setq org-confirm-babel-evaluate t))
 
 ;;; Better Org-Return
+;;;; Option 1
 (use-package org
   :ensure nil
   :bind (:map org-mode-map
@@ -538,7 +539,7 @@ appropriate.  In tables, insert a new row or end the table."
 
 
 
-;;; ORG META RETURN ADVICE
+;;;; ORG META RETURN ADVICE
 (defun my/org-meta-return (&optional arg)
   "Insert a new heading or wrap a region in a table.
 Calls `org-insert-heading', `org-insert-item',
@@ -685,7 +686,7 @@ context.  When called with an argument, unconditionally call
           '(todo search agenda))
   (setopt org-agenda-hide-tags-regexp nil)
   (setopt org-agenda-remove-tags nil)
-  (setopt org-agenda-tags-column -100)
+  (setopt org-agenda-tags-column 0)
 
   )
 
@@ -810,6 +811,11 @@ context.  When called with an argument, unconditionally call
   (add-to-list 'org-capture-templates
                '("w" "Movies" checkitem
                  (file+headline "~/Org/Capture/lists.org" "Watchlist")) :append)
+  ;; Reading list
+  (add-to-list 'org-capture-templates
+               '("r" "Reading List" checkitem
+                 (file+headline "~/Org/Capture/lists.org" "Readling List")))
+
   )
 
 
@@ -939,11 +945,13 @@ context.  When called with an argument, unconditionally call
 ;;; Org Modern
 ;; Modern Look for Org
 (use-package org-modern
+  :ensure t
   :after org
   ;; :config
   ;; (global-org-modern-mode)
   :hook
   ((org-mode . org-modern-mode)
+   (org-agenda-finalize . org-modern-agenda)
    (org-mode . ef/org-modern-spacing)
    )
   :config
@@ -987,9 +995,9 @@ context.  When called with an argument, unconditionally call
      (?E :inverse-video t :inherit (shadow org-priority))
      (?F :inverse-video t :inherit (shadow org-priority))))
   ;; Table
-  (org-modern-table t)
-  (org-modern-table-vertical 2)
-  (org-modern-table-horizontal 1)
+  (org-modern-table nil)
+  (org-modern-table-vertical nil)
+  (org-modern-table-horizontal nil)
   (org-modern-horizontal-rule t)
   ;; List
   (org-modern-list '((?+ . "+")
@@ -1064,9 +1072,9 @@ context.  When called with an argument, unconditionally call
   (org-modern-timestamp t)  )
 
 ;;; Org Modern Indent
+;; Instead of org outline mode
 (use-package org-modern-indent
   :ensure (:host github :repo "jdtsmith/org-modern-indent")
-  :disabled
   :defer t
   :init
   ;; Add late to hook

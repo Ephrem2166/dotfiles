@@ -252,7 +252,7 @@
   ;;(setopt bookmark-save-flag 1)
   (setopt warning-minimum-level :error)
   (setopt word-wrap-by-category t)
-
+  (setopt text-quoting-style 'straight)
   ;; Debug on error
   (setopt debug-on-error init-file-debug)
   (setopt delete-pair-blink-delay 0.03)
@@ -405,7 +405,7 @@
   :hook ((text-mode org-mode) . my/enable-variable-pitch)
   :config
   (defun my/enable-variable-pitch ()
-    (unless (derived-mode-p 'mhtml-mode 'prog-mode 'nxml-mode 'yaml-mode)
+    (unless (derived-mode-p 'mhtml-mode 'prog-mode 'nxml-mode 'org-mode 'yaml-mode)
       (variable-pitch-mode 1))))
 
 ;;; Files
