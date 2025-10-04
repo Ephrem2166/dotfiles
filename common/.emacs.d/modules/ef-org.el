@@ -700,13 +700,23 @@ appropriate.  In tables, insert a new row or end the table."
            (file+headline  "~/Org/Capture/links.org" "Links")
            "* READ %^{Title} %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%^{Link}L")
           ;; Journal
-          ("j" "Journal" entry
+          ("J" "Journal" entry
            (file+olp+datetree "~/Org/Capture/journal.org" "My Journal")
-           "* %^{TITLE} %^G \nEntered on %U\n  %i\n %?")
+           "* %^{TITLE}%?\n
+:PROPERTIES:
+:CREATED: %U
+:CUSTOM_ID: h:%(format-time-string \"%Y%m%dT%H%M%S\")
+:END:
+%i%?"
+           :empty-lines-after 1 )
           ;; Today
           ("." "Today Tasks" entry
            (file+headline "~/Org/Capture/today.org" "Today's Tasks")
-           "* TODO %^{Task} %^G \n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%?")
+           "* TODO %^{Task} \n
+:PROPERTIES:\n
+:CREATED: %U\n
+:END:\n\n
+%?")
           ;; Notes
           ("n" "Note" entry
            (file+headline "~/Org/Capture/notes.org" "Notes")
@@ -735,7 +745,7 @@ appropriate.  In tables, insert a new row or end the table."
                  "* %^{Note}%?\n   CREATED: %U\n  %a\n%i"
                  :empty-lines 1) :append)
 
-  ;; Test
+
   (add-to-list 'org-capture-templates
                '("h" "Person" entry
                  (file+headline "~/Org/Capture/tests.org" "Person ")
@@ -750,7 +760,35 @@ appropriate.  In tables, insert a new row or end the table."
 
                  :empty-lines  2           ):prepend nil)
 
+  (add-to-list 'org-capture-templates
+               '("u" "Unprocessed" entry
+                 (file+headline "~/Org/Capture/unprocessed.org" "Unprocessed")
+                 "* %^{Title}
+:PROPERTIES:
+:CAPTURED: %U
+:CUSTOM_ID: h:%(format-time-string \"%Y%m%dT%H%M%S\")
+:END:
+%i\%?"
+                 :empty-lines 1
+                 ))
+
+  (add-to-list 'org-capture-templates
+               '("j" "Journal" plain
+                 (file+olp+datetree "~/Org/Capture/journal.org" "Journal")
+                 "%?"
+                 :empty-lines-after 1
+                 ))
+
+  ;; CHECK
+  (add-to-list 'org-capture-templates
+               '("i" "Items" checkitem
+                 (file"~/Org/Capture/lists.org")) :prepend)
+  ;; Watch list
+  (add-to-list 'org-capture-templates
+               '("w" "Buy" checkitem
+                 (file+headline "~/Org/Capture/lists.org" "Watchlist")) :append)
   )
+
 
 ;;; ORG JOURNAL
 (use-package org-journal

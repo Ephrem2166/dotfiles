@@ -60,13 +60,18 @@
 ;;; Magit
 (use-package magit
   :ensure t
+  :defer t
   :after transient
   :custom
+  (magit-define-global-key-bindings nil)
+  (magit-uniquify-buffer-names nil)
   (magit-auto-revert-mode nil)
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (magit-bury-buffer-function #'magit-restore-window-configuration)
   (magit-refs-show-commit-count 'all)
   (magit-format-file-function #'magit-format-file-nerd-icons)
+  (with-eval-after-load 'magit
+    (setq magit-format-file-function #'magit-format-file-nerd-icons))
   )
 
 
