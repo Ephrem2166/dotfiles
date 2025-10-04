@@ -225,15 +225,15 @@
   :ensure t
   :demand t
   :diminish gcmh-mode
-  :hook
-  (emacs-startup . gcmh-mode)
   :init
   (setq gcmh-idle-delay 'auto)
   (setq gcmh-auto-idle-delay-factor 10)
   (setq gcmh-verbose nil)
   (setq gcmh-high-cons-threshold (* 64 1024 1024)) ; 64MB
   :config
-  (setq garbage-collection-messages nil))
+  (setq garbage-collection-messages nil)
+  (add-hook 'after-init #'gcmh-mode)
+  )
 
 
 
