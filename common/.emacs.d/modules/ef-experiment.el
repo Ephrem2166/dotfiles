@@ -130,5 +130,37 @@
 
 
 
+;;; TEST:
+;;; Better Color Support for Org Mode Src Code
+(defun org-src-color-blocks-light ()
+  "Colors the block headers and footers to make them stand out more for lighter themes"
+  (interactive)
+  (custom-set-faces
+   '(org-block-begin-line
+     ((t (:underline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF"))))
+   '(org-block-background
+     ((t (:background "#FFFFEA"))))
+   '(org-block
+     ((t (:background "#FFFFEA"))))
+   '(org-block-end-line
+     ((t (:overline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF"))))))
+
+(defun org-src-color-blocks-dark ()
+  "Colors the block headers and footers to make them stand out more for dark themes"
+  (interactive)
+  (custom-set-faces
+   '(org-block-begin-line
+     ((t (:foreground "#008ED1" :background "#002E41"))))
+   '(org-block-background
+     ((t (:background "#000000"))))
+   '(org-block
+     ((t (:background "#000000"))))
+   '(org-block-end-line
+     ((t (:foreground "#008ED1" :background "#002E41"))))))
+
+
+
+
 (provide 'ef-experiment)
+
 ;;; ef-experiment.el ends here

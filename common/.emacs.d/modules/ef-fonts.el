@@ -21,10 +21,10 @@
 
 (defvar my/available-variable-font
   (my/available-font
+   "SN Pro"
    "Atkinson Hyperlegible"
    "Iosevka Aile"
    "PragmataPro"
-   "SN Pro"
    "Avenir" "Iosevka Nerd Font" "PragmataPro Nerd Font" "Sans")
   "Primary Variable Fonts")
 
@@ -72,6 +72,8 @@
 
 ;;; Minibuffer
 (set-face-attribute 'minibuffer-prompt nil :family "Berkeley Nerd Font 9" :weight 'regular)
+
+
 ;;; Debugging
 ;; To show during startup
 ;; (message "🧱 Default mono font: %s" my/available-mono-font)
