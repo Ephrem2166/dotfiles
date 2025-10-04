@@ -30,42 +30,72 @@ The DWIM behaviour of this command is as follows:
 ;; (define-key global-map (kbd "C-g") #'ef/keyboard-quit-dwim)
 
 ;;;; Better `keyboard-quit'
-(defun my/keyboard-quit-context ()
-  "Quit current context.
-This function is a combination of `keyboard-quit' and `keyboard-escape-quit'
-with some parts omitted and some custom behavior added."
-  (interactive)
-  (cond
-   ((region-active-p)
-    ;; Avoid adding the region to the window selection.
-    (setq saved-region-selection nil)
-    (let (select-active-regions)
-      (deactivate-mark)))
+;; (defun my/keyboard-quit-context ()
+;;   "Quit current context.
+;; This function is a combination of `keyboard-quit' and `keyboard-escape-quit'
+;; with some parts omitted and some custom behavior added."
+;;   (interactive)
+;;   (cond
+;;    ((region-active-p)
+;;     ;; Avoid adding the region to the window selection.
+;;     (setq saved-region-selection nil)
+;;     (let (select-active-regions)
+;;       (deactivate-mark)))
+;;
+;;    ((eq last-command 'mode-exited)
+;;     nil)
+;;
+;;    (current-prefix-arg
+;;     nil)
+;;
+;;    (defining-kbd-macro
+;;     (message
+;;      (substitute-command-keys
+;;       "Quit is ignored during macro defintion, use \\[kmacro-end-macro] if you want to stop macro definition"))
+;;     (cancel-kbd-macro-events))
+;;
+;;    ((active-minibuffer-window)
+;;     (when (get-buffer-window "*Completions*")
+;;       ;; hide completions first so point stays in active window when
+;;       ;; outside the minibuffer
+;;       (minibuffer-hide-completions))
+;;     (abort-recursive-edit))
+;;
+;;    (t
+;;     (keyboard-quit))))
 
-   ((eq last-command 'mode-exited)
-    nil)
-
-   (current-prefix-arg
-    nil)
-
-   (defining-kbd-macro
-    (message
-     (substitute-command-keys
-      "Quit is ignored during macro defintion, use \\[kmacro-end-macro] if you want to stop macro definition"))
-    (cancel-kbd-macro-events))
-
-   ((active-minibuffer-window)
-    (when (get-buffer-window "*Completions*")
-      ;; hide completions first so point stays in active window when
-      ;; outside the minibuffer
-      (minibuffer-hide-completions))
-    (abort-recursive-edit))
-
-   (t
-    (keyboard-quit))))
-
-(define-key global-map (kbd "C-g") #'my/keyboard-quit-context)
+;; (define-key global-map (kbd "C-g") #'my/keyboard-quit-context)
 ;; (global-set-key [remap keyboard-quit] #'my/keyboard-quit-context)
+
+;;;; Doom Emacs Escape
+(defvar doom-escape-hook nil
+  "A hook run when C-g is pressed (or ESC in normal mode, for evil users).
+
+More specifically, when `doom/escape' is pressed. If any hook returns non-nil,
+all hooks after it are ignored.")
+
+(defun doom/escape (&optional interactive)
+  "Run `doom-escape-hook'."
+  (interactive (list 'interactive))
+  (let ((inhibit-quit t))
+    (cond ((minibuffer-window-active-p (minibuffer-window))
+           ;; quit the minibuffer if open.
+           (when interactive
+             (setq this-command 'abort-recursive-edit))
+           (abort-recursive-edit))
+          ;; Run all escape hooks. If any returns non-nil, then stop there.
+          ((run-hook-with-args-until-success 'doom-escape-hook))
+          ;; don't abort macros
+          ((or defining-kbd-macro executing-kbd-macro) nil)
+          ;; Back to the default
+          ((unwind-protect (keyboard-quit)
+             (when interactive
+               (setq this-command 'keyboard-quit)))))))
+
+(with-eval-after-load 'eldoc
+  (eldoc-add-command 'doom/escape))
+
+(global-set-key [remap keyboard-quit] #'doom/escape)
 
 ;;;; Reload Emacs
 (defun ef/reload-config ()
@@ -738,14 +768,6 @@ if prefix argument ARG is given, switch to it directly."
   (kill-emacs)
   )
 
-;;; Make Directory
-(defun my/make-directory-maybe ()
-  "Create parent directory if not exists while visiting file."
-  (let ((dir (file-name-directory buffer-file-name)))
-    (unless (file-exists-p dir)
-      (if (y-or-n-p (format "Directory %s does not exist,do you want you create it? " dir))
-          (make-directory dir t)
-        (keyboard-quit)))))
 
 ;;; Make Temporary Buffer
 (defvar temp-buffer-count 0)
@@ -2031,14 +2053,25 @@ selection of all minor-modes, active or not."
 
 ;;; Offer to create parent directories if they do not exist
 (defun my/create-non-existent-directory ()
-  (let ((parent-directory (file-name-directory buffer-file-name)))
-    (when (and (not (file-exists-p parent-directory))
-               (y-or-n-p (format "Directory `%s' does not exist! Create it?" parent-directory)))
-      (make-directory parent-directory t))))
-
+  "Automatically create missing directories when creating new files."
+  (unless (file-remote-p buffer-file-name)
+    (let ((parent-directory (file-name-directory buffer-file-name)))
+      (and (not (file-directory-p parent-directory))
+           (y-or-n-p (format "Directory `%s' does not exist! Create it?"
+                             parent-directory))
+           (progn (make-directory parent-directory 'parents)
+                  t)
+           ))))
 (add-to-list 'find-file-not-found-functions 'my/create-non-existent-directory)
 
-
+;;; Make Directory
+(defun my/make-directory-maybe ()
+  "Create parent directory if not exists while visiting file."
+  (let ((dir (file-name-directory buffer-file-name)))
+    (unless (file-exists-p dir)
+      (if (y-or-n-p (format "Directory %s does not exist,do you want you create it? " dir))
+          (make-directory dir t)
+        (keyboard-quit)))))
 
 ;;; Function for using tab for autocompletion
 (defun my/auto-complete-at-point ()

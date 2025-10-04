@@ -1072,13 +1072,15 @@ confines of word boundaries (e.g. multiple words)."
 
 ;;; Emacs server
 ;; allow emacsclient to connect to running session)
-;; (use-package server
-;;   :ensure nil
-;;   :init
-;;   (setq server-client-instructions nil)
-;;   :config
-;;   (unless (or (daemonp) (server-running-p))
-;;     (server-start)))
+(use-package server
+  :ensure nil
+  :if (display-graphic-p)
+  :init
+
+  (setq server-client-instructions nil)
+  :config
+  (unless (or (daemonp) (server-running-p))
+    (server-start)))
 
 
 ;;; Simple
@@ -1162,11 +1164,11 @@ confines of word boundaries (e.g. multiple words)."
 
 
 ;;; So long
-;; (use-package so-long
-;;   :ensure nil
-;;   :hook (after-init . so-long-mode)
-;;   :config
-;;   (setq so-long-threshold 10000))
+(use-package so-long
+  :ensure nil
+  :hook (after-init . so-long-mode)
+  :config
+  (setq so-long-threshold 10000))
 
 
 
@@ -1195,6 +1197,7 @@ confines of word boundaries (e.g. multiple words)."
   :mode "\\`\\(README\\|CHANGELOG\\|COPYING\\|LICENSE\\)\\'"
   :hook
   ((text-mode . turn-on-auto-fill)
+   (text-mode . visual-line-mode)
    (prog-mode . (lambda () (setq-local sentence-end-double-space t)))
    )
   :config
