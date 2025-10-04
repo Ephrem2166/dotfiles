@@ -4,6 +4,7 @@
 
 ;;; Adaptive Wrap
 (use-package adaptive-wrap
+  :disabled
   :ensure t
   :hook (visual-line-mode . adaptive-wrap-prefix-mode))
 

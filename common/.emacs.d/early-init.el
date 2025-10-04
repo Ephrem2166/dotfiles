@@ -5,11 +5,12 @@
 (setq read-process-output-max (* 1024 1024 3))
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
-
+;;
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (setq gc-cons-threshold (* 16 1024 1024))) 99)
-
+            (setq gc-cons-threshold (* 100 1024 1024))))
+;; Suppress GC messages for a cleaner startup log.
+(setq garbage-collection-messages nil)
 
 ;;; File Name Handler List
 ;; Every file opened and

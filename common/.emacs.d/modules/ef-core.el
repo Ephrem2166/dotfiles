@@ -518,7 +518,6 @@
 ;; Highlight Line in a Terminal
 (use-package hl-line-mode
   :ensure nil
-  :when (display-graphic-p)
   :defer t
   :hook (( text-mode . hl-line-mode)
          (org-mode . hl-line-mode)
@@ -636,11 +635,25 @@
 (use-package imenu
   :ensure nil
   :config
+  (defun my/imenu-setup ()
+    "Set up the imenu customization. Use in hooks."
+    (ignore-errors
+      (imenu-add-menubar-index)
+      (setq-local imenu-auto-rescan t)
+      (when (derived-mode-p 'prog-mode)
+        (setq-local imenu-sort-function 'imenu--sort-by-name))))
   (setq imenu-use-markers t)
   (setq org-imenu-depth 7)
   (setq imenu-auto-rescan t)
   (setq use-package-enable-imenu-support t)
-  (setq imenu-flatten 'group))
+  (setq imenu-flatten 'group)
+  (dolist (imenu-modes '(org-mode markdown-mode text-mode prog-mode)
+                       )
+    (add-hook 'imenu-modes #'my/imenu-setup)
+    )
+
+
+  )
 
 
 ;;; `Info
@@ -969,19 +982,20 @@ confines of word boundaries (e.g. multiple words)."
   (recentf-show-file-shortcuts-flag nil)
   :config
   ;; When to cleanup recentf
-  (setq recentf-auto-cleanup (if (daemonp) 300))
-  (add-hook 'kill-emacs-hook #'recentf-cleanup)
+  (setq recentf-auto-cleanup 'never)
+  ;; (setq recentf-auto-cleanup (if (daemonp) 300))
+  ;; (add-hook 'kill-emacs-hook #'my/recentf-cleanup)
   (setq recentf-save-file (concat user-emacs-directory "etc/recentf"))
   ;; Remove non-existent files from the recent files list automatically.
-  (defun my/recentf-cleanup ()
-    "Clean up recentf list by removing non-existent files."
-    (interactive)
-    (setq recentf-list (cl-remove-if-not 'file-exists-p recentf-list))
-    (recentf-cleanup))
+  ;; (defun my/recentf-cleanup ()
+  ;;   "Clean up recentf list by removing non-existent files."
+  ;;   (interactive)
+  ;;   (setq recentf-list (cl-remove-if-not 'file-exists-p recentf-list))
+  ;;   (recentf-cleanup))
 
   ;; Advice recentf-load-list to perform cleanup after loading the recentf
   ;; list.
-  (advice-add 'recentf-load-list :after #'my/recentf-cleanup)
+  ;; (advice-add 'recentf-load-list :after #'my/recentf-cleanup)
   ;; Anything in runtime folders
   (add-to-list 'recentf-exclude
                (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")
@@ -1074,9 +1088,8 @@ confines of word boundaries (e.g. multiple words)."
 ;; allow emacsclient to connect to running session)
 (use-package server
   :ensure nil
-  :if (display-graphic-p)
+  ;;:if (display-graphic-p)
   :init
-
   (setq server-client-instructions nil)
   :config
   (unless (or (daemonp) (server-running-p))
@@ -1163,12 +1176,12 @@ confines of word boundaries (e.g. multiple words)."
                       java-mode java-ts-mode js-mode js-ts-mode) . subword-mode))
 
 
-;;; So long
-(use-package so-long
-  :ensure nil
-  :hook (after-init . so-long-mode)
-  :config
-  (setq so-long-threshold 10000))
+;;; FIXME: So long
+;; (use-package so-long
+;;   :ensure nil
+;;   :hook (after-init . so-long-mode)
+;;   :config
+;;   (setq so-long-threshold 10000))
 
 
 
@@ -1189,6 +1202,34 @@ confines of word boundaries (e.g. multiple words)."
         )
   )
 
+
+;;; Tab bar
+(use-package tab-bar
+  :ensure nil
+  :preface
+  (defun my/tab-bar-new (name &optional bff)
+    "Create a new tab with a NAME.
+With a non-nil IFF, call IFF as a function or switch
+to the IFF buffer or  the files listed."
+    (interactive "sWorkspace Name: ")
+    (tab-bar-switch-to-tab name)
+    (when bff
+      (cond
+       ((listp bff) (find-file (car bff))
+        (dolist (f (cdr bff))
+          (split-window-right)
+          (find-file f)))
+       ((fboundp bff) (call-interactively bff))
+       ((bufferp bff) (switch-to-buffer bff)))))
+  :config
+  (setq tab-bar-new-button-show nil)
+  (setq tab-bar-close-button-show nil)
+  (setq tab-bar-new-tab-choice "*scratch*")
+  (setq tab-bar-tab-hints t)
+  (setq tab-bar-button-margin '(40 . 1))
+  (setq tab-bar-button-relief 0)
+  (setq tab-bar-show 1)
+  )
 
 ;;; FIXME Text Mode
 (use-package text-mode

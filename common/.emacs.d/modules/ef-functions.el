@@ -2142,6 +2142,13 @@ selection of all minor-modes, active or not."
     (funcall (or (command-remapping fn) fn)
              symbol)))
 
+;;; Auto save files when out of focus
+(defun my/save-all-buffers ()
+  "Save all buffers, because, why not?"
+  (interactive)
+  (save-some-buffers t))
+;; See 'after-focus-change-function?
+(add-hook 'focus-out-hook 'my/save-all-buffers)
 
 (provide 'ef-functions)
 ;;; ef-functions.el ends here

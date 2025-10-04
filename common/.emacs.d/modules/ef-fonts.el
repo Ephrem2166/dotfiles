@@ -20,7 +20,12 @@
   )
 
 (defvar my/available-variable-font
-  (my/available-font "Iosevka Aile" "PragmataPro" "Atkinson Hyperlegible" "Avenir" "Iosevka Nerd Font" "PragmataPro Nerd Font" "Sans")
+  (my/available-font
+   "Atkinson Hyperlegible"
+   "Iosevka Aile"
+   "PragmataPro"
+   "SN Pro"
+   "Avenir" "Iosevka Nerd Font" "PragmataPro Nerd Font" "Sans")
   "Primary Variable Fonts")
 
 ;; (when my/available-mono-font
@@ -61,15 +66,12 @@
    :height 120
    :weight 'regular))
 
-
 ;;; Modeline
 (set-face-attribute 'mode-line nil :family "Berkeley Nerd Font 9" :weight 'bold)
 (set-face-attribute 'mode-line-inactive nil :family "Berkeley Nerd Font 9" :weight 'bold)
 
 ;;; Minibuffer
 (set-face-attribute 'minibuffer-prompt nil :family "Berkeley Nerd Font 9" :weight 'regular)
-
-
 ;;; Debugging
 ;; To show during startup
 ;; (message "🧱 Default mono font: %s" my/available-mono-font)
@@ -83,7 +85,18 @@
                     ("Input" . 11)
                     ("Hack" . 12)
                     ("Consolas" . 12)
-                    ("UbuntuMono Nerd Font" . 12.5))
+                    ("UbuntuMono Nerd Font" . 12.5)
+                    ("Iosevka Nerd Font" . 11)
+
+                    ;; Variable Fonts
+                    ("SN Pro" . 10)
+                    ("Atkinson Hyperlegible" . 11)
+                    ("Verdana" . 12)
+                    ("Avenir" . 12)
+                    ("Aporetic Sans" . 11)
+                    ("Aporetic Serif" . 12)
+
+                    )
   "List of fonts and sizes.  The first one available will be used.")
 
 (defun get-available-fonts ()
@@ -123,7 +136,6 @@
           (insert font "\n"))
         (special-mode)))
     (pop-to-buffer buffer-name)))
-
 
 (provide 'ef-fonts)
 ;;; ef-fonts.el ends here

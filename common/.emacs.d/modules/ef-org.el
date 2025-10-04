@@ -24,7 +24,7 @@
   (setq-local fill-column 120)
   ;; It conflicts with org-modern block prettification
   ;; Use it with org-modern-indent
-  (org-indent-mode 1)
+  ;; (org-indent-mode 1)
   ;; (truncate-lines 1)
   ;; (center-document-mode 1)
   (org-display-inline-images)
@@ -124,7 +124,15 @@
   (setq org-use-sub-superscripts nil)
   ;; Image
   (setq org-image-actual-width 600)
-  (setq org-image-align 'center))
+  (setq org-image-align 'center)
+
+  ;; Blank line before new entry
+  (setq org-blank-before-new-entry
+        '(
+          (heading . t)
+          (plain-list-item . auto)
+          ))
+  )
 
 ;;; Org Faces
 (use-package org-faces
@@ -169,7 +177,7 @@
   :config
   (setq org-adapt-indentation nil)
   (setq org-indent-mode-turns-on-hiding-stars nil)
-  (setq org-indent-indentation-per-level 4))
+  (setq org-indent-indentation-per-level 2))
 
 ;;; Org Todo and Refile
 (use-package org
@@ -530,6 +538,21 @@ appropriate.  In tables, insert a new row or end the table."
 
 
 
+;;; ORG META RETURN ADVICE
+(defun my/org-meta-return (&optional arg)
+  "Insert a new heading or wrap a region in a table.
+Calls `org-insert-heading', `org-insert-item',
+`org-table-wrap-region', or `modi/org-split-block' depending on
+context.  When called with an argument, unconditionally call
+`org-insert-heading'."
+  (interactive "P")
+  (org-check-before-invisible-edit 'insert)
+  (or (run-hook-with-args-until-success 'org-metareturn-hook)
+      (call-interactively (cond (arg #'org-insert-heading)
+                                ((org-at-table-p) #'org-table-wrap-region)
+                                ((org-in-item-p) #'org-insert-item)
+                                (t #'org-insert-heading)))))
+(advice-add 'org-meta-return :override #'my/org-meta-return)
 ;;; TODO Org-Refile
 ;; (defconst my-org-todos "~/Org/Capture/")
 
@@ -785,7 +808,7 @@ appropriate.  In tables, insert a new row or end the table."
                  (file"~/Org/Capture/lists.org")) :prepend)
   ;; Watch list
   (add-to-list 'org-capture-templates
-               '("w" "Buy" checkitem
+               '("w" "Movies" checkitem
                  (file+headline "~/Org/Capture/lists.org" "Watchlist")) :append)
   )
 
@@ -1043,6 +1066,7 @@ appropriate.  In tables, insert a new row or end the table."
 ;;; Org Modern Indent
 (use-package org-modern-indent
   :ensure (:host github :repo "jdtsmith/org-modern-indent")
+  :disabled
   :defer t
   :init
   ;; Add late to hook
@@ -1052,6 +1076,7 @@ appropriate.  In tables, insert a new row or end the table."
 ;; Shows emphasis markers when the cursor is the emphasized
 ;; Region
 (use-package org-appear
+  :disabled
   :after org
   :ensure t
   :hook (org-mode . org-appear-mode)
