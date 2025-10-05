@@ -551,7 +551,7 @@
          ("C-M-_" . undo-fu-only-redo-all)))
 
 ;;; Vundo
-;;; Visualize Undo Tree
+;; Visualize Undo Tree
 (use-package vundo
   :ensure t
   :defer 1

@@ -96,7 +96,7 @@ all hooks after it are ignored.")
   (eldoc-add-command 'doom/escape))
 
 (global-set-key [remap keyboard-quit] #'doom/escape)
-
+(global-set-key [remap abort-recursive-edit] #'doom/escape)
 ;;;; Reload Emacs
 (defun ef/reload-config ()
   "Reload the Emacs configuration file."
@@ -1464,22 +1464,6 @@ See `display-line-numbers' for what these values mean."
     (clipboard-yank)
     (goto-char (point-min))))
 
-;;; Query man pages by keyword at point
-(defun my/use-selected-string-or-ask (&optional hint)
-  "Use selected region or ask for input.
-If HINT is empty, use symbol at point."
-  (cond
-   ((region-active-p)
-    (my-selected-str))
-   ((or (not hint) (string= "" hint))
-    (thing-at-point 'symbol))
-   (t
-    (read-string hint))))
-(defun my/lookup-doc-in-man ()
-  "Read man by querying keyword at point."
-  (interactive)
-  (man (concat "-k " (my/use-selected-string-or-ask))))
-
 ;;; Kill All Buffers Except Current Buffer
 (defun my/kill-all-but-current-buffer ()
   "Kill all other buffers, but not current buffer."
@@ -2206,6 +2190,20 @@ selection of all minor-modes, active or not."
   (save-some-buffers t))
 ;; See 'after-focus-change-function?
 (add-hook 'focus-out-hook 'my/save-all-buffers)
+
+;;; Utilities
+;; Show ASCII Table List
+(defun my/ascii-table ()
+  "Print the ascii table."
+  (interactive)
+  (switch-to-buffer "*ASCII*")
+  (erase-buffer)
+  (insert (format "ASCII characters up to number %d.\n" 254))
+  (let* ((i 0))
+    (while (< i 254)
+      (setq i (+ i 1))
+      (insert (format "%4d  %c\n " i i))))
+  (goto-char (point-min)))
 
 (provide 'ef-functions)
 ;;; ef-functions.el ends here

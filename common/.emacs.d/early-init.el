@@ -31,7 +31,7 @@
 (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 ;; Silence compiler warnings as they can be pretty disruptive
 (setq native-comp-async-report-warnings-errors nil)
-
+(setq native-comp-warning-on-missing-source nil)
 ;; Ensure that quitting only occurs once Emacs finishes native compiling,
 ;; preventing incomplete or leftover compilation files in `/tmp`.
 (setq native-comp-async-query-on-exit t)
@@ -73,6 +73,8 @@ not retain the generic background set by the function
   )
 
 (ef/avoid-initial-flash-of-light)
+
+
 
 ;;;; Another option to avoid white light before start
 ;; (add-to-list 'default-frame-alist '(alpha-background . 0))

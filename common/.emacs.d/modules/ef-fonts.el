@@ -1,4 +1,4 @@
-;;; ef-fonts.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
+;; ef-fonts.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
 
