@@ -69,9 +69,15 @@
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (magit-bury-buffer-function #'magit-restore-window-configuration)
   (magit-refs-show-commit-count 'all)
-  (magit-format-file-function #'magit-format-file-nerd-icons)
+  ;; (magit-refresh-status-buffer nil)
   (with-eval-after-load 'magit
     (setq magit-format-file-function #'magit-format-file-nerd-icons))
+
+  (with-eval-after-load 'magit
+    (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
+    (remove-hook 'server-switch-hook 'magit-commit-diffq)
+    (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
+
   )
 
 
