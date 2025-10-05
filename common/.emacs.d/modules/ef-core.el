@@ -1311,7 +1311,6 @@ to the IFF buffer or  the files listed."
     )
   (add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
   (add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
-  (add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
   (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil)))
   )
 
@@ -1338,6 +1337,8 @@ to the IFF buffer or  the files listed."
               "Remove trailing whitespace before save, skipping message-mode and diff-mode."
               (let ((buffer-undo-list buffer-undo-list))
                 (unless (or (derived-mode-p 'message-mode)
+                            (derived-mode-p 'markdown-mode)
+                            (derived-mode-p 'org-mode)
                             (derived-mode-p 'diff-mode))
                   (delete-trailing-whitespace)))))
   )

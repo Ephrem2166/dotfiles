@@ -1176,6 +1176,35 @@ buffer is not visiting a file."
                          (ido-read-file-name "Find file(as root): ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
+;;; Sudo save
+;; If the current buffer is not writable, ask if it should be saved with sudo.
+(defun my/sudo-file-name (filename)
+  "Prepend '/sudo:root@`system-name`:' to FILENAME if appropriate.
+This is, when it doesn't already have a sudo-prefix."
+  (if (not (or (string-prefix-p "/sudo:root@localhost:"
+                                filename)
+               (string-prefix-p (format "/sudo:root@%s:" system-name)
+                                filename)))
+      (format "/sudo:root@%s:%s" system-name filename)
+    filename))
+
+(defun my/sudo-save-buffer ()
+  "Save FILENAME with sudo if the user approves."
+  (interactive)
+  (when buffer-file-name
+    (let ((file (ph/sudo-file-name buffer-file-name)))
+      (if (yes-or-no-p (format "Save file as %s ? " file))
+          (write-file file)))))
+
+(advice-add 'save-buffer :around
+            '(lambda (fn &rest args)
+               (when (or (not (buffer-file-name))
+                         (not (buffer-modified-p))
+                         (file-writable-p (buffer-file-name))
+                         (not (ph/sudo-save-buffer)))
+                 (call-interactively fn args))))
+
+
 ;;; Dictionary Lookup
 (defun my/lookup-word (word)
   (interactive (list (thing-at-point 'word)))
@@ -1260,6 +1289,18 @@ exists. If BACKWARDP is non-nil it jumps backward."
             (number-sequence ?a ?z)
             (number-sequence ?A ?Z))
     len)))
+
+;;; Generate Password
+(defun my/generate-password-non-interactive ()
+  (string-trim (shell-command-to-string "pwgen -A 24")))
+
+(defun my/generate-password ()
+  "Generates and inserts a new password"
+  (interactive)
+  (insert
+   (shell-command-to-string
+    (concat "pwgen -A " (read-string "Length: " "24") " 1"))))
+
 
 ;;; Create New Frame
 ;; M-n for new frame (M-n is unbound in vanilla emacs)
@@ -1445,6 +1486,15 @@ If HINT is empty, use symbol at point."
   (interactive)
   (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
   "All other buffers have been killed!")
+
+;;; Kill Dired Buffers
+(defun my/kill-dired-buffers ()
+  "Kill all open dired buffers."
+  (interactive)
+  (mapc (lambda (buffer)
+          (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
+            (kill-buffer buffer)))
+        (buffer-list)))
 
 ;;; Advice to `kill-region'
 ;; With this it can either kill region or line
@@ -1924,6 +1974,12 @@ This command is intended to replace key C-g , but not always work. Sometimes you
     (sleep-for 1))
   (server-start))
 
+;;; Server Shutdown
+(defun my/server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs))
 
 ;;; Describe at Point
 (defun my/describe-at-point ()
