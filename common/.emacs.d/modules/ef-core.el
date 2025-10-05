@@ -60,8 +60,22 @@
   (auto-revert-stop-on-user-input nil)
   ;; (setq global-auto-revert-ignore-modes '(Buffer-menu-mode))
   :config
-  ;; (global-auto-revert-mode)
+  ;; (global-auto-revert-mode -1)
   ;; Performance
+  (defun my/visible-buffers (&optional buffer-list all-frames)
+    "Return a list of visible buffers (i.e. not buried)."
+    (let ((buffers
+           (delete-dups
+            (cl-loop for frame in (if all-frames (visible-frame-list) (list (selected-frame)))
+                     if (window-list frame)
+                     nconc (mapcar #'window-buffer it)))))
+      (if buffer-list
+          (cl-loop for buf in buffers
+                   unless (memq buf buffer-list)
+                   collect buffers)
+        buffers)))
+
+
   (defun my/auto-revert-current-buffer-h ()
     (unless (or auto-revert-mode
                 (active-minibuffer-window)
@@ -74,9 +88,9 @@
 
   (defun my/auto-revert-visible-buffers-h ()
     "Auto revert stale buffers in visible windows, if necessary."
-    (dolist (buf (+visible-buffers))
+    (dolist (buf (my/visible-buffers))
       (with-current-buffer buf
-        (+auto-revert-current-buffer-h))))
+        (my/auto-revert-current-buffer-h))))
   :hook
   (after-save-hook . my/auto-revert-visible-buffers-h)
 
@@ -780,6 +794,20 @@ confines of word boundaries (e.g. multiple words)."
                   isearch-yank-flag t))
         (ding)))
     (isearch-search-and-update))
+  ;; Mark active region and added it to search string
+  (defun my/isearch-mode-setup ()
+    "If the region is on, use it as initial search string.
+Intended to be added to `isearch-mode-hook'."
+    ;; Note that the text of the region can be an invalid regexp
+    (when (use-region-p)
+      (let ((beg (region-beginning))
+            (end (region-end)))
+        (deactivate-mark)
+        (goto-char beg)
+        (isearch-yank-internal (lambda () end)))))
+
+  (add-hook 'isearch-mode-hook #'my/isearch-mode-setup)
+
   ;; (define-key ef-file-keymap (kbd "s") #'my/isearch-yank-symbol)
   ;; (setq search-default-mode 'char-fold-to-regexp)
   (setq search-default-mode nil)
@@ -1478,6 +1506,8 @@ to the IFF buffer or  the files listed."
            (dedicated . t)
            )))
 
+  ;; Don't create new frames
+  ;; (setq display-buffer-alist (quote (("" ignore (nil . reusable-frames)))))
 
   (add-to-list 'display-buffer-alist
                '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"

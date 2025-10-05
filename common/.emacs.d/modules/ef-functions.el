@@ -318,6 +318,24 @@ windows, leaving only the currently active window visible."
     (before disable-before-load (theme &optional no-confirm no-enable) activate)
   (mapc 'disable-theme custom-enabled-themes))
 
+;;;; Better way to load themes
+(defun my/load-theme (theme)
+  "Load custom THEME.
+
+Load THEME exclusively, disabling any other enabled theme.
+
+When called with universal arg, it will append the theme to `custom-enabled-themes'."
+  (interactive
+   (list
+    (intern (completing-read "Load custom theme: "
+                             (mapcar #'symbol-name
+                                     (custom-available-themes))))))
+  (unless (custom-theme-name-valid-p theme)
+    (error "Invalid theme name `%s'" theme))
+  (unless current-prefix-arg
+    (dolist (theme custom-enabled-themes) (disable-theme theme))
+    (setq custom-enabled-themes nil))
+  (load-theme theme t))
 
 ;;; Functions from Doom Emacs
 ;;;; Large File Handling
@@ -439,6 +457,14 @@ If this is a daemon session, load them all immediately instead."
       (run-with-idle-timer doom-incremental-first-idle-timer
                            nil #'doom-load-packages-incrementally
                            (cdr doom-incremental-packages) t))))
+
+;;; TEST:
+(doom-load-packages-incrementally
+ '(calendar find-func format-spec org-agenda org-macs org-compat
+            org-faces org-entities org-list org-pcomplete org-src
+            org-footnote org-macro ob org org-clock org-agenda
+            org-capture))
+
 
 (add-hook 'emacs-startup-hook #'doom-load-packages-incrementally-h)
 
@@ -736,6 +762,11 @@ if prefix argument ARG is given, switch to it directly."
       (switch-to-buffer-other-window (current-buffer)))))
 (define-key ef-buffer-keymap (kbd "0") #'my/switch-to-messages-buffer)
 
+;;; Switch to Help Buffer
+(defun my/view-help-buffer ()
+  "View the `*Help*' buffer."
+  (interactive)
+  (pop-to-buffer (help-buffer)))
 ;;; Minibuffer Window
 (defun my/switch-to-minibuffer-window ()
   "Switch to minibuffer window (if active)."
@@ -781,13 +812,14 @@ if prefix argument ARG is given, switch to it directly."
 (define-key ef-buffer-keymap (kbd "n") #'my/make-temp-buffer)                                       ; Key Bindings
 
 ;;; Transparency
+;;;; Simple Transparency
 (defun my/transparency (value)
   "Sets the transparency of the frame window. 0=transparent/100=opaque"
   (interactive "nTransparency Value 0 - 100 opaque:")
   (set-frame-parameter (selected-frame) 'alpha-background value))
 
 
-;;; Toggle Transparency
+;;;; Toggle Transparency
 (defun my/toggle-transparency ()
   "Toggle transparency."
   (interactive)
@@ -802,7 +834,7 @@ if prefix argument ARG is given, switch to it directly."
          70
        100))))
 
-;;; Better Transparency
+;;;; Better Transparency
 (defun my/set-opacity (opacity &optional frames)
   "Interactively change the current frame's opacity.
 
@@ -828,6 +860,22 @@ arg)."
       (dolist (frame frames)
         (modify-frame-parameters frame alist)))))
 
+;;;; Adjust transparency using arrow keys
+(defun my/frame-transparency-adjust ()
+  "Adjust current frame's transparency using <up> and <down>."
+  (declare (interactive-only "Use `set-frame-parameter' instead."))
+  (interactive)
+  ;; If `alpha' is not a number in [0, 100], reset to 100
+  (pcase (frame-parameter nil 'alpha)
+    ((and (pred numberp) n (guard (<= 0 n 100))))
+    (_ (setf (frame-parameter nil 'alpha) 100)))
+  (while (pcase (read-key (format "%2d%%  Press <up> and <down> to adjust"
+                                  (frame-parameter nil 'alpha)))
+           ((or (and 'up   (let new-alpha (1+ (frame-parameter nil 'alpha))))
+                (and 'down (let new-alpha (1- (frame-parameter nil 'alpha)))))
+            (when (<= 0 new-alpha 100)
+              (setf (frame-parameter nil 'alpha) new-alpha))
+            t))))
 
 ;;; Invisible window dividers for themes
 (defun my/invisible-window-dividers (_theme)
@@ -1204,6 +1252,21 @@ This is, when it doesn't already have a sudo-prefix."
                          (not (ph/sudo-save-buffer)))
                  (call-interactively fn args))))
 
+;;;; Sudo Notify File When It Requires It
+
+(defun my/sudo-edit-notify ()
+  "Notify myself when edit a file owned by root.
+This should be add to `find-file-hook'."
+  (let ((old-msg (current-message)))
+    (when (and old-msg
+               (string= old-msg "Note: file is write protected")
+               ;; `chunyang-sudo-edit' doesn't work for remote files
+               ;; for now
+               (not (file-remote-p (buffer-file-name))))
+      (message "%s, %s"
+               old-msg
+               "use M-x sudo-edit RET to edit via sudo"))))
+(add-hook 'find-file-hook #'my/sudo-edit-notify)
 
 ;;; Dictionary Lookup
 (defun my/lookup-word (word)
@@ -1980,6 +2043,31 @@ This command is intended to replace key C-g , but not always work. Sometimes you
       (funcall fn sym)
     (user-error "There is no symbol at point")))
 
+;;; Describe at point better
+(defun my/describe-symbol-at-point ()
+  "Like `describe-symbol' but doesn't query always."
+  (interactive)
+  (require 'help-mode)
+  (describe-symbol
+   (or (pcase (variable-at-point)
+         (0 nil)
+         (v v))
+       (function-called-at-point)
+       (let* ((is-symbol-p
+               (lambda (vv)
+                 (cl-some (lambda (x) (funcall (nth 1 x) vv))
+                          describe-symbol-backends)))
+              (sym
+               (or (let ((it (intern (current-word))))
+                     (when (funcall is-symbol-p it)
+                       it))
+                   (completing-read
+                    "Describe symbol: "
+                    obarray
+                    is-symbol-p
+                    t))))
+         sym))))
+
 
 ;;; Open Default Config Folder For Emacs
 (defun my/user-config (ask)
@@ -2114,6 +2202,20 @@ selection of all minor-modes, active or not."
           (make-directory dir t)
         (keyboard-quit)))))
 
+;;; Save All Buffers
+(defun my/save-all-buffers ()
+  "Silently save every buffer that is visiting a file.
+If the file does not yet exist on disk, create it without
+confirmation.  Non–file‑visiting buffers are ignored."
+  (interactive)
+  (let ((confirm-nonexistent-file-or-buffer nil)) ; suppress “create file?” prompt
+    (dolist (buf (buffer-list))
+      (with-current-buffer buf
+        (when buffer-file-name
+          (when (or (buffer-modified-p)
+                    (not (file-exists-p buffer-file-name)))
+            (save-buffer)))))))
+
 ;;; Function for using tab for autocompletion
 (defun my/auto-complete-at-point ()
   (when (and (not (minibufferp))
@@ -2191,6 +2293,55 @@ selection of all minor-modes, active or not."
 ;; See 'after-focus-change-function?
 (add-hook 'focus-out-hook 'my/save-all-buffers)
 
+;;; Recent Files
+;;;; Open Recent Files
+(defun my/open-recent-files ()
+  (interactive)
+  (let* ((all-files recentf-list)
+         (tocpl (mapcar (function
+                         (lambda (x) (cons (file-name-nondirectory x) x))) all-files))
+         (prompt (append '("File name: ") tocpl))
+         (fname (completing-read (car prompt) (cdr prompt) nil nil)))
+    (find-file (cdr (assoc-string fname tocpl)))))
+
+(global-set-key (kbd "C-c r") #'my/open-recent-files)
+
+
+
+;;; Isearch word at point
+(defun my/isearch-yank-word-hook ()
+  (when (equal this-command 'my-isearch-word-at-point)
+    (let ((string (concat "\\<"
+                          (buffer-substring-no-properties
+                           (progn (skip-syntax-backward "w_") (point))
+                           (progn (skip-syntax-forward "w_") (point)))
+                          "\\>")))
+      (if (and isearch-case-fold-search
+               (eq 'not-yanks search-upper-case))
+          (setq string (downcase string)))
+      (setq isearch-string string
+            isearch-message
+            (concat isearch-message
+                    (mapconcat 'isearch-text-char-description
+                               string ""))
+            isearch-yank-flag t)
+      (isearch-search-and-update))))
+
+(add-hook 'isearch-mode-hook 'my-isearch-yank-word-hook)
+
+
+;;; Replace Word
+(defun my/replace-word (tosearch toreplace)
+  (interactive "sSearch for word: \nsReplace with: ")
+  (save-excursion
+    (goto-char (point-min))
+    (let ((case-fold-search nil)
+          (count 0))
+      (while (re-search-forward (concat "\\b" tosearch "\\b") nil t)
+        (setq count (1+ count))
+        (replace-match toreplace 'fixedcase 'literal))
+      (message "Replaced %s match(es)" count))))
+
 ;;; Utilities
 ;; Show ASCII Table List
 (defun my/ascii-table ()
@@ -2204,6 +2355,21 @@ selection of all minor-modes, active or not."
       (setq i (+ i 1))
       (insert (format "%4d  %c\n " i i))))
   (goto-char (point-min)))
+
+;;; Add numbering to a region
+(defun my/number-region (beg end)
+  "Add numbering to a highlighted region."
+  (interactive "r")
+  (let ((counter 1)
+        (end-marker (copy-marker end)))
+    (save-excursion
+      (goto-char beg)
+      (beginning-of-line)
+      (while (< (point) end-marker)
+        (insert (format "%d. " counter))
+        (setq counter (1+ counter))
+        (forward-line 1))
+      (set-marker end-marker nil))))
 
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
