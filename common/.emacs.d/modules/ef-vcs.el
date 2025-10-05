@@ -60,7 +60,7 @@
 ;;; Magit
 (use-package magit
   :ensure t
-  :defer t
+  :defer 10
   :after transient
   :custom
   (magit-define-global-key-bindings nil)

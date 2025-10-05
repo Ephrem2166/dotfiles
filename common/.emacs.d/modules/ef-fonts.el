@@ -80,64 +80,103 @@
 ;; (message "🎨 Variable-pitch font: %s" my/available-variable-font)
 
 ;;; Change Fonts Interactively
-(defvar font-list '(
-                    ("Berkeley Nerd Font" . 11)
-                    ("JetBrainsMono Nerd Font" . 12.5)
-                    ("PragmataProMono Nerd Font" . 13)
-                    ("Input" . 11)
-                    ("Hack" . 12)
-                    ("Consolas" . 12)
-                    ("UbuntuMono Nerd Font" . 12.5)
-                    ("Iosevka Nerd Font" . 11)
+;; (defvar font-list '(
+;;                     ("Berkeley Nerd Font" . 11)
+;;                     ("JetBrainsMono Nerd Font" . 12.5)
+;;                     ("PragmataProMono Nerd Font" . 13)
+;;                     ("Input" . 11)
+;;                     ("Hack" . 12)
+;;                     ("Consolas" . 12)
+;;                     ("UbuntuMono Nerd Font" . 12.5)
+;;                     ("Iosevka Nerd Font" . 11)
+;;
+;;                     ;; Variable Fonts
+;;                     ("SN Pro" . 10)
+;;                     ("Atkinson Hyperlegible" . 11)
+;;                     ("Verdana" . 12)
+;;                     ("Avenir" . 12)
+;;                     ("Aporetic Sans" . 11)
+;;                     ("Aporetic Serif" . 12)
+;;
+;;                     )
+;;   "List of fonts and sizes.  The first one available will be used.")
+;;
+;; (defun get-available-fonts ()
+;;   "Get list of available fonts from font-list."
+;;   (let (available-fonts)
+;;     (dolist (font font-list (nreverse available-fonts))
+;;       (when (member (car font) (font-family-list))
+;;         (push font available-fonts)))))
+;;
+;; (defun change-font ()
+;;   "Interactively change a font from a list a available fonts."
+;;   (interactive)
+;;   (let* ((available-fonts (get-available-fonts))
+;;          font-name font-size font-setting)
+;;     (if (not available-fonts)
+;;         (message "No fonts from the chosen set are available")
+;;       (if (called-interactively-p 'interactive)
+;;           (let* ((chosen (assoc-string (completing-read "What font to use? " available-fonts nil t) available-fonts)))
+;;             (setq font-name (car chosen) font-size (read-number "Font size: " (cdr chosen))))
+;;         (setq font-name (caar available-fonts) font-size (cdar available-fonts)))
+;;       (setq font-setting (format "%s-%d" font-name font-size))
+;;       (set-frame-font font-setting nil t)
+;;       (add-to-list 'default-frame-alist (cons 'font font-setting)))))
+;;
+;; ;; To automatically change fonts
+;; ;; (when (display-graphic-p)
+;; ;;   (change-font))
+;; ;;; List Available Fonts on a new buffer
+;; (defun my/list-available-fonts ()
+;;   "Display a list of available fonts in a new buffer."
+;;   (interactive)
+;;   (let ((font-list (sort (font-family-list) 'string<))
+;;         (buffer-name "*Available Fonts*"))
+;;     (with-output-to-temp-buffer buffer-name
+;;       (with-current-buffer buffer-name
+;;         (dolist (font font-list)
+;;           (insert font "\n"))
+;;         (special-mode)))
+;;     (pop-to-buffer buffer-name)))
+;;
+;; ;;; Adjust the font size of a region
+;; (defun my/adjust-region-font-size (b e)
+;;   (interactive "r")
+;;   (let* ((ov (or (seq-find
+;;                   (lambda (ov) (overlay-get ov 'adjust-font-size))
+;;                   (overlays-at b))
+;;                  (make-overlay b e)))
+;;          (face (overlay-get ov 'face))
+;;          (height (or (plist-get face :height) 1.0)))
+;;     (deactivate-mark)
+;;     (overlay-put ov 'adjust-font-size t)
+;;     (while (pcase (read-key (format "Type ↑ ↓ to adjust font size %f: " height))
+;;              ('up (cl-incf height 0.2))
+;;              ('down (cl-decf height 0.2))
+;;              ;; Quit
+;;              (_ nil))
+;;       (overlay-put ov 'face (plist-put face :height height))
+;;       (force-window-update))))
 
-                    ;; Variable Fonts
-                    ("SN Pro" . 10)
-                    ("Atkinson Hyperlegible" . 11)
-                    ("Verdana" . 12)
-                    ("Avenir" . 12)
-                    ("Aporetic Sans" . 11)
-                    ("Aporetic Serif" . 12)
-
-                    )
-  "List of fonts and sizes.  The first one available will be used.")
-
-(defun get-available-fonts ()
-  "Get list of available fonts from font-list."
-  (let (available-fonts)
-    (dolist (font font-list (nreverse available-fonts))
-      (when (member (car font) (font-family-list))
-        (push font available-fonts)))))
-
-(defun change-font ()
-  "Interactively change a font from a list a available fonts."
+;;; Better Way to Change Fonts Dynamically
+(defun my-system-fonts ()
+  "List of system fonts."
+  (x-list-fonts "*"))
+;; Set Default Face
+(defun my/set-default-face ()
+  "Set the default font and height interactively."
   (interactive)
-  (let* ((available-fonts (get-available-fonts))
-         font-name font-size font-setting)
-    (if (not available-fonts)
-        (message "No fonts from the chosen set are available")
-      (if (called-interactively-p 'interactive)
-          (let* ((chosen (assoc-string (completing-read "What font to use? " available-fonts nil t) available-fonts)))
-            (setq font-name (car chosen) font-size (read-number "Font size: " (cdr chosen))))
-        (setq font-name (caar available-fonts) font-size (cdar available-fonts)))
-      (setq font-setting (format "%s-%d" font-name font-size))
-      (set-frame-font font-setting nil t)
-      (add-to-list 'default-frame-alist (cons 'font font-setting)))))
+  (let* ((selected-font
+          (completing-read "Select default font: "
+                           (my-system-fonts)))
 
-;; To automatically change fonts
-;; (when (display-graphic-p)
-;;   (change-font))
-;;; List Available Fonts on a new buffer
-(defun my/list-available-fonts ()
-  "Display a list of available fonts in a new buffer."
-  (interactive)
-  (let ((font-list (sort (font-family-list) 'string<))
-        (buffer-name "*Available Fonts*"))
-    (with-output-to-temp-buffer buffer-name
-      (with-current-buffer buffer-name
-        (dolist (font font-list)
-          (insert font "\n"))
-        (special-mode)))
-    (pop-to-buffer buffer-name)))
+         (selected-size
+          (read-number "Select default font size: " 12)))
+
+    (set-face-attribute 'default nil :font selected-font )
+    (set-face-attribute 'default nil :height (* 10 selected-size))))
+
+
 
 (provide 'ef-fonts)
 ;;; ef-fonts.el ends here

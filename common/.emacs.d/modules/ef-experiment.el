@@ -159,6 +159,55 @@
      ((t (:foreground "#008ED1" :background "#002E41"))))))
 
 
+;;; Interactive Buffer Switcher
+(defun my/switch-to-buffer (buffer)
+  "Display BUFFER in the selected window.
+If BUFFER is displayed in some window, select that window instead."
+  (interactive
+   (list (get-buffer (read-buffer
+                      "Switch to buffer: "
+                      (other-buffer (current-buffer))))))
+  (cond
+   ((eq buffer (window-buffer)))
+   (t (let ((win (get-buffer-window buffer)))
+        (if win
+            (select-window win)
+          (switch-to-buffer buffer))))))
+
+;;*---------------------------------------------------------------------------*/
+;;*                                                                          */
+;;*---------------------------------------------------------------------------*/
+;;; Better Comment Box
+(defun my/comment-section (start end)
+  (interactive "*r")
+  (cond ((memq major-mode '(emacs-lisp-mode lisp-interaction-mode
+                                            racket-mode))
+         (let* ((c
+                 (substring comment-start 0 1))
+                (template
+                 (concat
+                  c c "*" (make-string (- fill-column 5) ?-) "*/" "\n"
+                  c c "*" "%s" "*/" "\n"
+                  c c "*" (make-string (- fill-column 5) ?-)  "*/" "\n"))
+                (comment
+                 (buffer-substring start end))
+                (comment-with-padding
+                 (format (concat "%-" (number-to-string (- fill-column 5)) "s")
+                         (concat "    " comment))))
+           (delete-region start end)
+           (insert (format template comment-with-padding))))
+        ((memq major-mode '(c-mode))
+         (let ((comment
+                (buffer-substring start end))
+               (template
+                "/*** %s ***/"))
+           (delete-region start end)
+           (insert (format template comment))))))
+
+;;; TEST: Org Table Align
+(defun my/align-all-tables ()
+  (interactive)
+  (org-table-map-tables 'org-table-align 'quietly))
 
 
 (provide 'ef-experiment)

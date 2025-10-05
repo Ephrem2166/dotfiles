@@ -1,4 +1,5 @@
 ;;; ef-org.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
+
 ;;; Commentary:
 ;;; Code:
 ;;; Functions
@@ -39,7 +40,6 @@
 ;;; Org Mode Hook Setup 2
 (defun org-mode-hook-setup ()
   (setq-local evil-auto-indent nil)
-
   ;; org-mime setup, run this command in org-file, than yank in `message-mode'
   ;; (local-set-key (kbd "C-c M-o") 'org-mime-org-buffer-htmlize)
 
@@ -56,6 +56,9 @@
   (setq word-wrap t))
 (add-hook 'org-mode-hook 'org-mode-hook-setup)
 
+;; Prevent flickering when org indent is enabled
+(add-hook 'org-mode-hook 'show-paren-mode nil)
+;; (add-hook 'org-mode-hook  line-spacing 0.1)
 ;;; Org General Settings
 (use-package org
   :ensure nil
@@ -80,7 +83,8 @@
   ;; Macro Replacement
   (setq org-hide-macro-markers t)
 
-  (setq org-cycle-separator-lines 0)
+  ;; Leave an empty line between folded subtrees
+  (setq org-cycle-separator-lines 1)
 
   ;; Some characters to choose from: …, ⤵, ▼, ↴, ⬎, ⤷, and ⋱
   (setq org-ellipsis "⮧")
@@ -118,7 +122,7 @@
   (setq org-startup-with-inline-images t)
   (setq org-startup-with-latex-preview nil)
   (setq org-startup-align-all-tables t)
-
+  (setq org-startup-shrink-all-tables t)
   ;; Pretty
   (setq org-pretty-entities t)
   (setq org-pretty-entities-include-sub-superscripts nil)
@@ -136,12 +140,25 @@
 
   ;; Allow a, A, a) and A) as list elements
   (setq org-list-allow-alphabetical t)
+
+  ;; Better lists
+  (setq org-list-indent-offset 1)
+
+  ;; Shift selct
+  (setq org-support-shift-select 'always)
+
+
   )
 
 ;;; Org Faces
 (use-package org-faces
   :ensure nil
   :config
+  (setq org-priority-faces
+        '((?A . error)
+          (?B . warning)
+          (?C . success)))
+  (setq org-fontify-emphasized-text t)
   (setq org-fontify-todo-headline t)
   (setq org-fontify-done-headline t)
   (setq org-fontify-quote-and-verse-blocks t)
@@ -175,11 +192,12 @@
 ;;   (org-num-skip-unnumbered t))
 
 
-;;; Org Indent
+                                        ;Org Indent
 ;; (use-package org
 ;;   :ensure nil
 ;;   :config
 ;;   (setq org-adapt-indentation nil)
+;;   (setq org-indent-mode-turns-off-org-adapt-indentation nil)
 ;;   (setq org-indent-mode-turns-on-hiding-stars nil)
 ;;   (setq org-indent-indentation-per-level 2))
 
@@ -383,6 +401,12 @@
   :ensure nil
   :after org
   :config
+  (setq org-link-abbrev-alist
+        '(("github"      . "https://github.com/%s")
+          ("youtube"     . "https://youtube.com/watch?v=%s")
+          ("google"      . "https://google.com/search?q=")
+          ("wikipedia"   . "https://en.wikipedia.org/wiki/%s")))
+
   (setq org-link-context-for-files t)
   (setq org-link-keep-stored-after-insertion nil)
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
@@ -1043,13 +1067,12 @@ context.  When called with an argument, unconditionally call
   ;;    ("example" "»–" "–«")
   ;;    ("quote" "❝" "❞")
   ;;    ("export" "⏩" "⏪")))
-
+  ;; Another Option
   (org-modern-block-name
    '((t . t)
      ("src" "»" "∥")
      ("example" "»–" "∥")
      ("quote" "❝" "❞")))
-
 
   ;; Keyword
   (org-modern-keyword "‣ ")
@@ -1083,7 +1106,13 @@ context.  When called with an argument, unconditionally call
 
    )
   ;; Miscellaneous
-  (org-modern-timestamp t)  )
+  (org-modern-timestamp t)
+
+  (modify-all-frames-parameters
+   '((right-divider-width . 2)
+     (internal-border-width . 0)))
+
+  )
 
 ;;; Org Modern Indent
 ;; Instead of org outline mode
