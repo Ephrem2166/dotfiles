@@ -57,9 +57,28 @@
   (global-auto-revert-non-file-buffers t)
   (auto-revert-use-notify nil)
   (auto-revert-avoid-polling t)
+  (auto-revert-stop-on-user-input nil)
   ;; (setq global-auto-revert-ignore-modes '(Buffer-menu-mode))
   :config
-  (global-auto-revert-mode)
+  ;; (global-auto-revert-mode)
+  ;; Performance
+  (defun my/auto-revert-current-buffer-h ()
+    (unless (or auto-revert-mode
+                (active-minibuffer-window)
+                ;; Skip non-file buffers
+                (not (buffer-file-name))
+                ;; Skip temporary/internal buffers
+                (string-prefix-p " " (buffer-name)))
+      (let ((auto-revert-mode t))
+        (auto-revert-handler))))
+
+  (defun my/auto-revert-visible-buffers-h ()
+    "Auto revert stale buffers in visible windows, if necessary."
+    (dolist (buf (+visible-buffers))
+      (with-current-buffer buf
+        (+auto-revert-current-buffer-h))))
+  :hook
+  (after-save-hook . my/auto-revert-visible-buffers-h)
 
   )
 
@@ -235,9 +254,6 @@
   ;; (setopt ad-redefinition-action 'accept)
 
   (setopt resize-mini-windows 'grow-only)
-  (setopt window-divider-default-bottom-width 1)
-  (setopt window-divider-default-places t)
-  (setopt window-divider-default-right-width 1)
 
   (setopt select-enable-clipboard t)
 
@@ -452,6 +468,14 @@
     "If derived-mode is Lisp data, check for parenthesis correcteness."
     (if (derived-mode-p 'lisp-data-mode) (check-parens)))
 
+  )
+
+;;; Frame
+(use-package frame
+  :config
+  (setopt window-divider-default-bottom-width 1)
+  (setopt window-divider-default-places t)
+  (setopt window-divider-default-right-width 1)
   )
 
 ;;; Goto Address
@@ -1087,6 +1111,7 @@ confines of word boundaries (e.g. multiple words)."
 ;;; Emacs server
 ;; allow emacsclient to connect to running session)
 (use-package server
+  :if (display-graphic-p)
   :ensure nil
   ;;:if (display-graphic-p)
   :init
@@ -1177,12 +1202,10 @@ confines of word boundaries (e.g. multiple words)."
 
 
 ;;; FIXME: So long
-;; (use-package so-long
-;;   :ensure nil
-;;   :hook (after-init . so-long-mode)
-;;   :config
-;;   (setq so-long-threshold 10000))
-
+(use-package so-long
+  :ensure nil
+  :hook (after-init-hook . global-so-long-mode)
+  )
 
 
 ;;; Display Time
