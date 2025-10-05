@@ -7,7 +7,8 @@
   (abbrev-mode)
   (setq line-spacing 12)
   ;;  (setq-default line-spacing 1)
-  (auto-fill-mode 0)
+  ;; Toggle automatic line breaking (Auto Fill mode).
+  (auto-fill-mode)
   ;; (electric-indent-mode nil)
   ;; (visual-fill-column-mode nil)
   ;; (variable-pitch-mode)
@@ -132,6 +133,9 @@
           (heading . t)
           (plain-list-item . auto)
           ))
+
+  ;; Allow a, A, a) and A) as list elements
+  (setq org-list-allow-alphabetical t)
   )
 
 ;;; Org Faces
@@ -719,6 +723,16 @@ context.  When called with an argument, unconditionally call
           ("t" "Tasks" entry
            (file+headline "~/Org/Capture/tasks.org" "My tasks")
            "* TODO %^{Todo} %^G \n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%?")
+          ;; Password
+          ("p" "password" entry
+           (file+headline "~/Org/Capture/password" "Passwords")
+           ;; Prompt for name
+           "* %^{name}
+   :PROPERTIES:
+   :username: %^{username}
+   :password: %(my/generate-password-non-interactive)
+   :url: %^{url}
+   :END:")
           ;; Links
           ("l" "Link" entry
            (file+headline  "~/Org/Capture/links.org" "Links")
