@@ -1,7 +1,24 @@
 ;;; ef-functions.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
+
 ;;; General Configuration
+;;;; Open Directories
+(defconst personal-dir "~/Org")
+(defconst config-dir "~/dotfiles")
+(defun my/open-personal ()
+  " Open Personal Directory"
+  (interactive)
+  (dired personal-dir)
+  )
+
+(defun my/open-dotfiles ()
+  "Open Dotfiles Directory"
+  (interactive)
+  (dired config-dir)
+  )
+
+
 ;;;; Better C-g from Prot
 (defun ef/keyboard-quit-dwim ()
   "Do-What-I-Mean behaviour for a general `keyboard-quit'.
@@ -201,6 +218,11 @@ It uses `ef/reload-config'
 ;;   (concat
 ;;    (format-time-string "%Y-%m-%dT%H%M%SZ%z")))
 
+;;; Kill Emacs and Exit
+(defun my/hard-kill-emacs ()
+  "Use `call-process' to send ourselves a KILL signal."
+  (interactive)
+  (call-process "kill" nil nil nil "-9" (number-to-string (emacs-pid))))
 ;;; Buffer
 
 ;;; Windows
@@ -458,13 +480,33 @@ If this is a daemon session, load them all immediately instead."
                            nil #'doom-load-packages-incrementally
                            (cdr doom-incremental-packages) t))))
 
-;;; TEST:
-(doom-load-packages-incrementally
- '(calendar find-func format-spec org-agenda org-macs org-compat
-            org-faces org-entities org-list org-pcomplete org-src
-            org-footnote org-macro ob org org-clock org-agenda
-            org-capture))
+;;; Explicit Approach
+;; (doom-load-packages-incrementally
+;;  '(calendar find-func format-spec org-agenda org-macs org-compat
+;;             org-faces org-entities org-list org-pcomplete org-src
+;;             org-footnote org-macro ob org org-clock org-agenda
+;;             org-capture))
+;;;;
+;; Adds two keywords to `use-package' to expand its lazy-loading capabilities:
+;;
+;;   :after-call SYMBOL|LIST
+;;   :defer-incrementally SYMBOL|LIST|t
+;;
+;; Check out `use-package!'s documentation for more about these two.
+(eval-when-compile
+  (dolist (keyword '(:defer-incrementally :after-call))
+    (push keyword use-package-deferring-keywords)
+    (setq use-package-keywords
+          (use-package-list-insert keyword use-package-keywords :after)))
 
+  (defalias 'use-package-normalize/:defer-incrementally #'use-package-normalize-symlist)
+  (defun use-package-handler/:defer-incrementally (name _keyword targets rest state)
+    (use-package-concat
+     `((doom-load-packages-incrementally
+        ',(if (equal targets '(t))
+              (list name)
+            (append targets (list name)))))
+     (use-package-process-keywords name rest state))))
 
 (add-hook 'emacs-startup-hook #'doom-load-packages-incrementally-h)
 
@@ -2327,7 +2369,17 @@ selection of all minor-modes, active or not."
             isearch-yank-flag t)
       (isearch-search-and-update))))
 
-(add-hook 'isearch-mode-hook 'my-isearch-yank-word-hook)
+(add-hook 'isearch-mode-hook 'my/isearch-yank-word-hook)
+
+
+;;; Occur inside isearch
+;; Isearch Occur
+(defun my/isearch-occur ()
+  (interactive)
+  (let ((case-fold-search isearch-case-fold-search))
+    (occur
+     (if isearch-regexp isearch-string (regexp-quote isearch-string)))))
+
 
 
 ;;; Replace Word
@@ -2370,6 +2422,26 @@ selection of all minor-modes, active or not."
         (setq counter (1+ counter))
         (forward-line 1))
       (set-marker end-marker nil))))
+
+;;; Insert Lorem Ipsum
+(defun my/insert-lorem-ipsum ()
+  "Insert a lorem ipsum."
+  (interactive)
+  (insert "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do "
+          "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim"
+          "ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
+          "aliquip ex ea commodo consequat. Duis aute irure dolor in "
+          "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
+          "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
+          "culpa qui officia deserunt mollit anim id est laborum."))
+
+;;; Accept non-y responses as no
+(defun my/y-or-n-p-optional (prompt)
+  "Prompt the user for a yes or no response, but accept any non-y
+response as a no."
+  (let ((query-replace-map (copy-keymap query-replace-map)))
+    (define-key query-replace-map [t] 'skip)
+    (y-or-n-p prompt)))
 
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
