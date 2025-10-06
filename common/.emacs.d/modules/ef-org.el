@@ -62,7 +62,9 @@
 ;;; Org General Settings
 (use-package org
   :ensure nil
-  :defer t
+  :defer-incrementally (calendar find-func format-spec org-macs org-compat org-faces org-entities
+                                 org-list org-pcomplete org-src org-footnote org-macro ob org org-agenda
+                                 org-capture)
   :init
   (setq-default org-directory "~/Org/")
   :config
@@ -146,7 +148,6 @@
 
   ;; Shift selct
   (setq org-support-shift-select 'always)
-
 
   )
 
@@ -1111,6 +1112,75 @@ context.  When called with an argument, unconditionally call
   (modify-all-frames-parameters
    '((right-divider-width . 2)
      (internal-border-width . 0)))
+
+  )
+
+;;;; Better Org Modern Function
+;; Use this
+
+;;; Better Org Modern
+(defun my/org-modern-hook ()
+  "Enabling org-modern and changing all sorts of settings according to its README."
+  (interactive)
+
+  ;; Option 1: Per buffer
+  (add-hook 'org-mode-hook #'org-modern-mode)
+  (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+
+  ;; Option 2: Globally
+  (global-org-modern-mode)
+
+  ;; Minimal UI
+  (package-initialize)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+                                        ;  (modus-themes-load-operandi)
+
+  ;; Choose some fonts
+  (set-face-attribute 'default nil :family "Berkeley Nerd Font")
+  (set-face-attribute 'variable-pitch nil :family "SN Pro")
+  (set-face-attribute 'org-modern-symbol nil :family "Berkeley Nerd Font")
+
+  ;; Add frame borders and window dividers
+  (modify-all-frames-parameters
+   '((right-divider-width . 40)
+     (internal-border-width . 40)))
+  (dolist (face '(window-divider
+                  window-divider-first-pixel
+                  window-divider-last-pixel))
+    (face-spec-reset-face face)
+    (set-face-foreground face (face-attribute 'default :background)))
+  (set-face-background 'fringe (face-attribute 'default :background))
+
+  (setq
+   ;; Edit settings
+   org-auto-align-tags nil
+   org-tags-column 0
+   org-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+
+   ;; Org styling, hide markup etc.
+   org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-ellipsis "…"
+
+   ;; Do not add source block fringe markers if org-indent-mode is
+   ;; enabled. org-indent-mode uses line prefixes for indentation.
+   ;; Therefore we cannot have both.
+
+   ;; Agenda styling
+   org-agenda-tags-column 0
+   org-agenda-block-separator ?─
+   org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "⭠ now ─────────────────────────────────────────────────")
+
+  ;; (global-org-modern-mode)
 
   )
 

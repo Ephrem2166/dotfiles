@@ -48,7 +48,6 @@
 ;;;; disk changes.
 (use-package autorevert
   :ensure nil
-  :defer t
   :custom
   (auto-revert-interval 3)
   (auto-revert-avoid-polling t)
@@ -336,6 +335,8 @@
   (setq-default word-wrap t)
   ;; Disable wrapping by default due to its performance cost.
   (setq-default truncate-lines t)
+  ;; Truncate lines in all buffers
+  (setq-default global-visual-line-mode t)
 
   ;; Various Modes
   (set-fringe-mode 8)
@@ -807,7 +808,6 @@ Intended to be added to `isearch-mode-hook'."
         (isearch-yank-internal (lambda () end)))))
 
   (add-hook 'isearch-mode-hook #'my/isearch-mode-setup)
-
   ;; (define-key ef-file-keymap (kbd "s") #'my/isearch-yank-symbol)
   ;; (setq search-default-mode 'char-fold-to-regexp)
   (setq search-default-mode nil)

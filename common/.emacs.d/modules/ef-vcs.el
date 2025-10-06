@@ -60,7 +60,7 @@
 ;;; Magit
 (use-package magit
   :ensure t
-  :defer 10
+  :defer-incrementally (dash f s with-editor git-commit transient)
   :after transient
   :custom
   (magit-define-global-key-bindings nil)

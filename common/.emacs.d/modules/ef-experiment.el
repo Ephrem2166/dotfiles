@@ -209,6 +209,27 @@ If BUFFER is displayed in some window, select that window instead."
   (interactive)
   (org-table-map-tables 'org-table-align 'quietly))
 
+;;; Kill Back to Indentation Instead of Full Line
+(defun my/kill-back-to-indentation ()
+  "Kill from point back to the first non-whitespace character on the line."
+  (interactive)
+  (let ((prev-pos (point)))
+    (back-to-indentation)
+    (kill-region (point) prev-pos)))
+
+;;; TEST: Better Comment
+(defun my/comment-dwim-line (&optional arg)
+"Replacement for the comment-dwim command.
+If no region is selected and current line is not blank and we are not at the end of the line,
+then comment current line.
+Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line."
+(interactive "*P")
+(if (bound-and-true-p paredit-mode)
+    (paredit-comment-dwim arg)
+  (comment-normalize-vars)
+  (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+    (comment-dwim arg))))
 
 (provide 'ef-experiment)
 
