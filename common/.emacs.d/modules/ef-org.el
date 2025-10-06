@@ -28,7 +28,7 @@
   ;; (org-indent-mode 1)
   ;; (truncate-lines 1)
   ;; (center-document-mode 1)
-  (org-display-inline-images)
+  (org-display-inline-images 1)
   ;; It messes with org-table
   ;; (variable-pitch-mode)
   ;; (lambda () (setq-local line-spacing 0.2 fill-column 100))

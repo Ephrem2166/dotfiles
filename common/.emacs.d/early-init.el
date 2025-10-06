@@ -208,7 +208,12 @@ not retain the generic background set by the function
 ;;    (format ";; %s, initialization in %s\n\n"
 ;;            emacs-version (emacs-init-time "%.3fs"))))
 
-
+;; Remove command line options that aren't relevant to the current OS; this
+;; results in slightly less processing at startup.
+(unless (eq system-type 'darwin)
+  (setq command-line-ns-option-alist nil))
+(unless (eq system-type 'gnu/linux)
+  (setq command-line-x-option-alist nil))
 
 (provide 'early-init)
 ;;; early-init ends here

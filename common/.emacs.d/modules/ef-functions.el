@@ -938,6 +938,12 @@ arg)."
   (interactive)
   (insert (shell-command-to-string "echo -n $(date +'%b %d, %Y')")))
 
+;;; Insert Current Date ISO Format
+(defun my/insert-date-iso ()
+  "Insert the current date, ISO format eg. 2016-12-09."
+  (interactive "*")
+  (insert (format-time-string "%F")))
+
 ;;; Insert Current File Name
 (defun my/insert-current-filename ()
   "Insert current buffer filename."
@@ -2435,6 +2441,121 @@ selection of all minor-modes, active or not."
           "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
           "culpa qui officia deserunt mollit anim id est laborum."))
 
+;;; Better `timestamp' and datestamp
+(defun my/insert-timestamp()
+  "Insert the current time in yyyy-mm-dd format."
+  (interactive "*")
+  (if (eq major-mode 'org-mode)
+      (progn
+        (org-insert-time-stamp nil t nil)
+        (insert " ")
+        )
+    (insert (format-time-string "%Y-%m-%d" (current-time)))
+    )
+  )
+
+(defun my/insert-datestamp()
+  "Insert the current date in yyyy-mm-dd format."
+  (interactive "*")
+  (if (eq major-mode 'org-mode)
+      (progn
+        (org-insert-time-stamp nil nil nil)
+        (insert " ")
+        )
+    (insert (format-time-string "%Y-%m-%d" (current-time)))
+    )
+  )
+
+;;; Better Switcher
+(defun my/switch-to-thing ()
+  "Using an unified interface to Switch to:
+- a buffer,
+- a recently visited file,
+- a bookmark,
+- a recently used dired directory,
+- an eyebrowser slot
+
+(disabled switching to themes)
+"
+  (interactive)
+  (let* ((buffers (mapcar #'buffer-name (buffer-list)))
+         (recent-files recentf-list)
+         (bookmarks (bookmark-all-names))
+         ;; (file-at-point (list (ffap-guesser)))
+         ;;(themes (custom-available-themes))
+         (directories dired-recent-directories-file)
+         ;; (eyebrowse (--map (eyebrowse-format-slot it) (eyebrowse--get 'window-configs)))
+         (all-options (append
+                       buffers
+                       recent-files
+                       bookmarks
+                       ;; eyebrowse
+                       directories
+                       ;; (mapcar (lambda (theme) (concat "Theme: " (symbol-name theme))) themes)
+                       ))
+         (selection (completing-read "Switch to: "
+                                     (lambda (str pred action)
+                                       (if (eq action 'metadata)
+                                           '(metadata . ((category . file)))
+                                         (complete-with-action action all-options str pred)))
+                                     nil t nil 'file-name-history)))
+    (message (concat "DEBUG: selection =" selection))
+    (pcase selection
+      ;; ((pred (lambda (sel) (member sel eyebrowse)))
+      ;;  ;; may be a bit hacky but this trick converts the string selection that looks like "3:my config" to the number 3:
+      ;;  (eyebrowse-switch-to-window-config (my-number-or-float selection)))
+      ((pred (lambda (sel) (member sel buffers))) (switch-to-buffer selection))
+      ((pred (lambda (sel) (member sel bookmarks))) (bookmark-jump selection))
+      ((pred (lambda (sel) (member sel directories))) (dired selection))
+      ;;((pred (lambda (sel) (string-prefix-p "Theme: " sel)))
+      ;; (load-theme (intern (substring selection (length "Theme: "))) t))
+      (_ (find-file selection)))))
+
+(global-set-key (kbd "C-c SPC") 'my/switch-to-thing)
+
+
+;;; Add advice to `delete-blank-lines'
+(defun my/delete-blank-lines-in-region (&rest args)
+  (let ((do-not-run-orig-fn (use-region-p)))
+    (when do-not-run-orig-fn
+      (flush-lines "^[[:blank:]]*$" (region-beginning) (region-end)))
+    do-not-run-orig-fn))
+(advice-add 'delete-blank-lines :before-until #'my/delete-blank-lines-in-region)
+
+;;; Anonymize
+;; Hide words
+(defun my/anonymize (&optional only-numbers)
+  "Replace alphabetical and numerical characters with random lowercase alphabets.
+
+Anonymize the selected region. If no region is selected, apply this function on
+the whole buffer.
+
+This function is useful when you want share an anonymized code snippet to someone
+to help with some debug.
+
+If ONLY-NUMBERS is non-nil, randomize only the numbers."
+  (interactive "P")
+  (let ((beg (if (use-region-p) (region-beginning) (point-min)))
+        (end (if (use-region-p) (region-end) (point-max))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (save-excursion
+        (let ((case-fold-search nil))
+          (unless only-numbers
+            (goto-char (point-min))
+            (while (re-search-forward "[a-z]" nil :noerror)
+              (replace-match (char-to-string (+ ?a (random (- ?z ?a))))))
+            (goto-char (point-min))
+            (while (re-search-forward "[A-Z]" nil :noerror)
+              (replace-match (char-to-string (+ ?A (random (- ?Z ?A)))))))
+          (goto-char (point-min))
+          (while (re-search-forward "[0-9]" nil :noerror)
+            (replace-match (char-to-string (+ ?0 (random (- ?9 ?0)))))))))))
+
+
+
+
+
 ;;; Accept non-y responses as no
 (defun my/y-or-n-p-optional (prompt)
   "Prompt the user for a yes or no response, but accept any non-y
@@ -2443,5 +2564,95 @@ response as a no."
     (define-key query-replace-map [t] 'skip)
     (y-or-n-p prompt)))
 
+;;; Show the evaluated value of an expression as a comment
+(defun my/show-me ()
+  "Evaluate a Lisp expression and insert its value
+   as a comment at the end of the line.
+
+   Useful for documenting values or checking values.
+  "
+  (interactive)
+  (-let [it
+         (thread-last (thing-at-point 'line)
+                      read-from-string
+                      car
+                      eval
+                      (format " ;; ⇒ %s"))]
+    (end-of-line)
+    (insert it)))
+
+;;; Kill all buffers that are not associated with a file
+(defun my/clean-buffers ()
+  "Kill all buffers that are not associated with a file.
+  By convention, such files are named in *earmuffs* style."
+  (interactive)
+  (ignore-errors (mapcar #'kill-buffer (--filter (s-matches? "\\*.*\\*" it) (mapcar #'buffer-name (buffer-list))))))
+
+
+;;; My `Agenda' for the Day
+(defun my/agenda-for-day ()
+  "Call this method, then enter say “-fri” to see tasks timestamped for last Friday."
+  (interactive)
+  (let* ((date (org-read-date))
+         (org-agenda-buffer-tmp-name (format "*Org Agenda(a:%s)*" date))
+         (org-agenda-sticky nil)
+         (org-agenda-span 'day)
+         ;; Putting the agenda in log mode, allows to see the tasks marked as DONE
+         ;; at the corresponding time of closing. If, like me, you clock all your
+         ;; working time, the task will appear also every time it was worked on.
+         ;; This is great to get a sens of what was accomplished.
+         (org-agenda-start-with-log-mode t))
+    (org-agenda-list nil date nil)))
+
+;;; Replace a word at point
+(defun my/symbol-replace (replacement)
+  "Replace all standalone symbols in the buffer matching the one at point."
+  (interactive  (list (read-from-minibuffer "Replacement for thing at point: " nil)))
+  (save-excursion
+    (let ((symbol (or (thing-at-point 'symbol) (error "No symbol at point!"))))
+      (beginning-of-buffer)
+      ;; (query-replace-regexp symbol replacement)
+      (replace-regexp (format "\\b%s\\b" (regexp-quote symbol)) replacement))))
+
+
+
+;;; Change the view of the buffer
+(defun my/toggle-selective-display (column)
+  (interactive "P")
+  (set-selective-display
+   (or column
+       (unless selective-display
+         (1+ (current-column))))))
+
+
+;;; Delete entries into the kill ring related to specific current buffer
+(defun my/clean-kill-ring (&optional buffer)
+  "Remove entries matching BUFFER from `kill-ring'.
+
+Also clears PRIMARY and SECONDARY selections by setting them to
+the empty string and clears CLIPBOARD by setting it to the first
+remaining element of `kill-ring', which should clear the
+clipboard for other applications as well."
+  (interactive)
+  ;; Just do this so current kill definitely doesn't contain any
+  ;; sensitive info. This element will be removed anyway since the
+  ;; empty string matches anything.
+  (kill-new "")
+  (setq kill-ring
+        (cl-loop
+         with bufstring = (with-current-buffer (or buffer (current-buffer)) (buffer-string))
+         for kill in kill-ring
+         unless (string-match-p (regexp-quote kill) bufstring)
+         collect kill))
+  (gui-set-selection 'CLIPBOARD (or (car kill-ring) ""))
+  (gui-set-selection 'PRIMARY "")
+  ;; (gui-set-selection 'SECONDARY "")
+  (message "Kill ring cleared of entries matching buffer %S" (buffer-name buffer)))
+
+
+
+
+
 (provide 'ef-functions)
+
 ;;; ef-functions.el ends here

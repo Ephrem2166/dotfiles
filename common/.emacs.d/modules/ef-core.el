@@ -634,6 +634,7 @@
              (name . "^\\*Calendar\\*$")
              (name . "^\\*Org Agenda")
              (name . "^ \\*Agenda")
+             (mode . org-agenda-mode)
              (mode . org-mode)))
            ("Emacs"
             (or
@@ -1399,6 +1400,8 @@ to the IFF buffer or  the files listed."
 (use-package window
   :ensure nil
   :config
+
+  (setq recenter-positions '(0.50 0.07 0.93)) ;default: '(middle top bottom)
   ;; Windows: Prefer verticl splitting
   (setq split-width-threshold 170)
   (setq split-height-threshold 80)
