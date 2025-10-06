@@ -231,6 +231,86 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
       (comment-or-uncomment-region (line-beginning-position) (line-end-position))
     (comment-dwim arg))))
 
+;;; TEST: Auto insert
+;; (use-package auto-insert
+;;   :ensure nil
+;;   :config
+;;
+;;   (setq auto-insert-query nil)
+;;   ;; Python
+;;   (define-auto-insert
+;;     '("\\.py\\'" . "Python")
+;;     '(nil
+;;       "# -*- coding: utf-8 -*-\n"
+;;       ))
+;;
+;;   ;; Org
+;;   (define-auto-insert
+;;     '("\\.org\\'" . "Org")
+;;     '(nil
+;;       "#+TITLE: " (read-from-minibuffer "Title: " (replace-regexp-in-string "\\(^.+\\)\.org$" "\\1" (buffer-real-name))) "\n"
+;;       "#+DATE: " (format-time-string "%Y/%m/%d（%a）%H:%M") "\n"
+;;       "#+AUTHOR: " user-full-name "\n"
+;;       "#+EMAIL: " user-mail-address "\n"
+;;       "#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \\n:nil ^:t arch:headline\n"
+;;       "#+OPTIONS: author:t c:nil creator:comment d:(not \"LOGBOOK\") date:t\n"
+;;       "#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil stat:t\n"
+;;       "#+OPTIONS: tags:t tasks:t tex:t timestamp:t toc:nil todo:t |:t\n"
+;;       "#+CREATOR: " (format "Emacs %s (Org mode %s)"
+;;                             emacs-version (org-version nil nil)) "\n"
+;;       "#+DESCRIPTION:\n"
+;;       "#+EXCLUDE_TAGS: noexport\n"
+;;       "#+KEYWORDS:\n"
+;;       "#+LANGUAGE: en\n"
+;;       "#+SELECT_TAGS: export\n"
+;;       ))
+;;   )
+
+;;; TEST: Download File
+(defun my/download-file (url directory file-name)
+  "Download the file at URL into DIRECTORY.
+The FILE-NAME defaults to the one used in the URL."
+  (interactive
+   ;; We're forced to let-bind url here since we access it before
+   ;; interactive binds the function parameters.
+   (let ((url (read-from-minibuffer "URL: ")))
+     (list
+      url
+      (read-directory-name "Destination dir: ")
+      ;; deliberately not using read-file-name since that inludes the directory
+      (read-from-minibuffer
+       "File name: "
+       (car (last (s-split "/" url)))))))
+  (let ((destination (f-join directory file-name)))
+    (url-copy-file url destination 't)
+    (find-file destination)))
+
+;;; TEST: Create a Duplicate Buffer
+(defun my/duplicate-buffer (new-name)
+  "Create a copy of the current buffer with the filename NEW-NAME.
+The original buffer and file are untouched."
+  (interactive (list (read-from-minibuffer "New name: " (buffer-file-name))))
+
+  (let ((filename (buffer-file-name))
+        (new-directory (file-name-directory new-name))
+        (contents (buffer-substring (point-min) (point-max))))
+    (unless filename (error "Buffer '%s' is not visiting a file!" (buffer-name)))
+
+    (make-directory new-directory t)
+    (find-file new-name)
+    (insert contents)
+    (basic-save-buffer)))
+
+;;; TEST: Mark Text Using M-SPC
+(defun my/mark-symbol-at-point ()
+  (interactive)
+  (let ((bounds (bounds-of-thing-at-point 'symbol)))
+    (cl-assert bounds nil "No symbol at point")
+    (goto-char (car bounds))
+    (push-mark (cdr bounds) nil t)))
+(global-set-key (kbd "M-SPC") #'my/mark-symbol-at-point )
+
+
 (provide 'ef-experiment)
 
 ;;; ef-experiment.el ends here
