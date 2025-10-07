@@ -98,7 +98,6 @@
 
 ;;; Doom Modeline
 (use-package doom-modeline
-  :disabled
   :ensure t
   :init (doom-modeline-mode 1)
   ;; (setq-default mode-line-format
