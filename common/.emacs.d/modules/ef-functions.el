@@ -1022,7 +1022,20 @@ The original function deletes trailing whitespace of the current line."
       (delete-blank-lines)
       (if (looking-at regexp) (delete-blank-lines)))
     (move-to-column col)))
-(define-key ef-file-keymap (kbd "o") #'my/delete-blank-lines-dwim)
+;; (define-key ef-file-keymap (kbd "o") #'my/delete-blank-lines-dwim)
+
+;;; Delete Blank Lines
+(defun my/delete-blank-lines ()
+  "Delete all newline around cursor.
+URL `http://ergoemacs.org/emacs/emacs_shrink_whitespace.html'
+Version 2018-04-02"
+  (interactive)
+  (let ($p3 $p4)
+    (skip-chars-backward "\n")
+    (setq $p3 (point))
+    (skip-chars-forward "\n")
+    (setq $p4 (point))
+    (delete-region $p3 $p4)))
 
 ;;; Delete Backward Whitespace or Word
 (defun my/kill-whitespace-or-word (arg)
@@ -2652,6 +2665,43 @@ clipboard for other applications as well."
 
 
 
+
+;;; Create new buffer or file
+(defun my/create-new-file ()
+  "Create an untitled file."
+  (interactive)
+  (let ((buf (generate-new-buffer "untitled")))
+    (switch-to-buffer buf)
+    (funcall initial-major-mode)
+    (setq buffer-offer-save t)
+    buf))
+
+;;; Reopen Recently Closed Buffer
+(defvar killed-buffer-list nil
+  "List of recently killed buffers.")
+
+(defun add-buffer-to-killed-list ()
+  "If buffer is associated with a file name, add that file
+to the `killed-buffer-list' when killing the buffer."
+  (when buffer-file-name
+    (push buffer-file-name killed-buffer-list)))
+(add-hook 'kill-buffer-hook #'add-buffer-to-killed-list)
+
+
+(defun my/reopen-killed-buffer ()
+  "Reopen the most recently killed file buffer, if one exists."
+  (interactive)
+  (when killed-buffer-list
+    (find-file (pop killed-buffer-list))))
+
+;;; Make current file executable
+(defun set-file-executable ()
+  "Add executable permissions on current file."
+  (interactive)
+  (when (buffer-file-name)
+    (set-file-modes buffer-file-name
+                    (logior (file-modes buffer-file-name) #o100))
+    (message (concat "Made " buffer-file-name " executable"))))
 
 (provide 'ef-functions)
 

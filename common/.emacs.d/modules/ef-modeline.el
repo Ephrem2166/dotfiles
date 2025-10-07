@@ -6,6 +6,7 @@
 (setq-default mode-line-format
               '("%e" ; print error message about full memory.
                 " "
+                toki-modeline-time
                 mode-line-front-space
                 (:propertize "λ " face font-lock-keyword-face)
                 ;; mode-line-mule-info
@@ -14,8 +15,8 @@
                 ;; mode-line-remote
                 ;; mode-line-frame-identification
                 mode-line-buffer-identification
-                "   "
-                ;; mode-line-position
+                " "
+                mode-line-position
                 ;; mode-line-format-right-align
                 ;; (vc-mode vc-mode)
                 ;; "  "
@@ -34,9 +35,7 @@
 (display-time-mode 1)
 (display-time-update)
 
-
-
-
+(display-battery-mode)
 
 (provide 'ef-modeline)
 ;;; ef-modeline.el ends here

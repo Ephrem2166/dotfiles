@@ -59,7 +59,7 @@
   (auto-revert-stop-on-user-input nil)
   ;; (setq global-auto-revert-ignore-modes '(Buffer-menu-mode))
   :config
-  ;; (global-auto-revert-mode -1)
+  (global-auto-revert-mode 1)
   ;; Performance
   (defun my/visible-buffers (&optional buffer-list all-frames)
     "Return a list of visible buffers (i.e. not buried)."
@@ -396,6 +396,37 @@
           kill-buffer-delete-auto-save-files t
           ))
 
+;;; Emacs: Prettify Symbols
+(use-package emacs
+  :ensure nil
+  :config
+  (setq prettify-symbols-unprettify-at-point 'right-edge)
+  (setq-default prettify-symbols-alist
+                '(("<-" . ?←)
+                  ("->" . ?→)
+                  ("->>" . ?↠)
+                  ("=>" . ?⇒)
+                  ;; ("/=" . ?≠)
+                  ;; ("!=" . ?≠)
+                  ;; ("==" . ?≡)
+                  ;; ("<=" . ?≤)
+                  ;; (">=" . ?≥)
+                  ("=<<" . (?= (Br . Bl) ?≪))
+                  (">>=" . (?≫ (Br . Bl) ?=))
+                  ("<=<" . ?↢)
+                  (">=>" . ?↣)
+                  ("lambda" . 955)
+                  ("delta" . 120517)
+                  ("epsilon" . 120518)
+                  ("<" . 10216)
+                  (">" . 10217)
+                  ;; ("[" . 10214)
+                  ;; ("]" . 10215)
+                  ("<<" . 10218)
+                  (">>" . 10219)
+                  ))
+  )
+
 ;;; Electric Pair
 ;; Toggle automatic parens pairing (Electric Pair mode).
 (use-package elec-pair
@@ -426,6 +457,12 @@
                               (?\{ . ?\})
                               (?\[ . ?\])
                               )))
+
+;;; FFAP: Find File At Point
+;; Command find-file-at-point replaces find-file.
+(use-package ffap
+  :ensure nil
+  :hook (on-first-input . ffap-bindings))
 
 ;;; Face Remap
 ;; Variable Pitch Mode Setup
@@ -1079,6 +1116,7 @@ Intended to be added to `isearch-mode-hook'."
 ;;; Repeat
 ;; Used to reduce key sequence length
 (use-package repeat
+  :disabled
   :ensure nil
   :hook (after-init . repeat-mode)
   :config

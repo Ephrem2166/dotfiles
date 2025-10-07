@@ -311,6 +311,68 @@ The original buffer and file are untouched."
 (global-set-key (kbd "M-SPC") #'my/mark-symbol-at-point )
 
 
+;;; Goto matching parens using `%`
+(defun my/goto-match-paren (arg)
+  "Go to the matching paren/bracket, otherwise (or if ARG is not
+    nil) insert %.  vi style of % jumping to matching brace."
+  (interactive "p")
+  (if (not (memq last-command '(set-mark
+                                cua-set-mark
+                                zz/goto-match-paren
+                                down-list
+                                up-list
+                                end-of-defun
+                                beginning-of-defun
+                                backward-sexp
+                                forward-sexp
+                                backward-up-list
+                                forward-paragraph
+                                backward-paragraph
+                                end-of-buffer
+                                beginning-of-buffer
+                                backward-word
+                                forward-word
+                                mwheel-scroll
+                                backward-word
+                                forward-word
+                                mouse-start-secondary
+                                mouse-yank-secondary
+                                mouse-secondary-save-then-kill
+                                move-end-of-line
+                                move-beginning-of-line
+                                backward-char
+                                forward-char
+                                scroll-up
+                                scroll-down
+                                scroll-left
+                                scroll-right
+                                mouse-set-point
+                                next-buffer
+                                previous-buffer
+                                previous-line
+                                next-line
+                                back-to-indentation
+                                )))
+      (self-insert-command (or arg 1))
+    (cond ((looking-at "\\s\(") (sp-forward-sexp) (backward-char 1))
+          ((looking-at "\\s\)") (forward-char 1) (sp-backward-sexp))
+          (t (self-insert-command (or arg 1))))))
+
+
+(bind-key "%" 'my/goto-match-paren)
+
+;;; Create non-existing folder when saving a file.
+(defun my/offer-to-create-parent-directories-on-save ()
+  "When saving a file in a directory that doesn't exist, offer
+to (recursively) create the file's parent directories."
+  (add-hook 'before-save-hook
+            (lambda ()
+              (when buffer-file-name
+                (let ((dir (file-name-directory buffer-file-name)))
+                  (when (and (not (file-exists-p dir))
+                             (y-or-n-p (format "Directory %s does not exist. Create it?" dir)))
+                    (make-directory dir t)))))))
+
 ;;; Quiet Macro
 (defmacro quiet! (&rest forms)
   "Run FORMS without generating any output.
@@ -339,6 +401,78 @@ In tty Emacs, messages are suppressed completely."
 
 
 
+
+
+;;; TEST: Keybinding (move it to functions)
+(use-package bind-key
+  :ensure nil
+  :bind
+  (:prefix-map my/files-map
+               :prefix "C-z f")
+  :bind
+  (:prefix-map my/toggles-map
+               :prefix "C-z x"))
+
+;;; TEST: Shortcut to insert global-set-key
+(defun my/insert-global-set-key (key command)
+  (interactive (list (read-key-sequence "Key sequence: ")
+                     (read-command "Command: ")))
+  (prin1 `(global-set-key (kbd ,(key-description key)) ',command)
+         (current-buffer)))
+
+;;; TEST: Open Directory in System Viewer
+(defmacro when-system (type &rest body)
+  "Evaluate BODY if `system-type' equals TYPE."
+  (declare (indent defun))
+  `(when (eq system-type ',type)
+     ,@body))
+
+(defun my/open-directory-in-system-viewer ()
+  (interactive)
+  (when-system gnu/linux
+    (if default-directory
+        (browse-url-of-file (expand-file-name default-directory))
+      (error "No `default-directory' to open")))
+  (when-system windows-nt
+    (require 'w32-browser)
+    (if default-directory
+        (w32explore (expand-file-name default-directory))
+      (error "No `default-directory' to open"))))
+
+
+
+;;; TEST: Copy/paste a region from emacs buffer with line + file reference
+(defun my/kill-with-linenum (beg end)
+  (interactive "r")
+  (save-excursion
+    (goto-char end)
+    (skip-chars-backward "\n \t")
+    (setq end (point))
+    (let* ((chunk (buffer-substring beg end))
+           (chunk (concat
+                   (format "╭──────── #%-d ─ %s ──\n│ "
+                           (line-number-at-pos beg)
+                           (or (buffer-file-name) (buffer-name)))
+                   (replace-regexp-in-string "\n" "\n│ " chunk)
+                   (format "\n╰──────── #%-d ─"
+                           (line-number-at-pos end)))))
+      (kill-new chunk)))
+  (deactivate-mark))
+
+
+
+;;; TEST: Goto Line
+(defun my/goto-line-number ()
+  (interactive)
+  (goto-char (point-min))
+  (forward-line (1- (string-to-number
+                     (read-from-minibuffer
+                      "Goto line: "
+                      (char-to-string last-command-event))))))
+
+;; (cl-loop for n from 1 to 9 do
+;;          (global-set-key (format "\M-g%d" n) 'my/goto-line-number))
+;; (global-set-key "\M-g?" 'describe-prefix-bindings)
 
 
 (provide 'ef-experiment)
