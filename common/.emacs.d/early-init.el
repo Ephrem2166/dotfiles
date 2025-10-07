@@ -28,7 +28,7 @@
 (setq native-comp-jit-compilation t)
 
 ;; Disable certain byte compiler warnings to cut down on the noise.
-(setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
+(setq byte-compile-warnings '(not obsolete free-vars unresolved noruntime lexical make-local))
 ;; Silence compiler warnings as they can be pretty disruptive
 (setq native-comp-async-report-warnings-errors nil)
 (setq native-comp-warning-on-missing-source nil)

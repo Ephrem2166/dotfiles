@@ -35,6 +35,8 @@
 ;;;; Completion At Point
 (global-set-key (kbd "M-<tab>") 'completion-at-point)
 
+;;;; Remap mark-sexp
+(global-set-key (kbd "M-SPC") 'mark-sexp)
 
 ;;;; Truncate lines
 (global-set-key (kbd "C-x C-l") #'toggle-truncate-lines)

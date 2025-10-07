@@ -8,9 +8,17 @@
   :hook
   (eshell-mode . capf-autosuggest-mode))
 
-;;; TODO Comint
+;;; TODO: Comint
 (use-package comint
   :ensure nil
+  :config
+  (setopt comint-prompt-read-only t)
+  (setopt comint-buffer-maximum-size 8192)
+  (setopt comint-scroll-to-bottom-on-input t)
+  (setopt comint-scroll-to-bottom-on-output nil)
+  (setopt comint-input-ignoredups t)
+  (setopt comint-scroll-show-maximum-output t)
+  (setopt comint-input-ring-size 5000)
   )
 
 ;; Eat
@@ -19,6 +27,7 @@
 ;;   :ensure t
 ;;   :config
 ;;   (eat-eshell-visual-command-mode 1))
+
 
 ;;; TODO: ESHELL
 

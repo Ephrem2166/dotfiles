@@ -69,6 +69,7 @@
         transient-history-file (concat user-emacs-directory "transient/history"))
   :after transient
   :custom
+  (magit-no-message (list "Turning on magit-auto-revert-mode..."))
   (magit-define-global-key-bindings nil)
   (magit-uniquify-buffer-names nil)
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
