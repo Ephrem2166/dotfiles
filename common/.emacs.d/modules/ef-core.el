@@ -466,15 +466,15 @@
 
 ;;; Face Remap
 ;; Variable Pitch Mode Setup
-(use-package face-remap
-  :ensure nil
-  :bind (:map ef-toggle-keymap
-              ("v" . variable-pitch-mode))
-  :hook ((text-mode org-mode) . my/enable-variable-pitch)
-  :config
-  (defun my/enable-variable-pitch ()
-    (unless (derived-mode-p 'mhtml-mode 'prog-mode 'nxml-mode 'org-mode 'yaml-mode)
-      (variable-pitch-mode 1))))
+;; (use-package face-remap
+;;   :ensure nil
+;;   :bind (:map ef-toggle-keymap
+;;               ("v" . variable-pitch-mode))
+;;   :hook ((text-mode org-mode) . my/enable-variable-pitch)
+;;   :config
+;;   (defun my/enable-variable-pitch ()
+;;     (unless (derived-mode-p 'mhtml-mode 'prog-mode 'nxml-mode 'org-mode 'yaml-mode)
+;;       (variable-pitch-mode 1))))
 
 ;;; Files
 (use-package files
@@ -1157,7 +1157,10 @@ Intended to be added to `isearch-mode-hook'."
                                         register-alist
                                         search-ring
                                         regexp-search-ring
-                                        extended-command-history)))
+                                        extended-command-history))
+
+
+  )
 
 ;;; Saveplace
 ;; saveplace remembers your location in a file when saving files
@@ -1220,6 +1223,10 @@ Intended to be added to `isearch-mode-hook'."
   (setopt remote-file-name-inhibit-auto-save t)
   (setopt save-interprogram-paste-before-kill t)
 
+  ;; Performance: Remove text properties for kill ring entries
+  (defun unpropertize-kill-ring ()
+    (setq kill-ring (mapcar 'substring-no-properties kill-ring)))
+  (add-hook 'kill-emacs-hook #'unpropertize-kill-ring)
   )
 
 ;;; Speedbar

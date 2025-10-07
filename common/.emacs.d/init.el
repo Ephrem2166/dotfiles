@@ -24,7 +24,7 @@
 (require 'ef-writing)
 (require 'ef-reading)
 (require 'ef-org)
-(require 'ef-modeline)
+;; (require 'ef-modeline)
 ;; External
 (require 'ef-completion)
 (require 'ef-minibuffer)
