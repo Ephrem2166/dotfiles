@@ -311,6 +311,36 @@ The original buffer and file are untouched."
 (global-set-key (kbd "M-SPC") #'my/mark-symbol-at-point )
 
 
+;;; Quiet Macro
+(defmacro quiet! (&rest forms)
+  "Run FORMS without generating any output.
+
+This silences calls to `message', `load', `write-region' and anything that
+writes to `standard-output'. In interactive sessions this inhibits output to the
+echo-area, but not to *Messages*."
+  (declare (indent 0))
+  `(if init-file-debug
+       (progn ,@forms)
+     ,(if noninteractive
+          `(quiet!! ,@forms)
+        `(let ((inhibit-message t)
+               (save-silently t))
+           (prog1 ,@forms (message ""))))))
+
+
+(defun doom-shut-up-a (fn &rest args)
+  "Generic advisor for silencing noisy functions.
+
+In interactive Emacs, this just inhibits messages from appearing in the
+minibuffer. They are still logged to *Messages*.
+
+In tty Emacs, messages are suppressed completely."
+  (quiet! (apply fn args)))
+
+
+
+
+
 (provide 'ef-experiment)
 
 ;;; ef-experiment.el ends here

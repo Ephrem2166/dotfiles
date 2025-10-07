@@ -1021,7 +1021,6 @@ Intended to be added to `isearch-mode-hook'."
 ;;; Recentf
 (use-package recentf
   :ensure nil
-  :defer 10
   :hook
   (after-init . recentf-mode)
   :custom
@@ -1046,6 +1045,7 @@ Intended to be added to `isearch-mode-hook'."
   ;;   (setq recentf-list (cl-remove-if-not 'file-exists-p recentf-list))
   ;;   (recentf-cleanup))
 
+
   ;; Advice recentf-load-list to perform cleanup after loading the recentf
   ;; list.
   ;; (advice-add 'recentf-load-list :after #'my/recentf-cleanup)
@@ -1055,6 +1055,7 @@ Intended to be added to `isearch-mode-hook'."
                                              "/run"))))
   ;; For perfromance
   (add-to-list 'recentf-filename-handlers #'substring-no-properties)
+  (advice-add #'recentf-load-list :around #'doom-shut-up-a)
   )
 
 
@@ -1086,7 +1087,8 @@ Intended to be added to `isearch-mode-hook'."
   (setq repeat-exit-timeout 5)
   (setq repeat-check-key t)
   (setq repeat-echo-function 'ignore)
-  (setq repeat-exit-key (kbd "<escape>")))
+  (setq repeat-exit-key (kbd "<escape>"))
+  )
 
 
 ;;; Savehist
