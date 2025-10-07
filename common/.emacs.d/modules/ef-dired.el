@@ -171,6 +171,7 @@
   (setq dired-clean-up-buffers-too t)
   (setq dired-clean-confirm-killing-deleted-buffers t)
   (setq dired-x-hands-off-my-keys t)    ; easier to show the keys I use
+
   (setq dired-bind-man nil)
   (setq dired-bind-info nil))
 

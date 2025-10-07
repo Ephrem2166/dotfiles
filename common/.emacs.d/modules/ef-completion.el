@@ -28,7 +28,7 @@
   (add-to-list 'completion-at-point-functions #'cape-emoji)
   (add-to-list 'completion-at-point-functions #'cape-keyword)
   :config
-  (setq cape-dict-file (concat user-emacs-directory "etc/dict.txt"))
+  (setq cape-dict-file (concat user-emacs-directory "etc/dictionary.txt"))
   (defun my/eglot-capf ()
     (setq-local completion-at-point-functions
                 (cons (cape-capf-super

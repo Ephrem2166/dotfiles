@@ -1021,7 +1021,7 @@ Intended to be added to `isearch-mode-hook'."
 ;;; Recentf
 (use-package recentf
   :ensure nil
-  :defer t
+  :defer 10
   :hook
   (after-init . recentf-mode)
   :custom
