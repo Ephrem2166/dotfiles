@@ -719,6 +719,28 @@ context.  When called with an argument, unconditionally call
 
   )
 
+;;; Org Agenda Custom Commands
+(use-package org
+  :ensure nil
+  :config
+  (setq org-agenda-custom-commands
+        '(
+          ;; Remove
+          ("#" " To remove"
+           ((todo "DONE|SKIP"))
+           ((org-agenda-overriding-header "Items to remove (use C-k)")
+            (org-agenda-include-diary nil)))
+          ;; Next Week Scheduled
+          ("H" " Next week scheduled/deadline"
+           agenda ""
+           ((org-agenda-overriding-header "Next week scheduled/deadline items")
+            (org-agenda-entry-types '(:deadline :scheduled))
+            (org-agenda-span 'week)
+            (org-deadline-warning-days 1)
+            (org-agenda-include-diary nil)))
+
+          ) ))
+
 ;;; Org Log
 (use-package org
   :ensure nil

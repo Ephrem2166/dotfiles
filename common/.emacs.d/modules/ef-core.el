@@ -59,7 +59,7 @@
   (auto-revert-stop-on-user-input nil)
   ;; (setq global-auto-revert-ignore-modes '(Buffer-menu-mode))
   :config
-  (global-auto-revert-mode 1)
+  (global-auto-revert-mode)
   ;; Performance
   (defun my/visible-buffers (&optional buffer-list all-frames)
     "Return a list of visible buffers (i.e. not buried)."
