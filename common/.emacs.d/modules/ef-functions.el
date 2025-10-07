@@ -424,7 +424,7 @@ If you want to disable incremental loading altogether, either remove
 `doom-load-packages-incrementally-h' from `emacs-startup-hook' or set
 `doom-incremental-first-idle-timer' to nil.")
 
-(defvar doom-incremental-first-idle-timer 2.0
+(defvar doom-incremental-first-idle-timer 5.0
   "How long (in idle seconds) until incremental loading starts.
 Set this to nil to disable incremental loading.")
 
@@ -486,6 +486,16 @@ If this is a daemon session, load them all immediately instead."
 ;;             org-faces org-entities org-list org-pcomplete org-src
 ;;             org-footnote org-macro ob org org-clock org-agenda
 ;;             org-capture))
+
+(doom-load-packages-incrementally
+ '(calendar find-func format-spec org-macs org-compat
+            org-faces org-entities org-list org-pcomplete org-src
+            org-footnote org-macro ob org org-clock org-agenda org-capture
+            org-attach magit-log magit-diff magit-status bookmark
+            eshell em-alias em-banner em-basic em-cmpl em-glob em-hist em-ls
+            em-prompt em-script em-term em-unix em-smart
+            init-eglot)
+ )
 ;;;;
 ;; Adds two keywords to `use-package' to expand its lazy-loading capabilities:
 ;;

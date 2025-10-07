@@ -475,6 +475,34 @@ In tty Emacs, messages are suppressed completely."
 ;; (global-set-key "\M-g?" 'describe-prefix-bindings)
 
 
+;;; TEST: Different Fonts for different org faces
+;; (defun my/org-font-setup ()
+;;   "Setup fixed-pitch font for Org."
+;;   (custom-set-faces
+;;    '(org-block ((t (:inherit fixed-pitch))))
+;;    '(org-table ((t (:inherit fixed-pitch))))
+;;    '(org-formula ((t (:inherit fixed-pitch))))
+;;    '(org-code ((t (:inherit fixed-pitch))))
+;;    '(org-verbatim ((t (:inherit fixed-pitch))))
+;;    '(org-special-keyword ((t (:inherit fixed-pitch))))
+;;    '(org-checkbox ((t (:inherit fixed-pitch))))
+;;    '(line-number ((t (:inherit fixed-pitch))))
+;;    '(line-number-current-line ((t (:inherit fixed-pitch))))
+;;    '(org-block-begin-line ((t (:inherit fixed-pitch))))
+;;    '(org-block-end-line ((t (:inherit org-block-begin-line))))))
+;;
+;; (add-to-list 'org-mode-hook #'my/org-font-setup)
+
+;;;; Alternative
+;; Ensure that anything that should be fixed-pitch in Org files appears that way
+;; (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+;; (set-face-attribute 'org-code nil   :inherit '(default fixed-pitch))
+;; (set-face-attribute 'org-table nil   :inherit '(default fixed-pitch))
+;; (set-face-attribute 'org-verbatim nil :inherit '(default fixed-pitch))
+;; (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+;; (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+;; (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
 (provide 'ef-experiment)
 
 ;;; ef-experiment.el ends here
