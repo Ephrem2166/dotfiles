@@ -14,6 +14,7 @@ common/.emacs.d/etc/savehist
 common/.emacs.d/etc/saveplace
 common/.emacs.d/tree-sitter/*
 common/.emacs.d/etc/dict.txt
+common/.emacs.d/etc/dictionary
 
 common/.config/nvim/lazyvim.json
 common/.config/nvim/lazy-lock.json

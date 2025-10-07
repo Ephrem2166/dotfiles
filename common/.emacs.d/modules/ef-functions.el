@@ -1559,7 +1559,6 @@ See `display-line-numbers' for what these values mean."
 
 
 
-
 ;;; Delete to the end of the buffer
 (defun my/delete-to-end-of-buffer ()
   (interactive)
@@ -2238,8 +2237,9 @@ selection of all minor-modes, active or not."
                              parent-directory))
            (progn (make-directory parent-directory 'parents)
                   t)
-           ))))
-(add-to-list 'find-file-not-found-functions 'my/create-non-existent-directory)
+           )
+      )))
+(add-hook 'find-file-not-found-functions 'my/create-non-existent-directory)
 
 ;;; Make Directory
 (defun my/make-directory-maybe ()
@@ -2483,14 +2483,14 @@ selection of all minor-modes, active or not."
          (bookmarks (bookmark-all-names))
          ;; (file-at-point (list (ffap-guesser)))
          ;;(themes (custom-available-themes))
-         (directories dired-recent-directories-file)
+         ;; (directories dired-recent-directories)
          ;; (eyebrowse (--map (eyebrowse-format-slot it) (eyebrowse--get 'window-configs)))
          (all-options (append
                        buffers
                        recent-files
                        bookmarks
                        ;; eyebrowse
-                       directories
+                       ;; directories
                        ;; (mapcar (lambda (theme) (concat "Theme: " (symbol-name theme))) themes)
                        ))
          (selection (completing-read "Switch to: "
@@ -2506,7 +2506,7 @@ selection of all minor-modes, active or not."
       ;;  (eyebrowse-switch-to-window-config (my-number-or-float selection)))
       ((pred (lambda (sel) (member sel buffers))) (switch-to-buffer selection))
       ((pred (lambda (sel) (member sel bookmarks))) (bookmark-jump selection))
-      ((pred (lambda (sel) (member sel directories))) (dired selection))
+      ;; ((pred (lambda (sel) (member sel directories))) (dired selection))
       ;;((pred (lambda (sel) (string-prefix-p "Theme: " sel)))
       ;; (load-theme (intern (substring selection (length "Theme: "))) t))
       (_ (find-file selection)))))

@@ -277,6 +277,7 @@
      ("NOTE"  error bold)
      ("DEBUG"  . "#EBCB9B")
      ("BUG" error italic)
+     ("REVIEW" font-lock-keyword-face bold)
      ("GOTCHA" . "#FF4500")
      ;; Documentation and closure.
      ("NOTE"       . "#1E90FF")    ; Dodger blue - Informational notes.

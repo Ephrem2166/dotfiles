@@ -61,15 +61,27 @@
 (use-package magit
   :ensure t
   :defer-incrementally (dash f s with-editor git-commit transient)
+  :init
+  (setq magit-auto-revert-mode nil)  ; we do this ourselves further down
+  ;; Must be set early to prevent ~/.emacs.d/transient from being created
+  (setq transient-levels-file  (concat user-emacs-directory "transient/levels")
+        transient-values-file  (concat user-emacs-directory  "transient/values")
+        transient-history-file (concat user-emacs-directory "transient/history"))
   :after transient
   :custom
   (magit-define-global-key-bindings nil)
   (magit-uniquify-buffer-names nil)
-  (magit-auto-revert-mode nil)
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (magit-bury-buffer-function #'magit-restore-window-configuration)
   (magit-refs-show-commit-count 'all)
   ;; (magit-refresh-status-buffer nil)
+  :config
+  (setq transient-default-level 5)
+  (setq magit-diff-refine-hunk t)
+  (setq magit-save-repository-buffers nil)
+  (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
+  (setq transient-display-buffer-action '(display-buffer-below-selected))
+  (add-hook 'magit-popup-mode-hook #'hide-mode-line-mode)
   (with-eval-after-load 'magit
     (setq magit-format-file-function #'magit-format-file-nerd-icons))
 
