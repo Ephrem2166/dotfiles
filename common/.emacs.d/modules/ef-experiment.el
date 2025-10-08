@@ -503,6 +503,7 @@ In tty Emacs, messages are suppressed completely."
 ;; (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
 ;; (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
 
+
 (provide 'ef-experiment)
 
 ;;; ef-experiment.el ends here

@@ -456,7 +456,12 @@
   (setq electric-pair-pairs '(
                               (?\{ . ?\})
                               (?\[ . ?\])
-                              )))
+                              ))
+  ;; disable auto pairing for <  >
+  (add-function :before-until electric-pair-inhibit-predicate
+                (lambda (c) (eq c ?<   ;; >
+                           )))
+  )
 
 ;;; FFAP: Find File At Point
 ;; Command find-file-at-point replaces find-file.
