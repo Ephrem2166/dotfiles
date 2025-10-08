@@ -578,6 +578,31 @@ Return either 'hide-all, 'headings-only, or 'show-all."
     (error nil)))
 
 
+;;; List Loaded Packages
+(defvar my-loaded-features-buffer "*loaded-features*"
+  "Buffer name for data about loaded features.")
+
+(defun my/list-loaded-features()
+  "List all currently loaded features."
+  (interactive)
+  (with-current-buffer (get-buffer-create my-loaded-features-buffer)
+    (erase-buffer)
+    (pop-to-buffer (current-buffer))
+
+    (insert (format "\n** %d features currently loaded\n"
+                    (length features)))
+
+    (let ((features-vec (apply 'vector features)))
+      (cl-sort features-vec 'string-lessp)
+      (cl-loop for x across features-vec
+               do (insert (format "  - %-25s: %s\n" x
+                                  (locate-library (symbol-name x))))))
+
+    (goto-char (point-min))))
+
+
+
+
 (provide 'ef-experiment)
 
 ;;; ef-experiment.el ends here
