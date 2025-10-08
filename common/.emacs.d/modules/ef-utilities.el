@@ -206,6 +206,13 @@
   )
 
 
+;;; ESUP
+(use-package esup
+  :ensure t
+  :defer t
+  :config
+  (setq esup-depth 0))
+
 ;;; Expand Region
 ;; Increase selected region by semantic units
 (use-package expand-region

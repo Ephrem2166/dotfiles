@@ -305,9 +305,36 @@
                                          ("#+END_SRC" . "«")
                                          ("#+begin_src" . "»")
                                          ("#+end_src" . "«")
+                                         ;; Greek Symbols
+                                         ("delta"  . ?Δ)
+                                         ("gamma"  . ?Γ)
+                                         ("phi"    . ?φ)
+                                         ("psi"    . ?ψ)
                                          ("lambda"  . "λ")
+                                         ;; Arrow
                                          ("->" . "→")
-                                         ("->>" . "↠")))
+                                         ("->>" . "↠")
+                                        ; Agenda tags 
+                                         (":@projects:"  . ?☕)
+                                         (":work:"       . ?🚀)
+                                         (":@inbox:"     . ?✉)
+                                         (":goal:"       . ?🎯)
+                                         (":task:"       . ?📋)
+                                         (":@thesis:"    . ?📝)
+                                         (":thesis:"     . ?📝)
+                                         (":emacs:"      . ?)
+                                         (":learn:"      . ?🌱)
+                                         (":code:"       . ?💻)
+                                         (":fix:"        . ?🛠)
+                                         (":bug:"        . ?🚩)
+                                         (":read:"       . ?📚)
+                                        ; Drawers
+                                         (":properties:" . ?)
+                                        ; Agenda scheduling
+                                         ("SCHEDULED:"   . ?🕘)
+                                         ("DEADLINE:"    . ?⏰)
+
+                                         ))
 
   (setq prettify-symbols-unprettify-at-point 'right-edge))
 
