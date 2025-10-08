@@ -168,6 +168,8 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
 
 (setq confirm-kill-emacs #'my/quit-emacs)
 
+
+
 ;;(global-set-key "\C-x\C-c" 'save-buffers-kill-emacs-with-confirm)
 
 ;;;; Open Files Externally
@@ -2712,6 +2714,15 @@ to the `killed-buffer-list' when killing the buffer."
     (set-file-modes buffer-file-name
                     (logior (file-modes buffer-file-name) #o100))
     (message (concat "Made " buffer-file-name " executable"))))
+
+;;; Create a lisp buffer for testing
+(defun my/lisp-interaction-buffer ()
+  (interactive)
+  (let ((buf (get-buffer-create "*lisp-interaction*")))
+    (with-current-buffer buf
+      (lisp-interaction-mode))
+    (switch-to-buffer buf)))
+
 
 (provide 'ef-functions)
 
