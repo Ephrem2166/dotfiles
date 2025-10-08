@@ -29,6 +29,7 @@
   :delight "Y"
   )
 ;;; Yasnippet snippets
+;; Disabled because I create my own snippets
 (use-package yasnippet-snippets
   :disabled
   :ensure t

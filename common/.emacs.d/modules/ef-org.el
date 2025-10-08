@@ -37,7 +37,7 @@
 ;; (add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))
 (add-hook 'org-mode-hook #'ef/org-mode-hooks)
 
-;;; Org Mode Hook Setup 2
+;;;; Org Mode Hook Setup 2
 (defun org-mode-hook-setup ()
   (setq-local evil-auto-indent nil)
   ;; org-mime setup, run this command in org-file, than yank in `message-mode'
@@ -59,6 +59,32 @@
 ;; Prevent flickering when org indent is enabled
 (add-hook 'org-mode-hook 'show-paren-mode nil)
 ;; (add-hook 'org-mode-hook  line-spacing 0.1)
+
+;;;; Org SRC Code Block in monospace font
+(use-package org
+  :ensure nil
+  :config
+  (defun my-adjoin-to-list-or-symbol (element list-or-symbol)
+    (let ((list (if (not (listp list-or-symbol))
+                    (list list-or-symbol)
+                  list-or-symbol)))
+      (require 'cl-lib)
+      (cl-adjoin element list)))
+
+  (eval-after-load "org"
+    '(mapc
+      (lambda (face)
+        (set-face-attribute
+         face nil
+         :inherit
+         (my-adjoin-to-list-or-symbol
+          'fixed-pitch
+          (face-attribute face :inherit))))
+      (list 'org-code 'org-block
+            ;; 'org-table 'org-block-background
+            )))
+  )
+
 ;;; Org General Settings
 (use-package org
   :ensure nil

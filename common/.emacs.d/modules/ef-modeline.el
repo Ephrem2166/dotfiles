@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (setq mode-line-compact nil)
-(setq mode-line-right-align-edge 'right-margin)
+(setq mode-line-right-align-edge 'right-fringe)
 (setq-default mode-line-format
               '("%e" ; print error message about full memory.
                 " "

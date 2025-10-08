@@ -958,17 +958,20 @@ Intended to be added to `isearch-mode-hook'."
   (outline-minor-mode-use-buttons nil)
   (outline-minor-mode-use-margins nil)
   :config
-  (defun my/outline-cycle ()
-    (interactive)
-    (if (save-excursion (forward-line 0)
-                        (looking-at-p outline-regexp))
-        (call-interactively #'outline-cycle)
-      (let* ((outline-minor-mode nil)
-             (cmd (or (key-binding (this-command-keys-vector))
-                      (key-binding (key-parse "TAB")))))
-        (when cmd
-          (setq this-command cmd)
-          (call-interactively cmd)))))
+
+
+  ;; Outline headings
+  ;; (defun my/outline-cycle ()
+  ;;   (interactive)
+  ;;   (if (save-excursion (forward-line 0)
+  ;;                       (looking-at-p outline-regexp))
+  ;;       (call-interactively #'outline-cycle)
+  ;;     (let* ((outline-minor-mode nil)
+  ;;            (cmd (or (key-binding (this-command-keys-vector))
+  ;;                     (key-binding (key-parse "TAB")))))
+  ;;       (when cmd
+  ;;         (setq this-command cmd)
+  ;;         (call-interactively cmd)))))
   (defun my/prog-outline ()
     (outline-minor-mode 1)
     (outline-hide-sublevels 1))
@@ -1571,6 +1574,14 @@ to the IFF buffer or  the files listed."
 
   (add-to-list 'display-buffer-alist '("\\*shell\\*"
                                        display-buffer-same-window))
+
+  ;; FIXME: Reuse Help Windows
+  (setq display-buffer-alist
+        `((,(rx bos (or "*Apropos*" "*Help*" "*helpful" "*info*" "*Summary*") (0+ not-newline))
+           (display-buffer-reuse-mode-window display-buffer-below-selected)
+           (window-height . 0.33)
+           (mode apropos-mode help-mode helpful-mode Info-mode Man-mode))))
+
   ;; Only one window on startup
   (add-hook 'emacs-startup-hook 'delete-other-windows t)
   )
