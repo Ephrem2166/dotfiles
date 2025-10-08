@@ -1354,7 +1354,33 @@ This should be add to `find-file-hook'."
   (interactive "p")
   (kill-line (- 1 arg))
   (setq kill-ring (cdr kill-ring)))
-(global-set-key (kbd "C-<backspace>") 'my/backward-kill-line)
+;; (global-set-key (kbd "C-<backspace>") 'my/backward-kill-line)
+
+;;; Backward Delete
+(defun my/delete-dont-kill (arg)
+  "Delete characters backward until encountering the beginning of a word.
+   With argument ARG, do this that many times. Don't add to kill ring."
+  (interactive "p")
+  (delete-region (point) (progn (backward-word arg) (point))))
+
+(defun my/backward-delete ()
+  "Delete a word, a character, or whitespace."
+  (interactive)
+  (cond
+   ;; If you see a word, delete all of it
+   ((looking-back (rx (char word)) 1)
+    (my/delete-dont-kill 1))
+   ;; If you see a single whitespace and a word, delete both together
+   ((looking-back (rx (seq (char word) (= 1 blank))) 1)
+    (my/delete-dont-kill 1))
+   ;; If you see several whitespaces, delete them until the next word
+   ((looking-back (rx (char blank)) 1)
+    (delete-horizontal-space t))
+   ;; If you see a single non-word character, delete that
+   (t
+    (backward-delete-char-untabify 1))))
+(global-set-key (kbd "C-<backspace>") 'my/backward-delete)
+
 
 ;;; Delete Empty Lines Around a Point
 (defun my/spacing-delete-newlines ()
@@ -2723,6 +2749,16 @@ to the `killed-buffer-list' when killing the buffer."
       (lisp-interaction-mode))
     (switch-to-buffer buf)))
 
+
+;;; Dired Related
+;;;; Kill Dired buffers
+(defun my/kill-dired-buffers ()
+  "Kill all open dired buffers."
+  (interactive)
+  (mapc (lambda (buffer)
+          (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
+            (kill-buffer buffer)))
+        (buffer-list)))
 
 (provide 'ef-functions)
 

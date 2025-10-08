@@ -6,8 +6,10 @@
 (setq-default mode-line-format
               '("%e" ; print error message about full memory.
                 " "
-                mode-line-front-space
+                (:propertize " " display (raise +0.4)) ;; Top padding
+                (:propertize " " display (raise -0.4)) ;; Bottom padding
                 (:propertize "λ " face font-lock-keyword-face)
+                ;; mode-line-front-space
                 ;; mode-line-mule-info
                 ;; mode-line-client
                 mode-line-modified
@@ -19,20 +21,21 @@
                 ;; (vc-mode vc-mode)
                 ;; "  "
                 ;; " "
+                (:propertize "%4l:%c" face mode-line-buffer-id)
                 ;; mode-line-misc-info
                 mode-line-position
                 mode-line-modes
                 ;; (:eval (mode-line-right))
-                battery-mode-line-string
+                ;; battery-mode-line-string
                 mode-line-end-spaces))
 
 ;; Date and Time
-;; (setq display-time-format "%a, %b %e %R"
-;;       battery-mode-line-format "%p%%"  ; Default: "[%b%p%%]"
-;;       global-mode-string   (remove 'display-time-string global-mode-string)
-;;       mode-line-end-spaces (list (propertize " "
-;;                                              'display '(space :align-to (- right 20)))
-;;                                  'display-time-string))
+(setq display-time-format "%a, %b %e %R"
+      battery-mode-line-format "%p%%"  ; Default: "[%b%p%%]"
+      global-mode-string   (remove 'display-time-string global-mode-string)
+      mode-line-end-spaces (list (propertize " "
+                                             'display '(space :align-to (- right 20)))
+                                 'display-time-string))
 (display-time-mode 1)
 (display-time-update)
 
