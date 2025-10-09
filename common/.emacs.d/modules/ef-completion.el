@@ -97,6 +97,25 @@
   (add-hook 'prog-mode-hook #'ef-setup-completion)
 
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+  ;; Remove keywords from the candidate list
+  (defun my/emacs-lisp-ignore-keywords (cand)
+    "Remove keywords from the CAND list, unless the completion text
+starts with a `:'."
+    (or (not (keywordp cand))
+        (eq (char-after (car completion-in-region--data)) ?:)))
+  (defun my/emacs-lisp-capf ()
+    "`completion-at-point-functions' for `emacs-lisp-mode', including
+support for symbols currently unknown to Emacs, using `cape-dabbrev'.
+Also adds `cape-file' as a fallback."
+    (setq-local completion-at-point-functions
+                `(,(cape-capf-super
+                    (cape-capf-predicate
+                     #'elisp-completion-at-point
+                     #'my/emacs-lisp-ignore-keywords)
+                    #'cape-dabbrev)
+                  cape-file)
+                cape-dabbrev-min-length 5))
+  (add-hook 'emacs-lisp-mode #'my/emacs-lisp-capf)
   :custom
   (text-mode-ispell-word-completion nil)
   )
