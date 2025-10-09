@@ -6,7 +6,7 @@
 (when (file-exists-p custom-file)
   (load custom-file t))
 
-;;(load-theme 'modus-vivendi-tinted)
+;;(load-theme 'nano-theme-set-dark)
 (require 'elpaca-module)
 (setq elpaca-after-init-time (or elpaca-after-init-time (current-time)))
 (elpaca-wait)

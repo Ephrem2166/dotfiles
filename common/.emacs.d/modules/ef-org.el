@@ -6,8 +6,8 @@
 (defun ef/org-mode-hooks ()
   "Various modes to run in org mode."
   (abbrev-mode)
-  (setq line-spacing 12)
-  ;;  (setq-default line-spacing 1)
+  ;; (setq line-spacing 12)
+  (setq-default line-spacing 1)
   ;; Toggle automatic line breaking (Auto Fill mode).
   (auto-fill-mode)
   ;; (electric-indent-mode nil)
