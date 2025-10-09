@@ -225,6 +225,24 @@ It uses `ef/reload-config'
   "Use `call-process' to send ourselves a KILL signal."
   (interactive)
   (call-process "kill" nil nil nil "-9" (number-to-string (emacs-pid))))
+
+;;; Insert Header and Footer into a New Lisp File
+(defun my/insert-header-and-footer ()
+  "Add a minimal header and footer to an elisp buffer."
+  (interactive)
+  (let ((fname (if (buffer-file-name)
+                   (file-name-nondirectory (buffer-file-name))
+                 (error "This buffer is not visiting a file"))))
+    (save-excursion
+      (goto-char (point-min))
+      (insert ";;; " fname "  -*- lexical-binding: t; no-byte-compile: t; -*-\n"
+              ";;; Commentary:\n"
+              ";;; Code:\n\n")
+      (goto-char (point-max))
+      (setq name (file-name-nondirectory (file-name-sans-extension fname)))
+      (insert "(provide '"name")\n")
+      (insert ";;; " fname " ends here\n"))))
+
 ;;; Buffer
 
 ;;; Windows
