@@ -240,6 +240,7 @@
   :config
   (setq garbage-collection-messages nil)
   (add-hook 'after-init #'gcmh-mode)
+  (add-hook 'focus-out #'gcmh-mode)
   )
 
 
