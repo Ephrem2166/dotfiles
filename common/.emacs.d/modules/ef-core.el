@@ -1081,6 +1081,7 @@ Intended to be added to `isearch-mode-hook'."
   (recentf-filename-handlers nil)
   (recentf-show-file-shortcuts-flag nil)
   :config
+  (quiet! (recentf-mode 1))
   (setq recentf-exclude
         '("\\.?cache" ".cask" "url" "COMMIT_EDITMSG\\'" "bookmarks"
           "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
@@ -1109,12 +1110,12 @@ Intended to be added to `isearch-mode-hook'."
                (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")
                                              "/run"))))
   ;; Quiet Recentf
-  (defun my/recentf-quiet ()
-    "Wrapper for `recentf-save-list' with no message."
-    (let ((inhibit-message t))
-      (recentf-save-list))
-    )
-  (run-at-time 60 (* 5 60) #'my/recentf-quiet)
+  ;; (defun my/recentf-quiet ()
+  ;;   "Wrapper for `recentf-save-list' with no message."
+  ;;   (let ((inhibit-message t))
+  ;;     (recentf-save-list))
+  ;;   )
+  ;; (run-at-time 60 (* 5 60) #'my/recentf-quiet)
   ;; For perfromance
   (add-to-list 'recentf-filename-handlers #'substring-no-properties)
   (advice-add #'recentf-load-list :around #'doom-shut-up-a)

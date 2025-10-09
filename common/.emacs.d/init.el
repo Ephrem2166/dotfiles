@@ -11,6 +11,9 @@
 (setq elpaca-after-init-time (or elpaca-after-init-time (current-time)))
 (elpaca-wait)
 
+;; Alternative to elpaca: Builtin
+;; (require 'ef-package)
+
 (require 'ef-core)
 (require 'ef-themes)
 (require 'ef-fonts)
@@ -24,7 +27,7 @@
 (require 'ef-writing)
 (require 'ef-reading)
 (require 'ef-org)
-(require 'ef-modeline)
+;; (require 'ef-modeline)
 ;; External
 (require 'ef-completion)
 (require 'ef-minibuffer)

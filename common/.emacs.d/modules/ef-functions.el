@@ -2778,6 +2778,12 @@ to the `killed-buffer-list' when killing the buffer."
             (kill-buffer buffer)))
         (buffer-list)))
 
+;;; Delete Blank Lines
+(defun my/delete-blank-lines (start end)
+  "Remove blank lines in a buffer."
+  (interactive "r")
+  (flush-lines "^\\s-*$" start end nil))
+
 (provide 'ef-functions)
 
 ;;; ef-functions.el ends here

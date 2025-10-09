@@ -96,12 +96,12 @@
                        #'cape-file))))
   (add-hook 'prog-mode-hook #'ef-setup-completion)
 
-  ;; (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   :custom
   (text-mode-ispell-word-completion nil)
   )
 
-;;;
+;;; Corfu
 ;; Corfu Corfu enhances in-buffer completion with a small complet ion
 ;; popup.
 (use-package corfu

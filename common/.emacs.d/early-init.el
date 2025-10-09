@@ -127,6 +127,9 @@ not retain the generic background set by the function
 
 (advice-add #'display-startup-screen :override #'ignore)
 
+
+;; once the config is loaded settings from our configuration will make
+;; x-resources redundant. ignore it.
 (advice-add #'x-apply-session-resources :override #'ignore)
 
 

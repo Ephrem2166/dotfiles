@@ -374,6 +374,7 @@ to (recursively) create the file's parent directories."
                     (make-directory dir t)))))))
 
 ;;; Quiet Macro
+;; Example application (quiet! (recentf-mode 1))
 (defmacro quiet! (&rest forms)
   "Run FORMS without generating any output.
 
@@ -703,6 +704,63 @@ buffer will be recentered to the line at point."
   )
 
 (current-buffer)
+
+;;; Replace Unnecessary Characters
+(defun my/replace-chars ()
+  "Replace goofy MS and other garbage characters with Latin1 equivalents."
+  (interactive)
+  (let ((beg (point-min))
+        (end (point-max)))
+    (when (region-active-p)
+      (setq beg (region-beginning))
+      (setq end (region-end)))
+    (save-excursion ;save the current point
+      (replace-string "΄" "'" nil beg end)
+      (replace-string "‘" "'" nil beg end)
+      (replace-string "’" "'" nil beg end)
+      (replace-string "“" "\"" nil beg end)
+      (replace-string "”" "\"" nil beg end)
+      (replace-string "" "'" nil beg end)
+      (replace-string "" "'" nil beg end)
+      (replace-string "" "\"" nil beg end)
+      (replace-string "" "\"" nil beg end)
+      (replace-string "" "\"" nil beg end)
+      (replace-string "" "\"" nil beg end)
+      (replace-string "‘" "\"" nil beg end)
+      (replace-string "’" "'" nil beg end)
+      (replace-string "¡\"" "\"" nil beg end)
+      (replace-string "¡­" "..." nil beg end)
+      (replace-string "" "..." nil beg end)
+      (replace-string "" " " nil beg end) ; M-SPC
+      (replace-string "" "`" nil beg end)  ; \221
+      (replace-string "" "'" nil beg end)  ; \222
+      (replace-string "" "``" nil beg end)
+      (replace-string "" "''" nil beg end)
+      (replace-string "" "*" nil beg end)
+      (replace-string "" "--" nil beg end)
+      (replace-string "" "--" nil beg end)
+      (replace-string " " " " nil beg end) ; M-SPC
+      (replace-string "¡" "\"" nil beg end)
+      (replace-string "´" "\"" nil beg end)
+      (replace-string "»" "<<" nil beg end)
+      (replace-string "Ç" "'" nil beg end)
+      (replace-string "È" "\"" nil beg end)
+      (replace-string "é" "e" nil beg end) ;; &eacute;
+      (replace-string "ó" "-" nil beg end)
+
+      ;; mine
+      (replace-string "•" "-" nil beg end)
+      (replace-string "–" "--" nil beg end)
+      (replace-string "—" "---" nil beg end) ; multi-byte
+      (replace-string "…" "..." nil beg end)
+      (replace-string "&#38;" "&" nil beg end)
+      (replace-string "&#39;" "'" nil beg end)
+
+      (message "Garbage in, garbage out.") )))
+
+
+
+
 
 (provide 'ef-experiment)
 
