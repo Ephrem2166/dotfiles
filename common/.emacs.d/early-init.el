@@ -61,6 +61,10 @@ not retain the generic background set by the function
   "Avoid flash of light when starting Emacs."
   (setq mode-line-format nil)
   (setq default-frame-alist '(
+                              (tool-bar-lines . 0)
+                              (menu-bar-lines . 0)
+                              (horizontal-scroll-bars)
+                              (vertical-scroll-bars)
                               (undecorated-round . t)
                               (background-color . "#282C34")
                               (ns-appearance . dark)
@@ -97,10 +101,10 @@ not retain the generic background set by the function
 
 ;;; Default Emacs Window Size
 ;; FIXME: Move to avoid ef/avoid-initial-flash-of-light
-(push '(tool-bar-lines . 0) default-frame-alist)
-(push '(vertical-scroll-bars) default-frame-alist)
-(push '(horizontal-scroll-bars) default-frame-alist)
-(push '(menu-bar-lines . 0) default-frame-alist)
+;; (push '(tool-bar-lines . 0) default-frame-alist)
+;; (push '(vertical-scroll-bars) default-frame-alist)
+;; (push '(horizontal-scroll-bars) default-frame-alist)
+;; (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(width . 80) default-frame-alist)
 (push '(height . 44) default-frame-alist)
 

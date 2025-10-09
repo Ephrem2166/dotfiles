@@ -2784,6 +2784,60 @@ to the `killed-buffer-list' when killing the buffer."
   (interactive "r")
   (flush-lines "^\\s-*$" start end nil))
 
+;;; Interactive cusror changer
+(defconst my-cursor-types '(box hollow bar hbar)
+  "Cursor types that can be set using `completing-read'.")
+
+(defun my/set-cursor-type (&optional reset)
+  "Set the `cursor-type'.
+
+Optionally RESET the type when called with `universal-argument'."
+  (interactive "P")
+
+  (if reset
+      (setq-local cursor-type t)
+    (let* ((type-string (completing-read "Select cursor type: " my-cursor-types))
+           (type (intern type-string)))
+
+      (setq-local cursor-type type))))
+
+
+;;; Better Kill DWIM
+(defun my/kill-dwim (&optional arg)
+  "Kill what I mean.
+
+If there's an active region, kill it.
+
+If we're at the (actual) end or (actual) beginning of a line,
+kill the whole line, otherwise kill forward.
+
+If a whole line is killed, move to the beginning of text on the
+next line.
+
+ARG is passed to `kill-line' and function `kill-whole-line'."
+  (interactive "P")
+
+  (if (region-active-p)
+      (kill-region nil nil t)
+    (let ((p-before (point))
+          (p-end nil)
+          (p-beg nil))
+
+      (save-excursion
+        (end-of-line)
+        (setq p-end (point))
+
+        (beginning-of-line)
+        (setq p-beg (point)))
+
+      (if (and (/= p-before p-beg) (/= p-before p-end))
+          (kill-line arg)
+        (kill-whole-line arg)
+        (beginning-of-line-text)))))
+
+(global-set-key [remap kill-line] #'my/kill-dwim)
+
+
 (provide 'ef-functions)
 
 ;;; ef-functions.el ends here
