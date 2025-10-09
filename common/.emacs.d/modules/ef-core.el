@@ -153,6 +153,8 @@
 ;;   :ensure nil
 ;;   :config
 ;;   (setq-default custom-file (concat "custom.el" user-emacs-directory))
+;; To avoid using custom.el forever
+;; (setq-default custom-file "/dev/null")
 ;;   (when (file-exists-p custom-file)
 ;;     (load custom-file))
 ;;   )
@@ -529,11 +531,12 @@
 
 ;;; Frame
 (use-package frame
-  :config
-  (setopt window-divider-default-bottom-width 1)
-  (setopt window-divider-default-places t)
-  (setopt window-divider-default-right-width 1)
-  )
+:config
+(setopt window-divider-default-bottom-width 1)
+(setopt window-divider-default-places t)
+(setopt window-divider-default-right-width 1)
+
+)
 
 ;;; Goto Address
 ;; Buttonize URLs and e-mail addresses in the current buffer
@@ -961,17 +964,17 @@ Intended to be added to `isearch-mode-hook'."
 
 
   ;; Outline headings
-  ;; (defun my/outline-cycle ()
-  ;;   (interactive)
-  ;;   (if (save-excursion (forward-line 0)
-  ;;                       (looking-at-p outline-regexp))
-  ;;       (call-interactively #'outline-cycle)
-  ;;     (let* ((outline-minor-mode nil)
-  ;;            (cmd (or (key-binding (this-command-keys-vector))
-  ;;                     (key-binding (key-parse "TAB")))))
-  ;;       (when cmd
-  ;;         (setq this-command cmd)
-  ;;         (call-interactively cmd)))))
+  (defun my/outline-cycle ()
+    (interactive)
+    (if (save-excursion (forward-line 0)
+                        (looking-at-p outline-regexp))
+        (call-interactively #'outline-cycle)
+      (let* ((outline-minor-mode nil)
+             (cmd (or (key-binding (this-command-keys-vector))
+                      (key-binding (key-parse "TAB")))))
+        (when cmd
+          (setq this-command cmd)
+          (call-interactively cmd)))))
   (defun my/prog-outline ()
     (outline-minor-mode 1)
     (outline-hide-sublevels 1))
@@ -1069,7 +1072,7 @@ Intended to be added to `isearch-mode-hook'."
   :hook
   (after-init . recentf-mode)
   :custom
-  (recentf-max-saved-items 100)
+  (recentf-max-saved-items 300)
   (recentf-max-menu-items 25)
   (recentf-save-file-modes nil)
   (recentf-keep nil)
@@ -1078,6 +1081,13 @@ Intended to be added to `isearch-mode-hook'."
   (recentf-filename-handlers nil)
   (recentf-show-file-shortcuts-flag nil)
   :config
+  (setq recentf-exclude
+        '("\\.?cache" ".cask" "url" "COMMIT_EDITMSG\\'" "bookmarks"
+          "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
+          "\\.?ido\\.last$" "\\.revive$" "/G?TAGS$" "/.elfeed/"
+          "^/tmp/" "^/var/folders/.+$" "^/ssh:" "/persp-confs/"
+          (lambda (file) (file-in-directory-p file package-user-dir))))
+  (push (expand-file-name recentf-save-file) recentf-exclude)
   ;; When to cleanup recentf
   (setq recentf-auto-cleanup 'never)
   ;; (setq recentf-auto-cleanup (if (daemonp) 300))
@@ -1098,6 +1108,13 @@ Intended to be added to `isearch-mode-hook'."
   (add-to-list 'recentf-exclude
                (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")
                                              "/run"))))
+  ;; Quiet Recentf
+  (defun my/recentf-quiet ()
+    "Wrapper for `recentf-save-list' with no message."
+    (let ((inhibit-message t))
+      (recentf-save-list))
+    )
+  (run-at-time 60 (* 5 60) #'my/recentf-quiet)
   ;; For perfromance
   (add-to-list 'recentf-filename-handlers #'substring-no-properties)
   (advice-add #'recentf-load-list :around #'doom-shut-up-a)

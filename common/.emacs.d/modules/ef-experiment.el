@@ -603,6 +603,107 @@ Return either 'hide-all, 'headings-only, or 'show-all."
 
 
 
+;;; FIXME: Modify keybindings to use in org mode to bold, italize etc.
+;; (defun +org-emphasize-below-point (&optional char)
+;;   "Emphasize region with CHAR.
+;;
+;; If there's no region, marks the closest sexp first."
+;;   (interactive)
+;;   (unless (region-active-p)
+;;     (backward-sexp)
+;;     (mark-sexp))
+;;   (org-emphasize char))
+;;
+;; (defun +org-emphasize-bindings ()
+;;   (dolist (binding '(("s-i b" ?*)
+;;                      ("s-i i" ?/)
+;;                      ("s-i u" ?_)
+;;                      ("s-i v" ?=)
+;;                      ("s-i c" ?~)
+;;                      ("s-i s" ?+)))
+;;     (let ((key (car binding))
+;;           (char (cadr binding)))
+;;       (define-key org-mode-map (kbd key)
+;;                   `(lambda () (interactive) (+org-emphasize-below-point ,char))))))
+
+;;; Org Formatting Helpers
+(defun my/org-apply-format (prefix suffic)
+  "Apply the specified PREFIX and SUFFIX to the active region or current line.
+If there is an active region, wrap it directly. If there is no active region,
+apply to the current line, ignoring leading whitespace."
+  (interactive "sPrefix: \nsSuffix: ")
+  (let* ((use-region (region-active-p))
+         (beg (if use-region
+                  (region-beginning)
+                (save-excursion
+                  (beginning-of-line)
+                  (skip-chars-forward " \t") ; ignore leading whitespace
+                  (point))))
+         (end (if use-region
+                  (region-end)
+                (line-end-position)))
+         (text (buffer-substring-no-properties beg end)))
+    (delete-region beg end)
+    (insert (concat prefix text suffix))))
+
+(defun my/org-apply-bold ()
+  "Wrap region or line in Org *bold* markers."
+  (interactive)
+  (my/org-apply-format "*" "*"))
+
+(defun my/org-apply-italic ()
+  "Wrap region or line in Org /italic/ markers."
+  (interactive)
+  (my/org-apply-format "/" "/"))
+
+(defun my/org-apply-strike-through ()
+  "Wrap region or line in Org +strike-through+ markers."
+  (interactive)
+  (my/org-apply-format "+" "+"))
+
+(defun my/org-apply-verbatim ()
+  "Wrap region or line in Org =verbatim= markers."
+  (interactive)
+  (my/org-apply-format "=" "="))
+
+
+(defun my/org-apply-code ()
+  "Wrap region or line in Org ~code~ markers."
+  (interactive)
+  (my/org-apply-format "~" "~"))
+
+;;; Reopen File
+(defun my/reopen-file-at-buffer ()
+  "Re-open the file at buffer, replacing buffer.
+
+After reopening, cursor will attempt to return to the point it was previously
+on. This may cause a jump if the file has changed significantly. Finally, the
+buffer will be recentered to the line at point."
+  (interactive)
+  (let ((initial-line (line-beginning-position))
+        (initial-point (point))
+        (initial-total-lines (count-lines (point-min) (point-max))))
+    (find-alternate-file (buffer-file-name))
+    (if (= initial-total-lines (count-lines (point-min) (point-max)))
+        ;; If total lines have not changed, we can reasonably guess that the
+        ;; content has not changed significantly (if at all), so we can jump
+        ;; right back to the initial point.
+        (goto-char initial-point)
+      ;; If total lines /have/ changed, we can reasonably guess that the initial
+      ;; point is contextually not where we were before. The best thing we can
+      ;; do now is return to the same line number, and hope it's close. Getting
+      ;; closer than this would require text parsing, which is more complex than
+      ;; we need for a simple file replacement.
+      (goto-char initial-line))
+    ;; Finally, recenter the line. We may not have been centered before, but this is more often than
+    ;; not what we want.
+    (recenter))
+  (setq buffer-name buffer-file-name)
+  (message "%s Restarted!" buffer-name)
+  )
+
+(current-buffer)
+
 (provide 'ef-experiment)
 
 ;;; ef-experiment.el ends here

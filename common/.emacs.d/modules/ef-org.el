@@ -301,10 +301,15 @@
 (use-package org
   :ensure nil
   :config
-  (setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "»")
+  (setq-default prettify-symbols-alist '(
+                                         ;; SRC CODE
+                                         ("#+BEGIN_SRC" . "»")
                                          ("#+END_SRC" . "«")
                                          ("#+begin_src" . "»")
                                          ("#+end_src" . "«")
+                                         ;; Quote
+                                         ("#+begin_quote" . "")
+                                         ("#+end_quote" . "―")
                                          ;; Greek Symbols
                                          ("delta"  . ?Δ)
                                          ("gamma"  . ?Γ)
@@ -331,6 +336,19 @@
                                         ; Drawers
                                          (":properties:" . ?)
                                         ; Agenda scheduling
+                                         ("#+STARTUP:" . "")
+                                         ("#+TITLE: " . "")
+                                         ("#+title: " . "")
+                                         ("#+RESULTS:" . "")
+                                         ("#+NAME:" . "")
+                                         ("#+ROAM_TAGS:" . "")
+                                         ("#+FILETAGS:" . "")
+                                         ("#+HTML_HEAD:" . "")
+                                         ("#+SUBTITLE:" . "")
+                                         ("#+AUTHOR:" . "")
+                                         (":Effort:" . "")
+                                         ("SCHEDULED:" . "")
+                                         ("DEADLINE:" . "")
                                          ("SCHEDULED:"   . ?🕘)
                                          ("DEADLINE:"    . ?⏰)
 

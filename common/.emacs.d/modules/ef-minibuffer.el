@@ -62,24 +62,31 @@
              face minibuffer-prompt))
   )
 
-;;; From Doom Emacs
-;; (use-package minibuffer
-;;   :ensure nil
-;;   :hook ((minibuffer-setup . defer-garbage-collection)
-;;          (minibuffer-setup . restore-garbage-collection))
-;;
-;;   :preface
-;;   (defun defer-garbage-collection ()
-;;     (setq gc-cons-threshold most-positive-fixnum))
-;;
-;;   (defvar default-gc-cons-threshold)
-;;   (defun restore-garbage-collection ()
-;;     ;; Deferred so that commands launched immediately after will enjoy the
-;;     ;; benefits.
-;;     (run-at-time
-;;      1 nil (lambda () (setq gc-cons-threshold default-gc-cons-threshold))))
-;;
-;;   )
+;;; Don't allow the cursor in the minibuffer
+(use-package minibuffer
+  :ensure nil
+  :config
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  )
+
+;; From Doom Emacs
+(use-package minibuffer
+  :ensure nil
+  :hook ((minibuffer-setup . defer-garbage-collection)
+         (minibuffer-setup . restore-garbage-collection))
+
+  :preface
+  (defun defer-garbage-collection ()
+    (setq gc-cons-threshold most-positive-fixnum))
+
+  (defvar default-gc-cons-threshold 16777216)
+  (defun restore-garbage-collection ()
+    ;; Deferred so that commands launched immediately after will enjoy the
+    ;; benefits.
+    (run-at-time
+     1 nil (lambda () (setq gc-cons-threshold default-gc-cons-threshold))))
+
+  )
 
 (provide 'ef-minibuffer)
 ;;; ef-minibuffer.el ends here
