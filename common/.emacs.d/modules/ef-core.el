@@ -533,12 +533,12 @@
 
 ;;; Frame
 (use-package frame
-:config
-(setopt window-divider-default-bottom-width 1)
-(setopt window-divider-default-places t)
-(setopt window-divider-default-right-width 1)
-
-)
+  :hook (after-init . window-divider-modex)
+  :config
+  (setopt window-divider-default-bottom-width 1)
+  (setopt window-divider-default-places t)
+  (setopt window-divider-default-right-width 1)
+  )
 
 ;;; Goto Address
 ;; Buttonize URLs and e-mail addresses in the current buffer
@@ -746,13 +746,18 @@
 ;;; `Info
 (use-package info
   :ensure nil
-  :hook ((Info-selection . my/info-font-resize))
+  :hook (Info-Mode . my/info-buffer-setup)
   :custom
   (Info-isearch-search nil)
   :config
-  (defun my/info-font-resize ()
-    "Increase the font size of text in Info buffers."
-    (face-remap-set-base 'default `(:height 1.0))))
+  (defun my/info-buffer-setup ()
+    (hl-line-mode)
+    (when (fboundp 'visual-line-fill-column-mode)
+      (setq-local visual-fill-column-width 80)
+      (visual-line-fill-column-mode))
+    (face-remap-set-base 'default `(:height 1.0))
+    )
+  )
 
 ;;; Info Look
 ;; (use-package info-look

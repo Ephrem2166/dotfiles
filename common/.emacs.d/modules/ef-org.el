@@ -1195,6 +1195,20 @@ context.  When called with an argument, unconditionally call
      ("header" . "›")
      ("caption" . "☰")
      ("results" . "∴")
+     ("options" . "  ")
+     ("property" . "  ")
+     ("reveal" . " 󰐩 ")
+     ("logbook" . "  ")
+     ("language" . " 󰗊 ")
+     ("todo" . "  ")
+     ("tags" . "  ")
+     ("exclude_tags" . " 󱈣 ")
+     ("latex" . "  ")
+     ("latex_compiler" . "  ")
+     ("latex_class" . "  ")
+     ("latex_header" . "  ")
+     ("html_head" . "  ")
+
 
 
      )
