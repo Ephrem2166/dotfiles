@@ -59,7 +59,7 @@
   (auto-revert-stop-on-user-input nil)
   ;; (setq global-auto-revert-ignore-modes '(Buffer-menu-mode))
   :config
-  (global-auto-revert-mode)
+  ;; (global-auto-revert-mode)
   ;; Performance
   (defun my/visible-buffers (&optional buffer-list all-frames)
     "Return a list of visible buffers (i.e. not buried)."
@@ -92,7 +92,7 @@
         (my/auto-revert-current-buffer-h))))
   :hook
   (after-save-hook . my/auto-revert-visible-buffers-h)
-
+  (after-change-major-mode-hook . my/auto-revert-current-buffer-h)
   )
 
 ;;; Bookmarks
@@ -1394,6 +1394,15 @@ to the IFF buffer or  the files listed."
   :when (>= emacs-major-version 30)
   :hook ((prog-mode conf-mode org-mode) . visual-wrap-prefix-mode))
 
+;;; Warning
+;; Feature `warnings' allows us to enable and disable warnings.
+(use-package warnings
+  :ensure nil
+  :config
+
+  ;; Ignore the warning we get when a huge buffer is reverted and the
+  ;; undo information is too large to be recorded.
+  (add-to-list 'warning-suppress-log-types '(undo discard-info)))
 ;;; Which Key
 ;; Builtin (Emacs Version 30)
 ;; Display available keybindings in popup

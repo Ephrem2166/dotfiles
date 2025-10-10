@@ -2838,6 +2838,51 @@ ARG is passed to `kill-line' and function `kill-whole-line'."
 (global-set-key [remap kill-line] #'my/kill-dwim)
 
 
+;;; Reverse Region Characters
+(defun my/reverse-region-characters (beg end)
+  "Reverse the characters in the region from BEG to END.
+Interactively, reverse the characters in the current region."
+  (interactive "*r")
+  (insert
+   (reverse
+    (delete-and-extract-region
+     beg end))))
+
+;;; Describe Keymap
+(defun my/describe-keymap (keymap)
+  "Display the bindings defined by KEYMAP, a symbol or keymap.
+Interactively, select a keymap from the list of all defined
+keymaps."
+  (interactive
+   (list
+    (intern
+     (completing-read
+      "Keymap: " obarray
+      (lambda (m)
+        (and (boundp m)
+             (keymapp (symbol-value m))))
+      'require-match
+      nil nil (thing-at-point 'symbol)))))
+  (with-help-window (help-buffer)
+    (with-current-buffer (help-buffer)
+      (insert (format "Keymap `%S' defines the following bindings:" keymap)
+              "\n\n"
+              (substitute-command-keys (format "\\{%S}" keymap))))))
+
+;;; Describe Symbol
+(defun my/find-symbol (&optional symbol)
+  "Same as `xref-find-definitions' but only for Elisp symbols.
+SYMBOL is as in `xref-find-definitions'."
+  (interactive)
+  (let ((xref-backend-functions '(elisp--xref-backend))
+        ;; Make this command behave the same as `find-function' and
+        ;; `find-variable', i.e. always prompt for an identifier,
+        ;; defaulting to the one at point.
+        (xref-prompt-for-identifier t))
+    (if symbol
+        (xref-find-definitions symbol)
+      (call-interactively 'xref-find-definitions))))
+
 (provide 'ef-functions)
 
 ;;; ef-functions.el ends here
