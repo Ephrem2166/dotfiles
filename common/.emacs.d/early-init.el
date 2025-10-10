@@ -51,9 +51,9 @@
 
 (defun my/emacs-re-enable-frame-theme (_frame)
   "Re-enable active theme, if any, upon FRAME creation.
-Add this to `after-make-frame-functions' so that new frames do
-not retain the generic background set by the function
-`prot-emacs-avoid-initial-flash-of-light'."
+ Add this to `after-make-frame-functions' so that new frames do
+ not retain the generic background set by the function
+ `prot-emacs-avoid-initial-flash-of-light'."
   (when-let* ((theme (car custom-enabled-themes)))
     (enable-theme theme)))
 
@@ -192,25 +192,26 @@ not retain the generic background set by the function
 
 
 ;;; Profile emacs startup
+(defun my/display-startup-time ()
+  (add-hook 'after-init-hook
+            (lambda ()
+              (message "🚀 Emacs loaded in %s with %d garbage collections."
+                       (format "%.3f seconds"
+                               (float-time
+                                (time-subtract after-init-time before-init-time)))
+                       gcs-done))))
+(my/display-startup-time)
+;; (eval-and-compile
+;;   (defconst emacs-start-time (current-time))
+;;
+;;   (defun report-time-since-load (&optional suffix)
+;;     (message " Loading init...done (%.3fs)%s"
+;;              (float-time (time-subtract (current-time) emacs-start-time))
+;;              suffix)))
+
 ;; (add-hook 'after-init-hook
-;;           (lambda ()
-;;             (message "🚀 Emacs loaded in %s with %d garbage collections."
-;;                      (format "%.2f seconds"
-;;                              (float-time
-;;                               (time-subtract elpaca-after-init-time before-init-time)))
-;;                      gcs-done)) 98)
-
-(eval-and-compile
-  (defconst emacs-start-time (current-time))
-
-  (defun report-time-since-load (&optional suffix)
-    (message " Loading init...done (%.3fs)%s"
-             (float-time (time-subtract (current-time) emacs-start-time))
-             suffix)))
-
-(add-hook 'after-init-hook
-          (lambda () (report-time-since-load " after-init"))
-          t)
+;;           (lambda () (report-time-since-load " after-init"))
+;;           t)
 
 ;;; Initial Scratch Message
 ;; (setq-default
@@ -226,6 +227,18 @@ not retain the generic background set by the function
 (unless (eq system-type 'gnu/linux)
   (setq command-line-x-option-alist nil))
 
+
+
+
+;;; Increase CPU Processing Restrictions
+
+;; (when (boundp 'read-process-output-max)
+;;   (setq-default process-adaptive-read-buffering nil
+;;                 read-process-output-max
+;;                 (or (ignore-errors (with-temp-buffer
+;;                                      (insert-file-contents "/proc/sys/fs/pipe-max-size")
+;;                                      (string-to-number (buffer-string))))
+;;                     (* 1024 1024))))
 
 
 
