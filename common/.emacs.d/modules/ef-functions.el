@@ -2883,6 +2883,21 @@ SYMBOL is as in `xref-find-definitions'."
         (xref-find-definitions symbol)
       (call-interactively 'xref-find-definitions))))
 
+;;; Describe Symbol Without Changing Focus
+(defun my/describe-peek (sym)
+  "Show help for SYM without changing focus."
+  (interactive
+   (list (or (symbol-at-point)
+             (with-demoted-errors "describe-peek error: %S"
+               (save-excursion (backward-up-list)
+                               (forward-char)
+                               (symbol-at-point))))))
+  (when sym
+    (describe-symbol sym)))
+
+
+
+
 (provide 'ef-functions)
 
 ;;; ef-functions.el ends here

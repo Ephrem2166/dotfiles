@@ -59,6 +59,8 @@
   (auto-revert-stop-on-user-input nil)
   ;; (setq global-auto-revert-ignore-modes '(Buffer-menu-mode))
   :config
+  ;; (quiet! (auto-revert-mode +1))
+
   ;; (global-auto-revert-mode)
   ;; Performance
   (defun my/visible-buffers (&optional buffer-list all-frames)
@@ -1604,7 +1606,8 @@ to the IFF buffer or  the files listed."
 
   ;; FIXME: Reuse Help Windows
   (setq display-buffer-alist
-        `((,(rx bos (or "*Apropos*" "*Help*" "*helpful" "*info*" "*Summary*") (0+ not-newline))
+        `((,(rx bos (or "*Apropos*" "*Help*" "*helpful" "*info*" "*Summary*")
+                (0+ not-newline))
            (display-buffer-reuse-mode-window display-buffer-below-selected)
            (window-height . 0.33)
            (mode apropos-mode help-mode helpful-mode Info-mode Man-mode))))
