@@ -21,6 +21,7 @@
 
 (defvar my/available-variable-font
   (my/available-font
+   "Triplicate A"
    "SN Pro"
    "Atkinson Hyperlegible"
    "Iosevka Aile"

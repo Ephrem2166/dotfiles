@@ -392,7 +392,7 @@ Also adds `cape-file' as a fallback."
   (prescient-aggressive-file-save t)
   (prescient-sort-length-enable nil)
   (prescient-sort-full-matches-first t)
-  (prescient-history-length 200)
+  (prescient-history-length 1000)
   (prescient-frequency-decay 0.997)
   (prescient-frequency-threshold 0.05)
   :config
