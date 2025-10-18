@@ -20,3 +20,12 @@ common/.config/nvim/lazyvim.json
 common/.config/nvim/lazy-lock.json
 
 common/.config/htop/htoprc
+
+
+common/.config/mpd/database
+common/.config/mpd/log
+common/.config/mpd/state
+common/.config/mpd/sticker.sql
+
+common/.config/zsh/.zcompdump*
+common/.config/zsh/zsh_history
