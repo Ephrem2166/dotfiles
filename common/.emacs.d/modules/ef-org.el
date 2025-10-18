@@ -949,6 +949,11 @@ context.  When called with an argument, unconditionally call
                '("r" "Reading List" checkitem
                  (file+headline "~/Org/Capture/lists.org" "Readling List")))
 
+  ;; Get List
+  (add-to-list 'org-capture-templates
+               '("g" "Get List" checkitem
+                 (file+headline "~/Org/Capture/lists.org" "Get List")))
+
   )
 
 
