@@ -1,0 +1,77 @@
+;;; ef-shell.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
+;;; Commentary:
+;;; Code:
+;;; Capf autosuggest
+;; History autosuggestions for comint and eshell
+(use-package capf-autosuggest
+  :ensure t
+  :hook
+  (eshell-mode . capf-autosuggest-mode))
+
+;;; TODO: Comint
+(use-package comint
+  :ensure nil
+  :config
+  (setopt comint-prompt-read-only t)
+  (setopt comint-buffer-maximum-size 8192)
+  (setopt comint-scroll-to-bottom-on-input t)
+  (setopt comint-scroll-to-bottom-on-output nil)
+  (setopt comint-input-ignoredups t)
+  (setopt comint-scroll-show-maximum-output t)
+  (setopt comint-input-ring-size 5000)
+  )
+
+;; Eat
+;; Emulate a terminal, in a region, in a buffer and in eshell
+;; (use-package eat
+;;   :ensure t
+;;   :config
+;;   (eat-eshell-visual-command-mode 1))
+
+
+;;; TODO: ESHELL
+
+;;; Exec Path from Shell
+;; Get Environment variables such as $PATH from the shell
+(use-package exec-path-from-shell
+  :ensure t
+  :defer t
+  :if (memq window-system '(mac ns x pgtk))
+  :custom
+  (exec-path-from-shell-variables
+   '("PATH" "MANPATH" "NODE_PATH")
+   )
+  :config
+  (exec-path-from-shell-copy-envs '("PATH" "MANPATH"))
+  (exec-path-from-shell-initialize))
+
+;;; Shell
+;; Built-in shell
+(use-package shell
+  :ensure nil
+  :custom
+  (async-shell-command-buffer 'confirm-kill-processes)
+  (ansi-color-for-comint-mode t)
+  (shell-command-prompt-show-cwd 1)
+  (shell-input-autoexpand 'input)
+  (shell-highlight-undef-enable t)
+  (shell-has-auto-cd nil)
+  (shell-get-old-input-include-continuation-lines t)
+  (shell-kill-buffer-on-exit t)
+  )
+
+;;; Vterm
+;; Fully featured terminal emulator
+(use-package vterm
+  :ensure t
+  :defer t
+  :bind
+  (("M-<RET>" . vterm))
+  :config
+  (setq vterm-kill-buffer-on-exit nil)
+  (setq vterm-timer-delay nil)
+  (setq vterm-shell "/usr/bin/fish"
+        vterm-always-compile-module t))
+
+(provide 'ef-shell)
+;;; ef-shell.el ends here
