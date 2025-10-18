@@ -18,3 +18,5 @@ common/.emacs.d/etc/dictionary.txt
 
 common/.config/nvim/lazyvim.json
 common/.config/nvim/lazy-lock.json
+
+common/.config/htop/htoprc
