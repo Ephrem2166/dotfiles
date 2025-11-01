@@ -27,17 +27,17 @@ echo "You are using ${package_manager} as a package manager."
 echo "Started Installation ..."
 if [[ $package_manager == 'zypper' ]]; then
   for package in "${package_list[@]}"; do
-    sudo zypper --no-refresh in "$package"
+    sudo zypper --no-refresh in "$package" &>/dev/null
     # echo $package
-  done 2>/dev/null
+  done
 elif [[ $package_manager == 'pacman' ]]; then
   for package in "${package_list[@]}"; do
-    sudo pacman -S "$package"
-  done 2>/dev/null
+    sudo pacman -S "$package" &>/dev/null
+  done
 elif [[ $package_manager == 'dnf' ]]; then
   for package in "${package_list[@]}"; do
-    sudo dnf in "$package"
-  done 2>/dev/null
+    sudo dnf in "$package" &>/dev/null
+  done
 
 fi
 echo "Finished!!!"
