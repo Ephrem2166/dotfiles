@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 package_list=(
+  # System Packages
+  fwupd
   vivid
   atuin
   fzf
@@ -24,7 +26,7 @@ echo "You are using ${package_manager} as a package manager."
 echo "Started Installation ..."
 if [[ $package_manager == 'zypper' ]]; then
   for package in "${package_list[@]}"; do
-    sudo zypper in "$package"
+    sudo zypper --no-refresh in "$package"
     # echo $package
   done 2>/dev/null
 elif [[ $package_manager == 'pacman' ]]; then
