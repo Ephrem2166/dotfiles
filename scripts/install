@@ -21,7 +21,7 @@ else
 fi
 
 echo "You are using ${package_manager} as a package manager."
-
+echo "Started Installation ..."
 if [[ $package_manager == 'zypper' ]]; then
   for package in "${package_list[@]}"; do
     sudo zypper in "$package"
@@ -37,3 +37,4 @@ elif [[ $package_manager == 'dnf' ]]; then
   done 2>/dev/null
 
 fi
+echo "Finished!!!"
