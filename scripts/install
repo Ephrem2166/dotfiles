@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 package_list=(
-  # System Packages
   fwupd
   vivid
   atuin
   fzf
+  vim
+  emacs
 )
 
 if command -v apt &>/dev/null; then
