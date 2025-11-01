@@ -24,11 +24,11 @@ echo "You are using ${package_manager} as a package manager."
 
 if [[ $package_manager == 'zypper' ]]; then
 for package in "${package_list[@]}"; do
-  sudo zypper in "$package" &> /dev/null
+  sudo zypper in "$package"
 # echo $package
-done
+done 2> /dev/null
 elif [[ $package_manager == 'pacman' ]]; then
   for package in "${package_list[@]}"; do
-    sudo pacman -S "$package" &> /dev/null
-    done
+    sudo pacman -S "$package"
+    done 2> /dev/null
 fi
