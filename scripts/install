@@ -1,14 +1,27 @@
 #!/usr/bin/env bash
 
-package_list=(
-  fwupd
-  vivid
-  atuin
-  fzf
-  vim
-  emacs
-)
+FILE="packages.txt"
 
+if [[ ! -f "$FILE" ]]; then
+  echo "Error: File '$FILE' not found!"
+  exit 1
+fi
+
+# package_list=()
+# while IFS= read -r package; do
+#   package_list+=("$package")
+#   # echo $package
+# done <"$FILE"
+
+# Read packages into array, ignoring empty lines and comments
+mapfile -t package_list < <(grep -Ev '^\s*#|^\s*$' "$FILE")
+
+if [[ ${#package_list[@]} -eq 0 ]]; then
+  echo "No packages found in $FILE."
+  exit 1
+fi
+
+# Check for package manager
 if command -v apt &>/dev/null; then
   package_manager=apt
 elif command -v yum &>/dev/null; then
@@ -20,24 +33,33 @@ elif command -v pacman &>/dev/null; then
 elif command -v zypper &>/dev/null; then
   package_manager=zypper
 else
-  echo "No common package manager found."
+  echo "No package manager found."
+  exit 1
 fi
 
 echo "You are using ${package_manager} as a package manager."
 echo "Started Installation ..."
 if [[ $package_manager == 'zypper' ]]; then
+  sudo zypper refresh
   for package in "${package_list[@]}"; do
-    sudo zypper --no-refresh in "$package" &>/dev/null
-    # echo $package
+    echo "Installing $package ..."
+    sudo zypper --non-interactive install "$package"
   done
 elif [[ $package_manager == 'pacman' ]]; then
+  sudo pacman -Sy --noconfirm
   for package in "${package_list[@]}"; do
-    sudo pacman -S "$package" &>/dev/null
+    echo "Installing $package ..."
+    sudo pacman -S --noconfirm "$package"
   done
 elif [[ $package_manager == 'dnf' ]]; then
   for package in "${package_list[@]}"; do
-    sudo dnf in "$package" &>/dev/null
+    sudo dnf install -y "$package"
   done
-
+elif [[ $package_manager == 'apt' ]]; then
+  sudo apt update -y
+  for package in "${package_list[@]}"; do
+    echo "Installing $package ..."
+    sudo apt install -y "$package"
+  done
 fi
 echo "Finished!!!"
