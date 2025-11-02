@@ -1,0 +1,10 @@
+vim
+emacs
+
+fwupd
+git
+wget
+curl
+ufw
+stow
+micro-editor
