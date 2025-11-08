@@ -38,7 +38,7 @@ export FZF_DEFAULT_OPTS="\
 --no-mouse \
 --cycle \
 --multi \
-# --ansi \ # Performance Problems 
+# --ansi \ # Performance Problems
 --info=inline \
 --prompt=' ' \
 --pointer='→' \
@@ -51,7 +51,7 @@ export FZF_DEFAULT_OPTS="\
 # --preview='if [ -d {} ]; then tree -C -L 2 {}; elif [ -f {} ]; then bat -f --style=numbers {}; fi' \
 # --preview-window='right:60%:wrap,<50(bottom,50%)' \
 --style full \
-# --input-label ' Input' \ 
+# --input-label ' Input' \
 # --header-label 'File Type' \
 --bind='ctrl-p:preview(stat {})' \
 --bind='ctrl-c:abort' \

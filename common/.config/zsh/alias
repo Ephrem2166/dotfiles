@@ -84,7 +84,7 @@ alias logw='sudo journalctl --vacuum-time=1s'
 #alias ll='eza -al --no-time --no-user --no-permissions --no-filesize --icons=always --color=always --group-directories-first'
 #alias la='eza -alh --git --icons=always --color=always --group-directories-first'
 if command -v eza &> /dev/null; then
-  alias ls='eza -lh --group-directories-first --icons=auto'
+  alias ls='eza -l --icons'
   alias lsl='eza -l'
   alias lsa='ls -a'
   alias lt='eza --tree --level=2 --long --icons --git'
@@ -99,6 +99,7 @@ alias grep='rg'
 
 # FZF
 # alias fzf="fzf --preview=\"bat --color=always --style=plain {}\" --preview-window=\"border:rounded\" --border=rounded --prompt=\"$ \" --pointer=\"->\""
+alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
 
 # Opensuse
 if [[ $PACKAGE_MANAGER == zypper ]]; then

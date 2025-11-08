@@ -1,11 +1,11 @@
 # Yazi
 # Use y and q to enter and exit yazi
 function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-	rm -f -- "$tmp"
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd < "$tmp"
+    [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+    rm -f -- "$tmp"
 }
 
 # Open file with mupdf
@@ -17,4 +17,40 @@ function o() {
         mupdf -I "$1"
         true
     fi
+}
+
+# Quick cd using fzf
+fcd() {
+  cd "$(find -type d | fzf --preview 'tree -C {} | head -200' --preview-window 'up:60%')"
+}
+
+
+# Find and remove files with fzf
+frm() {
+  # Use `find` to list files and directories, and pipe them to `fzf` for selection
+  selected=$(find . -type f -o -type d 2>/dev/null | fzf -m)
+
+  # Check if any selection was made
+  if [[ -n "$selected" ]]; then
+    # Echo the files or directories that will be deleted
+    echo "Deleting the following files or directories:"
+    echo "$selected"
+
+    # Use `xargs` to safely pass selected files/directories to `rm -rf`
+    echo "$selected" | xargs -d '\n' rm -rf
+  else
+    echo "No files or directories selected."
+  fi
+}
+
+# cd and ls at the same time.
+# function cd {
+#     builtin cd "$@" && ls -F
+#     }
+
+
+# Open files from a terminal
+# open <file>
+open() {
+  xdg-open "$@" >/dev/null 2>&1 &
 }
