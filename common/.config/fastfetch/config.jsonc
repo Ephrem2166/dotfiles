@@ -24,42 +24,42 @@
       "key":" ",
       "keyColor": "",
     },
-    { 
+    {
       "type": "uptime",
       "key":"󱑃 ",
       "keyColor": "",
     },
-    { 
+    {
       "type": "packages",
       "key":"󰏗 ",
       "keyColor": "",
     },
-    { 
+    {
       "type": "shell",
       "key":" ",
       "keyColor": "",
     },
-    { 
+    {
       "type": "wm",
       "key":" ",
       "keyColor": "",
     },
-    { 
+    {
       "type" :"terminal",
       "key":" ",
       "keyColor": "",
     },
-    { 
+    {
       "type": "terminalfont",
       "key":" ",
       "keyColor": "",
     },
-    { 
+    {
       "type": "memory",
       "key":" ",
       "keyColor": "",
     },
-    { 
+    {
       "type": "disk",
       "key":"󰋊 ",
       "keyColor": "",
