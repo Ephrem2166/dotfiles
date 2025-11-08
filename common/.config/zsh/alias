@@ -79,10 +79,17 @@ alias logw='sudo journalctl --vacuum-time=1s'
 # External Programs
 # Changing "ls" to "eza"
 # alias ls='eza --icons=always --color=always --group-directories-first --no-quotes -x  -l'
-alias ls='eza --all  --icons=always --color=always --group-directories-first'
-alias lt='eza --all  --tree --color-scale --level=2 --icons=always --color=always --group-directories-first'
-alias ll='eza -al --no-time --no-user --no-permissions --no-filesize --icons=always --color=always --group-directories-first'
-alias la='eza -alh --git --icons=always --color=always --group-directories-first'
+#alias ls='eza --all  --icons=always --color=always --group-directories-first'
+#alias lt='eza --all  --tree --color-scale --level=2 --icons=always --color=always --group-directories-first'
+#alias ll='eza -al --no-time --no-user --no-permissions --no-filesize --icons=always --color=always --group-directories-first'
+#alias la='eza -alh --git --icons=always --color=always --group-directories-first'
+if command -v eza &> /dev/null; then
+  alias ls='eza -lh --group-directories-first --icons=auto'
+  alias lsl='eza -l'
+  alias lsa='ls -a'
+  alias lt='eza --tree --level=2 --long --icons --git'
+  alias lta='lt -a'
+fi
 
 # Replace cat with bat
 alias cat='bat'
