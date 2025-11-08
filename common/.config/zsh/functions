@@ -1,29 +1,28 @@
 # Yazi
 # Use y and q to enter and exit yazi
 function y() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-    yazi "$@" --cwd-file="$tmp"
-    IFS= read -r -d '' cwd < "$tmp"
-    [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-    rm -f -- "$tmp"
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd <"$tmp"
+  [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+  rm -f -- "$tmp"
 }
 
 # Open file with mupdf
 function o() {
-    if [ -z "$1" ]; then
-        printf "Please specify file to read\n" > /dev/stderr
-        false
-    else
-        mupdf -I "$1"
-        true
-    fi
+  if [ -z "$1" ]; then
+    printf "Please specify file to read\n" >/dev/stderr
+    false
+  else
+    mupdf -I "$1"
+    true
+  fi
 }
 
 # Quick cd using fzf
 fcd() {
   cd "$(find -type d | fzf --preview 'tree -C {} | head -200' --preview-window 'up:60%')"
 }
-
 
 # Find and remove files with fzf
 frm() {
@@ -48,7 +47,6 @@ frm() {
 #     builtin cd "$@" && ls -F
 #     }
 
-
 # Open files from a terminal
 # open <file>
 open() {
@@ -58,10 +56,26 @@ open() {
 # Search for a process by name directly from terminal
 # pf name
 function pf() {
-    if [ -z "$1" ]; then
-        printf "pf needs a process name to search for\n" > /dev/stderr
-        false
-    else
-        ps -aux | rg "$1"
-    fi
+  if [ -z "$1" ]; then
+    printf "pf needs a process name to search for\n" >/dev/stderr
+    false
+  else
+    ps -aux | rg "$1"
+  fi
+}
+
+# Use update to update and upgrade system
+# based on distro
+function update() {
+
+  if command -v zypper &>/dev/null; then
+    sudo zypper dup && flatpak update
+  elif command -v pacman &>/dev/null; then
+    sudo pacman -Syu && flatpak update
+  fi
+}
+
+# Create and enter directory
+function mk() {
+  mkdir -p "$@" && cd "$1" || echo "Unable to cd into $1"
 }
