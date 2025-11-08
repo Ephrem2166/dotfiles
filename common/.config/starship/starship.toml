@@ -1,6 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
-# Inserts a blank line between shell prompts 
-add_newline = false 
+# Inserts a blank line between shell prompts
+add_newline = false
 
 # Duration entry
 [cmd_duration]
@@ -36,6 +36,12 @@ symbol = " "
 
 [fossil_branch]
 symbol = " "
+
+[time]
+disabled = true
+time_format = "%R" # Hour:Minute Format
+style = "bg:#2E3440"
+format = '[[  $time ](fg:#D8DEE9 bg:#2E3440)]($style)'
 
 # Directory entry
 [directory]
@@ -128,6 +134,8 @@ symbol = " "
 
 [nodejs]
 symbol = " "
+# style = "bg:#4C566A"
+# format = '[[ $symbol ($version) ](fg:#81A1C1 bg:#4C566A)]($style)'
 
 [ocaml]
 symbol = " "
