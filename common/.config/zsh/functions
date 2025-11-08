@@ -55,7 +55,7 @@ open() {
 
 # Search for a process by name directly from terminal
 # pf name
-function pf() {
+pf() {
   if [ -z "$1" ]; then
     printf "pf needs a process name to search for\n" >/dev/stderr
     false
@@ -66,8 +66,7 @@ function pf() {
 
 # Use update to update and upgrade system
 # based on distro
-function update() {
-
+update_system() {
   if command -v zypper &>/dev/null; then
     sudo zypper dup && flatpak update
   elif command -v pacman &>/dev/null; then
@@ -76,6 +75,6 @@ function update() {
 }
 
 # Create and enter directory
-function mk() {
+mk() {
   mkdir -p "$@" && cd "$1" || echo "Unable to cd into $1"
 }
