@@ -2898,6 +2898,17 @@ SYMBOL is as in `xref-find-definitions'."
 
 
 
+;;; Org Insert Image
+;; Insert image into org from selection
+(defun my/org-insert-image ()
+  "Select and insert an image into org file."
+  (interactive)
+  (let ((selected-file (read-file-name "Select image: " "~/Pictures/" nil t)))
+    (when selected-file
+      (insert (format "[[file:%s]]\n" selected-file))
+      (org-display-inline-images))))
+
+
 (provide 'ef-functions)
 
 ;;; ef-functions.el ends here
