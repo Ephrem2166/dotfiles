@@ -51,4 +51,4 @@ __pycache__/
 *.~undo-tree
 
 # Node
-node_modules
+node_modules/
