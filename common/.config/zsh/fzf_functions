@@ -33,3 +33,29 @@ fpdf() {
     result=$(find -type f -name '*.pdf' | fzf --bind "ctrl-r:reload(find -type f -name '*.pdf')" --preview "pdftotext {} - | less")
     [ -n "$result" ] && nohup zathura "$result" &> /dev/null & disown
 }
+
+# Open files with vim
+function vf()
+{
+    fzf -i --walker=file,dir,follow,hidden --walker-skip=.git,node_modules --header="Select a file to edit" --input-label="Filename" --preview-label="Edit this file:" --preview="bat --color=always --style=plain,changes,numbers {}" --preview-window="border:rounded" --border=double --scroll-off=3 --prompt="$ " --pointer="->" --layout=reverse --multi=3 > /tmp/fzf.txt
+    xargs -r -o -a /tmp/fzf.txt vim -n -T alacritty -o
+}
+
+
+# List packages
+
+list_packages() {
+  if command -v pacman &>/dev/null; then
+    pacman -Qq | fzf -m --preview 'pacman -Qil {}' \
+        --border=rounded \
+        --margin=1% \
+        --layout=reverse \
+        --bind 'enter:execute(echo "Selected: "{+}; sudo pacman -Rns {+})+abort'
+  elif command -v zypper &>/dev/null; then
+    zypper --no-refresh se -i | awk '/^i/{print $3}' | fzf -m --preview 'zypper --no-refresh info {1} 2> /dev/null' \
+        --border=rounded \
+        --margin=1% \
+        --layout=reverse \
+        --bind 'enter:execute(echo "Selected: "{1}; sudo zypper rm {1})+abort'
+  fi
+}
