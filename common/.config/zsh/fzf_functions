@@ -2,3 +2,34 @@
 function fman() {
     man -k . | fzf -q "$1" --prompt='man> '  --preview $'echo {} | tr -d \'()\' | awk \'{printf "%s ", $2} {print $1}\' | xargs -r man' | tr -d '()' | awk '{printf "%s ", $2} {print $1}' | xargs -r man
 }
+
+
+# Find in File using ripgrep
+fif() {
+  if [ ! "$#" -gt 0 ]; then return 1; fi
+  rg --files-with-matches --no-messages "$1" \
+      | fzf --preview "highlight -O ansi -l {} 2> /dev/null \
+      | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' \
+      || rg --ignore-case --pretty --context 10 '$1' {}"
+}
+
+# Find in file using ripgrep-all
+fifa() {
+    if [ ! "$#" -gt 0 ]; then return 1; fi
+    local file
+    file="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$*" \
+        | fzf-tmux -p +m --preview="rga --ignore-case --pretty --context 10 '"$*"' {}")" \
+        && print -z "./$file" || return 1;
+}
+
+# Open epubs with Zathura
+fepub() {
+    result=$(find -type f -name '*.epub' | fzf --bind "ctrl-r:reload(find -type f -name '*.epub')")
+    [ -n "$result" ] && nohup zathura "$result" &> /dev/null & disown
+}
+
+# Open pdf with Zathura
+fpdf() {
+    result=$(find -type f -name '*.pdf' | fzf --bind "ctrl-r:reload(find -type f -name '*.pdf')" --preview "pdftotext {} - | less")
+    [ -n "$result" ] && nohup zathura "$result" &> /dev/null & disown
+}
