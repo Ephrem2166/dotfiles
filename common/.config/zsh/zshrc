@@ -213,9 +213,9 @@ source $ZSH/oh-my-zsh.sh
 # Others Configuration
 
 # Dircolors
-DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors.conf"
+export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors.conf"
 if [[ -x "$(command -v dircolors)" && -f "$DIRCOLOR" ]]; then
-  eval "$(dircolors -b '$DIRCOLOR')"
+  eval "$(dircolors -b "$DIRCOLOR")"
 fi
 
 # This makes Zsh's tab completion respect your custom colors.
