@@ -88,3 +88,6 @@ export FZF_ALT_C_OPTS=" \
   --walker-skip .git,node_modules,target \
   --preview 'tree -C {}' \
 "
+
+# Source FZF Functions
+source $ZDOTDIR/fzf_functions
