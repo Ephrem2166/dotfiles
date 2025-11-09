@@ -80,7 +80,7 @@ export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08
 # bindkey -e
 # Go to folder path without using CD
 setopt auto_cd
- # Push the old directory onto the stack on cd.
+# Push the old directory onto the stack on cd.
 setopt auto_pushd
 # Do not store duplicates in the stack.
 setopt PUSHD_IGNORE_DUPS
@@ -115,7 +115,6 @@ HISTSIZE=1000000
 HISTFILE="$HOME/.zsh_history"
 HISTCONTROL=ignoreboth
 
-
 # TODO Modules
 zmodload zsh/complist
 
@@ -143,7 +142,7 @@ zstyle ':completion:' cache-path "$HOME/.cache/zsh/.zcompcache"
 zstyle ':completion:*:parameters' list-colors '=*=1;35'
 zstyle ':completion:*:builtins' list-colors '=*=1;34'
 zstyle ':completion:*:aliases' list-colors '=*=1;33'
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+#zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
 zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
 zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
@@ -198,22 +197,31 @@ ZSH_THEME="robbyrussell"
 #         man "$@"
 # }
 
-
-
 # Plugins
 plugins=(
-    git
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-    fast-syntax-highlighting
-    zsh-history-substring-search
-    zsh-fzf-history-search
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  fast-syntax-highlighting
+  zsh-history-substring-search
+  zsh-fzf-history-search
 )
 
 # Oh My Zsh
 source $ZSH/oh-my-zsh.sh
 
 # Others Configuration
+
+# Dircolors
+DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors.conf"
+if [[ -x "$(command -v dircolors)" && -f "$DIRCOLOR" ]]; then
+  eval "$(dircolors -b '$DIRCOLOR')"
+fi
+
+# This makes Zsh's tab completion respect your custom colors.
+if [[ -n "$LS_COLORS" ]]; then
+  zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+fi
 
 # FZF Shell integrations
 eval "$(fzf --zsh)"
@@ -234,7 +242,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-
 # STARSHIP
 eval "$(starship init zsh)"
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+#alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
