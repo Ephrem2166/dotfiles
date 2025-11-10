@@ -1,5 +1,5 @@
 # Reload shell configuration
-alias reload="source ~/.zshrc"
+alias reload='echo "Reloading .zshrc" && source ~/.zshrc'
 
 # Exit and Clear
 alias c='clear'
@@ -35,6 +35,7 @@ alias whoami="echo $USER"          # Show the current user
 alias whoip="hostname -I"          # Show local IP address
 alias lsb="lsb_release -a"         # Detailed distro information
 alias hwinfo="lshw -short"         # Summarized hardware info
+alias lsb='lsblk -o name,size,label'
 
 # Date and time
 alias today="date '+%Y-%m-%d'"        # Current date
