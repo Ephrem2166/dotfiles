@@ -1,7 +1,7 @@
 # Compress
 compress() {
-    if [[ -f "$1" ||  -d "$1" ]]; then
-        tar zcvf "${1}_$(date '+%Y-%m-%d').tar.gz" "$1";
+    if [[ -f "$@" ||  -d "$@" ]]; then
+    tar -czvf "$archive_name" "$@"
     else
         echo "not a valid file or dir"
     fi
