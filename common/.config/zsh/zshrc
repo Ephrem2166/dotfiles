@@ -246,7 +246,10 @@ if [[ $(command -v "fzf") ]]; then
 fi
 
 # Zoxid integration
+if hash zoxide 2>/dev/null; then
 eval "$(zoxide init zsh)"
+alias zf='__zoxide_zi'
+fi
 
 # PYENV
 export PYENV_ROOT="$HOME/.pyenv"
