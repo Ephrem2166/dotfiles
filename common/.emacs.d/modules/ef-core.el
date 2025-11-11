@@ -571,7 +571,7 @@
 
 ;;; Frame
 (use-package frame
-  :hook (after-init . window-divider-modex)
+  :ensure nil
   :config
   (setopt window-divider-default-bottom-width 1)
   (setopt window-divider-default-places t)
