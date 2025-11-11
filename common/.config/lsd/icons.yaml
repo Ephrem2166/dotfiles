@@ -4,17 +4,131 @@ name:
   .emacs.d: 
   a.out: 
 extension:
-  go: 
-  hs: 
-  rs: 🦀
+  # Archives
+  zip: " "
+  rar: " "
+  7z: " "
+  tar: " "
+  gz: " "
+  bz2: " "
+  xz: " "
+
+ # Web / Frontend
+  html: " "
+  htm: " "
+  css: " "
+  scss: " "
+  sass: " "
+  less: " "
+  js: "󰌞 "
+  jsx: " "
+  ts: "󰛦 "
+  tsx: " "
+  vue: "󰡄 "
+  svelte: "󰡄 "
+
+  # Python / ML / Data
+  py: " "
+  ipynb: "󰕮 "
+  pyi: " "
+  npy: "󰘦 "
+  csv: " "
+  tsv: " "
+  r: "󰟔 "
+  rmd: " "
+
+
+
+  c: " "
+  h: " "
+  cpp: " "
+  java: " "
+  kt: " "
+  # Rust / Go / JVM
+  rs: " "
+  go: " "
+  class: " "
+  jar: " "
+  kts: " "
+  groovy: " "
+
+  # C / C++ / Low-level
+  hpp: " "
+  cc: " "
+  hh: " "
+  asm: " "
+
+# Fonts
+  ttf: " "
+  otf: " "
+  woff: " "
+  woff2: " "
+  # Shell / Config
+  sh: " "
+  bash: " "
+  zsh: " "
+  fish: " "
+  conf: " "
+  ini: " "
+  env: " "
+  envrc: " "
+  dotenv: " "
+  # DevOps / Infra
+  yaml: " "
+  yml: " "
+  json: " "
+  toml: " "
+  lock: " "
+  dockerfile: "󰡨 "
+  dockerignore: "󰡨 "
+  tf: "󱁢 "
+  tfvars: "󱁢 "
+  # System / Executables
+  exe: " "
+  app: " "
+  dmg: " "
+  pkg: " "
+  deb: " "
+  rpm: " "
+  # Logs
+  log: " "
+  # Markup / Docs
+  md: " "
+  markdown: " "
+  txt: " "
+  rst: " "
+  adoc: " "
+  pdf: " "
+  epub: " "
+  # Images
+  png: " "
+  jpg: " "
+  jpeg: " "
+  gif: " "
+  webp: " "
+  svg: "󰜡 "
+  ico: " "
+  # Audio
+  mp3: " "
+  flac: " "
+  wav: " "
+  ogg: " "
+  # Video
+  mp4: " "
+  mkv: " "
+  webm: " "
+  avi: " "
 filetype:
-  dir: 📂
-  file: 📄
-  pipe: 📩
-  socket: 󰆨
-  executable: 
+  dir: " "
+  file: " "
   symlink-dir: 
   symlink-file: 
   device-char: 
   device-block: 󰜫
   special: 
+  symlink: " "
+  executable: " "
+  pipe: "ﳣ "
+  socket: "ﳧ "
+  block_device: " "
+  char_device: " i"

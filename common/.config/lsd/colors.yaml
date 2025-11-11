@@ -1,38 +1,45 @@
-user: 230
-group: 187
+user: 253
+group: 253
+
 permission:
-  read: dark_green
-  write: dark_yellow
-  exec: dark_red
-  exec-sticky: 5
-  no-access: 245
-  octal: 6
-  acl: dark_cyan
-  context: cyan
+  read: 116         # Frost (blue-green)
+  write: 173        # Aurora Orange
+  exec: 151         # Aurora Green
+  exec-sticky: 151
+  no-access: 239
+  octal: 239
+  acl: 116
+  context: 116
+
 date:
-  hour-old: 40
-  day-old: 42
-  older: 36
+  hour-old: 109     # Frost teal
+  day-old: 110      # Frost blue
+  older: 67         # Frost deep blue
+
 size:
-  none: 245
-  small: 229
-  medium: 216
-  large: 172
+  none: 239
+  small: 222        # Aurora Yellow (mild)
+  medium: 173       # Aurora Orange
+  large: 131        # Aurora Red
+
 inode:
-  valid: 13
-  invalid: 245
+  valid: 151
+  invalid: 239
+
 links:
-  valid: 13
-  invalid: 245
-tree-edge: 245
+  valid: 151
+  invalid: 239
+
+tree-edge: 239
+
 git-status:
-  default: 245
-  unmodified: 245
-  ignored: 245
-  new-in-index: dark_green
-  new-in-workdir: dark_green
-  typechange: dark_yellow
-  deleted: dark_red
-  renamed: dark_green
-  modified: dark_yellow
-  conflicted: dark_red
+  default: 239
+  unmodified: 239
+  ignored: 239
+  new-in-index: 151
+  new-in-workdir: 151
+  typechange: 173
+  deleted: 131
+  renamed: 151
+  modified: 173
+  conflicted: 131
