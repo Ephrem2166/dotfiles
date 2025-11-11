@@ -97,10 +97,31 @@
   (after-change-major-mode-hook . my/auto-revert-current-buffer-h)
   )
 
+;;; Auto Insert
+(use-package autoinsert
+  :ensure nil
+  :init
+  (setq auto-insert-query nil)
+  :config
+  (auto-insert-mode 1)
+  (define-auto-insert
+    "\\.el\\'"
+    '(
+      "Emacs Lisp header"
+      ";;; " (file-name-nondirectory (buffer-file-name)) " --- " _ " -*- lexical-binding: t; -*-\n\n"
+      ";;; Commentary:\n"
+      ";; \n\n"
+      ";;; Code:\n\n\n"
+      "(provide '" (file-name-base) ")\n"
+      ";;; " (file-name-nondirectory (buffer-file-name)) " ends here\n"
+      )))
+
+
 ;;; Bookmarks
 (use-package bookmark
   :ensure nil
   :custom
+  (bookmark-set-fring-mark nil)
   (bookmark-use-annotations nil)
   (bookmark-automatically-show-annotations nil)
   (bookmark-default-file (expand-file-name "bookmarks" user-emacs-directory))
@@ -422,7 +443,7 @@
                   ("lambda" . 955)
                   ("delta" . 120517)
                   ("epsilon" . 120518)
-                  ("<" . 10216)
+                  ;; ("<" . 10216)
                   (">" . 10217)
                   ;; ("[" . 10214)
                   ;; ("]" . 10215)
@@ -465,6 +486,23 @@
   (add-function :before-until electric-pair-inhibit-predicate
                 (lambda (c) (eq c ?<   ;; >
                            )))
+  ;; Better Electric Pair
+  (defun my/electric-pair-conservative-inhibit (char)
+    (or
+     ;; I find it more often preferable not to pair when the
+     ;; same char is next.
+     (eq char (char-after))
+     ;; Don't pair up when we insert the second of "" or of ((.
+     (and (eq char (char-before))
+          (eq char (char-before (1- (point)))))
+     ;; I also find it often preferable not to pair next to a word.
+     (eq (char-syntax (following-char)) ?w)
+     ;; Don't pair at the end of a word, unless parens.
+     (and
+      (eq (char-syntax (char-before (1- (point)))) ?w)
+      (eq (preceding-char) char)
+      (not (eq (char-syntax (preceding-char)) ?\()))))
+  (setq electric-pair-inhibit-predicate 'my/electric-pair-conservative-inhibit)
   )
 
 ;;; FFAP: Find File At Point
