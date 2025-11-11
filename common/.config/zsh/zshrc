@@ -11,12 +11,6 @@ export  XDG_STATE_HOME="$HOME/.local/state"
 [ -d "$XDG_STATE_HOME" ]  || mkdir -m 0750 "$XDG_STATE_HOME"
 
 
-# For Opensuse Tumbleweed
-export PACKAGE_MANAGER="zypper"
-# For Arch
-# export PACKAGE_MANAGER="pacman"
-# For Fedora
-# export PACKAGE_MANAGER="dnf"
 # Bootstrap .zshrc to ~/.config/zsh/.zshrc, any other zsh config files can also reside here
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
@@ -130,12 +124,12 @@ setopt INC_APPEND_HISTORY
 setopt RM_STAR_WAIT
 
 # Allow comment with #
-setopt interactive_comments
+setopt INTERACTIVE_COMMENTS
 
 # Spell Correction for Commands
-setopt correct
+setopt CORRECT
 # But not for arguments
-unsetopt correct_all
+unsetopt CORRECT_ALL
 
 # Make Alias Commands Distinct for Completion purpose
 # By unsetting, substitute alias before completion
@@ -248,6 +242,19 @@ ZSH_THEME="robbyrussell"
 #         PAGER="${commands[less]:-$PAGER}" \
 #         man "$@"
 # }
+
+# add color to man pages
+export MANROFFOPT='-c'
+export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
+export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
+export LESS_TERMCAP_me=$(tput sgr0)
+export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4)
+export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
+export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 8)
+export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
+export LESS_TERMCAP_mr=$(tput rev)
+export LESS_TERMCAP_mh=$(tput dim)
+
 
 # Plugins
 plugins=(

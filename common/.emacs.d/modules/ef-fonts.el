@@ -179,5 +179,24 @@
 
 
 
+;;; Better Font Changer
+(defun my/select-font ()
+  "Select and set a font."
+  (interactive)
+  (let ((font-name (completing-read "Choose font: " (cl-remove-duplicates (font-family-list)))))
+    (let ((family (meain/get-font-prop font-name 'family))
+          (weight (meain/get-font-prop font-name 'weight)))
+      (set-frame-font family)
+      (set-face-attribute 'default nil :font family :weight weight)
+      (set-face-attribute 'fixed-pitch nil :font family :weight weight)
+      (set-face-attribute 'variable-pitch nil :font family :weight weight)
+      (setq-default line-spacing (meain/get-font-prop font-name 'line-spacing)))))
+
+;;; Better Describe Font
+(defun my/what-font ()
+  "Show the name/details for the current font in use."
+  (interactive)
+  (message "%s" (face-attribute 'default :font)))
+
 (provide 'ef-fonts)
 ;;; ef-fonts.el ends here
