@@ -298,5 +298,8 @@ export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init -)"
 
 # STARSHIP
-eval "$(starship init zsh)"
+if hash starship 2>/dev/null; then
+  eval "$(starship init zsh)"
+  fi
+
 #alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
