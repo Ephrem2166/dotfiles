@@ -313,13 +313,13 @@
 
 ;;; Nano Themes
 (use-package nano-theme
-:ensure t
-:defer t
-:config
-(setq nano-fonts-family-monospaced “Berkeley Nerd Font”)
-(setq nano-font-family-proportional nil)
-(setq nano-font-size 14)
-)
+  :ensure t
+  :defer t
+  :config
+  (setq nano-fonts-family-monospaced “Berkeley Nerd Font”)
+  (setq nano-font-family-proportional nil)
+  (setq nano-font-size 14)
+  )
 
 (provide 'ef-themes)
 ;;; ef-themes.el ends here
