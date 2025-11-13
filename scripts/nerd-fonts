@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+nerd_fonts_release_version='3.4.0'
+if [[ "$(uname)" == "Linux" ]]; then
+    fonts_dir="${HOME}/.fonts"
+elif [[ "$(uname)" == "Darwin" ]]; then
+    fonts_dir="${HOME}/Library/Fonts"
+else
+    echo "Unsupported operating system."
+    exit 1
+fi
+
+
+declare -a fonts=(
+  FantasqueSansMono
+  Go-Mono
+)
+
+if [[ ! -d "$fonts_dir" ]]; then
+    mkdir -p "$fonts_dir"
+fi
+
+for font in "${fonts[@]}"; do
+  ((count++))
+  zip_file="${font}.zip"
+  download_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${nerd_fonts_release_version}/${zip_file}"
+  printf ">>> Downloading and installing $count: ${font}...\n"
+  wget -q "$download_url"
+  unzip -o -qq "$zip_file" -d "$fonts_dir/$font/"
+  rm "$zip_file"
+done
+
+find "$fonts_dir" -name '*Windows Compatible*' -delete
+
+# printf ">>> Updating user cache...\n"
+# fc-cache -fv
+# printf ">>> Font cache for user $USER updated.\n\n"
