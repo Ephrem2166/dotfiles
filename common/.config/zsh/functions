@@ -136,3 +136,11 @@ update_system() {
 mk() {
   mkdir -p "$@" && cd "$1" || echo "Unable to cd into $1"
 }
+
+# Create and open file
+daily_file() {
+  local today
+  today="$(date -I)"
+  file_name="${today}_$1".$2
+  touch "$file_name" && nvim "$file_name"
+}
