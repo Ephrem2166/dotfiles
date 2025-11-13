@@ -107,7 +107,7 @@ frm() {
 
 # Open files from a terminal
 # open <file>
-open() {
+open_pdf() {
   xdg-open "$@" >/dev/null 2>&1 &
 }
 

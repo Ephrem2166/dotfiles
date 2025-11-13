@@ -50,7 +50,7 @@ draw_bold_text_with_bright_colors = true
 #italic = { family = "PragmataProMono Nerd Font", style = "Italic" }
 #bold_italic = { family = "PragmataProMono Nerd Font", style = "Bold Italic" }
 
-# Berkeley Mono 
+# Berkeley Mono
 normal = { family = "Berkeley Nerd Font", style = "Regular" }
 bold = { family = "Berkeley Nerd Font", style = "Bold" }
 italic = { family = "Berkeley Nerd Font", style = "Italic" }
@@ -89,7 +89,7 @@ opacity = 1.0
 decorations = 'Full'
 title = 'Alacritty'
 dynamic_title = true
-padding = { x = 9, y = 9 }
+padding = { x = 0, y = 0 }
 dynamic_padding = true
 #startup_mode = "Maximized"
 

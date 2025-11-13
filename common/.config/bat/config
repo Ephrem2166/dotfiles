@@ -30,6 +30,5 @@
 --style=full
 
 --color=always
-
+--decorations=always
 --tabs 4
-
