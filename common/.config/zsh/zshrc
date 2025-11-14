@@ -204,11 +204,14 @@ zstyle ':completion:*' file-list all
 
 # Alias
 [ -f "$XDG_CONFIG_HOME/zsh/alias" ] && source "$XDG_CONFIG_HOME/zsh/alias"
+
+# Functions
 [ -f "$XDG_CONFIG_HOME/zsh/functions" ] && source "$XDG_CONFIG_HOME/zsh/functions"
-# Bindings
-# Vim Keybindings
-# bindkey -v
-# export KEYTIMEOUT=1
+
+# Key Bindings
+[ -f "$XDG_CONFIG_HOME/zsh/keybinds" ] && source "$XDG_CONFIG_HOME/zsh/keybinds"
+
+#export KEYTIMEOUT=1
 #
 # Theme
 ZSH_THEME="robbyrussell"
