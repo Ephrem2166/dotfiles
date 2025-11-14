@@ -130,7 +130,7 @@ alias listening='lsof -P -i -n'
 # External alternatives for ls #
 ################################
 if command -v eza &>/dev/null; then
-    alias ls='eza -ll --color=always --group-directories-first'
+    alias ls='eza -lh --group-directories-first --icons=auto'
     alias lsl='eza -la --icons --group-directories-first'
     alias lsa='eza -la --icons --group-directories-first'
     alias lst='eza --tree --level=2 --icons'
@@ -159,6 +159,27 @@ fi
 if command -v rg &>/dev/null; then
  alias grep='rg'
 fi
+
+###########
+# # Zoxide #
+###########
+if hash zoxide 2>/dev/null; then
+eval "$(zoxide init zsh)"
+alias cd='zd'
+zd() {
+    if [ $# -eq 0 ]; then
+      builtin cd ~ && return
+    elif [ -d "$1" ]; then
+      builtin cd "$1"
+    else
+      z "$@" && printf "\U000F17A9 " && pwd || echo "Error: Directory not found"
+    fi
+  }
+
+
+fi
+
+
 
 # FZF
 # alias fzf="fzf --preview=\"bat --color=always --style=plain {}\" --preview-window=\"border:rounded\" --border=rounded --prompt=\"$ \" --pointer=\"->\""
