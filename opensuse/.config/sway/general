@@ -19,15 +19,18 @@ set $color13    = #B48EAD
 set $color14    = #8FBCBB
 set $color15    = #ECEFF4
 
-# Colors                
-client.focused #2E3440 #D8DEE9 #3B4252   
+# Colors
+# Class border background  text indicator  child_border
+client.focused #2E3440 #D8DEE9 #3B4252
 client.focused_inactive #2E3440 #D8DEE9 #3B4252
 client.unfocused  #2E3440 #D8DEE9 #3B4252
-client.urgent #BF616A #D8DEE9 #BF616A 
+client.urgent #BF616A #D8DEE9 #BF616A
+
+
 
 #xwayland enable
 
-workspace_layout default 
+workspace_layout default
 
 default_border pixel 2px
 default_floating_border normal
@@ -37,7 +40,7 @@ font pango:Berkeley Nerd Font 10
 # Focus window when mouse hovers it
 focus_follows_mouse yes
 
-focus_on_window_activation focus 
+focus_on_window_activation focus
 
 titlebar_border_thickness 1
 
@@ -45,10 +48,10 @@ titlebar_border_thickness 1
 # mouse_warping output
 
 # Add gaps in between all application windows
-gaps inner 2 
+gaps inner 2
 gaps outer 2
 # smart_gaps on
-# smart_borders on 
+# smart_borders on
 
 
 # Window Border
@@ -60,4 +63,3 @@ title_align center
 # Disable the laptop screen when the lid is closed.
 bindswitch --reload --locked lid:on output eDP-1 disable
 bindswitch --reload --locked lid:off output eDP-1 enable
-
