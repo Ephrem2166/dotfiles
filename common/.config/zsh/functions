@@ -144,3 +144,33 @@ daily_file() {
   file_name="${today}_$1".$2
   touch "$file_name" && nvim "$file_name"
 }
+
+
+# Get my ip
+myip(){
+  hostname -I | awk '{print $1}' && echo -n 'External: ' && curl -s ifconfig.me && echo
+}
+
+# Colored man pages function
+man() {
+    LESS_TERMCAP_mb=$'\e[1;32m' \
+    LESS_TERMCAP_md=$'\e[1;32m' \
+    LESS_TERMCAP_me=$'\e[0m' \
+    LESS_TERMCAP_se=$'\e[0m' \
+    LESS_TERMCAP_so=$'\e[01;33m' \
+    LESS_TERMCAP_ue=$'\e[0m' \
+    LESS_TERMCAP_us=$'\e[1;4;31m' \
+    command man "$@"
+}
+
+# # add color to man pages
+# export MANROFFOPT='-c'
+# export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
+# export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
+# export LESS_TERMCAP_me=$(tput sgr0)
+# export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4)
+# export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
+# export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 8)
+# export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
+# export LESS_TERMCAP_mr=$(tput rev)
+# export LESS_TERMCAP_mh=$(tput dim)
