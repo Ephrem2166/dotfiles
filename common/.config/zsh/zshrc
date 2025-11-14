@@ -254,12 +254,6 @@ if [[ $(command -v "fzf") ]]; then
   source $XDG_CONFIG_HOME/zsh/fzf.zsh
 fi
 
-# Zoxid integration
-if hash zoxide 2>/dev/null; then
-eval "$(zoxide init zsh)"
-alias zd='__zoxide_zi'
-fi
-
 # PYENV
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
