@@ -61,8 +61,18 @@ list_packages() {
 }
 
 
-# Open Files with Default Editor
+# Better Open
+function zopen() {
+  local fname
+  local current_dir="$PWD"
+  cd "${XDG_CONFIG_HOME:-~/.config}"
+  fname="$(fzf)" || return
+  $EDITOR "$fname"
+  cd "$current_dir"
+}
 
+
+# Open Files with Default Editor
 fopen () {
     # [f]uzzy [e]dit  [s]earch [f]ile [c]ontent
     local selected_file
