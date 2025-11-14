@@ -216,48 +216,6 @@ zstyle ':completion:*' file-list all
 # Theme
 ZSH_THEME="robbyrussell"
 
-# ShellFuncs
-# Colored manuals
-# man() {
-#     env \
-#         LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-#         LESS_TERMCAP_md=$(printf "\e[1;31m") \
-#         LESS_TERMCAP_me=$(printf "\e[0m") \
-#         LESS_TERMCAP_se=$(printf "\e[0m") \
-#         LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-#         LESS_TERMCAP_ue=$(printf "\e[0m") \
-#         LESS_TERMCAP_us=$(printf "\e[1;32m") \
-#         man "$@"
-# }
-
-# # function man() {
-# #    env \
-#         LESS_TERMCAP_md=$(
-#             tput bold
-#             tput setaf 4
-#         ) \
-#         LESS_TERMCAP_me=$(tput sgr0) \
-#         LESS_TERMCAP_mb=$(tput blink) \
-#         LESS_TERMCAP_us=$(tput setaf 2) \
-#         LESS_TERMCAP_ue=$(tput sgr0) \
-#         LESS_TERMCAP_so=$(tput smso) \
-#         LESS_TERMCAP_se=$(tput rmso) \
-#         PAGER="${commands[less]:-$PAGER}" \
-#         man "$@"
-# }
-
-# add color to man pages
-export MANROFFOPT='-c'
-export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
-export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
-export LESS_TERMCAP_me=$(tput sgr0)
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4)
-export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 8)
-export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
-export LESS_TERMCAP_mr=$(tput rev)
-export LESS_TERMCAP_mh=$(tput dim)
-
 
 # Plugins
 plugins=(
