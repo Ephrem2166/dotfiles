@@ -645,7 +645,7 @@ window-rule{
 match app-id="foot"
 match app-id="kitty"
 match app-id="alacritty"
-
+match app-id="ghostty"
 open-on-workspace "terminal"
 }
 
