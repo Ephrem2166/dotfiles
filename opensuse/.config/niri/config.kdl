@@ -698,7 +698,7 @@ open-on-workspace "office"
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 // spawn-at-startup "alacritty" "-e" "fish"
-spawn-at-startup "waybar"
+//spawn-at-startup "waybar" "-c" "'$HOME/.config/waybar/niriconfig.jsonc'"
 spawn-at-startup "/usr/libexec/polkit-kde-authentication-agent-1"
 spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
 spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
@@ -711,8 +711,9 @@ spawn-at-startup "nm-applet" "--indicator"
 spawn-at-startup "swayidle" "-w" "timeout" "300" "$HOME/.config/swaylock/lock.sh" "timeout" "600" "'swaymsg output * power off'" "resume" "'swaymsg output * power on'" "before-sleep" "$HOME/.config/swaylock/lock.sh"
 spawn-at-startup "swaync"
 spawn-at-startup "/usr/bin/emacs" "--daemon"
-spawn-at-startup "swaybg" "-o" "eDP-1" "-i" "~/Pictures/berserk.png"
+spawn-sh-at-startup "swaybg -o eDP-1 -i ~/Pictures/berserk.png"
 
+spawn-sh-at-startup "waybar -c ~/.config/waybar/niriconfig.jsonc"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
