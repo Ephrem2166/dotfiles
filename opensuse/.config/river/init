@@ -43,7 +43,7 @@ riverctl map normal $mod+Control B spawn "$HOME/.config/rofi/rofi-bluetooth.sh"
 # Reload
 riverctl map normal $mod+Control R spawn "$HOME/.config/river/init"
 # Toggle waybar
-riverctl map normal $mod B spawn "killall -SIGUSR1 waybar"
+riverctl map normal $mod B spawn "$HOME/.config/river/scripts/waybar"
 # Lock
 riverctl map normal $mod+Shift Z spawn "hyprlock"
 # Clipboard
@@ -157,6 +157,22 @@ done
 ##########################
 ######  Tags    #########
 ##########################
+# Tags
+terminal_tag=$((1 << 0))
+files_tag=$((1 << 1))
+browser_tag=$((1 << 2))
+
+riverctl rule-add --app-id "alacritty" tags $terminal_tag
+riverctl rule-add --app-id "kitty" tags $terminal_tag
+riverctl rule-add --app-id "ghostty" tags $terminal_tag
+
+riverctl rule-add --app-id "dolphin" tags $files_tag
+
+riverctl rule-add --app-id "firefox" tags $browser_tag
+riverctl rule-add --app-id "librewolf" tags $browser_tag
+
+
+
 for i in $(seq 1 9); do
   tags=$((1 << ($i - 1)))
 
@@ -216,10 +232,11 @@ rivertile -view-padding 2 -outer-padding 2 &
 #######################
 ######## Autostart ####
 #######################
+source "$HOME/.config/river/environment"
 riverctl spawn "/usr/libexec/polkit-kde-authentication-agent-1"
 riverctl spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
 riverctl spawn "systemctl --user import-environment"
-riverctl spawn "swaybg -i ~/Pictures/wallpapers/0650.jpg"
+riverctl spawn "swaybg -i ~/Pictures/berserk.png"
 riverctl spawn "waybar -c /home/ephrem/.config/waybar/riverconfig.jsonc -s /home/ephrem/.config/waybar/river.css"
 riverctl spawn wlsunset
 riverctl spawn mpd
