@@ -3,60 +3,9 @@
 // Check the wiki for a full description of the configuration:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Overview
 
-workspace "terminal"
-workspace "browser"
-workspace "file"
-workspace "video"
-workspace "chat"
-workspace "emacs"
-
-window-rule{
-open-focused true
-}
-
-window-rule{
-match app-id="foot"
-match app-id="kitty"
-match app-id="alacritty"
-
-open-on-workspace "terminal"
-}
-
-window-rule{
-match app-id="dolphin"
-
-open-on-workspace "file"
-}
-
-
-window-rule {
-match app-id="firefox"
-match app-id="librewolf"
-
-open-on-workspace "browser"
-}
-
-window-rule{
-match app-id="mpv"
-match app-id="vlc"
-
-
-open-on-workspace "video"
-}
-
-window-rule{
-match app-id="telegram"
-
-open-on-workspace "chat"
-}
-
-window-rule{
-match app-id="emacs"
-
-open-on-workspace "emacs"
-}
-
+////////////////////////////////////////
 // Input device configuration.
+////////////////////////////////////////
 // Find the full list of options on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Input
 input {
@@ -72,18 +21,17 @@ input {
         }
         // numlock
     }
-    focus-follows-mouse
 
     // Next sections include libinput settings.
     // Omitting settings disables them, or leaves them at their default values.
     touchpad {
         // off
         tap
-        // dwt
+        dwt
         // dwtp
         // drag-lock
         natural-scroll
-        // accel-speed 0.2
+         accel-speed 0.5
         // accel-profile "flat"
         // scroll-method "two-finger"
         // disabled-on-external-mouse
@@ -116,12 +64,21 @@ input {
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    // focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse max-scroll-amount="0%"
+    // focus-follows-mouse
+
+    // Let niri not take over the power button by default
+    // disable-power-key-handling
+
+    // Switching twice to the same workspace by index
+    // will switch back to previous workspace
+    workspace-auto-back-and-forth
+
 }
 
-
-
-
+////////////////////////////////////////
+// Outputs
+////////////////////////////////////////
 // You can configure outputs by their name, which you can find
 // by running `niri msg outputs` while inside a niri instance.
 // The built-in laptop monitor is usually called "eDP-1".
@@ -138,7 +95,7 @@ output "eDP-1" {
     // for the resolution.
     // If the mode is omitted altogether or is invalid, niri will pick one automatically.
     // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
-    mode "1920x1080@120.030"
+    mode "1920x1080@60.003"
 
     // You can use integer or fractional scale, for example use 1.5 for 150% scale.
     scale 1
@@ -157,9 +114,20 @@ output "eDP-1" {
     // If the position is unset or results in an overlap, the output is instead placed
     // automatically.
     position x=1280 y=0
-    background-color "#2E3440"
+    //background-color "#2E3440" Deprecated
     backdrop-color "#2E3440"
+
+    variable-refresh-rate on-demand=true
+
+    hot-corners {
+    // off
+    bottom-right
 }
+}
+
+////////////////////////////////////////
+// Layout
+////////////////////////////////////////
 
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
@@ -174,7 +142,7 @@ layout {
     // - "always", the focused column will always be centered.
     // - "on-overflow", focusing a column will center it if it doesn't fit
     //   together with the previously focused column.
-    center-focused-column "never"
+    center-focused-column "on-overflow"
     // always-center-single-column
     default-column-display "tabbed"
 
@@ -216,7 +184,7 @@ layout {
         // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 5
+        width 1
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -251,7 +219,7 @@ layout {
         // If you enable the border, you probably want to disable the focus ring.
         off
 
-        width 4
+        width 14
         active-color "#81A1C1"
         inactive-color "#2E3440"
         urgent-color "#BF616A"
@@ -308,9 +276,13 @@ layout {
         // top 64
         // bottom 64
     }
+    background-color "#2E3440"
 }
 
 
+////////////////////////////////////////
+// Animations
+////////////////////////////////////////
 // Animation settings.
 // The wiki explains how to configure individual animations:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Animations
@@ -321,65 +293,14 @@ animations {
     // Slow down all animations by this factor. Values below 1 speed them up instead.
     // slowdown 3.0
 }
-// Add lines like this to spawn processes at startup.
-// Note that running niri as a session supports xdg-desktop-autostart,
-// which may be more convenient to use.
-// See the binds section below for more spawn examples.
-// spawn-at-startup "alacritty" "-e" "fish"
-spawn-at-startup "waybar"
-spawn-at-startup "/usr/libexec/polkit-kde-authentication-agent-1"
-spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
-spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
-spawn-at-startup "mpd"
-spawn-at-startup "/usr/lib/kdeconnectd"
-spawn-at-startup "/usr/bin/kdeconnect-indicator"
-spawn-at-startup "/usr/bin/gammastep"
-spawn-at-startup "/usr/bin/gammastep-indicator"
-spawn-at-startup "nm-applet" "--indicator"
-spawn-at-startup "swayidle" "-w" "timeout" "300" "$HOME/.config/swaylock/lock.sh" "timeout" "600" "'swaymsg output * power off'" "resume" "'swaymsg output * power on'" "before-sleep" "$HOME/.config/swaylock/lock.sh"
-spawn-at-startup "swaync"
-spawn-at-startup "/usr/bin/emacs" "--daemon"
-spawn-at-startup "swaybg" "-o" "eDP-1" "-i" "$HOME/Pictures/berserk.png"
-
-// Uncomment this line to ask the clients to omit their client-side decorations if possible.
-// If the client will specifically ask for CSD, the request will be honored.
-// Additionally, clients will be informed that they are tiled, removing some client-side rounded corners.
-// This option will also fix border/focus ring drawing behind some semitransparent windows.
-// After enabling or disabling this, you need to restart the apps for this to take effect.
-prefer-no-csd
-
-// You can change the path where screenshots are saved.
-// A ~ at the front will be expanded to the home directory.
-// The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 
-environment {
-QT_QPA_PLATFORM "wayland"
-}
-
-cursor {
-    xcursor-theme "breeze_cursors"
-    xcursor-size 22
-
-}
-
-// You can also set this to null to disable saving screenshots to disk.
-// screenshot-path null
-
-
-hotkey-overlay {
-    skip-at-startup
-}
-
-clipboard {
-    disable-primary
-}
-
+////////////////////////////////////////
+// Window Rules
+////////////////////////////////////////
 // Window rules let you adjust behavior for individual windows.
 // Find more information on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
-
 // Work around WezTerm's initial configure bug
 // by setting an empty default-column-width.
 window-rule {
@@ -441,8 +362,9 @@ open-fullscreen true
 }
 
 
-
-
+////////////////////////////////////////
+// Keybindings
+////////////////////////////////////////
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
@@ -463,7 +385,7 @@ binds {
     Mod+D { spawn "rofi" "-show" "drun"; }
     Super+SHIFT+L { spawn "swaylock"; }
     Mod+SHIFT+q { spawn "~/.config/rofi/rofi-power.sh"; }
-    Mod+Shift+r { spawn "pkill" "-SIGUSR2" "waybar"; }
+    Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR2" "waybar"; }
     Mod+Space repeat=false { toggle-overview; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
@@ -478,6 +400,8 @@ binds {
     XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
 
     Mod+Q { close-window; }
+
+    Mod+Shift+E { quit skip-confirmation=true; }
 
     Mod+Left  { focus-column-left; }
     Mod+Down  { focus-window-down; }
@@ -640,8 +564,6 @@ binds {
     // Makes the column "fill the rest of the space".
     Mod+Ctrl+F { expand-column-to-available-width; }
 
-
-
     // Finer width adjustments.
     // This command can also:
     // * set width in pixels: "1000"
@@ -674,9 +596,10 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
-    Print { screenshot; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print { screenshot-window; }
+    Print { screenshot show-pointer=false; }
+    Ctrl+Print { screenshot-screen write-to-disk=false show-pointer=false; }
+    Alt+Print { screenshot-window write-to-disk=false; }
+
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here
@@ -695,4 +618,135 @@ binds {
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
+}
+
+////////////////////////////////////////
+// Named Workspaces
+////////////////////////////////////////
+workspace "terminal" {
+layout {
+gaps 2
+}
+}
+workspace "browser"
+workspace "file"
+workspace "video"
+workspace "chat"
+workspace "emacs"
+workspace "office"
+
+window-rule{
+open-focused true
+}
+
+window-rule{
+match app-id="foot"
+match app-id="kitty"
+match app-id="alacritty"
+
+open-on-workspace "terminal"
+}
+
+window-rule{
+match app-id="dolphin"
+
+open-on-workspace "file"
+}
+
+
+window-rule {
+match app-id="firefox"
+match app-id="librewolf"
+
+open-on-workspace "browser"
+}
+
+window-rule{
+match app-id="mpv"
+match app-id="vlc"
+
+
+open-on-workspace "video"
+}
+
+window-rule{
+match app-id="telegram"
+
+open-on-workspace "chat"
+}
+
+window-rule{
+match app-id="emacs"
+
+open-on-workspace "emacs"
+}
+
+window-rule{
+match app-id="libreoffice"
+match app-id="obsidian"
+
+open-on-workspace "office"
+}
+
+////////////////////////////////////////
+// Miscellaneous
+////////////////////////////////////////
+// Add lines like this to spawn processes at startup.
+// Note that running niri as a session supports xdg-desktop-autostart,
+// which may be more convenient to use.
+// See the binds section below for more spawn examples.
+// spawn-at-startup "alacritty" "-e" "fish"
+spawn-at-startup "waybar"
+spawn-at-startup "/usr/libexec/polkit-kde-authentication-agent-1"
+spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
+spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
+spawn-at-startup "mpd"
+spawn-at-startup "/usr/lib/kdeconnectd"
+spawn-at-startup "/usr/bin/kdeconnect-indicator"
+spawn-at-startup "/usr/bin/gammastep"
+spawn-at-startup "/usr/bin/gammastep-indicator"
+spawn-at-startup "nm-applet" "--indicator"
+spawn-at-startup "swayidle" "-w" "timeout" "300" "$HOME/.config/swaylock/lock.sh" "timeout" "600" "'swaymsg output * power off'" "resume" "'swaymsg output * power on'" "before-sleep" "$HOME/.config/swaylock/lock.sh"
+spawn-at-startup "swaync"
+spawn-at-startup "/usr/bin/emacs" "--daemon"
+spawn-at-startup "swaybg" "-o" "eDP-1" "-i" "~/Pictures/berserk.png"
+
+
+// Uncomment this line to ask the clients to omit their client-side decorations if possible.
+// If the client will specifically ask for CSD, the request will be honored.
+// Additionally, clients will be informed that they are tiled, removing some client-side rounded corners.
+// This option will also fix border/focus ring drawing behind some semitransparent windows.
+// After enabling or disabling this, you need to restart the apps for this to take effect.
+prefer-no-csd
+
+// You can change the path where screenshots are saved.
+// A ~ at the front will be expanded to the home directory.
+// The path is formatted with strftime(3) to give you the screenshot date and time.
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+
+environment {
+QT_QPA_PLATFORM "wayland"
+}
+
+cursor {
+    xcursor-theme "breeze_cursors"
+    xcursor-size 22
+
+}
+
+// You can also set this to null to disable saving screenshots to disk.
+// screenshot-path null
+
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+clipboard {
+    disable-primary
+}
+
+config-notification {
+     disable-failed
 }
