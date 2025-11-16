@@ -29,7 +29,7 @@
   "backlight#keyboard": {
     "device": "tpacpi::kbd_backlight",
     // "exec": "brightnessctl -d tpacpi::kbd_backlight get | awk '{print int($1 * 50)}'",
-    "format": "{icon} {percent}%",
+    "format": " {icon} {percent}%",
     "format-icons": [
       "",
       "",
