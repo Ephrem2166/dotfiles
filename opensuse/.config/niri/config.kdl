@@ -27,11 +27,11 @@ input {
     touchpad {
         // off
         tap
-        dwt
+        // dwt
         // dwtp
         // drag-lock
         natural-scroll
-         accel-speed 0.5
+         // accel-speed 0.2
         // accel-profile "flat"
         // scroll-method "two-finger"
         // disabled-on-external-mouse
@@ -403,6 +403,7 @@ binds {
 
     Mod+Shift+E { quit skip-confirmation=true; }
 
+    // Navigation
     Mod+Left  { focus-column-left; }
     Mod+Down  { focus-window-down; }
     Mod+Up    { focus-window-up; }
@@ -557,8 +558,9 @@ binds {
     Mod+R { switch-preset-column-width; }
   //  Mod+Shift+R { switch-preset-window-height; }
     Mod+Ctrl+R { reset-window-height; }
-    Mod+F { maximize-column; }
-    Mod+Shift+F { fullscreen-window; }
+    Mod+Shift+F { maximize-column; }
+    Mod+F { fullscreen-window; }
+
 
     // Expand the focused column to space not taken up by other fully visible columns.
     // Makes the column "fill the rest of the space".
@@ -628,8 +630,8 @@ layout {
 gaps 2
 }
 }
-workspace "browser"
 workspace "file"
+workspace "browser"
 workspace "video"
 workspace "chat"
 workspace "emacs"

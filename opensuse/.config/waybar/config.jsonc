@@ -36,9 +36,9 @@
     "format-icons": {
       // Named workspaces
       // (you need to configure them in niri)
-        "browser": " ",
         "terminal" : " ",
         "file": " ",
+        "browser": " ",
         "chat": "<b></b>",
         "video": " ",
         // "music": " ",
