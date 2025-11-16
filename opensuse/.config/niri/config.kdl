@@ -541,9 +541,9 @@ binds {
     // Mod+Ctrl+1 { move-window-to-workspace 1; }
 
     // Switches focus between the current and the previous workspace.
-     # Mod+Tab { focus-workspace-down; }
+     // Mod+Tab { focus-workspace-down; }
      Mod+Tab { focus-workspace-previous; }
-     # Mod+Shift+Tab { focus-workspace-up; }
+     // Mod+Shift+Tab { focus-workspace-up; }
 
     // The following binds move the focused window in and out of a column.
     // If the window is alone, they will consume it into the nearby column to the side.
@@ -709,7 +709,8 @@ spawn-at-startup "/usr/bin/kdeconnect-indicator"
 spawn-at-startup "/usr/bin/gammastep"
 spawn-at-startup "/usr/bin/gammastep-indicator"
 spawn-at-startup "nm-applet" "--indicator"
-spawn-at-startup "swayidle" "-w" "timeout" "300" "$HOME/.config/swaylock/lock.sh" "timeout" "600" "'swaymsg output * power off'" "resume" "'swaymsg output * power on'" "before-sleep" "$HOME/.config/swaylock/lock.sh"
+//spawn-at-startup "swayidle" "-w" "timeout" "300" "$HOME/.config/swaylock/lock.sh" "timeout" "600" "'swaymsg output * power off'" "resume" "'swaymsg output * power on'" "before-sleep" "$HOME/.config/swaylock/lock.sh"
+spawn-at-startup "swayidle" "-w" "timeout" "300" "hyprlock" "timeout" "600" "'swaymsg output * power off'" "resume" "'swaymsg output * power on'" "before-sleep" "hyprlock"
 spawn-at-startup "swaync"
 spawn-at-startup "/usr/bin/emacs" "--daemon"
 spawn-sh-at-startup "swaybg -o eDP-1 -i ~/Pictures/berserk.png"
