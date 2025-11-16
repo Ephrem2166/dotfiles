@@ -37,15 +37,18 @@
       // Named workspaces
       // (you need to configure them in niri)
         "browser": " ",
-        "terminal" : " ", 
+        "terminal" : " ",
         "file": " ",
         "chat": "<b></b>",
         "video": " ",
         // "music": " ",
         "emacs": " ",
+      "office": " ",
       // Icons by state
       // "active": "",
       "default": " "
-    }
+    },
+        "on-scroll-up": "niri msg action focus-workspace-up",
+        "on-scroll-down": "niri msg action focus-workspace-down",
   }
 }
