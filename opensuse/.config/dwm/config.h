@@ -21,6 +21,19 @@ static const char *colors[][3]      = {
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
+/* Autostart */
+static const char *const autostart[] = {
+    "dbus-update-activation-environment", "--systemd", "--all", NULL,
+    "/usr/libexec/polkit-kde-authentication-agent-1", NULL, 
+    "redshift", NULL,
+    "dunst", NULL,
+    "picom", "-b", NULL,
+    "feh --bg-fill ~/Pictures/berserk.png",NULL,
+    //"sh", "-c", "feh --randomize --bg-fill ~/Pictures/backgrounds/*", NULL,
+    //"sh", "-c", "/usr/bin/dex -a", NULL,
+    NULL /* terminate */
+};
+
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
