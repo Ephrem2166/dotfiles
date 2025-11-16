@@ -16,7 +16,7 @@ set $right l
 # set $term alacritty --config-file "$HOME/.config/alacritty/alacritty.toml"
 set $term kitty
 # Launcher
-# set $menu rofi -show drun 
+# set $menu rofi -show drun
 set $menu rofi -show drun -modi drun,filebrowser,run,window
 # set $menu fuzzel
 # set $menu wofi -show drun -f -i --width 350
@@ -35,9 +35,9 @@ set $bluetooth exec "$HOME/.config/rofi/rofi-bluetooth.sh"
 set $wifi "$HOME/.config/rofi/rofi-wifi.sh"
 
 # Clipboard
-set $clipboard "$HOME/.config/rofi/rofi-clipboard.sh" 
+set $clipboard "$HOME/.config/rofi/rofi-clipboard.sh"
 
-# Emoji 
+# Emoji
 set $emoji "$HOME/.config/rofi/rofi-emoji.sh"
 
 # Keybind
@@ -47,13 +47,16 @@ set $keys "$HOME/.config/rofi/rofi-shortcuts.sh"
 set $calc "$HOME/.config/rofi/rofi-calc.sh"
 
 
-# Waybar 
-# set $waybar-reload "$HOME/.config/waybar/waybar.sh" 
+# Waybar
+# set $waybar-reload "$HOME/.config/waybar/waybar.sh"
 
-# Lock Screen 
+# Lock Screen
 # set $lock "$HOME/.config/sway/scripts/lock.sh"
+# Swaylock
+# set $lock "$HOME/.config/swaylock/lock.sh"
+# Hyprlock
+set $lockscreen hyprlock
 
-set $lock "$HOME/.config/swaylock/lock.sh"
 
 # Use the left click to move windows
 floating_modifier $mod normal
@@ -61,19 +64,21 @@ floating_modifier $mod normal
 ##################
 ## Key Bindings ##
 ##################
-# Start applications 
+# Start applications
 bindsym $mod+Return exec $term
 bindsym $mod+d exec $menu
 bindsym $mod+Escape $power
 bindsym $mod+Shift+q exec $power
 bindsym $mod+Shift+f exec $file
-bindsym $mod+Shift+z exec $lock
+# bindsym $mod+Shift+z exec $lock
+bindsym $mod+Shift+z exec $lockscreen
 bindsym $mod+Shift+w exec $wifi
 bindsym $mod+Shift+v exec $clipboard
 bindsym $mod+Control+w exec $bluetooth
 bindsym $mod+Shift+o exec $emoji
 bindsym $mod+Control+k exec $keys
 bindsym $mod+Control+0 exec $calc
+
 
 # Kill focused window
 bindsym $mod+q kill
@@ -83,21 +88,21 @@ bindsym $mod+Shift+r reload
 bindsym $mod+Ctrl+r exec pkill -SIGUSR2 waybar
 
 # Toggle floating
-bindsym $mod+t floating toggle 
+bindsym $mod+t floating toggle
 
-# Workspace 
+# Workspace
 bindsym $mod+tab workspace next
-bindsym $mod+Shift+tab workspace prev 
+bindsym $mod+Shift+tab workspace prev
 
-# Layout Togggle 
-bindsym $mod+Ctrl+tab layout toggle all 
+# Layout Togggle
+bindsym $mod+Ctrl+tab layout toggle all
 
-# Exit sway 
+# Exit sway
 bindsym $mod+x exit
 # Exit (Default)
 # bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
-# Reload or update waybar 
+# Reload or update waybar
 bindsym $mod+Shift+u exec $waybar-reload
 
 #################
@@ -199,7 +204,7 @@ bindsym $mod+Shift+c scratchpad show
 
 
 ####################
-##### RESIZE ###### 
+##### RESIZE ######
 ####################
 mode "resize" {
     # left will shrink the containers width
@@ -258,7 +263,7 @@ bindsym $mod+Shift+p exec grim -t jpeg -g "$(slurp)" ~/Pictures/Screenshots/$(da
 bindsym $mod+Control+s exec grim -g "$(slurp -d)" - | wl-copy
 
 
-# Keyboard light 
+# Keyboard light
 # Increase keyboard backlight
 bindsym $mod+F6 exec brightnessctl -d tpacpi::kbd_backlight set +1
 # Decrease keyboard backlight
