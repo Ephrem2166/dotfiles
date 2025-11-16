@@ -383,7 +383,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return { spawn "kitty"; }
     Mod+D { spawn "rofi" "-show" "drun"; }
-    Super+SHIFT+L { spawn "swaylock"; }
+    Super+SHIFT+L { spawn "hyprlock"; }
     Mod+SHIFT+q { spawn "~/.config/rofi/rofi-power.sh"; }
     Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR2" "waybar"; }
     Mod+Space repeat=false { toggle-overview; }
