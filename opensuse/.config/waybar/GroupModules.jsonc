@@ -16,7 +16,7 @@
   "group/system": {
     "orientation": "horizontal",
     "modules": [
-      "backlight#screen", 
+      "backlight#screen",
       "battery",
       "cpu",
       "disk",

@@ -63,8 +63,8 @@ exec sway-audio-idle-inhibit
 # exec_always swayidle -w timeout 300 "$HOME/.config/swaylock/lock.sh" timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' before-sleep "$HOME/.config/swaylock/lock.sh"
 # Swayidle with hyprlock
 exec_always swayidle -w \
-                timeout 120 hyprlock \
-                timeout 180 'swaymsg "output * power off"' \
+                timeout 300 hyprlock \
+                timeout 600 'swaymsg "output * power off"' \
                      resume 'swaymsg "output * power on"' \
                 before-sleep hyprlock
 
