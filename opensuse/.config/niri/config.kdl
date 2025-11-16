@@ -56,9 +56,6 @@ match app-id="emacs"
 open-on-workspace "emacs"
 }
 
-
-
-
 // Input device configuration.
 // Find the full list of options on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Input
@@ -73,7 +70,7 @@ input {
             // layout "us,ru"
             // options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
         }
-        numlock
+        // numlock
     }
     focus-follows-mouse
 
@@ -121,6 +118,9 @@ input {
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
     // focus-follows-mouse max-scroll-amount="0%"
 }
+
+
+
 
 // You can configure outputs by their name, which you can find
 // by running `niri msg outputs` while inside a niri instance.
@@ -175,7 +175,7 @@ layout {
     // - "on-overflow", focusing a column will center it if it doesn't fit
     //   together with the previously focused column.
     center-focused-column "never"
-    // always-center-single-column 
+    // always-center-single-column
     default-column-display "tabbed"
 
     // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
@@ -272,13 +272,13 @@ layout {
         // radius. It has to assume that windows have square corners, leading to
         // shadow artifacts inside the CSD rounded corners. This setting fixes
         // those artifacts.
-        // 
+        //
         // However, instead you may want to set prefer-no-csd and/or
         // geometry-corner-radius. Then, niri will know the corner radius and
         // draw the shadow correctly, without having to draw it behind the
         // window. These will also remove client-side shadows if the window
         // draws any.
-        // 
+        //
         // draw-behind-window true
 
         // You can change how shadows look. The values below are in logical
@@ -326,7 +326,7 @@ animations {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 // spawn-at-startup "alacritty" "-e" "fish"
-spawn-at-startup "waybar" 
+spawn-at-startup "waybar"
 spawn-at-startup "/usr/libexec/polkit-kde-authentication-agent-1"
 spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
 spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
@@ -339,6 +339,7 @@ spawn-at-startup "nm-applet" "--indicator"
 spawn-at-startup "swayidle" "-w" "timeout" "300" "$HOME/.config/swaylock/lock.sh" "timeout" "600" "'swaymsg output * power off'" "resume" "'swaymsg output * power on'" "before-sleep" "$HOME/.config/swaylock/lock.sh"
 spawn-at-startup "swaync"
 spawn-at-startup "/usr/bin/emacs" "--daemon"
+spawn-at-startup "swaybg" "-o" "eDP-1" "-i" "$HOME/Pictures/berserk.png"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
@@ -360,7 +361,7 @@ QT_QPA_PLATFORM "wayland"
 cursor {
     xcursor-theme "breeze_cursors"
     xcursor-size 22
-  
+
 }
 
 // You can also set this to null to disable saving screenshots to disk.
@@ -398,12 +399,12 @@ window-rule {
     open-floating true
 }
 
-// Float Rule 
+// Float Rule
 window-rule {
     match app-id="nm-connection-editor"
     match app-id="org.kde.polkit-kde-authentication-agent-1"
    match app-id="org.qbittorrent.qBittorrent"
-   
+
 
     open-floating true
     open-focused true
@@ -412,7 +413,7 @@ window-rule {
 }
 
 
-// Fullscreen Rule 
+// Fullscreen Rule
 window-rule {
 match app-id="mpv"
 
@@ -498,7 +499,7 @@ binds {
 
     // Alternative commands that move across workspaces when reaching
     // the first or last window in a column.
-     Mod+J     { focus-window-or-workspace-down; } 
+     Mod+J     { focus-window-or-workspace-down; }
      Mod+K     { focus-window-or-workspace-up; }
     // Mod+Ctrl+J     { move-window-down-or-to-workspace-down; }
     // Mod+Ctrl+K     { move-window-up-or-to-workspace-up; }
@@ -695,5 +696,3 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
 }
-
-
