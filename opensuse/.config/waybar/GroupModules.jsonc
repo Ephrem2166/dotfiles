@@ -17,6 +17,7 @@
     "orientation": "horizontal",
     "modules": [
       "backlight#screen",
+      // "backlight#keyboard",
       "battery",
       "cpu",
       "disk",
