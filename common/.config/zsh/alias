@@ -15,6 +15,11 @@ alias restart='sudo reboot'
 # Open Files from the terminal
 alias open="open_command"
 
+# sudo not required for some system commands
+for command in mount umount su shutdown poweroff reboot zypper pacman dnf apt ; do
+    alias $command="sudo $command"
+done; unset command
+
 ##################
 # Grep and Tree  #
 ##################
@@ -25,6 +30,11 @@ alias tree2='tree -L 2'
 alias tree3='tree -L 3'
 
 
+#####################
+# Colorize Outputs  #
+#####################
+alias diff="diff --color=auto"
+alias ip="ip -color=auto"
 #######################
 # # Easier navigation #
 #######################
@@ -42,7 +52,7 @@ alias mkdir="mkdir -pv" # Create parent directories if needed
 alias rm="rm -Iv"        # Prompt before removing files
 alias mv="mv -iv"       # Interactive and verbose move
 alias cp="cp -iv"       # Interactive and verbose copy
-
+# alias rsync="rsync -vrPlu"
 
 ########################
 # # System Information #
