@@ -123,3 +123,9 @@ fkill(){
 selected=$(ps aux 2>/dev/null | fzf -m | awk '{print $2}')
    echo "$selected" | xargs kill -9 2>/dev/null
 }
+
+
+# Man with fzf
+_fman(){
+compgen -c | fzf | xargs man
+}
