@@ -174,3 +174,16 @@ man() {
 # export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
 # export LESS_TERMCAP_mr=$(tput rev)
 # export LESS_TERMCAP_mh=$(tput dim)
+
+
+# Safe Delete
+function rm {
+  # if it contains -rf then execute command rm
+  if [[ "$*" == *"-rf"* ]]; then
+    command rm "$@"
+    return
+  fi
+  going_to="/tmp/trash/$USER/$(date +%s%N)"
+  mkdir -p "$going_to"
+  mv -f "$@" "$going_to"
+}
