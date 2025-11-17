@@ -354,6 +354,10 @@ Vagrantfile             
 *.emf   
 *.ogv   
 *.ogx   
+*.webm  
+*.srt   󰨖
+*.sst   󰨖
+*.sub   󰨖
 
 # audio formats (extensions from dircolors defaults)
 *.aac   
@@ -374,4 +378,106 @@ Vagrantfile             
 *.xspf  
 
 # other formats
-*.pdf   
+#*.pdf   
+*.pdf        00;38;2;179;11;0
+*.zig   
+
+# disk images
+*.img    
+*.iso    
+*.dsk    
+*.dmg    
+*.rom    
+*.qcow   
+*.qcow2  
+
+# documents
+*.txt   
+*.scd   
+*.rtf   
+*.doc   
+*.docx  
+*.djv   
+*.djvu  
+*.org   
+*.xlr   
+*.xls   
+*.xlsx  
+*.xlsm  
+
+# code
+*.1       
+*.2       
+*.3       
+*.4       
+*.5       
+*.6       
+*.7       
+*.asm     
+*.bin     
+*.cgi     
+*.cr      
+*.download 
+*.elf     
+*.el      
+*.elc     
+*.nasm    
+*.o       
+*.obj     
+*.sym     
+*.part    
+*.s       
+*.scd     
+*.shtml   
+*.sqlite   
+*.sqlite3  
+*.wasm    
+*.wat     
+*.yuck    
+*.torrent 
+*.added   
+*.orig    󰁯
+*.backup  󰁯
+*.old     󰁯
+*.cfg         00;38;2;137;224;81
+*.conf        00;38;2;137;224;81
+*.kdl         00;38;2;137;224;81
+*.ini         00;38;2;137;224;81
+*.ron         00;38;2;137;224;81
+*.lock    
+*.log     
+*.jsx     
+*.java    
+*.jar     
+*.jad     
+*.jsp     
+*.class   
+*.desktop   
+*.service   
+*.pro     
+*.ui      
+*.ps1     
+
+# libs
+*.so      
+*.dll     
+*.a       
+
+# encryption
+*.asc       󰦝
+*.gpg       󰦝
+*.gpg-agent 󰦝
+*.key       󰷖
+*.kbx       󰯄
+*.sha1      󰕥
+*.sha256    󰕥
+*.md5       󰕥
+*.pub       󰷖
+*.sig       󰕥
+*.sig2      󰕥
+
+# fonts
+*.otf     
+*.ttf     
+*.woff    
+*.woff2   
