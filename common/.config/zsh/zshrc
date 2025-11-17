@@ -156,6 +156,7 @@ setopt auto_param_slash
 # ex: completes to Desktop/ from Dktop with cursor before k)
 setopt COMPLETE_IN_WORD
 
+
 HISTSIZE=1000000
 # SAVEHIST=100000
 HISTFILE="$HOME/.zsh_history"
@@ -264,4 +265,5 @@ if hash starship 2>/dev/null; then
   eval "$(starship init zsh)"
   fi
 
+# Bare Dotfiles
 #alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
