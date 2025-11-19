@@ -40,9 +40,29 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+
   { "Kitty",    NULL,       NULL,       1 << 1,      0,           -1 },
+
+    { "Gimp",             NULL,       NULL,       0,                       1,           -1 },
+    { "Firefox",          NULL,       NULL,       2 << 0,                  0,           -1 },
+    { "TelegramDesktop",  NULL,       NULL,       1 << 4,                  0,           -1 },
+    { "Inkscape",         NULL,       NULL,       1 << 3,                  0,           -1 },
+    { "ranger",           NULL,       NULL,       4 << 0,                  0,           -1 },
+    { "ranger2",          NULL,       NULL,       1 << 0,                  0,           -1 },
+    { "pulse",            NULL,       NULL,       0,                       1,           -1 },
+    { "amixer",           NULL,       NULL,       0,                       1,           -1 },
+    { "Pavucontrol",      NULL,       NULL,       0,                       1,           -1 },
+    { "St",               NULL,       NULL,       1 << 0,                  0,           -1 },
+    { "Alacritty",        NULL,       NULL,       1 << 0,                  0,           -1 },
+    { "term2",            NULL,       NULL,       0,                       0,           -1 },
+    { "htop",             NULL,       NULL,       0,                       1,           -1 },
+    { "scratchpad",       NULL,       NULL,       0,                       1,           -1 },
+    { "scratchy",         NULL,       NULL,       0,                       1,           -1 },
+    { "nvim",             NULL,       NULL,       1 << 8,                  0,           -1 },
+    { "newsboat",         NULL,       NULL,       1 << 5,                  1,           -1 },
+    { "Nemo",             NULL,       NULL,       1 << 7,                  0,           -1 },
+    { "mpv",              NULL,       NULL,       1 << 8,                  0,           -1 },
+    { "Firefox",          "Places",   "Library",  0,                       1,           -1 },
 };
 
 /* layout(s) */
