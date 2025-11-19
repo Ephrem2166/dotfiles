@@ -29,3 +29,6 @@ common/.config/mpd/sticker.sql
 
 common/.config/zsh/.zcompdump*
 common/.config/zsh/zsh_history
+
+opensuse/.config/qtile/__pycache__/
+opensuse/.config/qtile/.mypy_cache/
