@@ -3,6 +3,6 @@
 nm-applet &
 dunst &
 mpd &
-emacs --daemon&
-picom&
-redshift &
+emacs --daemon &
+picom &
+redshift -P -O 3900 &
