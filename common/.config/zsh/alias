@@ -2,7 +2,14 @@
 # Shell Management #
 ####################
 # Reload shell configuration
-alias reload='echo "Reloading .zshrc" && source ~/.zshrc'
+# alias reload='echo "Reloading .zshrc" && source ~/.zshrc'
+alias reload='() {
+local shell=${SHELL:-/usr/bin/zsh}
+print -P "%F{cyan}↻ Reloading Zsh...%f"
+  sleep 0.2
+  exec -l "$shell"
+}'
+
 
 # Exit and Clear
 alias c='clear'
@@ -14,6 +21,9 @@ alias restart='sudo reboot'
 
 # Open Files from the terminal
 alias open="open_command"
+
+# Check battery
+alias battery='cat /sys/class/power_supply/BAT0/capacity_level'
 
 # sudo not required for some system commands
 for command in mount umount su shutdown poweroff reboot zypper pacman dnf apt ; do

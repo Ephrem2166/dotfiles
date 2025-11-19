@@ -98,6 +98,7 @@ setopt NOMATCH
 setopt PROMPT_SUBST     # enable command substitution in prompt
 setopt LIST_PACKED      # The completion menu takes less space.
 
+setopt NOMATCH
 
 # Do not show error
 unsetopt BEEP
