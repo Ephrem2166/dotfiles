@@ -1,14 +1,15 @@
 from libqtile import qtile, widget
 from libqtile.config import Screen
-
+import colors
 from libqtile import bar
 my_wallpaper = "~/Pictures/berserk.png"
+
+color = colors.nord
 screens = [
     Screen(
         wallpaper=my_wallpaper,
         top=bar.Bar(
             [
-                widget.CurrentLayout(),
                 widget.GroupBox(),
                 widget.Prompt(),
                 widget.WindowName(),
@@ -18,8 +19,8 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.TextBox("default config", name="default"),
-                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
+                # widget.TextBox("default config", name="default"),
+                # widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
                 widget.Systray(),
