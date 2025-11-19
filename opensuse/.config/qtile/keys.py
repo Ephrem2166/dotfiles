@@ -4,14 +4,23 @@ from libqtile.lazy import lazy
 
 # from libqtile.utils import guess_terminal
 
+
+class Commands:
+    dmenu = "dmenu_run -i -b -p '>>>' -fn 'Berkeley Nerd Font' -nb '#2e3440' -nf '#d8dee9'  -sb '#00bf32' -sf '#fffff'"
+    dmenu_session = "dmenu-session"
+
+
 mod = "mod4"
 terminal = "kitty"
 file_browser = "dolphin"
 # terminal = guess_terminal()
 if qtile.core.name == "wayland":
     launcher = "rofi -show drun -show-icons"
+    lock = "hyprlock"
 else:
-    launcher = "dmenu_run -l 10 -b -fn 'Berkeley Nerd Font' -nb '#2E3440' -nf '#D8DEE9'"
+    # launcher = "dmenu_run -l 10 -b -fn 'Berkeley Nerd Font' -nb '#2E3440' -nf '#D8DEE9'"
+    launcher = "dmenu_run -i -p '>>>' -fn 'Berkeley Nerd Font' -nb '#2e3440' -nf '#d8dee9'  -sb '#88c0d0' -sf '#eceff4'"
+    lock = "slock"
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
@@ -73,8 +82,10 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     # My Definitions
-    Key([mod], "d", lazy.spawn(launcher), desc="Launcher"),
-    Key([mod], "e", lazy.spawn(launcher), desc="Launcher"),
+     Key([mod], "d", lazy.spawn(launcher), desc="Launcher"),
+    Key([mod, "shift"], "l", lazy.spawn(lock), desc="Lockscreen"),
+    
+   
 ]
 
 for vt in range(1, 8):

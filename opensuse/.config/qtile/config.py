@@ -27,19 +27,19 @@ import os
 from libqtile import bar, layout, qtile, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
+from libqtile.config import Key
 
 
 from keys import keys, mod
 from screens import screens
 from widgets import widget_defaults
-from layouts import *
+from layouts import layouts
 from mouse import mouse
 from groups import groups
 
-from libqtile.config import Key
 
 
-
+# General
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
