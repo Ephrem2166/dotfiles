@@ -22,6 +22,7 @@ else:
     # launcher = "dmenu_run -l 10 -b -fn 'Berkeley Nerd Font' -nb '#2E3440' -nf '#D8DEE9'"
     launcher = "dmenu_run -i -p '>>>' -fn 'Berkeley Nerd Font' -nb '#2e3440' -nf '#d8dee9'  -sb '#88c0d0' -sf '#eceff4'"
     lock = "i3lock -i ~/Pictures/berserk.png"
+
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
@@ -84,9 +85,16 @@ keys = [
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     # My Definitions
      Key([mod], "d", lazy.spawn(launcher), desc="Launcher"),
-    Key([mod, "shift"], "l", lazy.spawn(lock), desc="Lockscreen"),
-    
-   
+    Key([mod], "l", lazy.spawn('bash ./scripts/lockscreen')),
+
+    # Volume (for PipeWire via wpctl)
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")),
+    Key([], "XF86AudioMute", lazy.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")),
+
+    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl -d intel_backlight set +10")),
+    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl -d intel_backlight set 10-")),
+
 ]
 
 for vt in range(1, 8):

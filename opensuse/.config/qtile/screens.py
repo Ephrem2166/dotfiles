@@ -3,9 +3,23 @@ from libqtile import qtile, widget
 from libqtile.config import Screen
 import colors
 from libqtile import bar
+from libqtile.lazy import lazy 
 
 my_wallpaper = "~/Pictures/berserk.png"
-
+def check_bluetooth_status():
+    try:
+        result = subprocess.run(
+            ['bluetoothctl', 'show'],
+            capture_output=True,
+            text=True,
+            timeout=1
+        )
+        if 'Powered: yes' in result.stdout:
+            return 'ON'
+        else:
+            return 'OFF'
+    except:
+        return 'N/A'
 
 color = colors.nord
 screens = [
@@ -87,21 +101,25 @@ screens = [
                 ),
                 widget.Battery(
                     format="󰁹 {percent:2.0%}",
+ charge_char="",  
+                    discharge_char="",
+                    empty_char="",
+                    full_char="",
                     padding=10,
                     update_interval=5,
                     # show_short_text=False,
                     background=color[0],
                     foreground=color[2],
                 ),
-                widget.DF(
-                    padding=10,
-                    foreground=color[2],
-                    background=color[0],
-                    visible_on_warn=False,
-                    format="{p} {uf}{m} ({r:.0f}%)",
-                    update_interval=60,
-                    fmt="🖴 {}",
-                ),
+#                widget.DF(
+#                    padding=10,
+#                    foreground=color[2],
+#                    background=color[0],
+#                    visible_on_warn=False,
+#                    format="{p} {uf}{m} ({r:.0f}%)",
+#                    update_interval=60,
+#                    fmt="🖴 {}",
+#                ),
                 widget.CPU(
                     padding=10,
                     format="  {freq_current} GHz {load_percent}%",
@@ -134,6 +152,14 @@ screens = [
                     interface="wlp0s20f3",
                     update_interval=5,
                 ),
+#  widget.GenPollText(
+#                    func=lambda: check_bluetooth_status(),
+#                   update_interval=5,
+#                    fmt='󰂯:{}',
+#                    mouse_callbacks={
+#                        'Button1': lazy.spawn('blueman-applet'),  # Left click
+#                        'Button3': lazy.spawn('pkill blueman'),                    }
+#                ),
                                 # widget.TextBox(
                 #     foreground=color[2],
                 #     background=color[0],
