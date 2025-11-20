@@ -49,15 +49,16 @@ screens = [
                 # widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
-                widget.Mpd2(
-                    color_progress=color[0],
-                    # play_states="{'pause': '⏸', 'play': '▶', 'stop': '■'}",
-                    idle_format="{play_status} {idle_message} {consume}",
-                    status_format="{artist} - {title} {play_status}",
-                    # max_chars=15,
-                    foreground=color[2],
-                    background=color[0],
-                ),
+                #widget.Mpd2(
+                #     color_progress=color[0],
+                   # play_states="{'pause': '⏸', 'play': '▶', 'stop': '■'}",
+                #    idle_format="{play_status} {idle_message} {consume}",
+                #    status_format="{artist} - {title} {play_status}",
+                #   no_connection="No Connection", 
+                #    # max_chars=0,
+                #    foreground=color[2],
+                #    background=color[0],
+               # ),
                 widget.Spacer(
                     length=bar.STRETCH,
                 ),
@@ -117,7 +118,7 @@ screens = [
                 # widget.Net(
                 #     format=" {down:6.2f}{down_suffix:<2} {up:6.2f}{up_suffix:<2} ",
                 # ),
-                widget.Wlan(
+                                widget.Wlan(
                     foreground=color[2],
                     background=color[0],
                     padding=10,
@@ -144,13 +145,17 @@ screens = [
                 #         )
                 #     },
                 # ),
+                widget.Notify(),
                 widget.CurrentLayoutIcon(
                     format=" { }",
                     padding=10,
                     scale=0.5,
                     background=color[0],
                 ),
-            widget.Systray(padding = 6),
+            widget.Systray(
+                    padding = 6,
+
+                ),
                 # widget.Systray(),
                 # widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
                 # widget.QuickExit(),

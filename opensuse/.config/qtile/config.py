@@ -36,7 +36,7 @@ from widgets import widget_defaults
 from layouts import layouts
 from mouse import mouse
 from groups import groups
-
+from workspaces import workspaces
 
 
 # General
@@ -56,6 +56,14 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        Match(title="dialog"),
+        Match(title="download"),
+        Match(title="file_progress"),
+        Match(title="notification"),
+        Match(title="splash"),
+        Match(title="confirm"),
+        Match(title="error"),
+
     ]
 )
 auto_fullscreen = True
