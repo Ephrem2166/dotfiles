@@ -3,7 +3,7 @@
 # default options
 display_on=0
 span_image=false
-lock_timeout=300
+lock_timeout=60
 fx_list=(dim blur dimblur pixel dimpixel color)
 dim_level=40
 blur_level=1
@@ -13,29 +13,29 @@ wallpaper_cmd="feh --bg-fill"
 quiet=false
 
 # default theme
-loginbox=00000066
-loginshadow=00000000
+loginbox=000000
+loginshadow=000000
 locktext="Type password to unlock..."
 font="sans-serif"
-ringcolor=ffffffff
-insidecolor=00000000
-separatorcolor=00000000
-ringvercolor=ffffffff
-insidevercolor=00000000
-ringwrongcolor=ffffffff
-insidewrongcolor=d23c3dff
-timecolor=ffffffff
+ringcolor=ffffff
+insidecolor=000000
+separatorcolor=000000
+ringvercolor=ffffff
+insidevercolor=000000
+ringwrongcolor=ffffff
+insidewrongcolor=d23c3d
+timecolor=ffffff
 time_format="%H:%M:%S"
-greetercolor=ffffffff
-layoutcolor=ffffffff
-keyhlcolor=d23c3dff
-bshlcolor=d23c3dff
+greetercolor=ffffff
+layoutcolor=ffffff
+keyhlcolor=d23c3d
+bshlcolor=d23c3d
 veriftext="Verifying..."
-verifcolor=ffffffff
+verifcolor=ffffff
 wrongtext="Failure!"
-wrongcolor=d23c3dff
-modifcolor=d23c3dff
-bgcolor=000000ff
+wrongcolor=d23c3d
+modifcolor=d23c3d
+bgcolor=0000ff
 
 
 #

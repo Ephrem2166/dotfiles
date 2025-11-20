@@ -31,6 +31,13 @@ screens = [
                 widget.Spacer(
                     length=bar.STRETCH,
                 ),
+ widget.Clock(
+                    padding=10,
+                     format="  %a, %b %d %H:%M",
+                     foreground=color[2],
+                     background=color[0],
+                 ),
+
                 # widget.Prompt(),
                 # widget.WindowName(
                 #     margin_x=4,
@@ -54,7 +61,7 @@ screens = [
                    # play_states="{'pause': '⏸', 'play': '▶', 'stop': '■'}",
                 #    idle_format="{play_status} {idle_message} {consume}",
                 #    status_format="{artist} - {title} {play_status}",
-                #   no_connection="No Connection", 
+                #   no_connection="No Connection",
                 #    # max_chars=0,
                 #    foreground=color[2],
                 #    background=color[0],
@@ -127,13 +134,7 @@ screens = [
                     interface="wlp0s20f3",
                     update_interval=5,
                 ),
-                # widget.Clock(
-                #     padding=10,
-                #     format="  %a, %b %d %H:%M",
-                #     foreground=color[2],
-                #     background=color[0],
-                # ),
-                # widget.TextBox(
+                                # widget.TextBox(
                 #     foreground=color[2],
                 #     background=color[0],
                 #     padding=10,
@@ -153,7 +154,9 @@ screens = [
                     background=color[0],
                 ),
             widget.Systray(
-                    padding = 6,
+                    padding = 4,
+                    hide_crash = True,
+
 
                 ),
                 # widget.Systray(),

@@ -13,6 +13,7 @@ class Commands:
 mod = "mod4"
 terminal = "kitty"
 file_browser = "dolphin"
+
 # terminal = guess_terminal()
 if qtile.core.name == "wayland":
     launcher = "rofi -show drun -show-icons"
@@ -20,7 +21,7 @@ if qtile.core.name == "wayland":
 else:
     # launcher = "dmenu_run -l 10 -b -fn 'Berkeley Nerd Font' -nb '#2E3440' -nf '#D8DEE9'"
     launcher = "dmenu_run -i -p '>>>' -fn 'Berkeley Nerd Font' -nb '#2e3440' -nf '#d8dee9'  -sb '#88c0d0' -sf '#eceff4'"
-    lock = "slock"
+    lock = "i3lock -i ~/Pictures/berserk.png"
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
