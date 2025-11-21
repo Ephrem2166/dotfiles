@@ -176,14 +176,14 @@ man() {
 # export LESS_TERMCAP_mh=$(tput dim)
 
 
-# Safe Delete
-function rm {
-  # if it contains -rf then execute command rm
-  if [[ "$*" == *"-rf"* ]]; then
-    command rm "$@"
-    return
-  fi
-  going_to="/tmp/trash/$USER/$(date +%s%N)"
-  mkdir -p "$going_to"
-  mv -f "$@" "$going_to"
-}
+# FIXME: Safe Delete
+# function rm {
+#   # if it contains -rf then execute command rm
+#   if [[ "$*" == *"-rf"* ]]; then
+#     command rm "$@"
+#     return
+#   fi
+#   going_to="/tmp/trash/$USER/$(date +%s%N)"
+#   mkdir -p "$going_to"
+#   mv -f "$@" "$going_to"
+# }

@@ -1,0 +1,23 @@
+# Nord Glacier
+[colors]
+[colors.primary]
+foreground="#ECEFF4"
+background="#2E3440"
+[colors.normal]
+black = "#2E3440"
+red = "#BF616A"
+green = "#A3BE8C"
+yellow = "#EBCB8B"
+blue = "#5E81AC"
+magenta = "#B48EAD"
+cyan = "#88C0D0"
+white = "#ECEFF4"
+[colors.bright]
+black = "#3B4252"
+red = "#D08770"
+green = "#8FBCBB"
+yellow = "#FFAB91"
+blue = "#81A1C1"
+magenta = "#673AB7"
+cyan = "#90A4AE"
+white = "#FFFFFF"
