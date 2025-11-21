@@ -32,3 +32,7 @@ common/.config/zsh/zsh_history
 
 opensuse/.config/qtile/__pycache__/
 opensuse/.config/qtile/.mypy_cache/
+
+
+arch/.config/qtile/__pycache__/
+arch/.config/qtile/.mypy_cache/
