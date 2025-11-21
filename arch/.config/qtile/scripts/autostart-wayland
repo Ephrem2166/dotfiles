@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+#/usr/libexec/polkit-kde-authentication-agent-1 &
+#dunst &
+#nm-applet &
+#mpd &
+#emacs --daemon &
+#wlsunset
+#pkill -f swayidle &
+#swayidle -w -C ~/.config/swayidle/config
