@@ -26,6 +26,7 @@ common/.config/mpd/database
 common/.config/mpd/log
 common/.config/mpd/state
 common/.config/mpd/sticker.sql
+common/.config/mpd/pid
 
 common/.config/zsh/.zcompdump*
 common/.config/zsh/zsh_history
