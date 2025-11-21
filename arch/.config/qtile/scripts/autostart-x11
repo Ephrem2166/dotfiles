@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+/usr/libexec/polkit-kde-authentication-agent-1 &
+nm-applet &
+dunst &
+mpd &
+emacs --daemon &
+picom &
+redshift -P -O 3900 &
