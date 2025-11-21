@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+xrandr --output eDP-1 --primary --mode 1920x1080 --scale 1.0 &
+xrandr --dpi 120
 /usr/libexec/polkit-kde-authentication-agent-1 &
 nm-applet &
 dunst &
