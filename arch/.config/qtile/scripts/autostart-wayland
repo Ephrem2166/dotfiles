@@ -4,7 +4,23 @@
 #dunst &
 #nm-applet &
 #mpd &
-#emacs --daemon &
 #wlsunset
-#pkill -f swayidle &
-#swayidle -w -C ~/.config/swayidle/config
+
+
+dbus-update-activation-environment --systemd \
+    WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP
+
+pkill -f /usr/libexec/polkit-kde-authentication-agent-1
+/usr/libexec/polkit-kde-authentication-agent-1 &
+
+pkill -f dunst
+dunst &
+
+pkill -f wlsunset
+wlsunset &
+
+pkill -f swayidle &
+swayidle -w -C ~/.config/swayidle/config
+
+
+emacs --daemon &

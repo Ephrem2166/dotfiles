@@ -1,3 +1,4 @@
+from libqtile import layout
 from libqtile.config import Match, Key, Group
 from libqtile.lazy import lazy
 from keys import keys, mod
@@ -22,10 +23,10 @@ groups = [
         ],
         layout="bsp",
     ),
-    Group("2", label=" ", matches=[Match(wm_class="dolphin")], layout="bsp"),
-    Group("3", label="󰈹 ", matches=[Match(wm_class="firefox")], layout="bsp"),
-    Group("4", label=" ", matches=[Match(wm_class="mpv")], layout="bsp"),
-    Group("5", label=" ", matches=[Match(wm_class="telegram")], layout="bsp"),
+    Group("2", label=" ", matches=[Match(wm_class="dolphin")], layout="Bsp"),
+    Group("3", label="󰈹 ", matches=[Match(wm_class="firefox")], layout="Bsp"),
+    Group("4", label=" ", matches=[Match(wm_class="mpv")], layout="Bsp"),
+    Group("5", label=" ", matches=[Match(wm_class="telegram")], layout="Bsp"),
     Group(
         "6",
         label=" ",
@@ -42,9 +43,9 @@ groups = [
         layout="bsp",
     ),
     Group("7", label=" ", matches=[Match(wm_class="emacs")], layout="max"),
-    Group("8", label="󰈦 ", matches=[Match(wm_class="okular")], layout="bsp"),
+    Group("8", label="󰈦 ", matches=[Match(wm_class="okular")], layout="Bsp"),
     Group("9", label="", matches=[Match(wm_class="vlc")], layout="columns"),
-    Group("0", label=" ", layout="bsp"),
+    Group("0", label=" ", layout="Bsp"),
 ]
 
 

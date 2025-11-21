@@ -6,7 +6,7 @@ from libqtile.lazy import lazy
 
 
 class Commands:
-    dmenu = "dmenu_run -i -b -p '>>>' -fn 'Berkeley Nerd Font' -nb '#2e3440' -nf '#d8dee9'  -sb '#00bf32' -sf '#fffff'"
+    dmenu = "dmenu_run -i -b -p '>>>' -fn 'Berkeley Nerd Font -nb '#2e3440' -nf '#d8dee9'  -sb '#00bf32' -sf '#fffff'"
     dmenu_session = "dmenu-session"
 
 

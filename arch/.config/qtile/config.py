@@ -85,11 +85,11 @@ wl_xcursor_size = 24
 
 
 
-wl_input_rules = {
-        "1739:31251:SYNA2393:00 06CB:7A13 Touchpad": InputConfig(left_handed=False, tap=True),
-    "*": InputConfig(left_handed=False, pointer_accel=False),
-    "type:keyboard": InputConfig(kb_options="ctrl:nocaps,compose:ralt", kb_layout="us"),
-}
+#wl_input_rules = {
+#        "1739:31251:SYNA2393:00 06CB:7A13 Touchpad": InputConfig(left_handed=False, tap=True),
+#    "*": InputConfig(left_handed=False, pointer_accel=False),
+#    "type:keyboard": InputConfig(kb_options="ctrl:nocaps,compose:ralt", kb_layout="us"),
+#}
 
 # Autostart Programs
 @hook.subscribe.startup_once
