@@ -181,8 +181,9 @@ screens = [
                 #         )
                 #     },
                 # ),
-                widget.Notify(),
+                # widget.Notify(),
                 widget.CurrentLayoutIcon(
+                    custom_icon_paths=[os.path.expanduser("./icons")],
                     format=" { }",
                     padding=10,
                     scale=0.5,
