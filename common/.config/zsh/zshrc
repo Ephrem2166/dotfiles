@@ -25,8 +25,17 @@ export SUDO_EDITOR=nvim
 
 # External Programs
 # Oh My Zsh
+# Install Oh My Zsh!
+if ! [[ -e ~/.oh-my-zsh ]]; then
+     git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+fi
 export ZSH="$HOME/.oh-my-zsh"
 
+# Install Zsh Syntax Highlighting
+# if ! [[ -e ~/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting ]]; then
+#     mkdir ~/.oh-my-zsh-custom/plugins
+#     git clone git://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting
+# fi
 # export TERM="xterm-256color"
 export PATH="/var/lib/flatpak/exports/bin:$PATH"
 
