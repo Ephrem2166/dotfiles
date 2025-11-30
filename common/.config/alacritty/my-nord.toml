@@ -1,25 +1,23 @@
-
 # Nord
 [colors]
 [colors.primary]
 foreground="#D8DEE9"
 background="#2E3440"
 [colors.normal]
-black = "#4C566A"
+black = "#2E3440"
 red = "#BF616A"
-green = "#a3be8c" 
-yellow = "#ebcb8b"
-blue = "#81a1c1"
-magenta = "#b48ead"
-cyan = "#88c0d0"
-white = "#e5e9f0"
+green = "#A3BE8C"
+yellow = "#EBCB8B"
+blue = "#5E81AC"
+magenta = "#B48EAD"
+cyan = "#8FBCBB"
+white = "#D8DEE9"
 [colors.bright]
-black = "#4c566a"
-red = "#bf616a"
-green = "#a4be8c"
+black = "#212121"
+red = "#D32F2F"
+green = "#388E3C"
 yellow = "#ebcb8b"
-blue = "#81a1c1"
-magenta = "#b48ead"
-cyan = "#8fbcbb"
-white = "#eceff4"
-
+blue = "#1976D2"
+magenta = "#7B1FA2"
+cyan = "#0097A7"
+white = "#FAFAFA"

@@ -23,7 +23,11 @@
           (javascript-mode . prettier)
           (typescript-mode . prettier)
           (ruby-mode . rubocop)
-          (sh-mode . shfmt)))
+          (sh-mode . shfmt)
+          (yaml-ts-mode . prettier)
+          )
+
+        )
 
   (apheleia-global-mode +1))
 
