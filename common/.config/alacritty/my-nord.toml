@@ -1,8 +1,9 @@
-# Nord
+# My Nord
 [colors]
 [colors.primary]
-foreground="#D8DEE9"
+foreground="#ECEFF4"
 background="#2E3440"
+
 [colors.normal]
 black = "#2E3440"
 red = "#BF616A"
@@ -12,12 +13,13 @@ blue = "#5E81AC"
 magenta = "#B48EAD"
 cyan = "#8FBCBB"
 white = "#D8DEE9"
+
 [colors.bright]
-black = "#3B4252"
+black = "#272C36"
 red = "#D32F2F"
+yellow = "#ECBE7B"
 green = "#388E3C"
-yellow = "#ebcb8b"
-blue = "#1976D2"
+blue = "#81A1C1"
 magenta = "#7B1FA2"
-cyan = "#0097A7"
+cyan = "#9987A7"
 white = "#FAFAFA"
