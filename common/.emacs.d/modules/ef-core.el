@@ -476,7 +476,7 @@
   (electric-pair-skip-self 'electric-pair-default-skip-self)
   :config
   (electric-pair-mode 1)
-  (electric-quote-mode 1)
+  ;; (electric-quote-mode 1)
   (electric-indent-mode -1)
   (setq electric-pair-pairs '(
                               (?\{ . ?\})
