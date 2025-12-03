@@ -13,6 +13,7 @@ return {
     '*';
     user_default_options = {
       names = false,
+      RRGGBB=true,
       RRGGBBAA = true,
       rgb_fn = true,
       hsl_fn = true,
