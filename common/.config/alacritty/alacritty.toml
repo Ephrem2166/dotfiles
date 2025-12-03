@@ -1,5 +1,5 @@
 [general]
-import = ["~/dotfiles/common/.config/alacritty/nord.toml"]
+import = ["~/dotfiles/common/.config/alacritty/my-theme.toml"]
 live_config_reload = true
 
 [terminal]
