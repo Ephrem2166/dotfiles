@@ -1,10 +1,11 @@
 vim.g.mapleader = " "
-vim.g.maplocalleader = ";"
+vim.g.maplocalleader = " "
 local map = vim.keymap.set
 -- Basic Setting
 map("n", "<leader>:", vim.cmd.Ex)
 map("n", "<leader>qq", "<cmd>qa<cr>")
 map("i", "jk", "<ESC>")
+map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 -- Buffers
 map("n", "<leader>bl", "<cmd>bnext<CR>")
 map("n", "<leader>bp", "<cmd>bnext<cr>")
@@ -21,3 +22,11 @@ map("n", "<C-left>", "<C-W>h")
 map("n", "<C-right>", "<C-W>l")
 map("n", "<C-up>", "<C-W>k")
 map("n", "<C-down>", "<C-W>j")
+
+-- better navigation in insert mode
+map("i", "<C-b>", "<ESC>^i", { desc = "move beginning of line" })
+map("i", "<C-e>", "<End>", { desc = "move end of line" })
+map("i", "<C-h>", "<Left>", { desc = "move left" })
+map("i", "<C-l>", "<Right>", { desc = "move right" })
+map("i", "<C-j>", "<Down>", { desc = "move down" })
+map("i", "<C-k>", "<Up>", { desc = "move up" })

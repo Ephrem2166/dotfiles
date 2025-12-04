@@ -145,3 +145,17 @@ vim.api.nvim_create_autocmd("CursorMovedI", {
 		vim.lsp.buf.clear_references()
 	end,
 })
+
+-- Open help|man window in a vertical split to the right.
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	group = vim.api.nvim_create_augroup("help_window_right", {}),
+	pattern = { "*" },
+	callback = function()
+		if vim.bo.filetype == "help" or vim.bo.filetype == "man" then
+			vim.cmd([[
+        wincmd L
+        vertical resize 90
+      ]])
+		end
+	end,
+})
