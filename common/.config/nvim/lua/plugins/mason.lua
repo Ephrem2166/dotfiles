@@ -1,5 +1,6 @@
 return {
 	"mason-org/mason.nvim",
+	--enabled = false,
 	opts = {
 		ui = {
 			icons = {
@@ -7,6 +8,9 @@ return {
 				package_pending = "➜",
 				package_uninstalled = "✗",
 			},
+		},
+		ensure_installed = {
+			"shellcheck",
 		},
 	},
 }

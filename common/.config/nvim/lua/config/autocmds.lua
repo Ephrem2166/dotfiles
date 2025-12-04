@@ -113,3 +113,35 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 		vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
 	end,
 })
+
+-- disable automatic comment on newline
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "*",
+	callback = function()
+		vim.opt_local.formatoptions:remove({ "c", "r", "o" })
+	end,
+})
+
+-- -- spellcheck in md
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	pattern = "markdown",
+-- 	command = "setlocal spell wrap",
+--)
+
+-- Spell checking in text file types
+vim.api.nvim_create_autocmd("FileType", {
+	group = augroup("wrap_spell"),
+	pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+	callback = function()
+		vim.opt_local.spell = true
+	end,
+})
+
+-- IDE like highlight when stopping cursor
+vim.api.nvim_create_autocmd("CursorMovedI", {
+	group = augroup("LspReferenceHighlight"),
+	desc = "Clear highlights when entering insert mode",
+	callback = function()
+		vim.lsp.buf.clear_references()
+	end,
+})
