@@ -13,4 +13,5 @@ return {
 			"shellcheck",
 		},
 	},
+	keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
 }
