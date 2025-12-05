@@ -7,9 +7,8 @@ map("n", "<leader>qq", "<cmd>qa<cr>")
 map("i", "jk", "<ESC>")
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 -- Buffers
-map("n", "<leader>bl", "<cmd>bnext<CR>")
-map("n", "<leader>bp", "<cmd>bnext<cr>")
-
+map("n", "<leader>bl", "<cmd>bnext<cr>")
+map("n", "<leader>bp", "<cmd>bprev<cr>")
 map("n", "<leader>bb", "<cmd>e #<cr>")
 map("n", "<leader>bd", "<cmd>bdelete<cr>")
 
