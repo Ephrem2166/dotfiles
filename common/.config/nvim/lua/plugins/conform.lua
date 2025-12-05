@@ -4,14 +4,26 @@ return {
 		formatters_by_ft = {
 			c = { "clang-format" },
 			cpp = { "clang-format" },
+			css = { "prettierd", "prettier" },
+			html = { "djlint", "prettierd", "prettier" },
 			lua = { "stylua" },
+
 			javascript = { "prettierd", "prettier" },
+			javascriptreact = { "prettierd", "prettier" },
+			json = { "prettierd", "prettier" },
+			jsonc = { "prettierd", "prettier" },
+			markdown = { "prettierd", "prettier", "injected" },
 			python = { "isort", "black" },
+			rasi = { "prettierd", "prettier" },
+			sh = { "beautysh", "shfmt" },
+			typescript = { "prettierd", "prettier" },
+			typescriptreact = { "prettierd", "prettier" },
+			yaml = { "prettierd", "prettier" },
 			-- Apply on all filetype
 
 			-- ["*"] = { "codespell" },
 			-- trim whitespace
-			["_"] = { "trim_whitespace" },
+			["_"] = { "trim_whitespace", "trim_newlines" },
 		},
 		format_on_save = {
 			-- These options will be passed to conform.format()
