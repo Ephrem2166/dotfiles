@@ -5,7 +5,7 @@ return {
 			c = { "clang-format" },
 			cpp = { "clang-format" },
 			lua = { "stylua" },
-			javascript = { "prettier" },
+			javascript = { "prettierd", "prettier" },
 			python = { "isort", "black" },
 			-- Apply on all filetype
 
@@ -20,6 +20,11 @@ return {
 		},
 		format_after_save = {
 			lsp_format = "fallback",
+		},
+		formatters = {
+			shfmt = {
+				prepend_args = { "-i", "2" },
+			},
 		},
 		notify_on_error = true,
 		notify_no_foratters = true,
