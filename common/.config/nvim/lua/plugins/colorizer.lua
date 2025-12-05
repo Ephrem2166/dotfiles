@@ -1,14 +1,6 @@
 return {
 	"norcalli/nvim-colorizer.lua",
-	-- config = function()
-	--   require('colorizer').setup({
-	--     '*';
-	--     user_default_options = {
-	--       names = false,
-	--       mode = 'foreground'
-	--     }
-	--   })
-	-- end
+	event = { "BufReadPre", "BufNewFile" },
 	opts = {
 		"*",
 		user_default_options = {
@@ -22,4 +14,14 @@ return {
 			css_fn = true,
 		},
 	},
+	config = function()
+		vim.o.termguicolors = true
+		require("colorizer").setup({
+			"*",
+			user_default_options = {
+				names = false,
+				mode = "foreground",
+			},
+		})
+	end,
 }

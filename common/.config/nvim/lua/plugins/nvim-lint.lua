@@ -17,7 +17,7 @@ return {
 
 			bash = { "shellcheck" },
 			cpp = { "cpplint" },
-			json = { "jsonlint" },
+			--json = { "jsonlint" },
 			go = { "golangcilint" },
 			lua = { "luac" },
 			javascript = { "eslint_d" },
@@ -31,7 +31,7 @@ return {
 			toml = { "tombi" },
 			typescriptreact = { "eslint_d" },
 
-			yaml = { "yamllint" },
+			-- yaml = { "yamllint" },
 			zsh = { "zsh" },
 		}
 

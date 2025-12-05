@@ -29,3 +29,19 @@ map("i", "<C-h>", "<Left>", { desc = "move left" })
 map("i", "<C-l>", "<Right>", { desc = "move right" })
 map("i", "<C-j>", "<Down>", { desc = "move down" })
 map("i", "<C-k>", "<Up>", { desc = "move up" })
+
+-- Tabs
+map("n", "<leader>tn", "<cmd>tabnew<cr>")
+map("n", "<leader>tq", "<cmd>tabclose<cr>")
+map("n", "<leader>t.", "<cmd>tabnext<cr>")
+map("n", "<leader>t,", "<cmd>tabprevious<cr>")
+
+-- Open terminal in a new vertical split
+map("n", "<leader>tt", function()
+	vim.cmd.vnew()
+	vim.cmd.term()
+	vim.cmd.wincmd("J")
+	vim.api.nvim_win_set_height(0, 20)
+
+	job_id = vim.bo.channel
+end)
