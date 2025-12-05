@@ -18,8 +18,15 @@ return {
 			go = { "golangcilint" },
 			cpp = { "cppcheck" },
 			bash = { "shellcheck" },
+			json = { "jsonlint" },
+			lua = { "luac" },
+			markdown = { "markdownlint" },
+			nix = { "nix" },
 			sh = { "shellcheck" },
 			proto = { "buf_lint" },
+			toml = { "tombi" },
+			yaml = { "yamllint" },
+			zsh = { "zsh" },
 		}
 
 		vim.api.nvim_create_autocmd({ "BufWritePost", "BufWinEnter" }, {
