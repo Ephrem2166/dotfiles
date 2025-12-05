@@ -1,6 +1,7 @@
 return {
 	"saghen/blink.cmp",
 	-- optional: provides snippets for the snippet source
+	event = { "InsertEnter", "CmdlineEnter" },
 	dependencies = { "rafamadriz/friendly-snippets" },
 
 	-- use a release tag to download pre-built binaries
@@ -34,8 +35,23 @@ return {
 		},
 
 		-- (Default) Only show the documentation popup when manually triggered
-		completion = { documentation = { auto_show = false } },
+		completion = {
+			documentation = {
+				auto_show = false,
+			},
+			menu = {
+				border = "bold",
+				scrollbar = false,
+			},
+			keyword = {
+				range = "prefix",
+			},
+			trigger = {
+				prefetch_on_insert = true,
+			},
+		},
 
+		snippets = { preset = "luasnip" },
 		-- Default list of enabled providers defined so that you can extend it
 		-- elsewhere in your config, without redefining it, due to `opts_extend`
 		sources = {

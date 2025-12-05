@@ -16,6 +16,7 @@ return {
 					},
 				},
 			})
+			vim.keymap.set("n", "<leader>tz", "<cmd>ZenMode<cr>")
 
 			require("twilight").setup({
 				context = -1,
