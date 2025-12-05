@@ -14,17 +14,23 @@ return {
 
 		L.linters_by_ft = {
 			-- lua = { "luacheck" },
-			python = { "flake8" },
-			go = { "golangcilint" },
-			cpp = { "cpplint" },
+
 			bash = { "shellcheck" },
+			cpp = { "cpplint" },
 			json = { "jsonlint" },
+			go = { "golangcilint" },
 			lua = { "luac" },
+			javascript = { "eslint_d" },
+			javascriptreact = { "eslint_d" },
 			markdown = { "markdownlint" },
 			nix = { "nix" },
+			python = { "pylint", "ruff" },
 			sh = { "shellcheck" },
-			proto = { "buf_lint" },
+			svelte = { "eslint_d" },
+			typescript = { "eslint_d" },
 			toml = { "tombi" },
+			typescriptreact = { "eslint_d" },
+
 			yaml = { "yamllint" },
 			zsh = { "zsh" },
 		}
