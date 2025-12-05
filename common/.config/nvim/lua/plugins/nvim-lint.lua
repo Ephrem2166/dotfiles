@@ -16,7 +16,7 @@ return {
 			-- lua = { "luacheck" },
 			python = { "flake8" },
 			go = { "golangcilint" },
-			cpp = { "cppcheck" },
+			cpp = { "cpplint" },
 			bash = { "shellcheck" },
 			json = { "jsonlint" },
 			lua = { "luac" },
