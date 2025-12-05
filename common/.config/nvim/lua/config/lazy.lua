@@ -39,4 +39,6 @@ require("lazy").setup({
 		enabled = false,
 		notify = false,
 	},
+	-- Keys
+	vim.keymap.set("n", "<leader>l", "<cmd>Lazy home<CR>", { desc = "Open Lazy main menu" }),
 })

@@ -1,8 +1,8 @@
-return{
+return {
 	"neovim/nvim-lspconfig",
 	dependencies = {
- 	  "stevearc/conform.nvim",
-        "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",	
+		"stevearc/conform.nvim",
+		"williamboman/mason.nvim",
+		"williamboman/mason-lspconfig.nvim",
 	},
 }
