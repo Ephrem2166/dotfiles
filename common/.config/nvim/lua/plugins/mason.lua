@@ -19,6 +19,7 @@ return {
 					width = 0.8,
 					height = 0.8,
 				},
+				vim.keymap.set("n", "<leader>cm", "<cmd>Mason<cr>"),
 			})
 			require("mason-tool-installer").setup({
 
