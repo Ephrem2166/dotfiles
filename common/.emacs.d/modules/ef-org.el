@@ -252,8 +252,8 @@
   :config
   (setq org-todo-keywords
         '((sequence "TODO" "|" "IN-PROGRESS" "|" "DONE" "|" "CANCELED")
-          (sequence "UNREAD" "|" "READ")
-          (sequence "WATCH" "|" "WATCHED")
+          (sequence "TOREAD" "|" "READ")
+          (sequence "TOWATCH" "|" "WATCHED")
           ))
 
   (setq org-todo-keyword-faces
