@@ -70,7 +70,7 @@
   :config
   (setq vterm-kill-buffer-on-exit nil)
   (setq vterm-timer-delay nil)
-  (setq vterm-shell "/usr/bin/fish"
+  (setq vterm-shell "/usr/bin/zsh"
         vterm-always-compile-module t))
 
 (provide 'ef-shell)
