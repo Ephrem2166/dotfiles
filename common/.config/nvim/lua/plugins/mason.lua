@@ -53,49 +53,22 @@ return {
 			})
 		end,
 	},
-	-- TOFIX: it throws an error
-	-- {
-	-- 	"mason-org/mason-lspconfig.nvim",
-	-- 	--event = { "BufReadPre", "BufNewFile" },
-	-- 	dependencies = {
-	-- 		"neovim/nvim-lspconfig",
-	-- 	},
-	-- 	config = function()
-	-- 		require("mason-lspconfig").setup({
-	-- 			automatic_enable = true,
-	-- 			ensure_installed = { "lua_ls" },
-	-- 		})
-	-- 		local servers = {
-	-- 			-- biome
-	-- 			biome = {
-	-- 				filetypes = {
-	-- 					"javascript",
-	-- 					"javascriptreact",
-	-- 					"javascript.jsx",
-	-- 					"typescript",
-	-- 					"typescriptreact",
-	-- 					"typescript.tsx",
-	-- 				},
-	-- 			},
-	-- 			-- emmet_ls
-	-- 			emmet_ls = {
-	-- 				filetypes = {
-	--
-	-- 					"html",
-	-- 					"htmx",
-	-- 					"typescriptreact",
-	-- 					"javascriptreact",
-	-- 				},
-	-- 			},
-	-- 			clangd = {},
-	-- 			pyright = {},
-	-- 			html = {},
-	-- 		}
-	-- 		-- enable lsps
-	-- 		for server, config in pairs(servers) do
-	-- 			vim.lsp.config(server, config)
-	-- 			vim.lsp.enable(server)
-	-- 		end
-	-- 	end,
-	-- },
+	{
+		"williamboman/mason-lspconfig.nvim",
+		dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
+		opt = {
+			automatic_enable = true,
+			ensure_installed = {
+				"dockerls",
+				"eslint",
+				"jsonls",
+				"marksman",
+				"rust_analyzer",
+				"vimls",
+				"yamlls",
+				"basedpyright",
+				"lua_ls",
+			},
+		},
+	},
 }

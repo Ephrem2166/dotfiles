@@ -40,6 +40,13 @@
   :ensure nil
   :mode ("\\*.css\\'"))
 
+;;; Docker
+(use-package dockerfile-ts-mode
+  :mode "Dockerfile\\'")
+
+(use-package docker-compose-mode
+  :ensure t
+  :mode "docker-compose\\'")
 ;;; Emacslisp
 (use-package emacs-lisp-mode
   :ensure nil
@@ -82,6 +89,13 @@
 ;;   :hook ((web-mode . emmet-mode)
 ;;          (html-mode . emmet-mode)
 ;;          (css-mode . emmet-mode)))
+
+;;; Git Mode
+(use-package git-modes
+  :ensure t
+  :mode (("/.gitignore\\'" . gitignore-mode)
+         ("/.dockerignore\\'" . gitignore-mode))
+  )
 
 ;;; TODO HTML
 ;;; JSON

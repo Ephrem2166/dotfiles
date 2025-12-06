@@ -2,6 +2,39 @@
 ;;; Commentary:
 ;;; Code:
 
+;;; Apheleia
+(use-package apheleia
+  :ensure t
+  :defer t
+  :hook (apheleia-post-format . delete-trailing-whitespace)
+  :config
+  (setq apheleia-formatters-respect-fill-column t)
+  (setq apheleia-formatters-respect-indent-level t)
+  (setq apheleia-formatters
+        (append
+         '((prettier . ("prettier" "--stdin-filepath" filepath))
+           (black . ("black" "-"))
+           (stylua . ("stylua" "-"))
+           (shfmt . ("shfmt" "-i" "2" "-ci" "-")))
+         apheleia-formatters))
+
+  ;; Customize mode-to-formatter mapping.
+  (setq apheleia-mode-alist
+        '((python-mode . black)
+          (javascript-mode . prettier)
+          (typescript-mode . prettier)
+          (ruby-mode . rubocop)
+          (sh-mode . shfmt)
+          (lua-mode . stylua)
+          (yaml-ts-mode . prettier)
+          (toml-ts-mode . prettier)
+          )
+
+        )
+
+  (apheleia-global-mode +1))
+
+
 ;;; Eldoc
 ;;;; Eldoc (Emacs live documentation feedback)
 ;; Document thing at point.
@@ -46,6 +79,7 @@
          (bash-ts-mode . eglot-ensure)
          (c++-ts-mode . eglot-ensure)
          (c-ts-mode . eglot-ensure)
+         (lua-ts-mode . eglot-ensure)
          (sh-mode . eglot-ensure)
          (markdown-mode . eglot-ensure)
          (python-ts-mode . eglot-ensure)
@@ -224,6 +258,7 @@
          (js-ts-mode . lsp-deferred)
          ;; (markdown-mode . lsp-deferred)
          (lsp-mode        . lsp-ui-mode)
+         (lua-ts-mode . lsp-deferred)
          (python-ts-mode . lsp-deferred)
          (css-ts-mode . lsp-deferred)
          (js-json-mode . lsp-deferred)
@@ -246,8 +281,8 @@
         lsp-ui-sideline-show-code-action t)
   :custom
   (lsp-ui-doc-delay 2)
-  (lsp-ui-doc-max-height 5)
-  (lsp-ui-doc-max-width 30)
+  (lsp-ui-doc-max-height 25)
+  (lsp-ui-doc-max-width 50)
   (lsp-ui-doc-position 'at-point)
   (lsp-ui-doc-show-with-cursor t)
   (lsp-ui-doc-show-with-mouse nil)
