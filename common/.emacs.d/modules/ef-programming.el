@@ -2,35 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-;;; Apheleia
-(use-package apheleia
-  :ensure t
-  :defer t
-  :hook (apheleia-post-format . delete-trailing-whitespace)
-  :config
-  (setq apheleia-formatters-respect-fill-column t)
-  (setq apheleia-formatters-respect-indent-level t)
-  (setq apheleia-formatters
-        (append
-         '((prettier . ("prettier" "--stdin-filepath" filepath))
-           (black . ("black" "-"))
-           (shfmt . ("shfmt" "-i" "2" "-ci" "-")))
-         apheleia-formatters))
-
-  ;; Customize mode-to-formatter mapping.
-  (setq apheleia-mode-alist
-        '((python-mode . black)
-          (javascript-mode . prettier)
-          (typescript-mode . prettier)
-          (ruby-mode . rubocop)
-          (sh-mode . shfmt)
-          (yaml-ts-mode . prettier)
-          )
-
-        )
-
-  (apheleia-global-mode +1))
-
 ;;; Aggressive Indent
 ;; Enables automatic indentation of code while typing
 (use-package aggressive-indent
