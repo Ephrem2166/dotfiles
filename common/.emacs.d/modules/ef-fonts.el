@@ -185,5 +185,16 @@
   (interactive)
   (message "%s" (face-attribute 'default :font)))
 
+
+;;; Better Font Changer
+(defun my/font-changer ()
+  (interactive)
+  (let ((font-name (completing-read "Select font:"
+                                    (font-family-list))))
+    (if (member font-name (font-family-list))
+        (set-face-attribute 'default nil :font font-name)
+      (error "'%s' font not found" font-name))))
+
+
 (provide 'ef-fonts)
 ;;; ef-fonts.el ends here
