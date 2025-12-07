@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# mapfile -t opensuse_packages < "./opensuse_packages.txt"
+mapfile -t arch_packages < "./arch_packages.txt"
+
+# Install package function
+arch_install_package () {
+  [[ $# -eq 0 ]] && echo "No packages to install." && return
+
+  for package in "$@"; do
+    if pacman -Qq "$package" &>/dev/null; then
+      echo "✅ $package already installed."
+    else
+      echo "📦 Installing $package..."
+      sudo pacman -S --noconfirm "$package"
+    fi
+  done
+}
+
+# TODO: OPENSUSE
+
+# Install packages
+# install_package "${opensuse_packages[@]}"
+install_package "${arch_packages[@]}"
