@@ -250,7 +250,7 @@ if [[ -x "$(command -v dircolors)" && -f "$DIRCOLOR" ]]; then
   eval "$(dircolors -b "$DIRCOLOR")"
 fi
 
-# This makes Zsh's tab completion respect your custom colors.
+# # This makes Zsh's tab completion respect your custom colors.
 if [[ -n "$LS_COLORS" ]]; then
   zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi
