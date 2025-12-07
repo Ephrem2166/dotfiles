@@ -52,5 +52,19 @@ return {
 				require("conform").format({ bufnr = args.buf })
 			end,
 		}),
+		-- Manual Format
+	},
+	keys = {
+		{
+			mode = { "n", "v" },
+			"<leader>cf",
+			function()
+				require("conform").format({
+					lsp_fallback = true,
+					timeout_ms = 1000,
+				})
+			end,
+			desc = "Conform: Format Manually",
+		},
 	},
 }
