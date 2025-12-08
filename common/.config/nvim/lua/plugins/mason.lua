@@ -43,6 +43,7 @@ return {
 					-- 	{ "eslint-lsp" },
 					--	{ "codelldb" },
 					--	{ "tailwindcss-language-server" },
+					{ "markdownlint" },
 					{ "clangd" },
 					{ "clang-format" },
 				},
