@@ -187,3 +187,17 @@ man() {
 #   mkdir -p "$going_to"
 #   mv -f "$@" "$going_to"
 # }
+
+# Cheat.sh Lookup
+function ch() {
+    if [[ -z "$1" ]]; then
+        printf "No command to look up\n" > /dev/stderr
+        false
+    elif [[ -z "$2" ]]; then
+        curl "https://cht.sh/$1"
+        true
+    else
+        curl "https://cht.sh/$1/$2"
+        true
+    fi
+}
