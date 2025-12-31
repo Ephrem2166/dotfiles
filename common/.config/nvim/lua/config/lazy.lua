@@ -42,8 +42,8 @@ require("lazy").setup({
 	performance = {
 		rtp = {
 			disabled_plugins = {
-				"nvim-lint",
-				"trouble",
+				-- "nvim-lint",
+				-- "trouble",
 			},
 		},
 	},

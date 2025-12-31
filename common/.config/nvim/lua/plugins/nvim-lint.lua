@@ -22,7 +22,7 @@ return {
 			lua = { "luac" },
 			javascript = { "eslint_d" },
 			javascriptreact = { "eslint_d" },
-			markdown = { "markdownlint" },
+			-- markdown = { "markdownlint" },
 			nix = { "nix" },
 			python = { "pylint", "ruff" },
 			sh = { "shellcheck" },
