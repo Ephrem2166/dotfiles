@@ -192,8 +192,8 @@ prompt fade
 # Syntax for zstyle; `zstyle <pattern> <style> <values>`
 # Syntax for completion: `:completion:<function>:<completer>:<command>:<argument>:<tag>`
 # Define completers
-zstyle ':completion:*' completer _extensions _complete _approximate
 zstyle ':completion:*' menu select
+zstyle ':completion:*' completer _extensions _complete _approximate
 zstyle ':completion:*:*:kill:*' list-colors '=(#b) #([0-9]#)*( *[a-z])*=34=31=33'
 zstyle ':completion:*' use-cache on
 zstyle ':completion:' cache-path "$HOME/.cache/zsh/.zcompcache"
