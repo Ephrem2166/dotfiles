@@ -112,6 +112,7 @@ setopt NOMATCH
 
 # Do not show error
 unsetopt BEEP
+
 # setopt no_beep
 # History Related
 setopt APPENDHISTORY
@@ -161,12 +162,14 @@ setopt AUTO_LIST
 
 # DEFAULT; will put / instead of space when autocomplete for param (ex ~D(tab)
 # puts ~D/)
-setopt auto_param_slash
+setopt AUTO_PARAM_SLASH
 
 # allow completion from within a word/phrase
 # ex: completes to Desktop/ from Dktop with cursor before k)
 setopt COMPLETE_IN_WORD
 
+# Show directory name
+setopt AUTO_NAME_DIRS
 
 HISTSIZE=1000000
 # SAVEHIST=100000

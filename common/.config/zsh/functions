@@ -145,15 +145,14 @@ daily_file() {
   touch "$file_name" && nvim "$file_name"
 }
 
-
 # Get my ip
-myip(){
+myip() {
   hostname -I | awk '{print $1}' && echo -n 'External: ' && curl -s ifconfig.me && echo
 }
 
 # Colored man pages function
 man() {
-    LESS_TERMCAP_mb=$'\e[1;32m' \
+  LESS_TERMCAP_mb=$'\e[1;32m' \
     LESS_TERMCAP_md=$'\e[1;32m' \
     LESS_TERMCAP_me=$'\e[0m' \
     LESS_TERMCAP_se=$'\e[0m' \
@@ -175,7 +174,6 @@ man() {
 # export LESS_TERMCAP_mr=$(tput rev)
 # export LESS_TERMCAP_mh=$(tput dim)
 
-
 # FIXME: Safe Delete
 # function rm {
 #   # if it contains -rf then execute command rm
@@ -189,27 +187,26 @@ man() {
 # }
 
 # Cheat.sh Lookup
-function ch() {
-    if [[ -z "$1" ]]; then
-        printf "No command to look up\n" > /dev/stderr
-        false
-    elif [[ -z "$2" ]]; then
-        curl "https://cht.sh/$1"
-        true
-    else
-        curl "https://cht.sh/$1/$2"
-        true
-    fi
+ch() {
+  if [[ -z "$1" ]]; then
+    printf "No command to look up\n" >/dev/stderr
+    false
+  elif [[ -z "$2" ]]; then
+    curl "https://cht.sh/$1"
+    true
+  else
+    curl "https://cht.sh/$1/$2"
+    true
+  fi
 }
 
-
 # Check is a program is installed
-is_installed () {
-    prog=$1
-    if [[ $(command -v ${prog}) == "" ]]; then
-        echo -e "${prog} is not installed!"
-        return 1
-    fi
-    echo -e "${prog} is installed!"
-    return 0
+is_installed() {
+  prog=$1
+  if [[ $(command -v ${prog}) == "" ]]; then
+    echo -e "${prog} is not installed!"
+    return 1
+  fi
+  echo -e "${prog} is installed!"
+  return 0
 }
