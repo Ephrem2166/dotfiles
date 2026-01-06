@@ -18,10 +18,9 @@ setopt PUSHD_TO_HOME
 setopt EXTENDED_GLOB
 # Print error if no match found
 setopt NOMATCH
+
 setopt PROMPT_SUBST # enable command substitution in prompt
 setopt LIST_PACKED  # The completion menu takes less space.
-
-setopt NOMATCH
 
 # Do not show error
 unsetopt BEEP
@@ -38,10 +37,7 @@ setopt HIST_FIND_NO_DUPS      # Do not display a previously found event.
 setopt HIST_IGNORE_SPACE      # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS      # Do not write a duplicate event to the history file.
 setopt HIST_VERIFY            # Do not execute immediately upon history expansion.
-
-# Remove extra blanks from each command added to history
-setopt HIST_REDUCE_BLANKS
-
+setopt HIST_REDUCE_BLANKS     # Remove extra blanks from each command added to history
 # Don't wait until shell exits to add commands to history
 setopt INC_APPEND_HISTORY
 
