@@ -179,9 +179,6 @@ HISTCONTROL=ignoreboth
 # TODO Modules
 zmodload zsh/complist
 
-# Command completion
-# Use `compinstall` for interactive configuration
-autoload -U compinit && compinit
 autoload -U colors && colors
 # Enable Prompt Themes
 autoload -U promptinit
@@ -191,32 +188,6 @@ promptinit
 # To preview them: `prompt -p`
 prompt fade
 
-# TODO Completion Style
-# Syntax for zstyle; `zstyle <pattern> <style> <values>`
-# Syntax for completion: `:completion:<function>:<completer>:<command>:<argument>:<tag>`
-# Define completers
-zstyle ':completion:*' menu select
-zstyle ':completion:*' completer _extensions _complete _approximate
-zstyle ':completion:*:*:kill:*' list-colors '=(#b) #([0-9]#)*( *[a-z])*=34=31=33'
-zstyle ':completion:*' use-cache on
-zstyle ':completion:' cache-path "$HOME/.cache/zsh/.zcompcache"
-zstyle ':completion:*:parameters' list-colors '=*=1;35'
-zstyle ':completion:*:builtins' list-colors '=*=1;34'
-zstyle ':completion:*:aliases' list-colors '=*=1;33'
-#zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
-zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
-zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
-zstyle ':completion:*:warnings' format ' %F{red}no matches found %f'
-zstyle ':completion:*:options' list-colors '=^(-- *)=34'
-zstyle ':completion:*:*:-command-:*:*' group-order alias functions builtins commands
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-# Grouping
-# zstyle ':completion:*' group-name ''
-zstyle ':completion:*:*:-command-:*:*' group-order alias builtins functions commands
-# Detailed file listing
-zstyle ':completion:*' file-list all
-
 # Alias
 [ -f "$XDG_CONFIG_HOME/zsh/alias" ] && source "$XDG_CONFIG_HOME/zsh/alias"
 
@@ -225,6 +196,9 @@ zstyle ':completion:*' file-list all
 
 # Key Bindings
 [ -f "$XDG_CONFIG_HOME/zsh/keybinds" ] && source "$XDG_CONFIG_HOME/zsh/keybinds"
+
+# Completions
+[ -f "$XDG_CONFIG_HOME/zsh/completion.zsh" ] && source "$XDG_CONFIG_HOME/zsh/completion.zsh"
 
 #export KEYTIMEOUT=1
 #
