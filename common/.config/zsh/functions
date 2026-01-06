@@ -201,3 +201,15 @@ function ch() {
         true
     fi
 }
+
+
+# Check is a program is installed
+is_installed () {
+    prog=$1
+    if [[ $(command -v ${prog}) == "" ]]; then
+        echo -e "${prog} is not installed!"
+        return 1
+    fi
+    echo -e "${prog} is installed!"
+    return 0
+}
