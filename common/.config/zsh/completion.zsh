@@ -61,3 +61,6 @@ zstyle ':completion:*' complete-options true
 # zstyle ':completion:*:*:-command-:*:*' group-order alias functions builtins commands
 # Grouping
 # zstyle ':completion:*:*:-command-:*:*' group-order alias builtins functions commands
+
+
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
