@@ -18,7 +18,7 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 # for all completions: selected item
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} ma=0\;47
+# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} ma=0\;47
 
 # Case Insensitivity
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
@@ -42,8 +42,12 @@ zstyle ':completion::*:-tilde-:*:*' group-order named-directories users
 zstyle ':completion::*:kill:*:*' command 'ps xf -U $USER -o pid,%cpu,cmd'
 zstyle ':completion::*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
 
+zstyle ':completion:*' use-cache on
+
+zstyle  ':completion:*' complete true
+
+zstyle ':completion:*' complete-options true
 # zstyle ':completion:*:*:kill:*' list-colors '=(#b) #([0-9]#)*( *[a-z])*=34=31=33'
-# zstyle ':completion:*' use-cache on
 # zstyle ':completion:' cache-path "$HOME/.cache/zsh/.zcompcache"
 # zstyle ':completion:*:parameters' list-colors '=*=1;35'
 # zstyle ':completion:*:builtins' list-colors '=*=1;34'
@@ -56,5 +60,4 @@ zstyle ':completion::*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
 # zstyle ':completion:*:options' list-colors '=^(-- *)=34'
 # zstyle ':completion:*:*:-command-:*:*' group-order alias functions builtins commands
 # Grouping
-# zstyle ':completion:*' group-name ''
 # zstyle ':completion:*:*:-command-:*:*' group-order alias builtins functions commands
