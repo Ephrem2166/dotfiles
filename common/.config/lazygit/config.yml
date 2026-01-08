@@ -18,12 +18,11 @@ gui:
       - "#bf616a"
     defaultFgColor:
       - "#d8dee9"
-
 git:
-  paging:
-    colorArg: always
-    # pager: delta --dark --paging=never --syntax-theme="Catppuccin-mocha"
-    externalDiffCommand: difft --color=always --display=inline --syntax-highlight=off
+  pagers:
+    - colorArg: always
+      # pager: delta --dark --paging=never --syntax-theme="Catppuccin-mocha"
+      externalDiffCommand: difft --color=always --display=inline --syntax-highlight=off
 update:
   method: never
 notARepository: "quit"
@@ -70,8 +69,7 @@ customCommands:
         title: "Which PR do you want to check out?"
         key: "PullRequestNumber"
         command: >-
-          gh pr list --json number,title,headRefName,updatedAt
-          --template '{{`{{range .}}{{printf "#%v: %s - %s (%s)" .number .title .headRefName (timeago .updatedAt)}}{{end}}`}}'
+          gh pr list --json number,title,headRefName,updatedAt --template '{{`{{range .}}{{printf "#%v: %s - %s (%s)" .number .title .headRefName (timeago .updatedAt)}}{{end}}`}}'
         filter: "#(?P<number>[0-9]+): (?P<title>.+) - (?P<ref_name>[^ ]+).*"
         valueFormat: "{{.number}}"
         labelFormat: '{{"#" | black | bold}}{{.number | white | bold}} {{.title | yellow | bold}}{{" [" | black | bold}}{{.ref_name | green}}{{"]" | black | bold}}'

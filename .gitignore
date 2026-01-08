@@ -37,3 +37,7 @@ opensuse/.config/qtile/.mypy_cache/
 
 arch/.config/qtile/__pycache__/
 arch/.config/qtile/.mypy_cache/
+
+
+common/.config/ranger/plugins/__pycache__/
+common/.config/ranger/plugins/__init__.py
