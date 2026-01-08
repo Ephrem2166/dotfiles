@@ -159,3 +159,25 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
         end
     end,
 })
+
+
+
+-- Easy Quit
+vim.api.nvim_create_autocmd('FileType', {
+  group = augroup('EasyQuit'),
+  pattern = {
+    'checkhealth',
+    'help',
+    'lspinfo',
+    'man',
+    'notify',
+    'nofile',
+    'oil',
+    'qf',
+  },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set('n', 'q', '<cmd>q<cr>', { buffer = event.buf, silent = true })
+  end,
+  desc = 'Enable q to quit in help-like buffers',
+})
