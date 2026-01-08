@@ -32,7 +32,7 @@ export FZF_DEFAULT_OPTS="\
 --layout=reverse \
 --margin=0,5 \
 --padding 1,2 \
---border=sharp \
+--border=rounded \
 --border-label ' FZF' \
 --border-label-pos top \
 --no-mouse \
