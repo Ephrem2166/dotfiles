@@ -143,11 +143,14 @@ alias listening='lsof -P -i -n'
 # External alternatives for ls #
 ################################
 if command -v eza &>/dev/null; then
-  alias ls='eza -lh --group-directories-first --icons=auto'
+  alias ls='eza -l --level=1 --color=always --icons=always'
   alias lsl='eza -la --icons --group-directories-first'
   alias lsa='eza -la --icons --group-directories-first'
   alias lst='eza --tree --level=2 --icons'
   alias lsh='eza -la --sort=modified --reverse'
+  alias lst='eza -T --level=2 --color=always --icons=always'
+  alias lsf='eza -f -a --color=always --icons=always'
+  alias lstd='eza -D -T --level=2 --color=always --icons=always'
 elif command -v lsd &>/dev/null; then
   alias ls="lsd"
 else
