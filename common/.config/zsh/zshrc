@@ -14,6 +14,9 @@ export  XDG_STATE_HOME="$HOME/.local/state"
 # Bootstrap .zshrc to ~/.config/zsh/.zshrc, any other zsh config files can also reside here
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
+# Setting TERM
+[[ -z "$TERM" ]] && export TERM="xterm-256color"
+
 # Environment Variables
 export TERMINAL=alacritty
 
@@ -39,7 +42,8 @@ export ZSH="$HOME/.oh-my-zsh"
 #     mkdir ~/.oh-my-zsh-custom/plugins
 #     git clone git://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting
 # fi
-# export TERM="xterm-256color"
+
+
 export PATH="/var/lib/flatpak/exports/bin:$PATH"
 
 # Starship
