@@ -41,3 +41,6 @@ arch/.config/qtile/.mypy_cache/
 
 common/.config/ranger/plugins/__pycache__/
 common/.config/ranger/plugins/__init__.py
+
+common/.config/ranger/plugins/.github/
+common/.config/ranger/plugins/.gitignore
