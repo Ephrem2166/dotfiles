@@ -20,14 +20,16 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
-vim.opt.wrap = false
+vim.opt.wrap = true
+vim.opt.linebreak = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
 
-vim.opt.hlsearch = false
+vim.opt.hlsearch = true
 vim.opt.incsearch = true
+
 
 vim.opt.termguicolors = true
 
@@ -44,18 +46,18 @@ vim.opt.cursorline = true
 vim.opt.clipboard = "unnamedplus"
 
 vim.opt.fillchars = {
-	horiz = "━",
-	horizup = "┻",
-	horizdown = "┳",
-	vert = "┃",
-	vertleft = "┨",
-	vertright = "┣",
-	verthoriz = "╋",
-	fold = "⠀",
-	eob = " ",
-	diff = "┃",
-	msgsep = "‾",
-	foldsep = "│",
-	foldclose = "▶",
-	foldopen = "▼",
+    horiz = "━",
+    horizup = "┻",
+    horizdown = "┳",
+    vert = "┃",
+    vertleft = "┨",
+    vertright = "┣",
+    verthoriz = "╋",
+    fold = "⠀",
+    eob = " ",
+    diff = "┃",
+    msgsep = "‾",
+    foldsep = "│",
+    foldclose = "▶",
+    foldopen = "▼",
 }
