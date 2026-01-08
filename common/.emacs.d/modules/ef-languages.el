@@ -129,13 +129,24 @@
   :hook (emacs-lisp-mode . lispy-mode))
 
 ;;; LUA
-(use-package lua-mode
-  :ensure t
+;; (use-package lua-mode
+;;   :ensure t
+;;   :defer t
+;;   :custom
+;;   (lua-indent-level 2)
+;;   (lua-indent-string-contents t)
+;;   :config
+;;   (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+;;   (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+;;   )
+
+(use-package lua-ts-mode
+  :ensure nil
   :defer t
-  :mode ("\\.lua\\'")
-  :custom
-  (lua-indent-level 2)
+  :mode ("\\*.lua$\\'")
   )
+
+
 
 ;;; MARKDOWN
 ;; Markdown Header Configuration
