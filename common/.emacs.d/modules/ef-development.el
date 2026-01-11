@@ -31,8 +31,8 @@
           )
 
         )
-
-  (apheleia-global-mode +1))
+  :init
+  (apheleia-global-mode 1))
 
 
 ;;; Eldoc

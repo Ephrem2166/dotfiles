@@ -98,6 +98,8 @@ zstyle ':completion:*:*:(scp|rsync):*' file-list false
 # Optimize completion for git
 zstyle ':completion:*:*:git:*' user-commands ${${(M)${(k)commands}:#git-*}/git-/}
 
+# If there is only one candidate just insert it.
+zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
 
 # Format
 # zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'

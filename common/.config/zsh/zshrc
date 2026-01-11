@@ -124,6 +124,21 @@ prompt fade
 ZSH_THEME="robbyrussell"
 
 # Plugins
+# Install Function
+# $1 is the name of the plugin
+# $2 is the github url
+# install_plugin() {
+#     if [ ! -e $ZSH"custom/plugins/$1" ]
+#     then
+#       echo "cloning $2 into $ZSH""custom/plugins/$1"
+#       sudo git clone $2 $ZSH"custom/plugins/$1"
+#     fi
+# }
+#
+# install_plugin "zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions"
+# install_plugin "zsh-completions" "https://github.com/zsh-users/zsh-completions"
+# install_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting"
+
 plugins=(
   git
   zsh-autosuggestions
