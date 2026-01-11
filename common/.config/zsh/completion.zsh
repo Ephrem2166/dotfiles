@@ -23,10 +23,11 @@ zstyle ':completion:*' file-list all
 zstyle ':completion:*' group-name ''
 # dirs: reorder output sorting: named dirs over userdirs
 zstyle ':completion::*:-tilde-:*:*' group-order named-directories users
-# zstyle ':completion:*:*:-command-:*:*' group-order alias functions builtins commands
+zstyle ':completion:*:*:-command-:*:*' group-order alias functions builtins commands
 
 # Case insensitive completion
-# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+# zstyle ':completion:*' m# Only display some tags for the command cd
+zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directorieeatcher-list 'm:{a-zA-Z}={A-Za-z}'
 # Case insensitive and partial completion
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
@@ -47,14 +48,12 @@ zstyle ':completion::*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
 
 zstyle  ':completion:*' complete true
 
-# Format
-# zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
-# zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
-# zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
-# zstyle ':completion:*:warnings' format ' %F{red}no matches found %f'
 
+# STYLE
+# Colors for files and directory
+zstyle ':completion:*:*:*:*:default' list-colors ${(s.:.)LS_COLORS}
 # For all completions: color
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # #zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # zstyle ':completion:*:*:kill:*' list-colors '=(#b) #([0-9]#)*( *[a-z])*=34=31=33'
 # zstyle ':completion:' cache-path "$HOME/.cache/zsh/.zcompcache"
@@ -66,12 +65,26 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # Others
 # Allows // to be expanded as /
 zstyle ':completion:*' squeeze-slashes true
-# Directory stack completion
+
+# Autocomplete CD instead of showing a directory stack
 zstyle ':completion:*' complete-options true
 # Sorting matched files
 # Values: dummyvalue (alphabetically), size, links, modification, access, change or inode
 zstyle ':completion:*' file-sort dummyvalue
 
+# Only display some tags for the command cd
+zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
+
+
+
+
 # Fzf
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+
+# Format
+# zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
+# zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
+# zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+# zstyle ':completion:*:warnings' format ' %F{red}no matches found %f'
+# zstyle ':completion:*:default' list-prompt '%S%M matches%s'
