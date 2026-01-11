@@ -1,3 +1,4 @@
+# Check https://github.com/trapd00r/configs/blob/master/zsh/zshrc
 # Command completion
 # Use `compinstall` for interactive configuration
 autoload -Uz compinit
@@ -97,11 +98,26 @@ zstyle ':completion:*:*:(scp|rsync):*' file-list false
 # Optimize completion for git
 zstyle ':completion:*:*:git:*' user-commands ${${(M)${(k)commands}:#git-*}/git-/}
 
+
+# Format
+# zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
+# zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
+# zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+# zstyle ':completion:*:warnings' format ' %F{red}no matches found %f'
+# zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+
+zstyle ':completion:*:descriptions' format "- %d -"
+zstyle ':completion:*:messages'     format "- %d -"
+zstyle ':completion:*:corrections'  format "- %d - (errors %e)"
+zstyle ':completion:*:default'      select-prompt "Match %m  Line %l  %p"
+zstyle ':completion:*:default'      list-prompt "Line %l  Continue?"
+zstyle ':completion:*:warnings'     format "- no match - %d"
+
 # Fzf-tab
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # preview directory's content with eza when completing cd and ls
-zstyle ':fzf-tab:complete:*:*' fzf-preview 'file $realpath | sed -E "s/^.+: //"; hr -fg 137 -c _ -s 30;echo;eza -1 --color=always $realpath ;'
+# zstyle ':fzf-tab:complete:*:*' fzf-preview 'file $realpath | sed -E "s/^.+: //"; hr -fg 137 -c _ -s 30;echo;eza -1 --color=always $realpath ;'
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:complete:vim:*' fzf-preview 'bat --color=always $realpath'
 # environment variables
@@ -122,11 +138,3 @@ zstyle ':fzf-tab:*' fzf-bindings 'space:accept'
 #zstyle ':fzf-tab:*' fzf-bindings 'ctrl-j:accept' 'ctrl-a:toggle-all'
 zstyle ':fzf-tab:*' fzf-bindings 'ctrl-a:toggle-all'
 zstyle ':fzf-tab:*' fzf-min-height 100
-
-
-# Format
-# zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
-# zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
-# zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
-# zstyle ':completion:*:warnings' format ' %F{red}no matches found %f'
-# zstyle ':completion:*:default' list-prompt '%S%M matches%s'
