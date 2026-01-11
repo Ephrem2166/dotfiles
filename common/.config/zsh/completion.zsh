@@ -75,8 +75,21 @@ zstyle ':completion:*' file-sort dummyvalue
 # Only display some tags for the command cd
 zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
 
+# Disable completion for commands we don't use
+zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+
+# Optimize completion for specific commands
+zstyle ':completion:*:*:(cd|ls|rm|cp|mv):*' ignore-parents parent pwd
+zstyle ':completion:*:*:(cd|ls|rm|cp|mv):*' file-sort name
+zstyle ':completion:*:*:(cd|ls|rm|cp|mv):*' group-order 'named-directories path-directories users'
+
+# Disable completion for commands that don't need it
+zstyle ':completion:*:*:(rm|kill|diff):*' ignore-line yes
+zstyle ':completion:*:*:(scp|rsync):*' file-list false
 
 
+# Optimize completion for git
+zstyle ':completion:*:*:git:*' user-commands ${${(M)${(k)commands}:#git-*}/git-/}
 
 # Fzf
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
