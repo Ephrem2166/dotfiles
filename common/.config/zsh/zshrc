@@ -143,14 +143,9 @@ source $ZSH/oh-my-zsh.sh
 # Others Configuration
 
 # Dircolors
-export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors.conf"
+export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors"
 if [[ -x "$(command -v dircolors)" && -f "$DIRCOLOR" ]]; then
   eval "$(dircolors -b "$DIRCOLOR")"
-fi
-
-# # This makes Zsh's tab completion respect your custom colors.
-if [[ -n "$LS_COLORS" ]]; then
-  zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi
 
 # FZF Shell integrations
