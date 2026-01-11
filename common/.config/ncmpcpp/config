@@ -1,8 +1,8 @@
-#                                              
-#    ____  _________ ___  ____  _________  ____ 
+#
+#    ____  _________ ___  ____  _________  ____
 #   / __ \/ ___/ __ `__ \/ __ \/ ___/ __ \/ __ \
 #  / / / / /__/ / / / / / /_/ / /__/ /_/ / /_/ /
-# /_/ /_/\___/_/ /_/ /_/ .___/\___/ .___/ .___/ 
+# /_/ /_/\___/_/ /_/ /_/ .___/\___/ .___/ .___/
 #                     /_/        /_/   /_/
 #
 #######################
@@ -11,7 +11,7 @@
 ncmpcpp_directory = ~/.ncmpcpp
 lyrics_directory = ~/.lyrics
 
-mpd_host = localhost 
+mpd_host = localhost
 mpd_port = 6600
 mpd_connection_timeout = 3
 mpd_crossfade_time = 5
@@ -44,12 +44,28 @@ visualizer_in_stereo = yes
 ## Available values: spectrum, wave, wave_filled, ellipse.
 visualizer_type = wave
 
-visualizer_look = ?$
+# visualizer_look = ?$
+#visualizer_look = "▒░"
+#visualizer_look = "◈░"
+# visualizer_look = "┃┃"
+# visualizer_look = ●┃
+#visualizer_look = "█┇"
+#visualizer_look = "▒░"
+#visualizer_look = "▋▍"
+#visualizer_look = "▋█"
+visualizer_look = "▋█"
+# visualizer_look = "▋░"
+#visualizer_look = "▋▓"
+#visualizer_look = "▋☰"
+#visualizer_look = "☰⛆"
+#visualizer_look = "☰▓"
+#visualizer_look = "●▉"
 
 # visualizer_color = magenta, red, green, cyan, yellow, blue, white
 # visualizer_color = 4, 44, 143, 88, 210, 50, 91, 12, 146, 192, 214, 205, 68, 140, 44, 125
+# visualizer_color = 78
+visualizer_color = 47, 83, 119, 155, 191, 227, 221, 215, 209, 203, 197, 161
 
-visualizer_color = 78
 
 visualizer_autoscale = yes
 
@@ -221,6 +237,14 @@ volume_change_step = 3
 centered_cursor = yes
 
 progressbar_look = 
+#progressbar_look = "___"
+##progressbar_look = "─╼ "
+##progressbar_look = "┅┅┄"
+##progressbar_look = "─➞─"
+##progressbar_look = "─┅─"
+##progressbar_look = "▁▁▁"
+##progressbar_look = "≈►·"
+##progressbar_look = "→→"
 
 #default_place_to_search_in = database
 
@@ -357,7 +381,7 @@ colors_enabled = yes
 
 empty_tag_color = magenta
 
-header_window_color = red 
+header_window_color = red
 
 volume_color = green
 
