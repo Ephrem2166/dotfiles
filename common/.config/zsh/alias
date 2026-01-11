@@ -53,6 +53,10 @@ alias ....='cd ../../../'
 alias .....='cd ../../../../'
 alias -- -="cd -"
 
+alias down='builtin cd $HOME/Downloads/'
+alias doc='builtin cd $HOME/Documents/'
+alias music='builtin cd $HOME/Music'
+alias dotfiles='builtin cd $HOME/dotfiles/'
 ####################################################################################
 # File Operations                                                                  #
 ####################################################################################
@@ -210,3 +214,8 @@ alias mp3-dl='yt-dlp --ignore-config --extract-audio \
 # # Utilities #
 ###############
 alias calc='python3 -ic "from math import *; import cmath"'
+
+#####################
+# Package Managers  #
+#####################
+alias pacman="pacman --color=auto"
