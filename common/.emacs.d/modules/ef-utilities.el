@@ -426,7 +426,7 @@
   (setq popper-group-by-directory t)
   (setq popper-echo-dispatch-actions t)
   (setq popper-display-control t)
-  (setq popper-window-height 12)
+  (setq popper-window-height 16)
   (popper-mode +1)
   (popper-echo-mode +1))
 

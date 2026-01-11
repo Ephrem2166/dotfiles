@@ -79,3 +79,9 @@ setopt COMPLETE_IN_WORD
 
 # Show directory name
 setopt AUTO_NAME_DIRS
+
+# Allow globs to match dotfiles.
+setopt GLOB_DOTS
+
+# Sort numeric filenames numerically, instead of lexicographically.
+setopt NUMERIC_GLOB_SORT
