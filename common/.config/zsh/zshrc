@@ -3,13 +3,12 @@
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
-export  XDG_STATE_HOME="$HOME/.local/state"
+export XDG_STATE_HOME="$HOME/.local/state"
 
 [ -d "$XDG_CONFIG_HOME" ] || mkdir -m 0750 "$XDG_CONFIG_HOME"
-[ -d "$XDG_CACHE_HOME" ]  || mkdir -m 0750 "$XDG_CACHE_HOME"
-[ -d "$XDG_DATA_HOME" ]   || mkdir -m 0750 "$XDG_DATA_HOME"
-[ -d "$XDG_STATE_HOME" ]  || mkdir -m 0750 "$XDG_STATE_HOME"
-
+[ -d "$XDG_CACHE_HOME" ] || mkdir -m 0750 "$XDG_CACHE_HOME"
+[ -d "$XDG_DATA_HOME" ] || mkdir -m 0750 "$XDG_DATA_HOME"
+[ -d "$XDG_STATE_HOME" ] || mkdir -m 0750 "$XDG_STATE_HOME"
 
 # Bootstrap .zshrc to ~/.config/zsh/.zshrc, any other zsh config files can also reside here
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
@@ -33,7 +32,7 @@ export SUDO_EDITOR=nvim
 # Oh My Zsh
 # Install Oh My Zsh!
 if ! [[ -e ~/.oh-my-zsh ]]; then
-     git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+  git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 fi
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -42,7 +41,6 @@ export ZSH="$HOME/.oh-my-zsh"
 #     mkdir ~/.oh-my-zsh-custom/plugins
 #     git clone git://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting
 # fi
-
 
 export PATH="/var/lib/flatpak/exports/bin:$PATH"
 
@@ -97,7 +95,6 @@ HISTSIZE=1000000
 HISTFILE="$HOME/.zsh_history"
 HISTCONTROL=ignoreboth
 
-
 autoload -U colors && colors
 # Enable Prompt Themes
 autoload -U promptinit
@@ -126,7 +123,6 @@ prompt fade
 # Theme
 ZSH_THEME="robbyrussell"
 
-
 # Plugins
 plugins=(
   git
@@ -135,6 +131,7 @@ plugins=(
   fast-syntax-highlighting
   zsh-history-substring-search
   zsh-fzf-history-search
+  fzf-tab
 )
 
 # Oh My Zsh
@@ -167,11 +164,10 @@ eval "$(pyenv init -)"
 # STARSHIP
 if hash starship 2>/dev/null; then
   eval "$(starship init zsh)"
-  fi
+fi
 
 # Bare Dotfiles
 #alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm

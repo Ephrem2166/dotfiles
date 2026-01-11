@@ -247,50 +247,58 @@ color_escape() {
 
 # SSH CREATE
 ssh-create() {
-    if [ ! -z "$1" ]; then
-        ssh-keygen -f $HOME/.ssh/$1 -t rsa -N '' -C "$1"
-        chmod 700 $HOME/.ssh/$1*
-    fi
+  if [ ! -z "$1" ]; then
+    ssh-keygen -f $HOME/.ssh/$1 -t rsa -N '' -C "$1"
+    chmod 700 $HOME/.ssh/$1*
+  fi
 }
 
 # HISTORY STATISTICS
 historystat() {
-    history 0 | awk '{print $2}' | sort | uniq -c | sort -n -r | head
+  history 0 | awk '{print $2}' | sort | uniq -c | sort -n -r | head
 }
-
 
 # MOUNT
 mnt() {
-    local FILE="/mnt/external"
-    if [ ! -z $2 ]; then
-        FILE=$2
-    fi
+  local FILE="/mnt/external"
+  if [ ! -z $2 ]; then
+    FILE=$2
+  fi
 
-    if [ ! -z $1 ]; then
-        sudo mount "$1" "$FILE" -o rw
-        echo "Device in read/write mounted in $FILE"
-    fi
+  if [ ! -z $1 ]; then
+    sudo mount "$1" "$FILE" -o rw
+    echo "Device in read/write mounted in $FILE"
+  fi
 
-    if [ $# = 0 ]; then
-        echo "You need to provide the device (/dev/sd*) - use lsblk"
-    fi
+  if [ $# = 0 ]; then
+    echo "You need to provide the device (/dev/sd*) - use lsblk"
+  fi
 }
 
 # UMOUNT
 umnt() {
-    local DIRECTORY="/mnt"
-    if [ ! -z $1 ]; then
-        DIRECTORY=$1
-    fi
-    MOUNTED=$(grep $DIRECTORY /proc/mounts | cut -f2 -d" " | sort -r)
-    cd "/mnt"
-    sudo umount $MOUNTED
-    echo "$MOUNTED unmounted"
+  local DIRECTORY="/mnt"
+  if [ ! -z $1 ]; then
+    DIRECTORY=$1
+  fi
+  MOUNTED=$(grep $DIRECTORY /proc/mounts | cut -f2 -d" " | sort -r)
+  cd "/mnt"
+  sudo umount $MOUNTED
+  echo "$MOUNTED unmounted"
 }
 
 # GENERATE PASSWORD
 # Default: 20
 pass() {
-    local size=${1:-20}
-    cat /dev/random | tr -dc '[:graph:]' | head -c$size
+  local size=${1:-20}
+  cat /dev/random | tr -dc '[:graph:]' | head -c$size
+}
+
+# Better Space Usage
+du1() {
+  du -h --max-depth=1 "$@" | sort -k 1,1hr -k 2,2f
+}
+
+du2() {
+  du -h --max-depth=1 "$@" | sort -k 1,1h -k 2,2f
 }
