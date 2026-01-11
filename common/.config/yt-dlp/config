@@ -9,6 +9,10 @@
 # Prefer 1080p or lower resolutions
 -f bestvideo[ext=mp4][width<2000][height<=1200]+bestaudio[ext=m4a]/bestvideo[ext=webm][width<2000][height<=1200]+bestaudio[ext=webm]/bestvideo[width<2000][height<=1200]+bestaudio/best[width<2000][height<=1200]/best
 
+# Download mp4 if available, else download whatever and reencode to mp4
+-S res,ext:mp4:m4a --recode mp3
+
+
 # Embed metadata to the video file. Also adds chapters to file
 --embed-metadata
 
@@ -18,23 +22,43 @@
 # Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
 --restrict-filenames
 
-# Languages of the subtitle to download 
+# Languages of the subtitle to download
 --sub-langs "en.*"
 
 #  Embed subtitles in the video (only for mp4, webm and mkv videos)
 --embed-subs
 
 # Embed thumbnail in the video as cover art
---embed-thumbnail 
+--embed-thumbnail
 
 #  Add chapter markers to the video file
 --embed-chapters
 
-# Containers that may be used when merging formats 
+# Containers that may be used when merging formats
 --merge-output-format "mkv/mp4"
 
 # Delete downloaded fragments after downloading is finished
---no-keep-fragments 
+--no-keep-fragments
 
 # Do not use .part files - write directly into output file
---no-part 
+--no-part
+
+# do not use mtime from the upload but rather the real mtime on disk
+--no-mtime
+
+# Metadata management
+--replace-in-metadata "title" "\(Official Video\)|\(Audio\)|Official Video HD\)" ""
+--replace-in-metadata "title" "\[Official Video\]|\[Audio\]|Official Video HD\]" ""
+--replace-in-metadata "title" "\(Official Music Video\)|\(Audio\)" ""
+--replace-in-metadata "title" "\[Official Music Video\]|\[Audio\]" ""
+--replace-in-metadata "title" "\[Official HD Video\]|\[Audio\]" ""
+--replace-in-metadata "title" "\(Official\)" ""
+--replace-in-metadata "title" "\(official\)" ""
+--replace-in-metadata "title" "\(HD\)" ""
+--replace-in-metadata "title" "\[HD\]" ""
+
+#--parse-metadata ":(?P<meta_>)"
+--parse-metadata "title:%(artist)s - %(title)s"
+--metadata-from-title "%(artist)s - %(title)s"
+--metadata-from-title "%(artist)s | %(title)s"
+--add-metadata
