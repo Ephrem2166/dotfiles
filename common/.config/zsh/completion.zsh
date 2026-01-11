@@ -13,10 +13,14 @@ zstyle ':completion:*' completer _complete _correct _approximate _extensions
 zstyle ':completion:*' use-cache on
 
 # Menu Select
-zstyle ':completion:*' menu select=1
+zstyle ':completion:*' menu select auto
+
+zstyle ':completion:*' accept-ezact '*(N)'
 
 # Detailed file listing
 zstyle ':completion:*' file-list all
+
+
 
 # Grouping
 # For all completions: grouping the output
@@ -35,7 +39,7 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 
 # statusline for many hits
 zstyle ':completion:*:default' select-prompt $'\e[01;35m -- Match %M    %P -- \e[00;00m'
 
-# for all completions: show comments when present
+# Enable verbose completion
 zstyle ':completion:*' verbose yes
 
 # The default directories to be completed are listed separately from and before completion for other files.
@@ -77,11 +81,13 @@ zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-d
 
 # Disable completion for commands we don't use
 zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+zstyle ':completion:*:cd:*' ignored-patterns '(*/)#lost+found'
 
 # Optimize completion for specific commands
 zstyle ':completion:*:*:(cd|ls|rm|cp|mv):*' ignore-parents parent pwd
 zstyle ':completion:*:*:(cd|ls|rm|cp|mv):*' file-sort name
 zstyle ':completion:*:*:(cd|ls|rm|cp|mv):*' group-order 'named-directories path-directories users'
+
 
 # Disable completion for commands that don't need it
 zstyle ':completion:*:*:(rm|kill|diff):*' ignore-line yes
@@ -91,9 +97,32 @@ zstyle ':completion:*:*:(scp|rsync):*' file-list false
 # Optimize completion for git
 zstyle ':completion:*:*:git:*' user-commands ${${(M)${(k)commands}:#git-*}/git-/}
 
-# Fzf
+# Fzf-tab
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+# preview directory's content with eza when completing cd and ls
+zstyle ':fzf-tab:complete:*:*' fzf-preview 'file $realpath | sed -E "s/^.+: //"; hr -fg 137 -c _ -s 30;echo;eza -1 --color=always $realpath ;'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:vim:*' fzf-preview 'bat --color=always $realpath'
+# environment variables
+zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
+  fzf-preview 'echo ${(P)word}'
+
+# preview systemctl status
+zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
+
+# give a preview of commandline arguments when completing kill
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
+  '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
+zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
+
+# accept with one key
+zstyle ':fzf-tab:*' fzf-bindings 'space:accept'
+#zstyle ':fzf-tab:*' fzf-bindings 'ctrl-j:accept' 'ctrl-a:toggle-all'
+zstyle ':fzf-tab:*' fzf-bindings 'ctrl-a:toggle-all'
+zstyle ':fzf-tab:*' fzf-min-height 100
+
 
 # Format
 # zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
