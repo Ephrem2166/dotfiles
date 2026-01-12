@@ -82,6 +82,8 @@ zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-d
 
 # Disable completion for commands we don't use
 zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+# Don't complete unavailable commands.
+zstyle ':completion:*:(functions|parameters)' ignored-patterns '(_*|.*|-*|+*|autosuggest-*|pre(cmd|exec))'
 zstyle ':completion:*:cd:*' ignored-patterns '(*/)#lost+found'
 
 # Optimize completion for specific commands
@@ -95,11 +97,19 @@ zstyle ':completion:*:*:(rm|kill|diff):*' ignore-line yes
 zstyle ':completion:*:*:(scp|rsync):*' file-list false
 
 
+# Omit parent and current directories from completion results when they are
+# already named in the input.
+zstyle ':completion:*:*:cd:*' ignore-parents parent pwd
+
 # Optimize completion for git
 zstyle ':completion:*:*:git:*' user-commands ${${(M)${(k)commands}:#git-*}/git-/}
 
 # If there is only one candidate just insert it.
 zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
+
+# Man
+zstyle ':completion:*:manuals' separate-sections true
+zstyle ':completion:*:manuals.(^1*)' insert-sections true
 
 # Format
 # zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
