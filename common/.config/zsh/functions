@@ -162,18 +162,6 @@ man() {
     command man "$@"
 }
 
-# # add color to man pages
-# export MANROFFOPT='-c'
-# export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
-# export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
-# export LESS_TERMCAP_me=$(tput sgr0)
-# export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4)
-# export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-# export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 8)
-# export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
-# export LESS_TERMCAP_mr=$(tput rev)
-# export LESS_TERMCAP_mh=$(tput dim)
-
 # FIXME: Safe Delete
 # function rm {
 #   # if it contains -rf then execute command rm
@@ -302,3 +290,13 @@ du1() {
 du2() {
   du -h --max-depth=1 "$@" | sort -k 1,1h -k 2,2f
 }
+
+# Print all 256 colors
+colors() (
+    x=$(tput op)
+    y=$(printf %76s)
+    for i in {0..256}; do
+        o=00$i
+        echo -e ${o:${#o}-3:3} $(tput setaf $i;tput setab $i)${y// /=}$x
+    done
+)
