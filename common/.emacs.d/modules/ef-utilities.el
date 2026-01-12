@@ -164,6 +164,15 @@
          )
   )
 
+;;; Emacs Everywhere
+(use-package emacs-everywhere
+  :ensure t
+  :config
+  (setq emacs-everywhere-major-mode-function #'org-mode)
+  (setq emacs-everywhere-frame-name-format "Editing: %s %s")
+
+  )
+
 ;;; Embark
 ;; Embark makes it easy to choose a command to run based on what is near point,
 ;; both during a minibuffer completion session and in normal buffers.

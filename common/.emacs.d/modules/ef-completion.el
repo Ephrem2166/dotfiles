@@ -116,6 +116,25 @@ Also adds `cape-file' as a fallback."
                   cape-file)
                 cape-dabbrev-min-length 5))
   (add-hook 'emacs-lisp-mode #'my/emacs-lisp-capf)
+
+  ;; Org Mode Setup
+  (defun my/org-mode-setup-capf ()
+    "Configure CAPFs for Org buffer"
+    (when buffer-file-name
+      (setq-local completion-at-point-functions
+                  (list #'tempel-complete
+                        #'cape-tex
+                        ;; FIXME:
+                        ;; #'org-block-capf
+                        #'cape-elisp-block
+                        (cape-capf-super #'cape-dabbrev
+                                         #'cape-dict
+                                         #'cape-keyword)
+                        #'cape-emoji
+                        )))
+
+    )
+  (add-hook 'org-mode-hook #'my/org-mode-setup-capf)
   :custom
   (text-mode-ispell-word-completion nil)
   )

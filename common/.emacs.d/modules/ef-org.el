@@ -60,6 +60,24 @@
 (add-hook 'org-mode-hook 'show-paren-mode nil)
 ;; (add-hook 'org-mode-hook  line-spacing 0.1)
 
+;;;; Variable Pitch Mode
+(defun my/enable-variable-pitch-mode ()
+  "Enable variable-pitch-mode for relevant org-mode text."
+  (variable-pitch-mode 1)
+
+  ;; keep code related stuff clean
+  (dolist (face '(org-block
+                  org-table
+                  org-verbatim
+                  org-code
+                  org-block-begin-line
+                  org-block-end-line
+                  org-meta-line
+                  org-document-info-keyword))
+    (set-face-attribute face nil :inherit 'fixed-pitch)))
+
+(add-hook 'org-mode-hook #'my/enable-variable-pitch-mode)
+
 ;;;; Org SRC Code Block in monospace font
 (use-package org
   :ensure nil
@@ -658,8 +676,9 @@ context.  When called with an argument, unconditionally call
 ;; (defconst my-org-todos "~/Org/Capture/")
 
 ;;; Org Agenda
-(use-package org
+(use-package org-agenda
   :ensure nil
+  :after irg
   :bind ("C-c C-a" . org-agenda)
   :config
   (setopt org-deadline-warning-days 3)
