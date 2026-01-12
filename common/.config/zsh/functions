@@ -300,3 +300,9 @@ du2() {
 #         echo -e ${o:${#o}-3:3} $(tput setaf $i;tput setab $i)${y// /=}$x
 #     done
 # )
+
+
+# List installed fonts using fzf
+fontlist() {
+  fc-list | sed 's/[^:]*: //' | fzf
+}
