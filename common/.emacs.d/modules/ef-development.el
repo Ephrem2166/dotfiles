@@ -57,6 +57,7 @@
   )
 
 ;;; Eglot
+;; FIXME:
 ;; Eglot (built-in client for the language server protocol)
 (use-package eglot
   :ensure nil
@@ -79,7 +80,7 @@
          (bash-ts-mode . eglot-ensure)
          (c++-ts-mode . eglot-ensure)
          (c-ts-mode . eglot-ensure)
-         (lua-ts-mode . eglot-ensure)
+         (lua-mode . eglot-ensure)
          (sh-mode . eglot-ensure)
          (markdown-mode . eglot-ensure)
          (python-ts-mode . eglot-ensure)
@@ -104,7 +105,9 @@
     (add-to-list 'eglot-server-programs '((css-ts-mode) . ("vscode-css-language-server" "--stdio")))
     (add-to-list 'eglot-server-programs
                  '(web-mode . ("vscode-css-language-server" "--stdio")))
-    (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("taplo" "--stdio"))))
+    (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("taplo" "--stdio")))
+    (add-to-list 'eglot-server-programs '((lua-mode) . ("stylua")))
+    )
   (setq eglot-sync-connect 1)
   (setq eglot-autoshutdown t)
   (setq eglot-confirm-server-edits nil)

@@ -41,7 +41,8 @@
   :mode ("\\*.css\\'"))
 
 ;;; Docker
-(use-package dockerfile-ts-mode
+(use-package dockerfile-mode
+  :ensure t
   :mode "Dockerfile\\'")
 
 (use-package docker-compose-mode
@@ -129,22 +130,22 @@
   :hook (emacs-lisp-mode . lispy-mode))
 
 ;;; LUA
-;; (use-package lua-mode
-;;   :ensure t
-;;   :defer t
-;;   :custom
-;;   (lua-indent-level 2)
-;;   (lua-indent-string-contents t)
-;;   :config
-;;   (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-;;   (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
-;;   )
-
-(use-package lua-ts-mode
-  :ensure nil
-  :defer t
-  :mode ("\\*.lua$\\'")
+(use-package lua-mode
+  :ensure t
+  :mode ("\\.lua\\'" . lua-mode)
+  ;; :custom
+  ;; (lua-indent-level 2)
+  ;; (lua-indent-string-contents t)
+  ;; :config
+  ;; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+  ;; (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
   )
+
+;; (use-package lua-ts-mode
+;;   :ensure nil
+;;   :defer t
+;;   :mode ("\\*.lua$\\'")
+;;   )
 
 
 
