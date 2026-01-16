@@ -112,6 +112,9 @@ prompt fade
 # Options
 [ -f "$XDG_CONFIG_HOME/zsh/options.zsh" ] && source "$XDG_CONFIG_HOME/zsh/options.zsh"
 
+# LS COLORS
+[ -f "$XDG_CONFIG_HOME/zsh/lscolors.sh" ] && source "$XDG_CONFIG_HOME/zsh/lscolors.sh"
+
 #export KEYTIMEOUT=1
 #
 # Theme
