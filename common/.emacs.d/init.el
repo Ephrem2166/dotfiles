@@ -27,7 +27,7 @@
 (require 'ef-writing)
 (require 'ef-reading)
 (require 'ef-org)
-;; (require 'ef-modeline)
+(require 'ef-modeline)
 ;; External
 (require 'ef-completion)
 (require 'ef-minibuffer)
@@ -38,7 +38,7 @@
 (require 'ef-programming)
 (require 'ef-languages)
 (require 'ef-evil)
-(require 'ef-comm)
+;; (require 'ef-comm)
 (require 'ef-experiment)
 ;; (require 'ef-general)
 ;; (require 'ef-company)
