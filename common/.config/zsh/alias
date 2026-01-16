@@ -44,6 +44,7 @@ alias tree3='tree -L 3'
 #####################
 alias diff="diff --color=auto"
 alias ip="ip -color=auto"
+
 #######################
 # # Easier navigation #
 #######################
@@ -138,6 +139,7 @@ alias logw='sudo journalctl --vacuum-time=1s'
 ###########
 alias ports='netstat -tulanp'
 alias listening='lsof -P -i -n'
+alias curl='curl --progress-bar'
 
 #######################
 # # External Programs #
