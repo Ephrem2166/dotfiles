@@ -1,3 +1,6 @@
+# Ignore Files
+# --ignore-file="$HOME/.config/ripgrep/ignore"
+
 --max-columns=150
 --max-columns-preview
 
@@ -13,6 +16,15 @@ web:*.{html,css,js}*
 --glob
 !.git/*
 
---colors=line:none
---colors=line:style:bold 
+# colors
+--colors=match:fg:magenta
+--colors=match:style:bold
+--colors=path:fg:blue
+--colors=line:fg:green
+--colors=column:fg:green
+
 --smart-case
+--hyperlink-format=default
+
+# shortened display
+--trim
