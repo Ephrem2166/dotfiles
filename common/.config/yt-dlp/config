@@ -62,3 +62,16 @@
 --metadata-from-title "%(artist)s - %(title)s"
 --metadata-from-title "%(artist)s | %(title)s"
 --add-metadata
+
+# Download Options
+--concurrent-fragments 5
+
+
+# Show progress bar, even in quiet mode
+--progress
+
+# Display progress in console titlebar
+# --console-title
+
+
+--trim-filenames=100
