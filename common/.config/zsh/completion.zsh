@@ -85,8 +85,8 @@ zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 # Don't complete unavailable commands.
 zstyle ':completion:*:(functions|parameters)' ignored-patterns '(_*|.*|-*|+*|autosuggest-*|pre(cmd|exec))'
 zstyle ':completion:*:cd:*' ignored-patterns '(*/)#lost+found'
-zstyle ':completion:*' ignored-patterns \
-    ".git" ".DS_Store" ".localized" "node_modules" "__pycache__"
+# zstyle ':completion:*' ignored-patterns \
+#     ".git" ".DS_Store" ".localized" "node_modules" "__pycache__"
 
 
 # Optimize completion for specific commands
@@ -155,20 +155,20 @@ zstyle ':fzf-tab:*' fzf-bindings 'ctrl-a:toggle-all'
 zstyle ':fzf-tab:*' fzf-min-height 100
 
 
-# On empty buffer, `tab` opens `cd` completion menu, otherwise, select completion.
-_tab-on-empty-buffer() {
-    # source: https://stackoverflow.com/a/29103676/22114136
-    if [[ -z "$BUFFER" && "$CONTEXT" == "start" ]]; then
-        BUFFER="cd "
-        export CURSOR=3
-        zle list-choices # open completion
-    else
-        zle menu-select # select completion (w/o zsh-autocomplete use `zle expand-or-complete`)
-    fi
-}
-zle -N _tab-on-empty-buffer
-bindkey '^I' _tab-on-empty-buffer
+# FIXME: On empty buffer, `tab` opens `cd` completion menu, otherwise, select completion.
+# _tab-on-empty-buffer() {
+#     # source: https://stackoverflow.com/a/29103676/22114136
+#     if [[ -z "$BUFFER" && "$CONTEXT" == "start" ]]; then
+#         BUFFER="cd "
+#         export CURSOR=3
+#         zle list-choices # open completion
+#     else
+#         zle menu-select # select completion (w/o zsh-autocomplete use `zle expand-or-complete`)
+#     fi
+# }
+# zle -N _tab-on-empty-buffer
+# bindkey '^I' _tab-on-empty-buffer
 
 
 # do not save in public dotfile repo
-export ZSH_COMPDUMP="$HOME/.local/share/zsh/zcompdump"
+# export ZSH_COMPDUMP="$HOME/.local/share/zsh/zcompdump"
