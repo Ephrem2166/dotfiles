@@ -2,6 +2,7 @@ return {
     "stevearc/conform.nvim",
     opts = {
         formatters_by_ft = {
+            bash = { "shfmt" },
             c = { "clang-format" },
             cpp = { "clang-format" },
             css = { "prettierd", "prettier" },
