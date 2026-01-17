@@ -321,5 +321,20 @@
   (setq nano-font-size 14)
   )
 
+;;; Catppuccin Theme
+(use-package catppuccin-theme
+  :ensure t
+  :defer t
+  :config
+  (setq catppuccin-flavor 'mocha) ;; options: 'frappe latte, 'macchiato, or 'mocha
+  (defun my/catppuccin-hack (_)
+    "A catppuccin hack to make sure everything is loaded"
+    (catppuccin-reload))
+  (add-hook 'after-init-hook (lambda ()
+                               (run-with-timer 0.3 nil
+                                               (lambda ()(my/catppuccin-hack nil)))))
+  (add-hook 'after-make-frame-functions 'my/catppuccin-hack)
+  )
+
 (provide 'ef-themes)
 ;;; ef-themes.el ends here

@@ -339,12 +339,18 @@
         '(
           (bash "https://github.com/tree-sitter/tree-sitter-bash")
           (c . ("https://github.com/tree-sitter/tree-sitter-c"))
+          (cmake           . ("https://github.com/uyha/tree-sitter-cmake"))
           (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp"))
           (css "https://github.com/tree-sitter/tree-sitter-css")
+          (dockerfile      . ("https://github.com/camdencheek/tree-sitter-dockerfile"))
           (elisp "https://github.com/Wilfred/tree-sitter-elisp")
           (html . ("https://github.com/tree-sitter/tree-sitter-html"))
+          (java            . ("https://github.com/tree-sitter/tree-sitter-java"))
           (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
-          (lua . ("https://github.com/Azganoth/tree-sitter-lua"))
+          (json            . ("https://github.com/tree-sitter/tree-sitter-json"))
+          (latex           . ("https://github.com/latex-lsp/tree-sitter-latex"))
+          ;; (lua . ("https://github.com/Azganoth/tree-sitter-lua"))
+          (lua             . ("https://github.com/tree-sitter-grammars/tree-sitter-lua"))
           (json "https://github.com/tree-sitter/tree-sitter-json")
           (make . ("https://github.com/alemuller/tree-sitter-make"))
           ;; (markdown "https://github.com/ikatyang/tree-sitter-markdown")
@@ -355,7 +361,7 @@
           (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
           (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
   :config
-  (dolist (lang '(bash c cpp elisp html javascript json lua make yaml css python toml))
+  (dolist (lang '(bash c cmake cpp elisp html javascript json lua make yaml css python toml))
     (unless (treesit-language-available-p lang)
       (treesit-install-language-grammar lang)))
   (setq major-mode-remap-alist

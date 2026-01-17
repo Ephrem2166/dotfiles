@@ -43,6 +43,7 @@
 ;;; Docker
 (use-package dockerfile-mode
   :ensure t
+  :defer t
   :mode "Dockerfile\\'")
 
 (use-package docker-compose-mode

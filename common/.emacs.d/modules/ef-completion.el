@@ -32,8 +32,9 @@
   (defun my/eglot-capf ()
     (setq-local completion-at-point-functions
                 (cons (cape-capf-super
-                       #'cape-file
                        #'eglot-completion-at-point
+                       #'tempel-expand
+                       #'cape-file
                        #'tempel-complete)
                       completion-at-point-functions)))
   (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
@@ -116,7 +117,6 @@ Also adds `cape-file' as a fallback."
                   cape-file)
                 cape-dabbrev-min-length 5))
   (add-hook 'emacs-lisp-mode #'my/emacs-lisp-capf)
-
   ;; Org Mode Setup
   (defun my/org-mode-setup-capf ()
     "Configure CAPFs for Org buffer"
