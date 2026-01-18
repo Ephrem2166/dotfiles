@@ -1,4 +1,4 @@
-# Ignore Files
+# FIXME: Ignore Files
 # --ignore-file="$HOME/.config/ripgrep/ignore"
 
 --max-columns=150

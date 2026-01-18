@@ -85,3 +85,6 @@ setopt GLOB_DOTS
 
 # Sort numeric filenames numerically, instead of lexicographically.
 setopt NUMERIC_GLOB_SORT
+
+# Append trailing / to filename expansion when they match a directory
+setopt MARK_DIRS
