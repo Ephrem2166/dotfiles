@@ -314,7 +314,7 @@ function which { # colorized & showing all
 
 
 # Better Man
-bman ()
+_man ()
 {
     env \
         LESS_TERMCAP_mb=$(tput bold; tput setaf 6) \
@@ -330,4 +330,16 @@ bman ()
         LESS_TERMCAP_ZO=$(tput ssupm) \
         LESS_TERMCAP_ZW=$(tput rsupm) \
         man "$@"
+}
+
+# Base 64 Encode and Decode
+function b64e() {
+    echo -n "$1" | base64 | wl-copy
+    wl-paste
+    echo >&2 'Copied to clipboard.'
+}
+
+function b64d() {
+    echo -n "$1" | base64 --decode | wl-copy
+    wl-paste
 }
