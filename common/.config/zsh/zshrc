@@ -28,6 +28,9 @@ export VISUAL=nvim
 export LANG=en_US.UTF-8
 export SUDO_EDITOR=nvim
 
+# Configure the time format for `ls` to display dates as "YYYY-MM-DD Day HH:MM".
+export TIME_STYLE=+"%Y-%m-%d %a %H:%M"
+
 # External Programs
 # Oh My Zsh
 # Install Oh My Zsh!

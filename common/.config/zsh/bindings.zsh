@@ -28,3 +28,15 @@ bindkey '^H' backward-kill-word
 
 # Ctrl+Delete to delete next word
 bindkey '^[[3;5~' kill-word
+
+# C-M-u: Move to parent directory.
+up-directory() {
+  local count=${1:-1}
+  while ((count > 0)); do
+    cd ..
+    ((count--))
+  done
+  zle reset-prompt
+}
+zle -N up-directory
+bindkey '\e\C-u' up-directory
