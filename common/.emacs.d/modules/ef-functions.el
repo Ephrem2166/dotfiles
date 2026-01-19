@@ -3004,16 +3004,6 @@ ARG is passed to `kill-line' and function `kill-whole-line'."
         (beginning-of-line-text)))))
 
 
-;;; KILL BUFFERS
-(defun my/kill-some-file-buffers ()
-  "Kill some buffers associated with files."
-  (interactive)
-
-  (let ((file-buffers (seq-filter #'buffer-file-name (buffer-list))))
-
-    (kill-some-buffers file-buffers)))
-
-
 
 
 ;;; End Here
