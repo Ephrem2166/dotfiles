@@ -1128,7 +1128,12 @@ Intended to be added to `isearch-mode-hook'."
   :config
   (quiet! (recentf-mode 1))
   (setq recentf-exclude
-        '("\\.?cache" ".cask" "url" "COMMIT_EDITMSG\\'" "bookmarks"
+        '("\\.?cache"
+          "~$"
+          ".cask"
+          "url"
+          "COMMIT_EDITMSG\\'"
+          "bookmarks"
           "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
           "\\.?ido\\.last$" "\\.revive$" "/G?TAGS$" "/.elfeed/"
           "^/tmp/" "^/var/folders/.+$" "^/ssh:" "/persp-confs/"
@@ -1139,17 +1144,6 @@ Intended to be added to `isearch-mode-hook'."
   ;; (setq recentf-auto-cleanup (if (daemonp) 300))
   ;; (add-hook 'kill-emacs-hook #'my/recentf-cleanup)
   (setq recentf-save-file (concat user-emacs-directory "etc/recentf"))
-  ;; Remove non-existent files from the recent files list automatically.
-  ;; (defun my/recentf-cleanup ()
-  ;;   "Clean up recentf list by removing non-existent files."
-  ;;   (interactive)
-  ;;   (setq recentf-list (cl-remove-if-not 'file-exists-p recentf-list))
-  ;;   (recentf-cleanup))
-
-
-  ;; Advice recentf-load-list to perform cleanup after loading the recentf
-  ;; list.
-  ;; (advice-add 'recentf-load-list :after #'my/recentf-cleanup)
   ;; Anything in runtime folders
   (add-to-list 'recentf-exclude
                (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")
@@ -1161,6 +1155,15 @@ Intended to be added to `isearch-mode-hook'."
   ;;     (recentf-save-list))
   ;;   )
   ;; (run-at-time 60 (* 5 60) #'my/recentf-quiet)
+  ;; Remove non-existent files from the recent files list automatically.
+  (defun my/recentf-cleanup ()
+    "Clean up recentf list by removing non-existent files."
+    (interactive)
+    (setq recentf-list (cl-remove-if-not 'file-exists-p recentf-list))
+    (recentf-cleanup))
+  ;; Advice recentf-load-list to perform cleanup after loading the recentf
+  ;; list.
+  (advice-add 'recentf-load-list :after #'my/recentf-cleanup)
   ;; For perfromance
   (add-to-list 'recentf-filename-handlers #'substring-no-properties)
   (advice-add #'recentf-load-list :around #'doom-shut-up-a)
