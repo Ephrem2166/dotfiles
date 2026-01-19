@@ -343,3 +343,16 @@ function b64d() {
     echo -n "$1" | base64 --decode | wl-copy
     wl-paste
 }
+
+# Function to add a directory to PATH if it's not already included.
+add_to_path() {
+    local dir="$1"
+    if [ -d "$dir" ] && [[ ":$PATH:" != *":$dir:"* ]]; then
+        export PATH="$dir:$PATH"
+    fi
+}
+
+# Command History Search with Grep and FZF
+hgrep() {
+    history | grep -i --color=auto "$@" | fzf
+}

@@ -141,6 +141,16 @@ alias ports='netstat -tulanp'
 alias listening='lsof -P -i -n'
 alias curl='curl --progress-bar'
 
+
+##########
+# Others #
+##########
+# Display the contents of $PATH with each directory separated by a newline
+# character.
+alias path='echo "$PATH" | tr ":" "\n"'
+
+
+
 #######################
 # # External Programs #
 #######################
