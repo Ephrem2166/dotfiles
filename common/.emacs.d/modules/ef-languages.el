@@ -106,6 +106,7 @@
   :preface
   (defun fundamental-mode-setup ()
     (hl-line-mode t)
+    (display-line-numbers-mode t)
     )
   )
 

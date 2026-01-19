@@ -2955,6 +2955,22 @@ SYMBOL is as in `xref-find-definitions'."
 (global-set-key (kbd "<f1>") #'my/describe-elisp-symbol-at-point)
 
 
+
+;;; List available fonts
+(defun my/list-available-fonts ()
+  "Display a list of available fonts in a new buffer."
+  (interactive)
+  (let ((font-list (sort (font-family-list) 'string<))
+        (buffer-name "*Available Fonts*"))
+    (with-output-to-temp-buffer buffer-name
+      (with-current-buffer buffer-name
+        (dolist (font font-list)
+          (insert font "\n"))
+        (special-mode)))
+    (pop-to-buffer buffer-name)))
+
+
+;;; End Here
 (provide 'ef-functions)
 
 ;;; ef-functions.el ends here

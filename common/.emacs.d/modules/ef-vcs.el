@@ -76,6 +76,10 @@
   (magit-bury-buffer-function #'magit-restore-window-configuration)
   (magit-refs-show-commit-count 'all)
   ;; (magit-refresh-status-buffer nil)
+  (magit-repository-directories '(
+                                  ("~/dotfiles/" . 0)
+                                  ))
+  (magit-bury-buffer-function 'magit-mode-quit-window)
   :config
   (setq transient-default-level 5)
   (setq magit-diff-refine-hunk t)
