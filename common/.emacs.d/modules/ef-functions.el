@@ -2970,6 +2970,52 @@ SYMBOL is as in `xref-find-definitions'."
     (pop-to-buffer buffer-name)))
 
 
+;;; KILL DWIM
+(defun kill-dwim (&optional arg)
+  "Kill what I mean.
+
+If there's an active region, kill it.
+
+If we're at the (actual) end or (actual) beginning of a line,
+kill the whole line, otherwise kill forward.
+
+If a whole line is killed, move to the beginning of text on the
+next line.
+
+ARG is passed to `kill-line' and function `kill-whole-line'."
+  (interactive "P")
+
+  (if (region-active-p)
+      (kill-region nil nil t)
+    (let ((p-before (point))
+          (p-end nil)
+          (p-beg nil))
+
+      (save-excursion
+        (end-of-line)
+        (setq p-end (point))
+
+        (beginning-of-line)
+        (setq p-beg (point)))
+
+      (if (and (/= p-before p-beg) (/= p-before p-end))
+          (kill-line arg)
+        (kill-whole-line arg)
+        (beginning-of-line-text)))))
+
+
+;;; KILL BUFFERS
+(defun my/kill-some-file-buffers ()
+  "Kill some buffers associated with files."
+  (interactive)
+
+  (let ((file-buffers (seq-filter #'buffer-file-name (buffer-list))))
+
+    (kill-some-buffers file-buffers)))
+
+
+
+
 ;;; End Here
 (provide 'ef-functions)
 

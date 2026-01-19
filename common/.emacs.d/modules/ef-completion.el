@@ -185,12 +185,23 @@ Also adds `cape-file' as a fallback."
               (setq-local completion-styles '(basic)
                           completion-category-overrides nil
                           completion-category-defaults nil)))
-  ;; Completing in the minibuffer
-  (setq global-corfu-minibuffer
-        (lambda ()
-          (not (or (bound-and-true-p mct--active)
-                   (bound-and-true-p vertico--input)
-                   (eq (current-local-map) read-passwd-map)))))
+  ;; FIXME: Completing in the minibuffer (Annoyance)
+  ;; (setq global-corfu-minibuffer
+  ;;       (lambda ()
+  ;;         (not (or (bound-and-true-p mct--active)
+  ;;                  (bound-and-true-p vertico--input)
+  ;;                  (eq (current-local-map) read-passwd-map)))))
+  :preface
+  (defun my/corfu-enable-in-minibuffer ()
+    "Enable Corfu in the minibuffer if `completion-at-point' is bound.
+
+Auto-completion is disabled."
+    (when (where-is-internal #'completion-at-point (list (current-local-map)))
+
+      (setq-local corfu-auto nil)
+
+      (corfu-mode 1)))
+  (add-hook 'minibuffer-setup-hook #'my/corfu-enable-in-minibuffer)
   :init
   (global-corfu-mode)
   (corfu-history-mode)
