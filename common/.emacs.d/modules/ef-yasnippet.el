@@ -19,6 +19,13 @@
                      eval-expression-minibuffer-setup)
           . yas-minor-mode))
   :config
+  ;; Integrate YASnippet with `hippie-expand'.
+  (with-eval-after-load 'yasnippet
+
+    (add-to-list 'hippie-expand-try-functions-list
+                 'yas-hippie-try-expand))
+                                        ; Makes more sense when placed at the
+                                        ; top of the list.
   ;; (setq yas-trigger-symbol "<tab>")
   (setq yas-wrap-around-region t)
   (setq yas-verbosity 1)
@@ -26,7 +33,6 @@
   ;; (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "etc/snippets/"))
   ;; to load Yasnippet on a per bxuffer basis
   (yas-reload-all)
-  :delight "Y"
   )
 ;;; Yasnippet snippets
 ;; Disabled because I create my own snippets
