@@ -60,5 +60,3 @@ vim.opt.fillchars = {
     foldclose = "▶",
     foldopen = "▼",
 }
-
--- Theme
