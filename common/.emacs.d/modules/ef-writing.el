@@ -14,6 +14,12 @@
          ((org-mode text-mode) . flyspell-mode)
          )
   :config
+
+  ;; Don't consider that a word repeated twice is an error.
+  (setq flyspell-mark-duplication-flag nil)
+
+  ;; Dash character (`-') is considered as a word delimiter.
+  (setq-default flyspell-consider-dash-as-word-delimiter-flag t)
   (setq ispell-program-name (s-trim (shell-command-to-string "which aspell")))
   (setq ispell-dictionary "en_US")
   (eval-after-load "flyspell"

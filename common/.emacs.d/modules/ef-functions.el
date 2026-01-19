@@ -2802,6 +2802,30 @@ Optionally RESET the type when called with `universal-argument'."
       (setq-local cursor-type type))))
 
 
+;; Cursor customization based on buffer state.
+(defun my/update-cursor-appearance ()
+  "Update cursor color and shape based on buffer state (read-only, overwrite, or insert)."
+  (let* ((is-light-theme (eq (frame-parameter nil 'background-mode) 'light))
+         (cursor-colors `((read-only . "purple1")
+                          (overwrite . "#7F7F7F")
+                          (default . ,(if is-light-theme "black" "white"))))
+         current-color
+         current-type)
+    (setq current-color
+          (cond (buffer-read-only
+                 (cdr (assoc 'read-only cursor-colors)))
+                (overwrite-mode
+                 (cdr (assoc 'overwrite cursor-colors)))
+                (t
+                 (cdr (assoc 'default cursor-colors)))))
+    (setq current-type (if overwrite-mode 'box 'bar))
+    (when (color-defined-p current-color)
+      (set-cursor-color current-color))
+    (setq cursor-type current-type)))
+
+;; Update cursor on every command.
+(add-hook 'post-command-hook #'my/update-cursor-appearance)
+
 ;;; Better Kill DWIM
 (defun my/kill-dwim (&optional arg)
   "Kill what I mean.
@@ -2907,6 +2931,28 @@ SYMBOL is as in `xref-find-definitions'."
     (when selected-file
       (insert (format "[[file:%s]]\n" selected-file))
       (org-display-inline-images))))
+
+
+;;; Avoid the description of all minor modes.
+(defun my/describe-major-mode ()
+  "Describe only `major-mode'."
+  (interactive)
+  (describe-function major-mode))
+
+;;; Use F1 key to lookup info about symbol at point
+(defun my/describe-elisp-symbol-at-point ()
+  "Get help for the symbol at point."
+  (interactive)
+  (let ((sym (intern-soft (current-word))))
+    (unless
+        (cond ((null sym))
+              ((not (eq t (help-function-arglist sym)))
+               (describe-function sym))
+              ((boundp sym)
+               (describe-variable sym)))
+      (message "[nothing]"))))
+
+(global-set-key (kbd "<f1>") #'my/describe-elisp-symbol-at-point)
 
 
 (provide 'ef-functions)
