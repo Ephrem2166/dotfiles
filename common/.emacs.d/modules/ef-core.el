@@ -40,7 +40,21 @@
   (save-abbrevs 'silently)
   (abbrev-suggest t)
   (abbrev-suggest-hint-threshold 2)
-  (setq-default abbrev-mode t))
+  (setq-default abbrev-mode t)
+  :config
+  (define-abbrev-table 'global-abbrev-table
+    '(
+
+      ("todo"  "👷 TODO:")
+      ("fixme" "🔥 FIXME:")
+      ("note"  "📎 NOTE:")
+      ("hack"  "👾 HACK:")
+
+      )
+    )
+
+  )
+
 
 ;;; Auto-revert
 ;;;; Auto-Revert Mode is a minor mode that affects only the current
@@ -725,10 +739,14 @@
             (mode . emacs-lisp-mode))
            ("Dired"
             (mode . dired-mode))
+           ("help"    (or
+                       (name . "^\\*Help\\*$")
+                       (name . "^\\*info\\*$")))
            ("Org"
             (or
              (name . "^\\*Calendar\\*$")
              (name . "^\\*Org Agenda")
+             (name . "^\\*Org Src")
              (name . "^ \\*Agenda")
              (mode . org-agenda-mode)
              (mode . org-mode)))
@@ -736,6 +754,9 @@
             (or
              (name . "^\\*scratch\\*$")
              (name . "^\\*Messages\\*$")
+             (name . "^\\*Warnings\\*$")
+             (name . "^\\*Shell Command Output\\*$")
+             (name . "^\\*Async-native-compile-log\\*$")
              (name . "^\\*\\(Customize\\|Help\\)")
              (name . "\\*\\(Echo\\|Minibuf\\)")))
 
@@ -763,6 +784,9 @@
                        (mode . erlang-mode)))
 
            )))
+  (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
 
   )
 
