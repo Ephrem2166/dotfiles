@@ -601,12 +601,23 @@
 ;;; Hideshow
 (use-package hideshow
   :ensure nil
+  :hook (prog-mode . hs-minor-mode)
+  :bind ("C-c C-h" . my/hideshow-toggle)
   :config
   ;; Unfold code when searching
   (setq hs-isearch-open t)
   (setq hs-hide-comments-when-hiding-all nil)
-  (setq hs-set-up-overlay #'hideshow-set-up-overlay-fn)
-  (add-hook 'prog-mode-hook  #'hs-minor-mode)
+  ;; (setq hs-set-up-overlay #'hideshow-set-up-overlay-fn)
+  ;; (add-hook 'prog-mode-hook  #'hs-minor-mode)
+  :preface
+  (defun my/hideshow-toggle (column)
+"Toggle hiding/showing blocks via hs-mode."
+    (interactive "P")
+    (condition-case nil
+        (hs-toggle-hiding)
+      (error (hs-show-all))
+      )
+    )
   )
 
 ;;; Hippie Expand

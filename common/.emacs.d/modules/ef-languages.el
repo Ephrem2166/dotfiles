@@ -33,7 +33,14 @@
 ;; Simple major mode for editing conf/ini/properties files
 (use-package conf-mode
   :ensure nil
-  :mode ("\\*.conf\\'" "\\config\\'" "\\.env\\..*\\'" "\\.env\\'"))
+  :mode ("\\*.conf\\'" "\\config\\'" "\\.env\\..*\\'" "\\.env\\'")
+  :hook (conf-mode . conf-mode-setup)
+  :preface
+  (defun conf-mode-setup()
+    (run-hooks 'prog-mode-hook)
+    (setq-local tab-width 4)
+    )
+  )
 
 ;;; CSS
 (use-package css-ts-mode
@@ -92,6 +99,16 @@
 ;;          (html-mode . emmet-mode)
 ;;          (css-mode . emmet-mode)))
 
+;;; Fundamental Mode
+(use-package fundamental-mode
+  :ensure nil
+  :hook (fundamental-mode . fundamental-mode-setup)
+  :preface
+  (defun fundamental-mode-setup ()
+    (hl-line-mode t)
+    )
+  )
+
 ;;; Git Mode
 (use-package git-modes
   :ensure t
@@ -131,22 +148,29 @@
   :hook (emacs-lisp-mode . lispy-mode))
 
 ;;; LUA
-(use-package lua-mode
-  :ensure t
-  :mode ("\\.lua\\'" . lua-mode)
-  ;; :custom
-  ;; (lua-indent-level 2)
-  ;; (lua-indent-string-contents t)
-  ;; :config
-  ;; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-  ;; (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
-  )
+(when (fboundp 'lua-ts-mode)
+  (use-package lua-ts-mode
+    :ensure nil
+    :mode ("\\*.lua$\\'")
+    :custom
+    (lua-ts-indent-offset 2)
+    )
+  ;; Otherwise use lua-mode
+  (use-package lua-mode
+    :ensure t
+    :mode ("\\.lua\\'" . lua-mode)
+    ;; :custom
+    ;; (lua-indent-level 2)
+    ;; (lua-indent-string-contents t)
+    ;; :config
+    ;; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+    ;; (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+    )
 
-;; (use-package lua-ts-mode
-;;   :ensure nil
-;;   :defer t
-;;   :mode ("\\*.lua$\\'")
-;;   )
+
+
+
+  )
 
 
 
@@ -239,20 +263,34 @@
 ;;   )
 
 ;;; Shell Mode
-(use-package sh-mode
+(use-package sh-script
   :ensure nil
   :defer t
   :hook (sh-mode . flymake-mode)
   :mode ("\\.\\(sh\\|bash\\|zsh\\|zsh-theme\\)\\'" . sh-mode)
   :mode
-  (("bashrc$" . sh-mode)
-   ("bash_profile$" . sh-mode)
-   ("bash_aliases$" . sh-mode)
-   ("bash_local$" . sh-mode)
-   ("bash_completion$" . sh-mode)
-   ("\\.zsh" . sh-mode)
-   ("zshrc" . sh-mode)
-   ("runcoms/[a-zA-Z]+$" . sh-mode)))
+  ("/\\.env\\'" . sh-mode)
+  ("/\\.env\\." . sh-mode)
+  ("/\\.envrc\\'" . sh-mode)
+  ("/\\.envrc\\." . sh-mode)
+  ("\\.zsh\\'" . sh-mode)
+  ("/zshenv\\'" . sh-mode)
+  ("//zshrc\\'" . sh-mode)
+  ("\\.tmux\\'" . sh-mode)
+  ("\\.tmuxsh\\'" . sh-mode)
+  ("\\.tmuxtheme\\'" . sh-mode)
+  ("bashrc$" . sh-mode)
+  ("bash_profile$" . sh-mode)
+  ("bash_aliases$" . sh-mode)
+  ("bash_local$" . sh-mode)
+  ("bash_completion$" . sh-mode)
+  ("runcoms/[a-zA-Z]+$" . sh-mode)
+  :custom
+  (sh-basic-offset 2)
+  (sh-indentation 2)
+  (sh-indent-after-continuation 'always)
+
+  )
 
 ;;; TOML
 (use-package toml-ts-mode
@@ -265,6 +303,12 @@
   :mode "\\.toml\\'"
   :mode "/\\(Cargo.lock\\|\\.cargo/config\\)\\'"
   )
+
+(use-package conf-toml-mode
+  :ensure nil
+  :mode "\\.toml\\'" "Cargo\\.lock\\'"
+  :hook
+  (conf-toml-mode . prog-mode))
 
 ;;; Vimrc
 (use-package vimrc-mode
@@ -308,10 +352,15 @@
 ;;; YAML
 (use-package yaml-ts-mode
   :ensure nil
-  :mode
-  ("\\.yml\\'" "\\.yaml\\'")
-
+  :mode "\\.yml\\'" "\\.yaml\\'"
+:mode "\\.ya?ml\\'"
+  :hook (yaml-ts-mode . yaml-mode-setup)
+  :preface
+  (defun yaml-mode-setup ()
+    (rainbow-mode 1)
+    (display-line-numbers-mode)
+    (run-hooks 'prog-mode-hook))
   )
-
+;;; end
 (provide 'ef-languages)
 ;;; ef-languages.el ends here

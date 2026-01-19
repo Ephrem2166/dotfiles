@@ -298,10 +298,17 @@
 ;;; Prog Mode
 (use-package prog-mode
   :ensure nil
-  :hook (
-         (prog-mode . prettify-symbols-mode)
-
-         ) )
+  :hook (prog-mode . prog-mode-setup)
+  :preface
+  (defun prog-mode-setup ()
+    (setq-local fill-column 80)
+    (prettify-symbols-mode t)
+    (hl-line-mode t)
+    (whitespace-mode t)
+    )
+  :init
+  (add-to-list 'safe-local-variable-values '(fill-column . 120))
+  )
 
 ;;; Sh-Script
 (use-package sh-script
