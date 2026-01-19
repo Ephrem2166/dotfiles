@@ -34,7 +34,8 @@ zstyle ':completion:*:*:-command-:*:*' group-order alias functions builtins comm
 # zstyle ':completion:*' m# Only display some tags for the command cd
 zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directorieeatcher-list 'm:{a-zA-Z}={A-Za-z}'
 # Case insensitive and partial completion
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*' 'l:|=* r:|=*'
 
 
 # statusline for many hits
