@@ -42,3 +42,4 @@
 (require 'ef-experiment)
 ;; (require 'ef-general)
 ;; (require 'ef-company)
+;; (require 'ef-lsp)
