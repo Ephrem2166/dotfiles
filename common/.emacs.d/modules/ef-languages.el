@@ -207,7 +207,7 @@
   :mode (("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :config
-  (require 'lsp-marksman)
+  ;; (require 'lsp-marksman)
   (setopt markdown-indent-on-enter 'indent-and-new-item)
   (setopt markdown-hide-markup t)
   (setopt markdown-enable-math t)
