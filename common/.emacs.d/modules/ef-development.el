@@ -128,10 +128,11 @@
      '((html-ts-mode html-mode) .  ("vscode-html-language-server" "--stdio"))
 
      ))
+  ;; Don't log every event
+  (fset #'jsonrpc--log-event #'ignore)
   :init
   (setq completion-category-overrides '((eglot (styles orderless))))
 
-  (fset #'jsonrpc--log-event #'ignore)
 
   (defun my/eglot-setup ()
     "Setup eglot mode with specific exclusions."
@@ -345,6 +346,9 @@
           (shell-script-mode . bash-ts-mode)
           (toml-mode . toml-ts-mode)
           (yaml-mode . yaml-ts-mode)))
+  ;; Alternative
+  (push '(css-mode . css-ts-mode) major-mode-remap-alist)
+  (push '(typescript-mode . tsx-ts-mode) major-mode-remap-alist)
   )
 
 (provide 'ef-development)

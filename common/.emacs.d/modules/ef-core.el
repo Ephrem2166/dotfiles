@@ -1561,7 +1561,7 @@ to the IFF buffer or  the files listed."
   )
 
 
-;;; FIXME Window
+;;; FIXME: Window
 (use-package window
   :ensure nil
   :defer t
@@ -1591,7 +1591,8 @@ to the IFF buffer or  the files listed."
            (side . right)
            (slot . 0))
           ("\\*\\(Ibuffer\\)\\*"
-           (display-buffer-in-side-window)
+           ;; (display-buffer-in-side-window)
+           (display-buffer-in-new-tab)
            (window-width . 100)
            (side . right)
            (slot . 1))
