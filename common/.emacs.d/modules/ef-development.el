@@ -61,7 +61,7 @@
 ;; Eglot (built-in client for the language server protocol)
 (use-package eglot
   :ensure nil
-  :disabled
+  ;; :disabled
   ;; :defer t
   :bind (
          ("C-c e i" . eglot-find-implementation)

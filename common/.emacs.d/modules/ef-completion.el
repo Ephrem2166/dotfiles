@@ -573,5 +573,7 @@ Auto-completion is disabled."
 
 
 
+
+;;; Ends here
 (provide 'ef-completion)
 ;;; ef-completion.el ends here
