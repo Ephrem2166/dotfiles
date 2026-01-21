@@ -152,7 +152,7 @@
 (when (fboundp 'lua-ts-mode)
   (use-package lua-ts-mode
     :ensure nil
-    :mode ("\\*.lua$\\'")
+    :mode ("\\.lua\\'")
     :custom
     (lua-ts-indent-offset 2)
     )
@@ -200,14 +200,13 @@
   :defer t
   :hook (
          (markdown-mode . visual-line-mode)
-         (markdown-mode . lsp)
          (markdown-mode . my/markdown-headers)
          )
 
   :mode (("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :config
-  (require 'lsp-marksman)
+  ;; (require 'lsp-marksman)
   (setopt markdown-indent-on-enter 'indent-and-new-item)
   (setopt markdown-hide-markup t)
   (setopt markdown-enable-math t)
@@ -262,6 +261,10 @@
 ;;   (rust-indent-offset 4)
 ;;   (rust-format-on-save t)
 ;;   )
+
+;;; Rusty Object Notation (RON)
+(use-package ron-mode
+  :ensure t)
 
 ;;; Shell Mode
 (use-package sh-script
