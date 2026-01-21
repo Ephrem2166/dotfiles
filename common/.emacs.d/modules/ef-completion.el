@@ -67,14 +67,22 @@
 
   (add-hook 'emacs-lisp-mode #'ef-elisp-setup)
 
-  ;; Tempel
+  ;; Eglot Tempel
   (defun init-cape-eglot-capf ()
     (setq-local completion-at-point-functions
                 (list #'cape-file
                       (cape-capf-super (cape-capf-buster #'eglot-completion-at-point #'string-prefix-p)
                                        :with #'tempel-complete))))
   (add-hook 'eglot-managed-mode #'init-cape-eglot-capf)
-
+  ;; Eglot Capf
+  (defun my/eglot-capf ()
+    (setq-local completion-at-point-functions
+                (cons (cape-capf-super
+                       #'cape-file
+                       #'eglot-completion-at-point
+                       #'tempel-complete)
+                      completion-at-point-functions)))
+  (add-hook 'eglot-managed-mode #'my/eglot-capf)
   ;; Writing
   (defun ef-writing-capf ()
     (setq-local completion-at-point-functions
@@ -208,7 +216,9 @@ Auto-completion is disabled."
   ;; (corfu-popupinfo-mode)
   (corfu-indexed-mode)
   :bind (:map corfu-map
-              ("<tab>" . corfu-complete)
+              ("<tab>" . corfu-next)
+              ("RET" . corfu-complete)
+              ;; ("<tab>" . corfu-complete)
               ("SPC" . corfu-insert-separator)
               ("M-d" . corfu-info-documentation)
               ("<esc>" . corfu-quit)

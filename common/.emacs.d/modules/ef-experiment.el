@@ -1021,6 +1021,29 @@ buffer will be recentered to the line at point."
 ;;
 ;;   )
 
+;;; Switch between buffers with the same major `mode'
+(defun my/switch-buffer-same-major-mode ()
+  "Switch buffer among those with the same major mode."
+  (interactive)
+  (switch-to-buffer
+   (completing-read
+    "Buffer: "
+    (mapcar #'buffer-name
+            (cl-remove-if-not (lambda (buf)
+                                (provided-mode-derived-p
+                                 (buffer-local-value 'major-mode buf)
+                                 major-mode))
+                              (buffer-list))))))
+
+
+;;; Insert Content to a file
+(defun my/html-empty-template ()
+  "Insert an empty HTML template at point."
+  (interactive)
+  (insert-file-contents
+   (locate-user-emacs-file "/home/ephrem/html-empty-template.html")))
+
+
 
 (provide 'ef-experiment)
 
