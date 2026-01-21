@@ -61,8 +61,8 @@
 ;; Eglot (built-in client for the language server protocol)
 (use-package eglot
   :ensure nil
-  ;; :disabled
-  :defer t
+  :disabled
+  ;; :defer t
   :bind (
          ("C-c e i" . eglot-find-implementation)
          ("C-c e e" . eglot)
@@ -74,25 +74,25 @@
          ("C-c e f" . eglot-format-buffer)
          ("C-c e h" . eglot-inlay-hints-mode)
          )
-  :hook (
-         ;;        (bash-ts-mode . eglot-ensure)
-         ;;        (c++-ts-mode . eglot-ensure)
-         ;;        (c-ts-mode . eglot-ensure)
-         (html-ts-mode . eglot-ensure)
-         ;;        ;; (lua-mode . eglot-ensure)
-         ;;        (lua-ts-mode . eglot-ensure)
-         ;;        (sh-mode . eglot-ensure)
-         (markdown-mode . eglot-ensure)
-         ;;        (python-ts-mode . eglot-ensure)
-         ;;        (js-ts-mode . eglot-ensure)
-         ;;        (typescript-ts-mode . eglot-ensure)
-         ;;        (rust-ts-mode . eglot-ensure)
-         ;;        (css-ts-mode . eglot-ensure)
-         ;;        (toml-ts-mode . eglot-ensure)
-         ;;        (yaml-ts-mode . eglot-ensure)
-         ;;        (web-mode . eglot-ensure)
-         ;;        (before-save . eglot-format-buffer)
-         )
+  ;; :hook (
+  ;;        (bash-ts-mode . eglot-ensure)
+  ;;        (c++-ts-mode . eglot-ensure)
+  ;;        (c-ts-mode . eglot-ensure)
+  ;; (html-ts-mode . eglot-ensure)
+  ;;        ;; (lua-mode . eglot-ensure)
+  ;;        (lua-ts-mode . eglot-ensure)
+  ;;        (sh-mode . eglot-ensure)
+  ;; (markdown-mode . eglot-ensure)
+  ;;        (python-ts-mode . eglot-ensure)
+  ;;        (js-ts-mode . eglot-ensure)
+  ;;        (typescript-ts-mode . eglot-ensure)
+  ;;        (rust-ts-mode . eglot-ensure)
+  ;;        (css-ts-mode . eglot-ensure)
+  ;;        (toml-ts-mode . eglot-ensure)
+  ;;        (yaml-ts-mode . eglot-ensure)
+  ;;        (web-mode . eglot-ensure)
+  ;;        (before-save . eglot-format-buffer)
+  ;; )
   :config
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   ;; use eglot-server-programs variable to find out LSP
@@ -109,14 +109,25 @@
   ;;   )
 
 
-  (setq eglot-sync-connect 1)
   (setq eglot-autoshutdown t)
+  (setq eglot-sync-connect 1)
   (setq eglot-confirm-server-edits nil)
   (setq eglot-extend-to-xref t)
   (setq eglot-autoreconnect t)
   (setq eglot-stay-out-of '(yasnippet))
   (setq eglot-prefer-plaintext nil)
   (setq jsonrpc-event-hook nil)
+  (setq eglot-events-buffer-config '(:size 0 :format full))
+  (with-eval-after-load 'eglot
+    (add-to-list
+     'eglot-server-programs
+     '(markdown-mode . ("marksman"))))
+  (with-eval-after-load 'eglot
+    (add-to-list
+     'eglot-server-programs
+     '((html-ts-mode html-mode) .  ("vscode-html-language-server" "--stdio"))
+
+     ))
   :init
   (setq completion-category-overrides '((eglot (styles orderless))))
 
@@ -130,19 +141,15 @@
   (add-hook 'prog-mode-hook #'my/eglot-setup)
   ;; Eldoc Integration
   (defun my/eglot-eldoc-setup ()
+    ;; Show flymake diagnostics first
+    (setq eldoc-documentation-functions
+          (cons #'flymake-eldoc-function
+                (remove #'flymake-eldoc-function eldoc-documentation-functions)))
     (setq eldoc-documentation-strategy
           'eldoc-documentation-compose-eagerly))
   (add-hook 'eglot-managed-mode #'my/eglot-eldoc-setup)
-  (with-eval-after-load 'eglot
-    (add-to-list
-     'eglot-server-programs
-     '((html-ts-mode html-mode) .  ("vscode-html-language-server"))
 
-     ))
-  ;; (with-eval-after-load 'eglot
-  ;;   (add-to-list
-  ;;    'eglot-server-programs
-  ;;    '(markdown-mode . ("marksman"))))
+
 
   )
 
