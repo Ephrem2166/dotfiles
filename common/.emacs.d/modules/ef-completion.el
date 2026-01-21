@@ -300,7 +300,7 @@ Auto-completion is disabled."
   (kind-icon-blend-background nil)
   (kind-icon-blend-frac 0.08)
   (kind-icon-default-style
-   '(:padding 0 :stroke 0 :margin 0 :radius 0 :height 0.8 :scale 1.0))
+   '(:padding 0 :stroke 0 :margin 0 :radius 0 :heigh 0.8 :scale 1.0))
   (kind-icon-mapping
    '((array          "a"   :icon "symbol-array"       :face font-lock-type-face              :collection "nerd-fonts-codicons")
      (boolean        "b"   :icon "symbol-boolean"     :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
