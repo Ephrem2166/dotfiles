@@ -62,8 +62,6 @@
 (use-package eglot
   :ensure nil
   ;; :disabled
-  :diminish
-  :preface
   :defer t
   :bind (
          ("C-c e i" . eglot-find-implementation)
@@ -77,21 +75,23 @@
          ("C-c e h" . eglot-inlay-hints-mode)
          )
   :hook (
-         (bash-ts-mode . eglot-ensure)
-         (c++-ts-mode . eglot-ensure)
-         (c-ts-mode . eglot-ensure)
-         (lua-mode . eglot-ensure)
-         (sh-mode . eglot-ensure)
+         ;;        (bash-ts-mode . eglot-ensure)
+         ;;        (c++-ts-mode . eglot-ensure)
+         ;;        (c-ts-mode . eglot-ensure)
+         (html-ts-mode . eglot-ensure)
+         ;;        ;; (lua-mode . eglot-ensure)
+         ;;        (lua-ts-mode . eglot-ensure)
+         ;;        (sh-mode . eglot-ensure)
          (markdown-mode . eglot-ensure)
-         (python-ts-mode . eglot-ensure)
-         (js-ts-mode . eglot-ensure)
-         (typescript-ts-mode . eglot-ensure)
-         (rust-ts-mode . eglot-ensure)
-         (css-ts-mode . eglot-ensure)
-         (toml-ts-mode . eglot-ensure)
-         (yaml-ts-mode . eglot-ensure)
-         (web-mode . eglot-ensure)
-         (before-save . eglot-format-buffer)
+         ;;        (python-ts-mode . eglot-ensure)
+         ;;        (js-ts-mode . eglot-ensure)
+         ;;        (typescript-ts-mode . eglot-ensure)
+         ;;        (rust-ts-mode . eglot-ensure)
+         ;;        (css-ts-mode . eglot-ensure)
+         ;;        (toml-ts-mode . eglot-ensure)
+         ;;        (yaml-ts-mode . eglot-ensure)
+         ;;        (web-mode . eglot-ensure)
+         ;;        (before-save . eglot-format-buffer)
          )
   :config
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
@@ -107,9 +107,8 @@
   ;;   ;; (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("taplo" "--stdio")))
   ;;   ;; (add-to-list 'eglot-server-programs '((lua-mode) . ("stylua")))
   ;;   )
-  (with-eval-after-load 'eglot
-    (add-to-list 'eglot-server-programs
-                 '(lua-ts-mode . ("lua-language-server" "start"))))
+
+
   (setq eglot-sync-connect 1)
   (setq eglot-autoshutdown t)
   (setq eglot-confirm-server-edits nil)
@@ -122,6 +121,29 @@
   (setq completion-category-overrides '((eglot (styles orderless))))
 
   (fset #'jsonrpc--log-event #'ignore)
+
+  (defun my/eglot-setup ()
+    "Setup eglot mode with specific exclusions."
+    (unless (eq major-mode 'emacs-lisp-mode)
+      (eglot-ensure)))
+
+  (add-hook 'prog-mode-hook #'my/eglot-setup)
+  ;; Eldoc Integration
+  (defun my/eglot-eldoc-setup ()
+    (setq eldoc-documentation-strategy
+          'eldoc-documentation-compose-eagerly))
+  (add-hook 'eglot-managed-mode #'my/eglot-eldoc-setup)
+  (with-eval-after-load 'eglot
+    (add-to-list
+     'eglot-server-programs
+     '((html-ts-mode html-mode) .  ("vscode-html-language-server"))
+
+     ))
+  ;; (with-eval-after-load 'eglot
+  ;;   (add-to-list
+  ;;    'eglot-server-programs
+  ;;    '(markdown-mode . ("marksman"))))
+
   )
 
 ;;; Eglot Booster
