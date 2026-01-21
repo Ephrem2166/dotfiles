@@ -58,7 +58,9 @@
   (company-box-doc-delay 1)
 
   :hook
-  (company-mode . company-box-mode))
+  (company-mode . company-box-mode)
+
+  )
 
 ;; little hack function to make company box frame bigger
 (defun ef/company-box-fix-size ()
@@ -69,6 +71,7 @@
                           box-frame
                           :height 180))))
 
+(add-hook 'company-mode #'ef/company-box-fix-size)
 ;;; Company Helper Functions
 ;; Text Mode Expansion
 (defun ef/my-text-mode-hook ()
