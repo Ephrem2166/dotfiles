@@ -5,7 +5,7 @@ return {
 		require("mini.ai").setup()
 		require("mini.align").setup()
 		require("mini.comment").setup()
-		require("mini.completion").setup()
+		-- require("mini.completion").setup()
 		require("mini.extra").setup()
 		require("mini.files").setup()
 		require("mini.hipatterns").setup()
