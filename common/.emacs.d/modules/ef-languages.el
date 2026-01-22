@@ -118,6 +118,11 @@
   )
 
 ;;; TODO HTML
+(use-package html-ts-mode
+  :ensure nil
+  :mode "\\.html\\'" "\\.htm\\'")
+
+
 ;;; JSON
 (use-package json-ts-mode
   :ensure nil
@@ -323,6 +328,7 @@
 ;;; Web Mode
 (use-package web-mode
   :ensure t
+  :disabled
   :mode
   (("\\.phtml\\'" . web-mode)
    ("\\.php\\'" . web-mode)
@@ -333,8 +339,8 @@
    ("\\.erb\\'" . web-mode)
    ("\\.mustache\\'" . web-mode)
    ("\\.djhtml\\'" . web-mode)
-   ("\\.html\\'" . web-mode)
-   ("\\.htm\\'" . web-mode)
+   ;; ("\\.html\\'" . web-mode)
+   ;; ("\\.htm\\'" . web-mode)
    )
   :config
   ;; Indentation
