@@ -7,6 +7,9 @@ map("i", "jj", "<ESC>")
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 map("n", "<leader>q", ":q<cr>", { desc = "Quit File", noremap = true, silent = true })
 map("n", "<leader>qq", ":qa<cr>", { desc = "Quit All Files", noremap = true, silent = true })
+-- Alternative way to exit
+map({ "n", "v", "i" }, "<M-q>", "<cmd>q!<cr>", { desc = "[P]Quit All" })
+
 map("n", "<leader>w", ":w<cr>", { desc = "Write File", noremap = true, silent = true })
 map("n", "<leader>ww", ":wa<cr>", { desc = "Write All Files", noremap = true, silent = true })
 map("n", "<leader>m", ":messages<cr>", { desc = "Show Messages", noremap = true, silent = true })

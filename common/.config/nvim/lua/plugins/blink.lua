@@ -3,7 +3,10 @@ return {
 		"saghen/blink.cmp",
 		-- optional: provides snippets for the snippet source
 		event = { "InsertEnter", "CmdlineEnter" },
-		dependencies = { "rafamadriz/friendly-snippets" },
+		dependencies = {
+			"rafamadriz/friendly-snippets",
+			"xieyonn/blink-cmp-dat-word",
+		},
 
 		-- use a release tag to download pre-built binaries
 		version = "1.*",
@@ -95,7 +98,7 @@ return {
 			-- Default list of enabled providers defined so that you can extend it
 			-- elsewhere in your config, without redefining it, due to `opts_extend`
 			sources = {
-				default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+				default = { "lazydev", "lsp", "path", "snippets", "buffer", "datword" },
 				providers = {
 					buffer = {
 						name = "Buffer",
@@ -167,6 +170,16 @@ return {
 						module = "blink.cmp.sources.snippets",
 						min_keyword_length = 2,
 						score_offset = 85,
+					},
+					datword = {
+						name = "Word",
+						module = "blink-cmp-dat-word",
+						opts = {
+							paths = {
+								-- "path_to_your_words.txt", -- add your owned word files before dictionary.
+								"/usr/share/dict/words", -- This file is included by default on Linux/macOS.
+							},
+						},
 					},
 				},
 			},
