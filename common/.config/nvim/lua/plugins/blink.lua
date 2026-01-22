@@ -28,17 +28,13 @@ return {
 			--
 			-- See :h blink-cmp-config-keymap for defining your own keymap
 			keymap = {
-				-- preset = "default",
-
 				preset = "none",
+				["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+				["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
 				["<CR>"] = { "accept", "fallback" },
-				["<Tab>"] = { "select_next", "fallback" },
-				["<S-Tab>"] = { "select_prev", "fallback" },
-				["<Up>"] = { "select_prev", "fallback" },
-				["<Down>"] = { "select_next", "fallback" },
-				["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
-				["<C-b>"] = { "scroll_documentation_up", "fallback" },
-				["<C-f>"] = { "scroll_documentation_down", "fallback" },
+				["<Esc>"] = { "hide", "fallback" },
+				["<PageUp>"] = { "scroll_documentation_up", "fallback" },
+				["<PageDown>"] = { "scroll_documentation_down", "fallback" },
 			},
 			appearance = {
 				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
@@ -47,10 +43,11 @@ return {
 			},
 			cmdline = {
 				completion = {
-					list = { selection = { auto_insert = false, preselect = true } },
+					list = { selection = { auto_insert = false, preselect = false } },
 					menu = { auto_show = true },
-					ghost_text = { enabled = false },
-				}
+					ghost_text = { enabled = true },
+				},
+
 				keymap = {
 					preset = "inherit",
 				},
@@ -59,11 +56,15 @@ return {
 			completion = {
 				documentation = {
 					auto_show = true,
+					auto_show_delay_ms = 500,
 				},
 				menu = {
-					border = "bold",
-					direction_priority = { "n", "s" },
-					draw = { treesitter = { "lsp" } },
+					auto_show = true,
+					-- border = "bold",
+					-- direction_priority = { "n", "s" },
+					-- draw = { treesitter = { "lsp" } },
+
+					draw = { columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } } },
 					scrollbar = false,
 				},
 				keyword = {
@@ -77,7 +78,10 @@ return {
 					show_on_trigger_character = true,
 					show_on_blocked_trigger_characters = { " ", "\n", "\t" },
 				},
-				list = { selection = { preselect = true, auto_insert = true } },
+				list = { selection = { preselect = false, auto_insert = true } },
+				ghost_text = {
+					enabled = true,
+				},
 			},
 			fuzzy = {
 				sorts = {
@@ -136,6 +140,7 @@ return {
 						module = "lazydev.integrations.blink",
 						score_offset = 100,
 					},
+
 					lsp = {
 						name = "lsp",
 						enabled = true,
@@ -194,5 +199,8 @@ return {
 	{
 		"folke/lazydev.nvim",
 		ft = "lua",
+	},
+	{
+		{ "rafamadriz/friendly-snippets" },
 	},
 }
