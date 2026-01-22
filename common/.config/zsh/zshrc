@@ -92,7 +92,6 @@ HISTSIZE=1000000
 HISTFILE="$HOME/.zsh_history"
 HISTCONTROL=ignoreboth
 
-autoload -U colors && colors
 # Enable Prompt Themes
 autoload -U promptinit
 promptinit

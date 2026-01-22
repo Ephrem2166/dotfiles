@@ -88,3 +88,12 @@ setopt NUMERIC_GLOB_SORT
 
 # Append trailing / to filename expansion when they match a directory
 setopt MARK_DIRS
+
+autoload -U colors && colors
+
+# Now we autoload run-help and several extensions to it which provide
+# more precise help for certain external commands.
+autoload -Uz run-help
+autoload -Uz run-help-git
+autoload -Uz run-help-ip
+autoload -Uz run-help-sudo

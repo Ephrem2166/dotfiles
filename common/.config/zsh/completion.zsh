@@ -115,6 +115,11 @@ zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:manuals.(^1*)' insert-sections true
 
+# If there is only one candidate just insert it.
+zstyle ':autocomplete:*complete*:*' INSERT-UNAMBIGUOUS YESS
+
+
+
 # Format
 # zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
 # zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'

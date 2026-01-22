@@ -96,9 +96,27 @@ alias fontfind='fc-list : family style'
 ###################
 #alias vi="vim -u NONE -N"
 alias vim="nvim"
-alias emacs="emacsclient -c -a 'emacs'" #  GUI versions of Emacs
-#alias em="/usr/bin/emacs -nw"                                                         # Terminal version of Emacs
 # alias rem="killall emacs || echo 'Emacs server not running'; /usr/bin/emacs --daemon" # Kill Emacs and restart daemon..
+
+
+##############
+# #### Emacs #
+##############
+if (( $+commands[emacs] )); then
+    alias e='emacs -nw'
+    alias eq='emacs -nw -Q'
+    alias ew='emacs'
+    alias eqw='emacs -Q'
+    alias ue='e --init-directory=$PWD'
+    alias uew='ew --init-directory=$PWD'
+fi
+
+if (( $+commands[emacsclient] )); then
+    alias ec='emacsclient --alternate-editor= -nw'
+    alias ecw='emacsclient --alternate-editor='
+fi
+
+
 
 #############
 # # Storage #
