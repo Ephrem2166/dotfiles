@@ -25,6 +25,6 @@
 
 [commit]
 verbose = true
-template = $XDG_CONFIG_HOME/git/template
+# template = $XDG_CONFIG_HOME/git/template
 [column]
 ui = auto

@@ -164,7 +164,7 @@
   ;; Otherwise use lua-mode
   (use-package lua-mode
     :ensure t
-    :mode ("\\.lua\\'" . lua-mode)
+    :mode ("\\.lua$\\'" . lua-mode)
     ;; :custom
     ;; (lua-indent-level 2)
     ;; (lua-indent-string-contents t)
