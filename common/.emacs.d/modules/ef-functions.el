@@ -1649,7 +1649,7 @@ See `display-line-numbers' for what these values mean."
   (interactive)
   (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
   "All other buffers have been killed!")
-
+(global-set-key (kbd "C-c k") #'my/kill-all-but-current-buffer)
 ;;; Kill Dired Buffers
 (defun my/kill-dired-buffers ()
   "Kill all open dired buffers."
