@@ -1,0 +1,30 @@
+# Colors (Gotham)
+
+# Default colors
+[colors.primary]
+background = '#0a0f14'
+foreground = '#98d1ce'
+
+# Normal colors
+[colors.normal]
+# black = '#98d1ce'
+black = '#0a0f14'     # Dark background (was white!)
+red = '#c33027'
+green = '#26c98b'
+yellow = '#edb54b'
+blue = '#195465'
+magenta = '#800080'
+cyan = '#33859d'
+# white = '#fafff4'
+white = '#98d1ce'     # Light foreground (was cyan)
+
+# Bright colors
+[colors.bright]
+black = '#2c3e50'     # Dark gray (was light gray)
+red = '#e74c3c'       # Brighter red
+green = '#2ecc71'     # Brighter green (same hue family)
+yellow = '#f39c12'    # Brighter yellow
+blue = '#3498db'      # Brighter blue
+magenta = '#9b59b6'   # Brighter purple (same hue family)
+cyan = '#1abc9c'      # Brighter cyan
+white = '#d3ebe9'

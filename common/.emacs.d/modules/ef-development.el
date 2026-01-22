@@ -128,12 +128,10 @@
      '((html-mode) .  ("vscode-html-language-server" "--stdio"))
 
      ))
+  (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("taplo" "--stdio")))
   ;; Don't log every event
   (fset #'jsonrpc--log-event #'ignore)
-  :init
   (setq completion-category-overrides '((eglot (styles orderless))))
-
-
   (defun my/eglot-setup ()
     "Setup eglot mode with specific exclusions."
     (unless (eq major-mode 'emacs-lisp-mode)
@@ -149,6 +147,9 @@
     (setq eldoc-documentation-strategy
           'eldoc-documentation-compose-eagerly))
   (add-hook 'eglot-managed-mode #'my/eglot-eldoc-setup)
+
+  ;; :init
+
 
 
 

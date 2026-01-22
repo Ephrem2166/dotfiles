@@ -129,3 +129,110 @@ selected=$(ps aux 2>/dev/null | fzf -m | awk '{print $2}')
 _fman(){
 compgen -c | fzf | xargs man
 }
+
+
+# Fuzzy CD into a directory
+fzfcd() {
+    local dir
+    dir=$(find "${1:-.}" -type d 2>/dev/null | fzf +m --prompt="cd> ")
+    [[ -n "$dir" ]] && cd "$dir"
+}
+
+# Fuzzy search command history
+fzfhist() {
+    local cmd
+    cmd=$(history | fzf --tac --prompt="Hist> " | sed 's/ *[0-9]* *//')
+    [[ -n "$cmd" ]] && eval "$cmd"
+}
+
+
+# Fuzzy systemd unit browser
+fsc() {
+    local unit
+    unit=$(systemctl list-units --all --no-pager | sed 1d | \
+        fzf --prompt="Systemd> " | awk '{print $1}') || return
+
+    if [[ -n "${unit}" ]]; then
+        systemctl status "${unit}"
+    fi
+}
+
+
+# Fuzzy git log browser
+fgl() {
+    git log --oneline --graph --color=always | \
+        fzf --ansi --no-sort --reverse --prompt="Git Log> " \
+            --preview 'git show --color=always $(echo {} | grep -o "[a-f0-9]\{7,\}" | head -1)' \
+            --preview-window=right:60%:wrap \
+            --bind 'enter:execute(git show --color=always $(echo {} | grep -o "[a-f0-9]\{7,\}" | head -1) | less -R)'
+}
+
+
+# Fuzzy grep with ripgrep
+fzf_grep() {
+    local pattern="${1:-}"
+    local file
+
+    if [[ -z "$pattern" ]]; then
+        echo "Usage: fzf_grep <pattern>"
+        return 1
+    fi
+
+    if command -v rg >/dev/null 2>&1; then
+        file=$(rg --line-number --color=never --no-heading --smart-case "$pattern" 2>/dev/null |
+               fzf --delimiter=: --nth=1..2 \
+                   --preview 'bat --style=numbers --color=always {1} 2>/dev/null | grep -C 3 --color=always {2}' \
+                   --preview-window=right:50%:wrap \
+                   --prompt="Grep> " \
+                   --bind="ctrl-o:execute($EDITOR +{2} {1})+abort")
+        if [[ -n "$file" ]]; then
+            local line=$(echo "$file" | cut -d: -f2)
+            file=$(echo "$file" | cut -d: -f1)
+            ${EDITOR:-vim} +"$line" "$file"
+        fi
+    else
+        echo "ripgrep (rg) is required for fzf_grep"
+        return 1
+    fi
+}
+
+
+# Fuzzy environment variable search
+fenv() {
+    local var
+    var=$(env | fzf --height 40% --prompt="Env> " --preview 'echo {} | cut -d= -f2')
+
+    if [[ -n "$var" ]]; then
+        echo "$var" | cut -d= -f1 | tr -d '\n' | xclip -selection clipboard 2>/dev/null
+        echo "Copied to clipboard: $(echo "$var" | cut -d= -f1)"
+    fi
+}
+
+
+# Fuzzy file editor
+fedit() {
+    local files
+    local editor="${EDITOR:-vim}"
+
+    # Select one or more files
+    files=$(fzf -m --preview 'bat --style=numbers --color=always {} 2>/dev/null || cat {}' --preview-window=right:50%:wrap --prompt="Edit> ")
+
+    if [[ -n "$files" ]]; then
+        # Handle multiple files (one per line)
+        echo "$files" | while read -r file; do
+            if [[ -n "$file" ]]; then
+                $editor "$file"
+            fi
+        done
+    fi
+}
+
+# Fuzzy man page search
+fzf_man() {
+    local man_page
+    man_page=$(man -k . | fzf --prompt='Man> ' | awk '{print $1}')
+
+    if [[ -n "$man_page" ]]; then
+        man "$man_page"
+    fi
+}
