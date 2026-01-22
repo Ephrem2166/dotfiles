@@ -1,8 +1,9 @@
 # Nord
 [colors]
 [colors.primary]
-foreground="#D8DEE9"
-background="#2E3440"
+foreground = "#D8DEE9"
+background = "#2E3440"
+
 [colors.normal]
 black = "#3b4252"
 red = "#bf616a"
@@ -12,6 +13,7 @@ blue = "#81a1c1"
 magenta = "#b48ead"
 cyan = "#88c0d0"
 white = "#e5e9f0"
+
 [colors.bright]
 black = "#4c566a"
 red = "#bf616a"
@@ -21,4 +23,3 @@ blue = "#81a1c1"
 magenta = "#b48ead"
 cyan = "#8fbcbb"
 white = "#eceff4"
-

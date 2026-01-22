@@ -18,10 +18,10 @@
 (use-package ediff
   :ensure nil
   :commands (ediff-buffers ediff-files ediff-buffers3 ediff-files3)
-  :init
-  (setq ediff-split-window-function 'split-window-horizontally)
-  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
   :config
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-merge-split-window-function 'split-window-horizontally)
   (setq ediff-keep-variants nil)
   (setq ediff-make-buffers-readonly-at-startup nil)
   (setq ediff-merge-revisions-with-ancestor t)

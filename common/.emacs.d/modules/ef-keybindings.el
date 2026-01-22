@@ -18,6 +18,9 @@
 ;;;; Eval Buffer
 (global-set-key (kbd "M-e") 'my/eval-buffer-or-region)
 
+
+;;; Replace C-g with escape
+(global-set-key [escape] 'keyboard-quit)
 ;;;; Comment Line
 ;; (global-set-key (kbd "C-/") 'comment-line)
 ;; (global-set-key (kbd "C-x /") 'comment-or-uncomment-region)
