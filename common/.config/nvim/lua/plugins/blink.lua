@@ -28,16 +28,18 @@ return {
 			--
 			-- See :h blink-cmp-config-keymap for defining your own keymap
 			keymap = {
-				-- preset = "default"
+				-- preset = "default",
+
 				preset = "none",
 				["<CR>"] = { "accept", "fallback" },
 				["<Tab>"] = { "select_next", "fallback" },
 				["<S-Tab>"] = { "select_prev", "fallback" },
-				["<Up>"] = { "scroll_documentation_up", "fallback" },
-				["<Down>"] = { "scroll_documentation_down", "fallback" },
+				["<Up>"] = { "select_prev", "fallback" },
+				["<Down>"] = { "select_next", "fallback" },
 				["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
+				["<C-b>"] = { "scroll_documentation_up", "fallback" },
+				["<C-f>"] = { "scroll_documentation_down", "fallback" },
 			},
-
 			appearance = {
 				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
 				-- Adjusts spacing to ensure icons are aligned
@@ -45,8 +47,12 @@ return {
 			},
 			cmdline = {
 				completion = {
-					list = { selection = { preselect = false } },
+					list = { selection = { auto_insert = false, preselect = true } },
 					menu = { auto_show = true },
+					ghost_text = { enabled = false },
+				}
+				keymap = {
+					preset = "inherit",
 				},
 			},
 			-- (Default) Only show the documentation popup when manually triggered
@@ -55,7 +61,7 @@ return {
 					auto_show = true,
 				},
 				menu = {
-					border = "rounded",
+					border = "bold",
 					direction_priority = { "n", "s" },
 					draw = { treesitter = { "lsp" } },
 					scrollbar = false,
@@ -71,8 +77,14 @@ return {
 					show_on_trigger_character = true,
 					show_on_blocked_trigger_characters = { " ", "\n", "\t" },
 				},
-				ghost_text = { enabled = false },
-				list = { selection = { preselect = false } },
+				list = { selection = { preselect = true, auto_insert = true } },
+			},
+			fuzzy = {
+				sorts = {
+					"exact",
+					"score",
+					"show_text",
+				},
 			},
 
 			snippets = { preset = "luasnip" },

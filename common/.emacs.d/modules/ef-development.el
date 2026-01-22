@@ -125,7 +125,7 @@
   (with-eval-after-load 'eglot
     (add-to-list
      'eglot-server-programs
-     '((html-ts-mode html-mode) .  ("vscode-html-language-server" "--stdio"))
+     '((html-mode) .  ("vscode-html-language-server" "--stdio"))
 
      ))
   ;; Don't log every event
