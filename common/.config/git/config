@@ -1,30 +1,30 @@
 [core]
-    editor = nvim
-    compression = -1
-    excludesfile = $XDG_CONFIG_HOME/git/ignore
-    pager = delta
+	editor = nvim
+	compression = -1
+	excludesfile = $XDG_CONFIG_HOME/git/ignore
+	pager = delta
 [user]
-    name = Ephrem2166
-    email = ephrem2166@gmail.com
+	name = Ephrem2166
+	email = ephrem2166@gmail.com
 [http]
-    postBuffer = 524288000
+	postBuffer = 524288000
 [color]
-    ui = auto
+	ui = auto
 [interactive]
-    diffFilter = delta --color-only
+	diffFilter = delta --color-only
 
 [delta]
-    navigate = true  # use n and N to move between diff sections
-    dark = true      # or light = true, or omit for auto-detection
-    line-numbers = true
-    syntax-theme = Dracula
-    plus-style = syntax "#a3be8c"
-    minus-style = syntax "#bf616a"
+	navigate = true  # use n and N to move between diff sections
+	dark = true      # or light = true, or omit for auto-detection
+	line-numbers = true
+	syntax-theme = Dracula
+	plus-style = syntax "#a3be8c"
+	minus-style = syntax "#bf616a"
 [merge]
-    conflictStyle = diff3
+	conflictStyle = diff3
 
 [commit]
 verbose = true
-
+template = $XDG_CONFIG_HOME/git/template
 [column]
 ui = auto

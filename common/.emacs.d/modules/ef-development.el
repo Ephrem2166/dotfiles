@@ -108,7 +108,7 @@
   ;;   ;; (add-to-list 'eglot-server-programs '((lua-mode) . ("stylua")))
   ;;   )
 
-
+  (setq eglot-events-buffer 0)
   (setq eglot-autoshutdown t)
   (setq eglot-sync-connect 1)
   (setq eglot-confirm-server-edits nil)

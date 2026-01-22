@@ -49,6 +49,11 @@
       "key":" ",
       "keyColor": "",
     },
+  {
+      "type": "localip",
+      "key": "󰩟 ",
+      "format": "{1} ({4})"
+    },
     {
       "type": "terminalfont",
       "key":" ",
@@ -69,6 +74,7 @@
       "type": "colors",
       "paddingLeft": 2,
       // "symbol": "circle"
-    }
+    },
+    "break"
   ]
 }
