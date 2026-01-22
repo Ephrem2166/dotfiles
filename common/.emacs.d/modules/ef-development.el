@@ -14,20 +14,25 @@
         (append
          '((prettier . ("prettier" "--stdin-filepath" filepath))
            (black . ("black" "-"))
+           (biome . ("biome"))
            (stylua . ("stylua" "-"))
-           (shfmt . ("shfmt" "-i" "2" "-ci" "-")))
+           (shfmt . ("shfmt" "-i" "2" "-ci" "-"))
+           (tombi . ("tombi" "format"))
+           )
          apheleia-formatters))
 
   ;; Customize mode-to-formatter mapping.
   (setq apheleia-mode-alist
         '((python-mode . black)
-          (javascript-mode . prettier)
-          (typescript-mode . prettier)
+          ;; (javascript-mode . prettier)
+          ;; (typescript-mode . prettier)
           (ruby-mode . rubocop)
           (sh-mode . shfmt)
           (lua-mode . stylua)
           (yaml-ts-mode . prettier)
-          (toml-ts-mode . prettier)
+          ;;; TRYING biome
+          ((css-mode css-ts-mode js-json-mode js-mode json-mode json-ts-mode tsx-ts-mode) . biome)
+          ((toml-ts-mode toml-mode) . tombi)
           )
 
         )
@@ -57,7 +62,6 @@
   )
 
 ;;; Eglot
-;; FIXME:
 ;; Eglot (built-in client for the language server protocol)
 (use-package eglot
   :ensure nil
@@ -107,7 +111,7 @@
   ;;   ;; (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("taplo" "--stdio")))
   ;;   ;; (add-to-list 'eglot-server-programs '((lua-mode) . ("stylua")))
   ;;   )
-
+  (setq eglot-send-changes-idle-time 0.1)
   (setq eglot-events-buffer 0)
   (setq eglot-autoshutdown t)
   (setq eglot-sync-connect 1)
@@ -128,7 +132,7 @@
      '((html-mode) .  ("vscode-html-language-server" "--stdio"))
 
      ))
-  (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("taplo" "--stdio")))
+  (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("tombi" "--stdio")))
   ;; Don't log every event
   (fset #'jsonrpc--log-event #'ignore)
   (setq completion-category-overrides '((eglot (styles orderless))))

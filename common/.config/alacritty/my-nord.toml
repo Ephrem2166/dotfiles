@@ -1,8 +1,8 @@
 # My Nord
 [colors]
 [colors.primary]
-foreground="#ECEFF4"
-background="#2E3440"
+foreground = "#ECEFF4"
+background = "#2E3440"
 
 [colors.normal]
 black = "#2E3440"

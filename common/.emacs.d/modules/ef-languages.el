@@ -215,6 +215,7 @@
   (setopt markdown-indent-on-enter 'indent-and-new-item)
   (setopt markdown-hide-markup t)
   (setopt markdown-enable-math t)
+  (setopt markdown-list-item-bullets '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
   (setopt markdown-fontify-code-blocks-natively t))
 
 ;;; Markdown Preview Mode

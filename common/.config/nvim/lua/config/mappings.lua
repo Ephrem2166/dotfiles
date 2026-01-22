@@ -38,6 +38,9 @@ map("i", "<C-h>", "<Left>", { desc = "move left" })
 map("i", "<C-l>", "<Right>", { desc = "move right" })
 map("i", "<C-j>", "<Down>", { desc = "move down" })
 map("i", "<C-k>", "<Up>", { desc = "move up" })
+-- make HJKL behave like hjkl but with bigger distance
+map({ "n", "x" }, "J", "6gj")
+map({ "n", "x" }, "K", "6gk")
 
 -- Tabs
 map("n", "<leader>tn", "<cmd>tabnew<cr>")
@@ -45,7 +48,14 @@ map("n", "<leader>tq", "<cmd>tabclose<cr>")
 map("n", "<leader>t.", "<cmd>tabnext<cr>")
 map("n", "<leader>t,", "<cmd>tabprevious<cr>")
 
+-- better up/down - allows moving to wrapped lines
+map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+
 -- Comment
+map("n", "<leader>c/", "gcc", { desc = "󰆈 Comment line", remap = true })
 
 -- Open terminal in a new vertical split
 map("n", "<leader>tt", function()

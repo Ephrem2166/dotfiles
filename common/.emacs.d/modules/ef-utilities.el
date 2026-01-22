@@ -175,6 +175,12 @@
   :config
   (setq emacs-everywhere-major-mode-function #'org-mode)
   (setq emacs-everywhere-frame-name-format "Editing: %s %s")
+  (setq emacs-everywhere-init-hooks
+        (delq 'emacs-everywhere-set-frame-position emacs-everywhere-init-hooks))
+  (setq emacs-everywhere-frame-parameters
+        '((name . "floating emacs-everywhere")
+          (width . 80)
+          (height . 30)))
 
   )
 
@@ -439,7 +445,10 @@
   :config
   (setq popper-group-by-directory t)
   (setq popper-echo-dispatch-actions t)
-  (setq popper-display-control t)
+  ;; (setq popper-display-control t)
+  (setq popper-display-control 'user)
+  (setq popper-display-function #'popper-display-popup-at-bottom)
+  (setq popper-group-function #'popper-group-by-project)
   (setq popper-window-height 16)
   (popper-mode +1)
   (popper-echo-mode +1))

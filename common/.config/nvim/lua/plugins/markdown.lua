@@ -136,6 +136,20 @@ return {
 					highlight = "RenderMarkdownBullet",
 					scope_highlight = {},
 				},
+				code = {
+					position = "left",
+					width = "block", -- = not full width
+					min_width = 50,
+					left_pad = 0, -- better `0` due to uneven padding https://github.com/MeanderingProgrammer/render-markdown.nvim/issues/576#issuecomment-3694595069
+					right_pad = 1,
+					border = "thin", -- use the `above`/`below` chars as is
+					below = "▔", -- ▀▔
+					above = "▁", -- ▃▁
+					language_border = "▁",
+					language_left = "▁▁█",
+					language_right = "█",
+					highlight_border = "PmenuThumb",
+				},
 				quote = { icon = "▋" },
 				anti_conceal = {
 					enabled = true,

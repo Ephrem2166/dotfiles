@@ -28,11 +28,14 @@ return {
 					{ "lua-language-server" },
 					{ "vim-language-server" },
 					{ "yaml-language-server" },
+					{ "emmet-language-server" }, -- css/html snippets
 					{ "stylua" },
 					{ "html-lsp" },
 					{ "emmet-ls" },
 					{ "css-lsp" },
-					{ "pyright" },
+					-- { "pyright" },
+					{ "basedpyright" }, -- python lsp (pyright fork)
+					{ "ruff" }, -- python linter & formatter
 					{ "black" },
 					{ "autopep8" },
 					{ "json-lsp" },
@@ -41,7 +44,11 @@ return {
 					{ "isort" },
 					{ "jq" },
 					{ "shfmt" },
+					{ "tombi" },
+					{ "harper-ls" }, -- natural language linter
+					{ "ltex-ls-plus" }, -- natural language linter (LanguageTool, ltex
 					--{ "typscript-language-server" },
+
 					---	{ "js-debug-adapter" },
 					-- 	{ "eslint-lsp" },
 					--	{ "codelldb" },
@@ -49,11 +56,13 @@ return {
 					{ "dockerfile-language-server" },
 					{ "eslint-lsp" },
 					{ "markdownlint" },
+					{ "rumdl" }, -- modern markdownlint
 					{ "clangd" },
 					{ "prettier" },
 					{ "prettierd" },
 					{ "python-lsp-server" },
 					{ "rust-analyzer" },
+					{ "shfmt" }, -- shell formatter (via bashls)
 					{ "shellcheck" },
 					{ "clang-format" },
 				},

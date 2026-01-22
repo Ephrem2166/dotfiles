@@ -1,8 +1,9 @@
 # Nord Glacier
 [colors]
 [colors.primary]
-foreground="#D8DEE9"
-background="#2E3440"
+foreground = "#D8DEE9"
+background = "#2E3440"
+
 [colors.normal]
 black = "#191D24"
 red = "#BF616A"
@@ -12,6 +13,7 @@ blue = "#5E81AC"
 magenta = "#B48EAD"
 cyan = "#8FBCBB"
 white = "#D8DEE9"
+
 [colors.bright]
 black = "#1E222A"
 red = "#C5727A"
