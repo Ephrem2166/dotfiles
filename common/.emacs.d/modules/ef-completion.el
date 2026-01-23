@@ -143,6 +143,16 @@ Also adds `cape-file' as a fallback."
 
     )
   (add-hook 'org-mode-hook #'my/org-mode-setup-capf)
+  ;; Text and Prog Mode
+  (defun my/extra-completion-options ()
+    (setq-local completion-at-point-functions
+                (list #'cape-file
+                      #'cape-dabbrev
+                      #'cape-abbrev
+                      #'cape-dict))
+    )
+  (add-hook 'prog-mode-hook #'my/extra-completion-options)
+  (add-hook 'text-mode-hook #'my/extra-completion-options)
   :custom
   (text-mode-ispell-word-completion nil)
   )
