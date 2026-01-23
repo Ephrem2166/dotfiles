@@ -683,7 +683,7 @@
               (highlight-lines-matching-regexp ".*//!.*" 'hi-red-b)
               (highlight-lines-matching-regexp ";;!.*" 'hi-red-b)))
 
-  (global-hi-lock-mode)
+  ;; (global-hi-lock-mode)
   )
 
 
