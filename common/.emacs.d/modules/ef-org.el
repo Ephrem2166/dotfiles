@@ -67,8 +67,11 @@
 
   ;; keep code related stuff clean
   (dolist (face '(org-block
+                  org-document-title
                   org-table
                   org-verbatim
+                  org-drawer
+                  org-date
                   org-code
                   org-block-begin-line
                   org-block-end-line
@@ -174,7 +177,7 @@
   (setq org-pretty-entities-include-sub-superscripts nil)
   (setq org-use-sub-superscripts nil)
   ;; Image
-  (setq org-image-actual-width 600)
+  (setq org-image-actual-width 400)
   (setq org-image-align 'center)
 
   ;; Blank line before new entry

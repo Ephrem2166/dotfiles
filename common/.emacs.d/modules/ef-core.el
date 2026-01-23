@@ -672,6 +672,21 @@
          (org-mode . hl-line-mode)
          ( prog-mode . hl-line-mode)))
 
+;;; Hi-lock
+;; minor mode for interactive automatic highlighting
+(use-package hi-lock
+  :ensure nil
+  :config
+  (add-hook 'prog-mode-hook
+            (defun emphasize-comments-starting-with-! ()
+              (highlight-lines-matching-regexp ".*\\*.*!.*" 'hi-red-b)
+              (highlight-lines-matching-regexp ".*//!.*" 'hi-red-b)
+              (highlight-lines-matching-regexp ";;!.*" 'hi-red-b)))
+
+  (global-hi-lock-mode)
+  )
+
+
 ;;; ibuffer
 (use-package ibuffer
   :ensure nil

@@ -21,12 +21,17 @@
 
 (defvar my/available-variable-font
   (my/available-font
+   "Atkinson Hyperlegible Next"
+   "Iosevka Aile"
    "Triplicate A"
    "SN Pro"
    "Atkinson Hyperlegible"
    "Iosevka Aile"
    "PragmataPro"
-   "Avenir" "Iosevka Nerd Font" "PragmataPro Nerd Font" "Sans")
+   "Avenir"
+   "Iosevka Nerd Font"
+   "PragmataPro Nerd Font"
+   "Sans")
   "Primary Variable Fonts")
 
 ;; (when my/available-mono-font

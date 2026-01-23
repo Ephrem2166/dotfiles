@@ -3006,6 +3006,39 @@ ARG is passed to `kill-line' and function `kill-whole-line'."
 
 
 
+;;; Ignore unwanted buffers when cycling through buffers using `C-x <|>'
+(defun my/buffer-predicate (buffer)
+  "Run `C-u 0 C-x C-e' on the following form to see all buffer names and find the
+   ones annyoning you, then place those in the function body below
+
+        (mapcar #'buffer-name (buffer-list))
+"
+  ;; First let's kill a bunch of buffers
+  ;; (my/clean-buffers) ;; TODO: Bad idea?
+
+  ;; Next let's filter out any remaining ones [Redundant?]
+  (defvar my/ignore/buffer/name '("*Quail Completions*" "*Backtrace*" "*Help*" "*agda2*" "*sqls*" "*which-key*" "*Warnings*" "*Messages*" "Status of Services"))
+  (defvar my/ignore/buffer/prefix '("*helm" "*Helm"  "*quelpa" "*lsp" "*Occur" "*magit*" "*Flymake" "*format" "*Shell" "*Async"
+                                    "*org-src-fontification:" "*Server:"))
+  (defvar my/ignore/buffer/suffix  '("stderr*" "log*" "-ls*"))
+
+  (-let [name (buffer-name buffer)]
+    (not (or (member name my/ignore/buffer/name)
+             (--any? (s-starts-with? it name) my/ignore/buffer/prefix)
+             (--any? (s-ends-with? it name) my/ignore/buffer/suffix)))))
+
+(set-frame-parameter nil 'buffer-predicate 'my/buffer-predicate)
+
+;;; Kill Unattached Buffers to a File
+(defun my/clean-buffers ()
+  "Kill all buffers that are not associated with a file.
+  By convention, such files are named in *earmuffs* style."
+  (interactive)
+  (ignore-errors (mapcar #'kill-buffer (--filter (s-matches? "\\*.*\\*" it) (mapcar #'buffer-name (buffer-list))))))
+
+
+
+
 ;;; End Here
 (provide 'ef-functions)
 
