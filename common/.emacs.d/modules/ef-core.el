@@ -829,6 +829,7 @@
   (dolist (imenu-modes '(org-mode markdown-mode text-mode prog-mode)
                        )
     (add-hook 'imenu-modes #'my/imenu-setup)
+
     )
 
 

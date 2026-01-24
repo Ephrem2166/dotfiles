@@ -6,13 +6,15 @@
 ;; Builtin Alternative
 (use-package flyspell
   :disabled
+  :after aspell
   :ensure nil
   :defer t
-  :commands flyspell-mode
+  :commands (flyspell-mode flyspell-prog-mode)
   :hook (
          (prog-mode . flyspell-prog-mode)
          ((org-mode text-mode) . flyspell-mode)
          )
+  :bind ("C-c C-;" . flyspell-auto-correct-word)
   :config
 
   ;; Don't consider that a word repeated twice is an error.

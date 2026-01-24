@@ -135,6 +135,7 @@
   (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("tombi" "--stdio")))
   ;; Don't log every event
   (fset #'jsonrpc--log-event #'ignore)
+  ;; (advice-add 'jsonrpc--log-event :override #'ignore)
   (setq completion-category-overrides '((eglot (styles orderless))))
   (defun my/eglot-setup ()
     "Setup eglot mode with specific exclusions."
