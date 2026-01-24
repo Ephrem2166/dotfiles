@@ -1745,7 +1745,7 @@ called interactively."
     (when (= orig-point (point))
       (move-beginning-of-line 1))))
 
-;; remap C-a to `smarter-move-beginning-of-line'
+;;; remap C-a to `smarter-move-beginning-of-line'
 (global-set-key [remap move-beginning-of-line]
                 'my/smarter-move-beginning-of-line)
 
@@ -3016,29 +3016,45 @@ ARG is passed to `kill-line' and function `kill-whole-line'."
 
 
 
-;;; TEST:
-;; (defun my/buffer-predicate (buffer)
-;;   "Run `C-u 0 C-x C-e' on the following form to see all buffer names and find the
-;;    ones annyoning you, then place those in the function body below
-;;
-;;         (mapcar #'buffer-name (buffer-list))
-;; "
-;;   ;; First let's kill a bunch of buffers
-;;   ;; (my/clean-buffers) ;; TODO: Bad idea?
-;;
-;;   ;; Next let's filter out any remaining ones [Redundant?]
-;;   (defvar my/ignore/buffer/name '("*Quail Completions*" "*Backtrace*" "*Help*" "*agda2*" "*sqls*" "*which-key*" "*Warnings*" "*Messages*" "Status of Services"))
-;;   (defvar my/ignore/buffer/prefix '("*helm" "*Helm"  "*quelpa" "*lsp" "*Occur" "magit" "*Flymake" "*format" "*Shell" "*Async"
-;;                                     "*org-src-fontification:" "*Server:"))
-;;   (defvar my/ignore/buffer/suffix  '("stderr*" "log*" "-ls*"))
-;;
-;;   (let (name (buffer-name buffer))
-;;     (not (or (member name my/ignore/buffer/name)
-;;              (--any? (s-starts-with? it name) my/ignore/buffer/prefix)
-;;              (--any? (s-ends-with? it name) my/ignore/buffer/suffix)))))
-;;
-;; (set-frame-parameter nil 'buffer-predicate 'my/buffer-predicate)
-;;; End Here
-(provide 'ef-functions)
 
+;;; Google This!
+(defun google ()
+  "Googles a query or region if any."
+  (interactive)
+  (browse-url
+   (concat
+    "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
+    (if mark-active
+        (buffer-substring (region-beginning) (region-end))
+      (read-string "Google: ")))))
+
+
+;;; Minor mode to hide the modeline
+(define-minor-mode my/hidden-mode-line-mode
+  "Minor mode to hide the mode-line in the current buffer."
+  :init-value nil
+  :global t
+  :variable hidden-mode-line-mode
+  :group 'editing-basics
+  (if hidden-mode-line-mode
+      (setq hide-mode-line mode-line-format
+            mode-line-format nil)
+    (setq mode-line-format hide-mode-line
+          hide-mode-line nil))
+  (force-mode-line-update)
+  ;; Apparently force-mode-line-update is not always enough to
+  ;; redisplay the mode-line
+  (redraw-display)
+  (when (and (called-interactively-p 'interactive)
+             hidden-mode-line-mode)
+    (run-with-idle-timer
+     0 nil 'message
+     (concat "Hidden Mode Line Mode enabled.  "
+             "Use M-x hidden-mode-line-mode to make the mode-line appear."))))
+
+;; (add-hook 'after-change-major-mode-hook 'my/hidden-mode-line-mode)
+
+
+;;; ef-functions ends here
+(provide 'ef-functions)
 ;;; ef-functions.el ends here

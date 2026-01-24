@@ -153,6 +153,17 @@ Also adds `cape-file' as a fallback."
     )
   (add-hook 'prog-mode-hook #'my/extra-completion-options)
   (add-hook 'text-mode-hook #'my/extra-completion-options)
+  ;; Cape ELisp
+  (let ((elisp-capf (cape-capf-super
+                     (cape-capf-nonexclusive
+                      (cape-capf-inside-code 'cape-elisp-symbol))
+                     (cape-capf-nonexclusive
+                      (cape-capf-inside-code 'cape-elisp-block)))))
+
+    (add-hook 'emacs-lisp-mode-hook
+              (lambda ()
+                (kill-local-variable 'completion-at-point-functions)
+                (add-hook 'completion-at-point-functions elisp-capf nil t))))
   :custom
   (text-mode-ispell-word-completion nil)
   )

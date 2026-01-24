@@ -6,6 +6,13 @@
 ;; Yet another snippet extension for Emacs
 (use-package yasnippet
   :ensure t
+  :bind
+
+  (:map yas-minor-mode-map
+        ("<tab>" . nil)
+        ("<backtab>" . yas-expand))
+
+
   ;; :preface
   ;; ;; Allow yasnippet and org mode expansion to work together
   ;; (defun yas-org-very-safe-expand ()

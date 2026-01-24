@@ -21,6 +21,7 @@
 
 (defvar my/available-variable-font
   (my/available-font
+   "DejaVu Sans"
    "Atkinson Hyperlegible Next"
    "Iosevka Aile"
    "Triplicate A"
