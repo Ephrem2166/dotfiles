@@ -17,7 +17,7 @@ alias q='exit'
 # System
 alias shutdown='sudo shutdown -h now'
 alias restart='sudo reboot'
-
+alias caffienate='systemd-inhibit tail -f /dev/null'
 # Open Files from the terminal
 alias open="open_command"
 
