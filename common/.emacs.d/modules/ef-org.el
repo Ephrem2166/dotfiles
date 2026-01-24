@@ -53,6 +53,7 @@
   (setq-local indent-line-function 'indent-relative)
   ;; display wrapped lines instead of truncated lines
   (setq truncate-lines nil)
+
   (setq word-wrap t))
 (add-hook 'org-mode-hook 'org-mode-hook-setup)
 
@@ -64,7 +65,9 @@
 (defun my/enable-variable-pitch-mode ()
   "Enable variable-pitch-mode for relevant org-mode text."
   (variable-pitch-mode 1)
-
+  (set-face-attribute 'variable-pitch nil
+                      :family "Iosevka Aile"
+                      :height 120)
   ;; keep code related stuff clean
   (dolist (face '(org-block
                   org-document-title
@@ -436,10 +439,12 @@
   (setq org-inline-src-prettify-results '("⟨" . "⟩"))
   (setq org-src-window-setup 'current-window)
   (setq org-src-fontify-natively t)
-  (setq org-src-preserve-indentation t)
   (setq org-src-tab-acts-natively t)
+  (setq org-src-preserve-indentation t)
   (setq org-edit-src-persistent-message nil)
   (setq org-edit-src-turn-on-auto-save nil)
+  ;; Fontify highlighting in code blocks in latext
+  (setq org-latex-listings 'minted)
   (setq org-edit-src-auto-save-idle-delay 3)
   (setq org-edit-src-content-indentation 0))
 
@@ -530,6 +535,8 @@
                            ;; (mermaid . t)
                            (org . t)
                            (plantuml . t)
+                           (latex . t)
+                           (js . t)
                            ))))
   :config
   (setq org-babel-default-header-args
@@ -1054,9 +1061,28 @@ context.  When called with an argument, unconditionally call
   (setopt org-export-use-babel t)
   (setq org-export-headline-levels 8)
   (setq org-export-dispatch-use-expert-ui nil)
+  )
+
+;;; Export to html
+(use-package org
+  :ensure nil
+  :config
+  ;; Other options css, inline css
   (setq org-html-htmlize-output-type nil)
   (setq org-html-head-include-default-style nil)
-  (setq org-html-head-include-scripts nil))
+  (setq org-html-head-include-scripts nil)
+  )
+
+;; ;;;; HTML Export for Org
+;; ;; For this to work set `org-html-htmlize-output-type' to css
+;; (use-package htmlize
+;;   :ensure t
+;;   :commands (htmlize-buffer
+;;              htmlize-file
+;;              htmlize-many-files
+;;              htmlize-many-files-dired
+;;              htmlize-region))
+
 
 ;;;; Ox-ODT
 (use-package ox-odt
@@ -1517,10 +1543,16 @@ context.  When called with an argument, unconditionally call
   (setq valign-fancy-bar t)
   )
 
-;;; TODO Org Present
+;;; TODO: Org Present
 (use-package org-present
   :after org
   )
+
+
+
+
+
+(define-key org-mode-map (kbd "C-<tab>") 'yas-expand)
 
 
 

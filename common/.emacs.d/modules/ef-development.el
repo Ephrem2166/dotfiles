@@ -17,7 +17,7 @@
            (biome . ("biome"))
            (stylua . ("stylua" "-"))
            (shfmt . ("shfmt" "-i" "2" "-ci" "-"))
-           (tombi . ("tombi" "format"))
+           (tombi . ("tombi" "format" "-"))
            )
          apheleia-formatters))
 

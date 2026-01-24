@@ -587,6 +587,8 @@
 (use-package frame
   :ensure nil
   :config
+  ;; Blink cursor
+  (setopt blink-cursor-blinks 0)
   (setopt window-divider-default-bottom-width 1)
   (setopt window-divider-default-places t)
   (setopt window-divider-default-right-width 1)
@@ -668,7 +670,7 @@
 (use-package hl-line-mode
   :ensure nil
   :defer t
-  :hook (( text-mode . hl-line-mode)
+  :hook ((text-mode . hl-line-mode)
          (org-mode . hl-line-mode)
          ( prog-mode . hl-line-mode)))
 
@@ -711,7 +713,7 @@
   ;; ("C-c i" . ibuffer)
   ([remap list-buffers] . ibuffer)
   :config
-  ;; Include VC Status in ibuffer-list
+  ;; Modify the default ibuffer formats
   (setq ibuffer-formats
         '((mark modified read-only vc-status-mini " "
                 (name 18 18 :left :elide)
@@ -729,6 +731,7 @@
   (setq ibuffer-jump-offer-only-visible-buffers t)
   (setq ibuffer-old-time 48)
   (setq ibuffer-expert nil)
+  ;; (setq ibuffer-display-summary nil)
   (setq ibuffer-use-other-window t)
   (setq ibuffer-show-empty-filter-groups nil)
   (setq ibuffer-shrink-to-minimum-size  t)
@@ -797,6 +800,7 @@
                        (mode . scala-mode)
                        (mode . go-mode)
                        (mode . erlang-mode)))
+           ("Magit" (name . "^\\*magit.*$"))
 
            )))
   (add-hook 'ibuffer-mode-hook
@@ -1176,7 +1180,7 @@ Intended to be added to `isearch-mode-hook'."
   (recentf-filename-handlers nil)
   (recentf-show-file-shortcuts-flag nil)
   :config
-  (quiet! (recentf-mode 1))
+  ;;(quiet! (recentf-mode 1))
   (setq recentf-exclude
         '("\\.?cache"
           "~$"
@@ -1216,7 +1220,7 @@ Intended to be added to `isearch-mode-hook'."
   (advice-add 'recentf-load-list :after #'my/recentf-cleanup)
   ;; For perfromance
   (add-to-list 'recentf-filename-handlers #'substring-no-properties)
-  (advice-add #'recentf-load-list :around #'doom-shut-up-a)
+;;  (advice-add #'recentf-load-list :around #'doom-shut-up-a)
   )
 
 
@@ -1313,6 +1317,7 @@ Intended to be added to `isearch-mode-hook'."
   :init
   (setq server-client-instructions nil)
   :config
+  ;; Start the server if it's not running
   (unless (or (daemonp) (server-running-p))
     (server-start)))
 

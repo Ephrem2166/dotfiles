@@ -38,6 +38,7 @@
   (setq evil-emacs-state-cursor '(bar "#FF6C68"))
   (setq evil-visual-state-cursor '(box "#DA854B"))
   :config
+  (define-key evil-normal-state-map (kbd "<") nil)
   (define-key evil-normal-state-map (kbd "C-z") nil)
   (define-key evil-motion-state-map (kbd "C-z") nil)
   (define-key evil-insert-state-map (kbd "C-z") nil)

@@ -8,6 +8,13 @@
   :ensure t
   :hook (visual-line-mode . adaptive-wrap-prefix-mode))
 
+;;; DocView
+;; Document viewer for Emacs (Builtin)
+(use-package doc-view
+  :ensure nil
+  (setq doc-view-continuous t)
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+  )
 ;;; Logos
 ;; Simple focus mode and extras
 (use-package logos

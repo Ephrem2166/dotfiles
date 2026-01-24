@@ -270,7 +270,10 @@
 
 ;;; Rusty Object Notation (RON)
 (use-package ron-mode
-  :ensure t)
+  :ensure t
+  :mode "\\.ron'"
+  )
+
 
 ;;; Shell Mode
 (use-package sh-script

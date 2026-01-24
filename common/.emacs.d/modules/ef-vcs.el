@@ -38,26 +38,13 @@
   (log-edit-setup-add-author nil)
   )
 
-;;; VC
-(use-package vc
-  :ensure nil
-  :defer 60
-  :init
-  (setq vc-follow-symlinks t)
-  :config
-  (setq vc-handled-backends '(Git))
-  (setq vc-revert-show-diff t)
-  (setq vc-annotate-display-mode 'fullscale)
-  (setq vc-find-revision-no-save t)
-  (setq vc-allow-rewriting-published-history 'ask)
 
-  )
-
-;; TODO MAGIT
+;;; TODO MAGIT
 ;; Since magit requires a newer version of transient
 ;; we need to install it on top of the built-in transient
 (use-package transient)
-;;; Magit
+
+;;;; Magit
 (use-package magit
   :ensure t
   :defer-incrementally (dash f s with-editor git-commit transient)
@@ -81,6 +68,7 @@
                                   ))
   (magit-bury-buffer-function 'magit-mode-quit-window)
   :config
+  (setq magit-push-always-verify t)
   (setq transient-default-level 5)
   (setq magit-diff-refine-hunk t)
   (setq magit-save-repository-buffers nil)
@@ -96,6 +84,22 @@
     (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
 
   )
+
+;;; VC
+(use-package vc
+  :ensure nil
+  :defer 60
+  :init
+  (setq vc-follow-symlinks t)
+  :config
+  (setq vc-handled-backends '(Git))
+  (setq vc-revert-show-diff t)
+  (setq vc-annotate-display-mode 'fullscale)
+  (setq vc-find-revision-no-save t)
+  (setq vc-allow-rewriting-published-history 'ask)
+
+  )
+
 
 
 (provide 'ef-vcs)
