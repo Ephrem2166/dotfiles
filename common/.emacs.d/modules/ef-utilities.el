@@ -84,6 +84,7 @@
          ("C-c c y" . consult-yank-pop)
          )
   :init
+  (global-set-key (kbd "M-i") 'consult-imenu)
   ;; Register
   (setq register-preview-delay 0.5)
   (setq register-preview-function #'consult-register-format)
