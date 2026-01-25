@@ -185,6 +185,22 @@
 
           ) ))
 
+;;; Org Clock
+(use-package org
+  :ensure nil
+  :custom
+  (org-clock-clocked-in-display nil)
+  (org-clock-idle-time 10)
+  (org-clock-in-resume t)
+  (org-clock-in-switch-to-state "DOING")
+  (org-clock-into-drawer "LOGBOOK")
+  (org-clock-mode-line-total 'current)
+  (org-clock-out-remove-zero-time-clocks t)
+  (org-clock-out-switch-to-state nil)
+  ;; (org-clock-persist t)
+  ;; (org-clock-persist-file (user-data "org-clock-save.el"))
+  (org-clock-resolve-expert t)
+  )
 
 
 (provide 'ef-org-agenda)
