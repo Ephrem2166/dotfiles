@@ -38,6 +38,13 @@
   (setq evil-emacs-state-cursor '(bar "#FF6C68"))
   (setq evil-visual-state-cursor '(box "#DA854B"))
   :config
+  ;;; How to make some modes to start with Emacs mode
+  (dolist (mode '(custom-mode
+                  erc-mode
+
+                  ))
+    (add-to-list 'evil-emacs-state-modes mode)
+    )
   (define-key evil-normal-state-map (kbd "<") nil)
   (define-key evil-normal-state-map (kbd "C-z") nil)
   (define-key evil-motion-state-map (kbd "C-z") nil)
@@ -160,5 +167,8 @@
   :config
   (global-evil-matchit-mode 1))
 
+
+
+;;; Code Ends Here
 (provide 'ef-evil)
 ;;; ef-evil.el ends here

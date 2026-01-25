@@ -76,15 +76,76 @@
 ;; Minor mode to automatically balance window margins
 (use-package olivetti
   :ensure t
-  :hook
-  ((org-mode Info-mode  markdown-mode) . olivetti-mode)
+  :hook (
+         ;; (olivetti-mode-on . my/olivetti-mode-on)
+         ;; (olivetti-mode-off . my/olivetti-mode-off)
 
+         ((org-mode Info-mode  markdown-mode) . olivetti-mode)
+         )
   :config
   (setq olivetti-lighter nil)
-  (setq olivetti-body-width 130)
+  ;; (setq olivetti-hide-mode-line nil)
+  (setq olivetti-body-width 80)
   (setq olivetti-style 'fancy)
-  (setq olivetti-minimum-body-width 80)
-  (setq olivetti-recall-visual-line-mode-entry-state t))
+  (setq olivetti-minimum-body-width 70)
+  (setq olivetti-recall-visual-line-mode-entry-state t)
+  ;; Olivetti Mode Hook On
+  ;; (defun my/olivetti-mode-on ()
+  ;;   (text-scale-adjust 2)
+  ;;   (setq-local original-flymake-fringe-indicator-position
+  ;;               flymake-fringe-indicator-position)
+
+  ;;               vi-tilde-fringe-mode)
+  ;;   (setq-local original-display-fill-column-indicator-mode
+  ;;               display-fill-column-indicator-mode)
+  ;;   (when (fboundp 'git-gutter-mode)
+  ;;     (setq-local original-git-gutter-mode
+  ;;                 git-gutter-mode))
+  ;;   (setq-local original-display-line-numbers-mode
+  ;;               display-line-numbers-mode)
+  ;;   (setq-local original-org-modern-block-fringe
+  ;;               org-modern-block-fringe)
+  ;;   ;; The of org-modern blocks is not quite right with olivetti.
+  ;;   (setq-local org-modern-block-fringe nil)
+  ;;   (setq-local flymake-fringe-indicator-position nil)
+  ;;   ;; By restarting org-modern-mode, I hide the expansive fringe; thus
+  ;;   ;; preserving the "beauty" of Olivetti
+  ;;   (when (eq major-mode 'org-mode)
+  ;;     (org-modern-mode 1))
+  ;;   (vi-tilde-fringe-mode -1)
+  ;;   (display-line-numbers-mode -1)
+  ;;   (display-fill-column-indicator-mode -1)
+  ;;   (when (fboundp 'git-gutter-mode)
+  ;;     (git-gutter-mode -1))
+  ;;   )
+  ;; ;; Olivetti Mode Hook Off
+  ;; (defun my/olivetti-mode-off ()
+  ;;   (text-scale-adjust 0)
+  ;;   (setq-local flymake-fringe-indicator-position
+  ;;               original-flymake-fringe-indicator-position)
+  ;;   (when (eq major-mode 'org-mode)
+  ;;     (org-modern-mode 1))
+  ;;   (vi-tilde-fringe-mode
+  ;;    original-vi-tilde-fringe-mode)
+  ;;   (display-fill-column-indicator-mode
+  ;;    original-display-fill-column-indicator-mode)
+  ;;   (display-line-numbers-mode
+  ;;    original-display-line-numbers-mode)
+  ;;   (when (fboundp 'git-gutter-mode)
+  ;;     (git-gutter-mode
+  ;;      original-git-gutter-mode))
+  ;;   (setq-local org-modern-block-fringe
+  ;;               original-org-modern-block-fringe))
+  ;;
+  ;; (defun my/olivetti-mode (&rest args)
+  ;;   ;; Turn off org-modern-mode as it's drawing of the
+  ;;   ;; overlays conflicts with Olivetti.  We'll turn it on later.
+  ;;   (when (eq major-mode 'org-mode)
+  ;;     (org-modern-mode -1)))
+  ;; (advice-add 'olivetti-mode :before #'my/olivetti-mode)
+  )
+
+
 
 
 ;;; Pdf Tools

@@ -244,6 +244,7 @@
   :config
   (add-hook 'flymake-diagnostic-functions #'package-lint-flymake))
 
+
 ;;; GUD
 (use-package gud
   :ensure nil

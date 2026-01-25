@@ -757,6 +757,62 @@ context.  When called with an argument, unconditionally call
 
   )
 
+
+;;; Beautify Org Mode (Word)
+(defun my/word-processor-fonts ()
+  "Configure `org-mode' fonts and faces."
+  (interactive)
+  (when window-system
+    ;; First step is to make all Org header levels to use the variable
+    ;; font, and be the same color as the default text:
+    (let ((default-color (face-attribute 'default :foreground)))
+      (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
+                                  org-level-5 org-level-6 org-level-7 org-level-8))
+        (set-face-attribute face nil :height 1.1
+                            :foreground default-color :weight 'bold
+                            :font "Berkeley Nerd Font")))
+
+    ;; Change the header sizes to show their level visually:
+    (set-face-attribute 'org-level-1 nil :height 2.2)
+    (set-face-attribute 'org-level-2 nil :height 1.8)
+    (set-face-attribute 'org-level-3 nil :height 1.4)
+    (set-face-attribute 'org-level-4 nil :height 1.2)
+
+    (dolist (face '(org-block org-code org-verbatim org-table org-drawer
+                              org-table org-formula org-special-keyword org-block
+                              org-property-value org-document-info-keyword))
+      (set-face-attribute face nil :inherit 'fixed-pitch :height 'unspecified))
+
+    (set-face-attribute 'org-block-begin-line nil :height 0.85)
+    (set-face-attribute 'org-block-end-line nil :height 0.8)
+
+    (set-face-attribute 'org-drawer nil :height 0.8)
+    (set-face-attribute 'org-property-value nil :height 0.85)
+    (set-face-attribute 'org-special-keyword nil :height 0.85)))
+
+;;; Better Checkboxes
+(use-package org
+  :ensure nil
+  :config
+  (add-hook 'org-mode-hook (lambda ()
+                             "Beautify Org Checkbox Symbol"
+                             (push '("[ ]" .  "☐") prettify-symbols-alist)
+                             (push '("[X]" . "☑" ) prettify-symbols-alist)
+                             (push '("[-]" . "❍" ) prettify-symbols-alist)
+                             (prettify-symbols-mode)))
+  ;; Strikethrough
+  (defface org-checkbox-done-text
+    '((t (:foreground "#71696A" :strike-through t)))
+    "Face for the text part of a checked org-mode checkbox.")
+
+  (font-lock-add-keywords
+   'org-mode
+   `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)"
+      1 'org-checkbox-done-text prepend))
+   'append)
+  )
+
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; ;;; Org Export ;;
 ;;;;;;;;;;;;;;;;;;;;
