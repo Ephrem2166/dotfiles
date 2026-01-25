@@ -628,7 +628,7 @@
   ;; (add-hook 'prog-mode-hook  #'hs-minor-mode)
   :preface
   (defun my/hideshow-toggle (column)
-"Toggle hiding/showing blocks via hs-mode."
+    "Toggle hiding/showing blocks via hs-mode."
     (interactive "P")
     (condition-case nil
         (hs-toggle-hiding)
@@ -880,6 +880,7 @@
   :hook (Info-Mode . my/info-buffer-setup)
   :custom
   (Info-isearch-search nil)
+
   :config
   (defun my/info-buffer-setup ()
     (hl-line-mode)
@@ -1220,7 +1221,7 @@ Intended to be added to `isearch-mode-hook'."
   (recentf-filename-handlers nil)
   (recentf-show-file-shortcuts-flag nil)
   :config
-  ;;(quiet! (recentf-mode 1))
+  (quiet! (recentf-mode 1))
   (setq recentf-exclude
         '("\\.?cache"
           "~$"
@@ -1260,7 +1261,20 @@ Intended to be added to `isearch-mode-hook'."
   (advice-add 'recentf-load-list :after #'my/recentf-cleanup)
   ;; For perfromance
   (add-to-list 'recentf-filename-handlers #'substring-no-properties)
-;;  (advice-add #'recentf-load-list :around #'doom-shut-up-a)
+  ;;  (advice-add #'recentf-load-list :around #'doom-shut-up-a)
+  :preface
+  (defun my/recentf-add-dired-directory ()
+    "Add directories visit by dired into recentf."
+    (if (and dired-directory
+             (stringp dired-directory)
+             (file-directory-p dired-directory)
+             (not (string= "/" dired-directory)))
+        (let ((last-idx (1- (length dired-directory))))
+          (recentf-add-file
+           (if (= ?/ (aref dired-directory last-idx))
+               (substring dired-directory 0 last-idx)
+             dired-directory)))))
+  (add-hook 'dired-mode #'my/recentf-add-dired-directory)
   )
 
 
@@ -1774,8 +1788,15 @@ to the IFF buffer or  the files listed."
           (if (> (length (window-list)) 1)
               (delete-window)
             (bury-buffer))))))
-  (define-key dired-mode-map "z" 'my/pop-window-configuration)
-  (define-key Info-mode-map "z" 'my/pop-window-configuration)
+  ;; (define-key dired-mode-map "z" 'my/pop-window-configuration)
+  ;; (define-key Info-mode-map "z" 'my/pop-window-configuration)
+  (setq same-window-buffer-names
+        '( "*eshell*"
+           "*shell*"
+           "*mail*"
+           "*inferior-lisp*"
+           "*ielm*"
+           "*scheme*"           ))
   )
 
 ;;; Winner

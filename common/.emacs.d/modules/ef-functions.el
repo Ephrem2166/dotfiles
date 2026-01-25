@@ -793,7 +793,7 @@ If FORCE-P, delete without confirmation."
         (delete-other-windows)))))
 (define-key ef-buffer-keymap (kbd "m") #'my/toggle-maximize-buffer)
 
-;; Indent Region or Buffer
+;;; Indent Region or Buffer
 (defun my/indent-region-or-buffer (&optional arg)
   "Indent a region if selected, otherwise the whole buffer.
 if prefix argument ARG is given, `untabify' first."
@@ -3056,7 +3056,85 @@ ARG is passed to `kill-line' and function `kill-whole-line'."
 
 
 
-;;; Query Replace
+;;; Bury or Unbury buffer
+(defun my/bury-or-unbury-buffer (&optional prefix)
+  "Without PREFIX `bury-buffer' a buffer.
+
+With one universal PREFIX, `unbury-buffer'.
+With two universal PREFIX `delete-frame'.
+With three or more universal PREFIX `save-buffers-kill-emacs'."
+  (interactive "p")
+  (cond
+   ((eq prefix nil)
+    (if buffer-read-only (kill-current-buffer) (bury-buffer)))
+   ((>= prefix 64)
+    (progn
+      (let ((save-silently t)) (recentf-save-list))
+      (save-buffers-kill-emacs t)))
+   ((>= prefix 16)
+    (delete-frame))
+   ((>= prefix 4)
+    (unbury-buffer))
+   (t
+    (if buffer-read-only (kill-current-buffer) (bury-buffer)))))
+
+
+;;; Transpose Windows
+(defun my/transpose-windows ()
+  "Swap the buffers shown in current and next window."
+  (interactive)
+  (let ((this-buffer (window-buffer))
+        (next-window (next-window nil :no-minibuf nil)))
+    (set-window-buffer nil (window-buffer next-window))
+    (set-window-buffer next-window this-buffer)
+    (select-window next-window)))
+
+;;; Create buffer
+(defun my/new-buffer (name)
+  "Create a new buffer, prompting for NAME."
+  (interactive
+   (list (read-string
+          "Create buffer (default \"untitled\"): "
+          nil nil "untitled")))
+  (let ((buffer (generate-new-buffer name)))
+    (switch-to-buffer buffer)
+    (text-mode)
+    (setq-local buffer-offer-save t)
+    (setq-local buffer-confirm-kill t)))
+
+
+;;; Edit Rectangle
+;; Select a text and edit or restor it in a separate buffer
+(defvar edit-rectangle-origin)
+(defvar edit-rectangle-saved-window-config)
+
+(defun edit-rectangle (&optional start end)
+  (interactive "r")
+  (let ((strs (delete-extract-rectangle start end))
+        (mode major-mode)
+        (here (copy-marker (min (mark) (point)) t))
+        (config (current-window-configuration)))
+    (with-current-buffer (generate-new-buffer "*Rectangle*")
+      (funcall mode)
+      (set (make-local-variable 'edit-rectangle-origin) here)
+      (set (make-local-variable 'edit-rectangle-saved-window-config) config)
+      (local-set-key (kbd "C-c C-c") #'restore-rectangle)
+      (mapc #'(lambda (x) (insert x ?\n)) strs)
+      (goto-char (point-min))
+      (pop-to-buffer (current-buffer)))))
+
+(defun restore-rectangle ()
+  (interactive)
+  (let ((content (split-string (buffer-string) "\n"))
+        (origin edit-rectangle-origin)
+        (config edit-rectangle-saved-window-config))
+    (with-current-buffer (marker-buffer origin)
+      (goto-char origin)
+      (insert-rectangle content))
+    (kill-buffer (current-buffer))
+    (set-window-configuration config)))
+
+
 
 
 ;;; ef-functions ends here

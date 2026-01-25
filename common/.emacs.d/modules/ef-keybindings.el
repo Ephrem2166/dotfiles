@@ -48,6 +48,10 @@
 (global-set-key [home] 'beginning-of-buffer)
 (global-set-key [end]  'end-of-buffer)
 
+;;; Kill buffer and window
+;; (global-set-key (kbd "C-x k") #'kill-buffer-and-window)
+
+
 (define-key global-map (kbd "RET") 'newline-and-indent)
 ;;; Alternative
 ;; (use-package emacs

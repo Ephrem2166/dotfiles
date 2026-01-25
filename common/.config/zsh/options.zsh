@@ -2,6 +2,11 @@
 # check `man zshoptions`
 # Use Emacs Keybindings
 # bindkey -e
+
+# Autoload the completion system
+autoload -U compinit
+compinit
+
 # Go to folder path without using CD
 setopt AUTO_CD
 # Push the old directory onto the stack on cd.
@@ -89,6 +94,9 @@ setopt NUMERIC_GLOB_SORT
 # Append trailing / to filename expansion when they match a directory
 setopt MARK_DIRS
 
+# Display red dots whilst waiting for commands to complete.
+# COMPLETION_WAITING_DOTS="true"
+# COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
 autoload -U colors && colors
 
 # Now we autoload run-help and several extensions to it which provide
@@ -97,3 +105,6 @@ autoload -Uz run-help
 autoload -Uz run-help-git
 autoload -Uz run-help-ip
 autoload -Uz run-help-sudo
+
+# Selecting options using Tab, arrows, and C-p / C-n:
+zmodload zsh/complist
