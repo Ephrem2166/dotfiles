@@ -203,9 +203,14 @@
 ;;;; Markdown (markdown-mode)
 (use-package markdown-mode
   :ensure t
-  :defer t
+  :preface
+  (defun my/markdown-hook ()
+    (setq fill-column 100)
+    (flyspell-mode)
+    (visual-line-mode)
+    )
   :hook (
-         (markdown-mode . visual-line-mode)
+         (markdown-mode . my/markdown-hook)
          (markdown-mode . my/markdown-headers)
          )
 

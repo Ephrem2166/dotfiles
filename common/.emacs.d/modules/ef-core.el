@@ -886,6 +886,7 @@
       (setq-local visual-fill-column-width 80)
       (visual-line-fill-column-mode))
     (face-remap-set-base 'default `(:height 1.0))
+
     )
   )
 
