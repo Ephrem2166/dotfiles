@@ -144,21 +144,20 @@
 
   (add-hook 'prog-mode-hook #'my/eglot-setup)
   ;; Eldoc Integration
-  (defun my/eglot-eldoc-setup ()
-    ;; Show flymake diagnostics first
-    (setq eldoc-documentation-functions
-          (cons #'flymake-eldoc-function
-                (remove #'flymake-eldoc-function eldoc-documentation-functions)))
-    (setq eldoc-documentation-strategy
-          'eldoc-documentation-compose-eagerly))
-  (add-hook 'eglot-managed-mode #'my/eglot-eldoc-setup)
+  (add-hook 'eglot-managed-mode-hook
+            (lambda ()
+              (setq eldoc-documentation-functions
+                    (cons #'flymake-eldoc-function
+                          (remove #'flymake-eldoc-function eldoc-documentation-functions))
+                    )
 
-  ;; :init
+              )
 
-
-
+            )
 
   )
+
+
 
 ;;; Eglot Booster
 ;; eglot-booster: Boost eglot using lsp-booster

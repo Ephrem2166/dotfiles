@@ -165,6 +165,7 @@
   (use-package lua-mode
     :ensure t
     :mode ("\\.lua$\\'" . lua-mode)
+    :interpreter "lua"
     ;; :custom
     ;; (lua-indent-level 2)
     ;; (lua-indent-string-contents t)
