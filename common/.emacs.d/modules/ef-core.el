@@ -126,6 +126,7 @@
       ";;; Commentary:\n"
       ";; \n\n"
       ";;; Code:\n\n\n"
+      ";;; Code Ends Here"
       "(provide '" (file-name-base) ")\n"
       ";;; " (file-name-nondirectory (buffer-file-name)) " ends here\n"
       )))
@@ -651,8 +652,8 @@
   (setq hippie-expand-try-functions-list
         '(
           try-expand-dabbrev
-          try-expand-dabbrev-visible
           try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-visible
           try-expand-dabbrev-from-kill
           try-complete-file-name-partially
           try-complete-file-name
@@ -1755,6 +1756,26 @@ to the IFF buffer or  the files listed."
 
   ;; Only one window on startup
   (add-hook 'emacs-startup-hook 'delete-other-windows t)
+
+  ;; Helper Function
+  ;; push and pop window configuration
+  (eval-and-compile
+    (defvar saved-window-configuration nil)
+
+    (defun push-window-configuration ()
+      (interactive)
+      (push (current-window-configuration) saved-window-configuration))
+
+    (defun my/pop-window-configuration ()
+      (interactive)
+      (let ((config (pop saved-window-configuration)))
+        (if config
+            (set-window-configuration config)
+          (if (> (length (window-list)) 1)
+              (delete-window)
+            (bury-buffer))))))
+  (define-key dired-mode-map "z" 'my/pop-window-configuration)
+  (define-key Info-mode-map "z" 'my/pop-window-configuration)
   )
 
 ;;; Winner

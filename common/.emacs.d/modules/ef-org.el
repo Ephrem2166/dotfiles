@@ -13,6 +13,9 @@
   (prettify-symbols-mode)
   (setq evil-auto-indent nil)
   (setq-local fill-column 120)
+  (setq-local evil-auto-indent nil)
+  ;; default `org-indent-line' inserts extra spaces at the beginning of lines
+  (setq-local indent-line-function 'indent-relative)
   ;; It conflicts with org-modern block prettification
   ;; Use it with org-modern-indent
   ;; (org-indent-mode 1)
@@ -22,35 +25,18 @@
   ;; It messes with org-table
   ;; (variable-pitch-mode)
   ;; (lambda () (setq-local line-spacing 0.2 fill-column 100))
-  )
-;; (add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))
-(add-hook 'org-mode-hook #'ef/org-mode-hooks)
-
-;;;; Org Mode Hook Setup 2
-(defun org-mode-hook-setup ()
-  (setq-local evil-auto-indent nil)
-  ;; org-mime setup, run this command in org-file, than yank in `message-mode'
-  ;; (local-set-key (kbd "C-c M-o") 'org-mime-org-buffer-htmlize)
-
-  ;; don't spell check double words
-  ;; (setq-local wucuo-flyspell-check-doublon nil)
-
-  ;; create updated table of contents of org file
-  ;; @see https://github.com/snosov1/toc-org
-  (toc-org-enable)
-  ;; default `org-indent-line' inserts extra spaces at the beginning of lines
-  (setq-local indent-line-function 'indent-relative)
   ;; display wrapped lines instead of truncated lines
   (setq truncate-lines nil)
+  (setq word-wrap t)
+  ;; (toc-org-enable)
+  ;; Prevent flickering when org indent is enabled
+  (show-paren-mode nil)
+  (abbrev-mode)
+  )
+(add-hook 'org-mode-hook #'ef/org-mode-hooks)
 
-  (setq word-wrap t))
-(add-hook 'org-mode-hook 'org-mode-hook-setup)
 
-;; Prevent flickering when org indent is enabled
-(add-hook 'org-mode-hook 'show-paren-mode nil)
-;; (add-hook 'org-mode-hook  line-spacing 0.1)
-
-;;;; Variable Pitch Mode
+;;; Variable Pitch Mode
 (defun my/enable-variable-pitch-mode ()
   "Enable variable-pitch-mode for relevant org-mode text."
   (variable-pitch-mode 1)
