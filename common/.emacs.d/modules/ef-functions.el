@@ -3055,6 +3055,10 @@ ARG is passed to `kill-line' and function `kill-whole-line'."
 ;; (add-hook 'after-change-major-mode-hook 'my/hidden-mode-line-mode)
 
 
+
+;;; Query Replace
+
+
 ;;; ef-functions ends here
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
