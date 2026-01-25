@@ -31,6 +31,8 @@
   (global-font-lock-mode t)
   (custom-set-faces '(flyspell-incorrect ((t (:inverse-video t)))))
   (setq ispell-silently-savep t)
+  (setq flyspell-abbrev-p nil)
+  (setq flyspell-use-meta-tab nil)
   )
 
 

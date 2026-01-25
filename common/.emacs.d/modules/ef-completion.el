@@ -33,6 +33,7 @@
     (setq-local completion-at-point-functions
                 (cons (cape-capf-super
                        #'eglot-completion-at-point
+                       #'cape-dabbrev
                        #'tempel-expand
                        #'cape-file
                        #'tempel-complete)
@@ -55,18 +56,6 @@
   ;; Merge the dabbrev, dict and keyword capfs, display candidates together.
   (setq-local completion-at-point-functions
               (list (cape-capf-super #'cape-dabbrev #'cape-dict #'cape-keyword)))
-  ;; Elisp Completion Setup
-  (defun ef-elisp-setup ()
-    (setq-local completion-at-point-functions (list (cape-capf-super
-                                                     #'elisp-completion-at-point
-                                                     #'cape-dabbrev
-                                                     #'cape-file
-                                                     #'cape-keyword
-                                                     )))
-    )
-
-  (add-hook 'emacs-lisp-mode #'ef-elisp-setup)
-
   ;; Eglot Tempel
   (defun init-cape-eglot-capf ()
     (setq-local completion-at-point-functions
@@ -74,15 +63,6 @@
                       (cape-capf-super (cape-capf-buster #'eglot-completion-at-point #'string-prefix-p)
                                        :with #'tempel-complete))))
   (add-hook 'eglot-managed-mode #'init-cape-eglot-capf)
-  ;; Eglot Capf
-  (defun my/eglot-capf ()
-    (setq-local completion-at-point-functions
-                (cons (cape-capf-super
-                       #'cape-file
-                       #'eglot-completion-at-point
-                       #'tempel-complete)
-                      completion-at-point-functions)))
-  (add-hook 'eglot-managed-mode #'my/eglot-capf)
   ;; Writing
   (defun ef-writing-capf ()
     (setq-local completion-at-point-functions
