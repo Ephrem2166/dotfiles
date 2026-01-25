@@ -650,18 +650,18 @@
   ;; change the order it tries things
   (setq hippie-expand-try-functions-list
         '(
-          try-expand-list
-          try-expand-dabbrev-visible
           try-expand-dabbrev
-          try-expand-all-abbrevs
+          try-expand-dabbrev-visible
           try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-from-kill
           try-complete-file-name-partially
           try-complete-file-name
-          try-expand-dabbrev-from-kill
-          try-expand-whole-kill
-          try-expand-line
+          try-expand-all-abbrevs
           try-complete-lisp-symbol-partially
           try-complete-lisp-symbol
+          try-expand-list
+          try-expand-whole-kill
+          try-expand-line
           ))
   )
 
@@ -737,6 +737,11 @@
   (setq ibuffer-shrink-to-minimum-size  t)
   (setq ibuffer-filter-group-name-face '(:inherit (success bold)))
   (setq ibuffer-default-display-maybe-show-predicates t)
+  ;; Kill ibuffer after quit
+  (defadvice ibuffer-quit (after kill-ibuffer activate)
+    "Kill the ibuffer buffer on exit."
+    (kill-buffer "*Ibuffer*"))
+
   (setq ibuffer-saved-filter-groups
         '(("default"
            ("Magit"
@@ -753,11 +758,10 @@
              (mode . eshell-mode)
              (mode . term-mode)
              (mode . compilation-mode)))
-           ("Lisp"
-            (mode . emacs-lisp-mode))
+
            ("Dired"
             (mode . dired-mode))
-           ("help"    (or
+           ("Help"    (or
                        (name . "^\\*Help\\*$")
                        (name . "^\\*info\\*$")))
            ("Org"
@@ -799,13 +803,46 @@
                        (mode . json-mode)
                        (mode . scala-mode)
                        (mode . go-mode)
-                       (mode . erlang-mode)))
+                       (mode . typescript-mode)
+                       (mode . javascript-mode)
+                       (mode . js-mode)
+                       (mode . jsx-mode)
+                       (mode . js2-mode)
+                       (mode . json-mode)
+                       (name . "\\*js\\*")
+                       (mode . nodejs-repl-mode)
+                       (mode . erlang-mode)
+                       (mode . html-mode)
+                       (mode . web-mode)
+                       (name . "\\.yml$")
+                       ))
            ("Magit" (name . "^\\*magit.*$"))
+           ("Markdown" (or
+                        (name . "*.md$")
+                        (mode . markdown-mode)))
+           ("LaTeX" (or (mode . latex-mode)
+                        (name . "*.tex$")))
+           ("IRC" (or
+                   (mode . erc-mode)
+                   (mode . rcirc-mode)))
 
            )))
+  ;; Auto-update ibuffer
   (add-hook 'ibuffer-mode-hook
             (lambda ()
+              ;; (ibuffer-auto-mode 1)
               (ibuffer-switch-to-saved-filter-groups "default")))
+  ;; recycle move cursor
+  (defun ibuffer-previous-line ()
+    (interactive) (previous-line)
+    (if (<= (line-number-at-pos) 2)
+        (goto-line (- (count-lines (point-min) (point-max)) 2))))
+  (defun ibuffer-next-line ()
+    (interactive) (next-line)
+    (if (>= (line-number-at-pos) (- (count-lines (point-min) (point-max)) 1))
+        (goto-line 3)))
+  (define-key ibuffer-mode-map (kbd "<up>") 'ibuffer-previous-line)
+  (define-key ibuffer-mode-map (kbd "<down>") 'ibuffer-next-line)
 
   )
 

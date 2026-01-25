@@ -6,21 +6,12 @@
 (defun ef/org-mode-hooks ()
   "Various modes to run in org mode."
   (abbrev-mode)
-  ;; (setq line-spacing 12)
   (setq-default line-spacing 1)
   ;; Toggle automatic line breaking (Auto Fill mode).
   (auto-fill-mode)
-  ;; (electric-indent-mode nil)
-  ;; (visual-fill-column-mode nil)
-  ;; (variable-pitch-mode)
   (visual-line-mode 1)
-  ;; (mixed-pitch-mode 1)
-  ;; (fontaine-mode 1)
   (display-line-numbers-mode -1)
   (prettify-symbols-mode)
-  ;; (adaptive-wrap-prefix-mode 1)
-  ;;(olivetti-mode)
-  ;; (setq corfu-auto nil)
   (setq evil-auto-indent nil)
   (setq-local fill-column 120)
   ;; It conflicts with org-modern block prettification
@@ -32,7 +23,6 @@
   ;; It messes with org-table
   ;; (variable-pitch-mode)
   ;; (lambda () (setq-local line-spacing 0.2 fill-column 100))
-  ;; (auto-insert-mode 1)
   )
 ;; (add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))
 (add-hook 'org-mode-hook #'ef/org-mode-hooks)
@@ -224,11 +214,11 @@
   :config
   (define-auto-insert 'org-mode
     '(t
-      "#+title: " (read-string "Title: ") "\n"
-      "#+author: " (user-full-name) "\n"
-      (if (y-or-n-p "Add Date? ") (concat "#+date: " (format-time-string "%Y-%m-%d") "\n"))
+      "#+TITLE: " (read-string "Title: ") "\n"
+      "#+AUTHOR: " (user-full-name) "\n"
+      (if (y-or-n-p "Add Date? ") (concat "#+DATE: " (format-time-string "%Y-%m-%d") "\n"))
       ;; Startup options completion
-      "#+startup: " ((completing-read "Startup: " org-startup-options nil t) str " ") "\n"
+      ;; "#+startup: " ((completing-read "Startup: " org-startup-options nil t) str " ") "\n"
       )    )
 
   )
