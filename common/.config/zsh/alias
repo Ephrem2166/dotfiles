@@ -44,6 +44,12 @@ alias tree3='tree -L 3'
 #####################
 alias diff="diff --color=auto"
 alias ip="ip -color=auto"
+# # colorful ls for whichever platform
+# if ls -F --color=auto >&/dev/null; then
+#     alias ls="ls --color=auto -F"
+# else
+#     alias ls="ls -GF"
+# fi
 
 #######################
 # # Easier navigation #
