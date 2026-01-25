@@ -33,9 +33,7 @@
           ;;; TRYING biome
           ((css-mode css-ts-mode js-json-mode js-mode json-mode json-ts-mode tsx-ts-mode) . biome)
           ((toml-ts-mode toml-mode) . tombi)
-          )
-
-        )
+          )        )
   :init
   (apheleia-global-mode 1))
 
