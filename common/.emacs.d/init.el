@@ -27,6 +27,9 @@
 (require 'ef-writing)
 (require 'ef-reading)
 (require 'ef-org)
+(require 'ef-org-agenda)
+(require 'ef-org-capture)
+(require 'ef-org-external)
 (require 'ef-modeline)
 ;; External
 (require 'ef-completion)
