@@ -3290,6 +3290,9 @@ nil then relative line-numbers are toggled."
          (t
           (if (eq display-line-numbers 'relative) t 'relative)))))
 
+;;; Inhibit Message Wrapper
+
+
 ;;; ef-functions ends here
 (provide 'ef-functions)
 ;;; ef-functions.el ends here

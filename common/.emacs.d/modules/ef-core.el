@@ -1,6 +1,11 @@
 ;;; ef-core.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
+;;; Wrapper
+(defun inhibit-messages-wrapper! (func &rest args)
+  (let ((inhibit-message t))
+    (apply func args)))
+
 ;;; Alias
 ;; Text Manipulation
 (defalias 'rs 'replace-string)
@@ -237,7 +242,7 @@
   :hook
   ((prog-mode . display-line-numbers-mode)
 
-   ;; (text-mode .display-line-numbers-mode)
+   (text-mode .display-line-numbers-mode)
    )
   :config
   ;; If non-nil, count number of lines to use for line number width.
@@ -612,10 +617,13 @@
   (help-clean-buttons t)
   (help-enable-symbol-autoload t)
   ;; Show help on point
-  (help-at-pt-display-when-idle t)
-  (help-at-pt-set-timer)
+  ;; (help-at-pt-display-when-idle t)
+  ;; (help-at-pt-set-timer)
   (describe-bindings-outline t)
   (describe-bindings-show-prefix-commands t)
+  :config
+  ;; stop repeating the same message please
+  (advice-add 'help-window-display-message :around #'ignore)
   )
 
 ;;; Hideshow
@@ -678,7 +686,10 @@
   :defer t
   :hook ((text-mode . hl-line-mode)
          (org-mode . hl-line-mode)
-         ( prog-mode . hl-line-mode)))
+         ( prog-mode . hl-line-mode))
+  ;; :custom
+  ;; (hl-line-sticky-flag nil "only highlight line in active mode")
+  )
 
 ;;; Hi-lock
 ;; minor mode for interactive automatic highlighting
@@ -718,6 +729,11 @@
   :bind
   ;; ("C-c i" . ibuffer)
   ([remap list-buffers] . ibuffer)
+  :custom
+  (ibuffer-filter-group-name-face '(:inherit (font-lock-string-face bold)))
+  (ibuffer-title-face '(:inherit (font-lock-type-face)))
+  (ibuffer-never-show-predicates (list (rx bol " " (* any))))
+
   :config
   ;; Modify the default ibuffer formats
   (setq ibuffer-formats
@@ -1226,6 +1242,7 @@ Intended to be added to `isearch-mode-hook'."
   (recentf-filename-handlers nil)
   (recentf-show-file-shortcuts-flag nil)
   :config
+  (advice-add 'recentf-load-list :around #'inhibit-messages-wrapper!)
   ;; (quiet! (recentf-mode 1))
   (setq recentf-exclude
         '("\\.?cache"
