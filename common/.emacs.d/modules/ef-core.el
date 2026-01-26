@@ -352,7 +352,7 @@
   ;; Show keystrokes
   (setopt echo-keystrokes 0.1)
   (setopt show-trailing-whitespace nil)
-  (setopt fill-column 80)
+  (setq-default fill-column 85)
   ;; Title bar of visible frames
   ;; (setopt frame-title-format '("Emacs" emacs-version))
   ;; Avoid automatic frame resizing when adjusting settings.
@@ -622,7 +622,9 @@
 (use-package hideshow
   :ensure nil
   :hook (prog-mode . hs-minor-mode)
-  :bind ("C-c C-h" . my/hideshow-toggle)
+  :bind (:map hs-minor-mode-map
+              ([C-tab] . hs-toggle-hiding))
+  ;; :bind ("C-c C-h" . my/hideshow-toggle)
   :config
   ;; Unfold code when searching
   (setq hs-isearch-open t)
