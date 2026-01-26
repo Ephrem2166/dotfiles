@@ -19,7 +19,7 @@
   ;; (setq company-lighter-base "C")
   (setq company-insertion-on-trigger nil)
   ;; Frontend
-  (setq company-tooltip-align-annotations nil)
+  (setq company-tooltip-align-annotations t)
   (setq company-tooltip-limit 5)
   (setq company-tooltip-offset-display 'lines)
   (setq company-tooltip-minimum 5)
@@ -43,6 +43,10 @@
   (setq company-files-exclusions '(".git/" ".DS_Store"))
   ;; Candidates Post Processing
   (setq company-transformers '(delete-consecutive-dups company-sort-by-occurrence company-sort-prefer-same-case-prefix))
+  ;; Others
+  (setq company-emoji-insert-unicode nil)
+  ;; Do not enable company in some modes
+  (setq company-global-modes '(not erland-mode python-mode))
   )
 
 ;;; Company Box

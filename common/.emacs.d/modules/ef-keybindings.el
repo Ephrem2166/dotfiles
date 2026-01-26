@@ -19,7 +19,7 @@
 (global-set-key (kbd "M-e") 'my/eval-buffer-or-region)
 
 ;;; Remap kill-buffer to `kill-current-buffer'
-(bind-key "C-x k" 'kill-current-buffer)
+;; (bind-key "C-x k" 'kill-current-buffer)
 ;;; Replace C-g with escape
 (global-set-key [escape] 'keyboard-quit)
 ;;;; Comment Line

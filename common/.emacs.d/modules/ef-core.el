@@ -611,6 +611,9 @@
   (help-enable-variable-value-editing t)
   (help-clean-buttons t)
   (help-enable-symbol-autoload t)
+  ;; Show help on point
+  (help-at-pt-display-when-idle t)
+  (help-at-pt-set-timer)
   (describe-bindings-outline t)
   (describe-bindings-show-prefix-commands t)
   )
