@@ -59,6 +59,34 @@
 
 (add-hook 'org-mode-hook #'my/enable-variable-pitch-mode)
 
+;; ;;; Variable Pitch Mode 2
+;; (use-package org
+;;   :ensure nil
+;;   :config
+;;   (custom-set-faces '(org-level-1 ((t (:inherit variable-pitch :weight medium :height 1.3))))
+;;                     '(org-level-2 ((t (:inherit variable-pitch :weight medium :height 1.2))))
+;;                     '(org-level-3 ((t (:inherit variable-pitch :weight medium :height 1.1))))
+;;                     '(org-level-4 ((t (:inherit variable-pitch :weight medium :height 1.0))))
+;;                     '(org-level-5 ((t (:inherit variable-pitch :weight medium :height 1.0))))
+;;                     '(org-level-6 ((t (:inherit variable-pitch :weight medium :height 1.0))))
+;;                     '(org-level-7 ((t (:inherit variable-pitch :weight medium :height 1.0))))
+;;                     '(org-level-8 ((t (:inherit variable-pitch :weight medium :height 1.0))))
+;;                     '(org-document-title ((t (:weight bold :height 2.1))))
+;;                     ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+;;                     '(org-block ((t (:inherit fixed-pitch))))
+;;                     '(org-table ((t (:inherit fixed-pitch))))
+;;                     '(org-formula ((t (:inherit fixed-pitch))))
+;;                     '(org-code ((t (:inherit fixed-pitch))))
+;;                     '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+;;                     '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+;;                     '(org-todo ((t (:inherit fixed-pitch))))
+;;                     '(org-done ((t (:inherit fixed-pitch))))
+;;                     '(org-headline-done ((t (:inherit variable-pitch :strike-through t))))
+;;                     '(org-checkbox ((t (:inherit fixed-pitch))))
+;;                     '(org-checkbox-statistics-todo ((t (:inherit fixed-pitch))))
+;;                     '(org-checkbox-statistics-done ((t (:inherit fixed-pitch)))))
+;;   )
+
 ;;;; Org SRC Code Block in monospace font
 (use-package org
   :ensure nil
@@ -272,7 +300,6 @@
         )   ;; Deep Blue
   (setq org-use-fast-todo-selection t)
   )
-
 
 ;;; Org Structure Template List
 ;; A list of keys and block types
@@ -896,11 +923,6 @@ context.  When called with an argument, unconditionally call
 
 
 
-
-;;; TODO: Org Present
-(use-package org-present
-  :after org
-  )
 
 
 

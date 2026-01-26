@@ -126,7 +126,7 @@
       ";;; Commentary:\n"
       ";; \n\n"
       ";;; Code:\n\n\n"
-      ";;; Code Ends Here"
+      ;; ";;; Code Ends Here"
       "(provide '" (file-name-base) ")\n"
       ";;; " (file-name-nondirectory (buffer-file-name)) " ends here\n"
       )))
@@ -1221,7 +1221,7 @@ Intended to be added to `isearch-mode-hook'."
   (recentf-filename-handlers nil)
   (recentf-show-file-shortcuts-flag nil)
   :config
-  (quiet! (recentf-mode 1))
+  ;; (quiet! (recentf-mode 1))
   (setq recentf-exclude
         '("\\.?cache"
           "~$"

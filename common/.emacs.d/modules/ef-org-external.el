@@ -6,9 +6,7 @@
 ;;; Code:
 
 
-;;;;;;;;;;;;;;;;;;;;
-;; ;;; Org Appear ;;
-;;;;;;;;;;;;;;;;;;;;
+;;; Org Appear
 ;; Shows emphasis markers when the cursor is on the emphasized region
 (use-package org-appear
   :disabled
@@ -29,9 +27,7 @@
   (run-at-time nil nil #'org-appear--set-elements))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Org Auto Tangle ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Org Auto Tangle
 ;; Automatically and Asynchronously tangles org files on save
 (use-package org-auto-tangle
   :after org
@@ -42,9 +38,8 @@
   (setq org-auto-tangle-default nil))
 
 
-;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; ORG-CLIPLINK ;;
-;;;;;;;;;;;;;;;;;;;;;;
+
+;;; ORG-CLIPLINK
 ;; Insert org-mode links from the clipboard
 (use-package org-cliplink
   :ensure t
@@ -52,9 +47,7 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Org Download ;;
-;;;;;;;;;;;;;;;;;;;;;;
+;;; Org Download
 ;; Image drag-and-drop for org-mode
 (use-package org-download
   :ensure t
@@ -71,9 +64,7 @@
   (org-download-image-html-width 700))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Org Modern Indent ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Org Modern Indent
 ;; Instead of org outline mode
 (use-package org-modern-indent
   :ensure (:host github :repo "jdtsmith/org-modern-indent")
@@ -84,9 +75,7 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;
-;; ;;; ORG JOURNAL ;;
-;;;;;;;;;;;;;;;;;;;;;
+;;; ORG JOURNAL
 (use-package org-journal
   :ensure t
   :after org
@@ -99,9 +88,7 @@
 
 
 
-;;;;;;;;;;;;;;;;
-;; ;; Mermaid ;;
-;;;;;;;;;;;;;;;;
+;;; Mermaid
 ;; Org-babel support for mermaid evaluation
 (defconst mermaid-folder "$HOME/.npm/bin/mmdc")
 (use-package ob-mermaid
@@ -112,11 +99,8 @@
   (setq ob-mermaid-cli-path mermaid-folder))
 
 
-;;;;;;;;;;;;;;;;;;;;
-;; ;;; Org Modern ;;
-;;;;;;;;;;;;;;;;;;;;
+;;; Org Modern
 ;; Modern Look for Org
-
 (use-package org-modern
   :ensure t
   :after org
@@ -264,9 +248,7 @@
   )
 
 
-;;;;;;;;;;;;;;;;;;;
-;; ;;; Org Noter ;;
-;;;;;;;;;;;;;;;;;;;
+;;; Org Noter
 ;; A synchronized org-mode document annotator
 ;; Just press i
 (use-package org-noter
@@ -290,18 +272,49 @@
   )
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; TODO: Org-pdftools (ERRORS) ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; TODO: Org-pdftools (ERRORS)
 ;; Support for links to documents in pdfview mode
 ;; (use-package org-pdftools
 ;;   :ensure t
 ;;   :hook (org-mode . org-pdftools-setup-link))
 
 
-;;;;;;;;;;;;;;;;;;;;
-;; ;;; Org Remark ;;
-;;;;;;;;;;;;;;;;;;;;
+;;; FIXME: Org Present
+(use-package org-present
+  :ensure t
+  :after org
+  :preface
+  (defun my/org-present-start (&rest args)
+    (menu-bar--display-line-numbers-mode-none)
+    (visual-line-mode 1)
+    (org-display-inline-images)
+    (org-present-hide-cursor)
+    (org-present-read-only)
+    (org-present-big)
+    (setq header-line-format " "))
+  (defun my/org-present-end (&rest args)
+    (menu-bar--display-line-numbers-mode-visual)
+    (visual-line-mode 0)
+    (org-remove-inline-images)
+    (org-present-show-cursor)
+    (org-present-read-write)
+    (setq header-line-format nil))
+  (defun my/org-present-prepare-slide (buffer-name heading)
+    ;; Show only top-level headlines
+    (org-overview)
+    ;; Unfold the current entry
+    (org-fold-show-entry)
+    ;; Show only direct subheadings of the slide but don't expand them
+    (org-fold-show-children))
+  :hook (org-present-mode . my/org-present-start)
+  :hook (org-present-mode-quit . my/org-present-end)
+  :custom
+  (org-present-after-navigate-functions  #'my/org-present-prepare-slide)
+  )
+
+
+
+;;; Org Remark
 ;; Org-remark lets you highlight and annotate text files, websites,
 ;; EPUB books and Info documentation with using Org mode.
 (use-package org-remark
@@ -343,9 +356,7 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Org Superstar ;;
-;;;;;;;;;;;;;;;;;;;;;;;
+;;; Org Superstar
 ;; Prettify headings and plain lists in org mode
 (use-package org-superstar
   :disabled t
@@ -381,9 +392,7 @@
      (?- . "–")
      (?* . "‣"))) )
 
-;;;;;;;;;;;;;;;;;
-;; ;;; toc-org ;;
-;;;;;;;;;;;;;;;;;
+;;; toc-org
 ;; Add table of contents to org mode files
 (use-package toc-org
   :ensure t
@@ -399,9 +408,7 @@
 ;;   :ensure t)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Org-Transclusion ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Org-Transclusion
 ;; Transclude text content via links
 ;; (use-package org-transclusion
 ;;   :ensure nil
@@ -417,9 +424,7 @@
 
 
 
-;;;;;;;;;;;;;;;;
-;; ;;; Valign ;;
-;;;;;;;;;;;;;;;;
+;;; Valign
 (use-package valign
   :ensure t
   :hook ((org-mode markdown-mode) . valign-mode)
