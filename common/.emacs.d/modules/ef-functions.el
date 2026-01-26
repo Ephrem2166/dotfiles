@@ -3137,6 +3137,45 @@ With three or more universal PREFIX `save-buffers-kill-emacs'."
 
 
 
+;;; By default hide apps by closing their window or burying them
+(defun my/default-hide-app ()
+  (interactive)
+  (if (one-window-p)
+      (bury-buffer)
+    (delete-window)))
+(global-set-key (kbd "C-c q") #'my/default-hide-app)
+
+;;; Kill current buffer
+(defun my/kill-this-buffer ()
+  (interactive)
+  (cond
+   ((window-minibuffer-p (frame-selected-window (selected-frame))) (abort-recursive-edit))
+   (t (kill-buffer (current-buffer)))))
+;; (global-set-key (kbd "C-x k") #'my/kill-this-buffer)
+
+
+
+;;; Reorient
+(defun my/reorient (&rest ignored)
+  (ignore-errors (recenter))
+  (iqbal-highlight-line)
+  (when (equal major-mode 'org-mode)
+    (org-show-subtree)))
+
+(add-hook 'imenu-after-jump-hook #'my/reorient t)
+;; After jumping to occurrence from occur mode
+(add-hook 'occur-mode-find-occurrence-hook #'my/reorient t)
+;; After finding a tag
+(add-hook 'find-tag-hook #'my/reorient t)
+;; After jumping to error from grep/compilation mode
+(add-hook 'next-error-hook #'my/reorient t)
+;; Goto Last Change
+(advice-add 'goto-last-change :after #'my/reorient)
+
+(advice-add 'goto-last-change-reverse :after #'my/reorient)
+
+
+
 ;;; ef-functions ends here
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
