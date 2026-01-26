@@ -154,7 +154,7 @@
   ;;:defer t
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :config
-  (pdf-tools-install)
+  (pdf-tools-install :no-query)
   (require 'pdf-tools)
   (require 'pdf-view)
   (require 'pdf-misc)

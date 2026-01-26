@@ -75,7 +75,10 @@
       (flymake-mode . "fly")
       (sideline-mode . "")
       (god-mode . ,(propertize "God" 'face 'success))
-      (gcmh-mode . ""))
+      (gcmh-mode . "")
+      (apheleia-mode . "AA")
+      )
+
     "Alist for `clean-mode-line'.
 
   ; ;; When you add a new element to the alist, keep in mind that you

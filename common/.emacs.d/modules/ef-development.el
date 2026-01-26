@@ -249,7 +249,7 @@
   :custom
   (gud-highlight-current-line t))
 
-;;; Prog Mode
+;;;   Prog Mode
 (use-package prog-mode
   :ensure nil
   :hook (prog-mode . prog-mode-setup)
@@ -262,6 +262,11 @@
     )
   :init
   (add-to-list 'safe-local-variable-values '(fill-column . 120))
+
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (font-lock-add-keywords nil
+                                      '(("\\<\\(NOTE\\|FIXME\\|TODO\\|BUG\\|HACK\\|REFACTOR\\|THE HORROR\\)" 1 font-lock-warning-face t)))))
   )
 
 ;;; Sh-Script
