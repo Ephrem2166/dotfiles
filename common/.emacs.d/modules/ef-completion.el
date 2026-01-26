@@ -452,6 +452,7 @@ Auto-completion is disabled."
    )
   :config
   (setq tempel-path (concat user-emacs-directory "etc/tempel/templates.eld"))
+  (setq tempel-auto-reload nil)
   :init
   (defun tempel-setup-capf ()
     (setq-local completion-at-point-functions

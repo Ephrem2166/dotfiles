@@ -3176,6 +3176,120 @@ With three or more universal PREFIX `save-buffers-kill-emacs'."
 
 
 
+;;; New Scratch Buffer
+(defconst +scratch-buffer-name "*scratch*"
+  "Name of users scratch buffer")
+
+(defun +scratch-buffer-p (&optional buffer)
+  (string-match
+   (regexp-quote scratch-buffer-name+)
+   (buffer-name buffer) 0))
+(defun +new-scratch-buffer (&optional buffer-name interactive)
+  "Creates and returns a new empty scratch like buffer
+with prefix it prompts you for the name of the buffer.
+if called interactively, the new buffer is switched to."
+  (interactive "Pp")
+  (let* ((def-buf-name scratch-buffer-name+)
+         (buffer-name
+          (cond
+           ((stringp buffer-name) buffer-name)
+           (buffer-name (read-buffer "buffer name: " def-buf-name))
+           (t def-buf-name)))
+         (buffer-name (generate-new-buffer-name buffer-name))
+         (buffer (get-buffer-create buffer-name)))
+    (with-current-buffer buffer
+      ;; Setup copied from `get-scratch-buffer-create'.
+      ;; (when initial-scratch-message
+      ;;   (insert (substitute-command-keys initial-scratch-message))
+      ;;   (set-buffer-modified-p nil))
+      (funcall initial-major-mode))
+    (when (called-interactively-p 'interactive)
+      (switch-to-buffer buffer))
+
+    buffer))
+
+;;; Kill Buffer
+(defun +kill-this-buffer-and-window-maybe ()
+  "Kills the currently open buffer and the window if another is open"
+  (interactive)
+  (let ((window-count (length (window-list))))
+    (if (> window-count 1)
+        (kill-buffer-and-window)
+      (kill-current-buffer))))
+
+;;; Run shell commands in the buffer
+(defun +shell-command-on-buffer (&optional prefix)
+  "Asks for a command and executes it in inferior shell with current buffer
+as input. if prefix is given, output of command is inserted in current buffer
+at point."
+  (interactive "P")
+  (let ((command (read-shell-command "Shell command on buffer: "))
+        (input-buffer (current-buffer)) output-buffer process-output)
+    (with-temp-buffer ;; needed for process output
+      (setq output-buffer (current-buffer))
+
+      (with-current-buffer input-buffer
+        (shell-command-on-region
+         (point-min) (point-max)
+         command output-buffer nil output-buffer))
+
+      (setq process-output (buffer-string)))
+
+    (if prefix
+        (insert process-output)
+      (message process-output))))
+
+;;; Better Help Functions
+;;; Describe keymap at point
+(defun +keymaps-at-point ()
+  "List entire keymaps present at point."
+  (interactive)
+  (let ((map-list
+         (list
+          (mapcar (lambda (overlay)
+                    (overlay-get overlay 'keymap))
+                  (overlays-at (point)))
+          (mapcar (lambda (overlay)
+                    (overlay-get overlay 'local-map))
+                  (overlays-at (point)))
+          (get-text-property (point) 'keymap)
+          (get-text-property (point) 'local-map))))
+    (apply #'message
+           (concat
+            "Overlay keymap: %s\n"
+            "Overlay local-map: %s\n"
+            "Text-property keymap: %s\n"
+            "Text-property local-map: %s")
+           map-list)))
+
+;;; Describe font at point
+(defun +list-faces (&optional point)
+  (interactive "d")
+  (or point (setq point (point)))
+  (let ((faces (remq nil
+                     `(,(get-char-property point 'read-face-name)
+                       ,(get-char-property point 'face)
+                       ,(plist-get (text-properties-at point) 'face)))))
+    (and (called-interactively-p 'any) (message (format "%s" faces)))
+    faces))
+
+;;; Toggle Relative Line Number
+
+
+(defun +toggle-relative-linum (&optional arg)
+  "toggle relative line numbers in the current buffer
+when ARG is given and is 0, then relative line numbers are disabled,
+otherwise if ARG is greater than 0 then they're enabled and if ARG is
+nil then relative line-numbers are toggled."
+  (interactive "P")
+  (setq display-line-numbers
+        (cond
+         ((and arg (zerop (prefix-numeric-value arg)))
+          t)
+         (arg 'relative)
+         (t
+          (if (eq display-line-numbers 'relative) t 'relative)))))
+
 ;;; ef-functions ends here
 (provide 'ef-functions)
 ;;; ef-functions.el ends here

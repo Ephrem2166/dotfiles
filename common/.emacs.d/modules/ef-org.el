@@ -786,7 +786,7 @@ context.  When called with an argument, unconditionally call
 
 
 ;;; Beautify Org Mode (Word)
-(defun my/word-processor-fonts ()
+(defun my/org-word-processor ()
   "Configure `org-mode' fonts and faces."
   (interactive)
   (when window-system
