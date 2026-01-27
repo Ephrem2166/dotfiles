@@ -40,11 +40,11 @@
   :config
   ;;; How to make some modes to start with Emacs mode
   (dolist (mode '(custom-mode
-                  erc-mode
+				  erc-mode
 
-                  ))
-    (add-to-list 'evil-emacs-state-modes mode)
-    )
+				  ))
+	(add-to-list 'evil-emacs-state-modes mode)
+	)
   (define-key evil-normal-state-map (kbd "<") nil)
   (define-key evil-normal-state-map (kbd "C-z") nil)
   (define-key evil-motion-state-map (kbd "C-z") nil)
@@ -78,15 +78,17 @@
   :custom
   (evil-surround-pairs-alist
    '((?\( . ("(" . ")"))
-     (?\[ . ("[" . "]"))
-     (?\{ . ("{" . "}"))
+	 (?\[ . ("[" . "]"))
+	 (?\{ . ("{" . "}"))
 
-     (?\) . ("(" . ")"))
-     (?\] . ("[" . "]"))
-     (?\} . ("{" . "}"))
+	 (?\) . ("(" . ")"))
+	 (?\] . ("[" . "]"))
+	 (?\} . ("{" . "}"))
 
-     (?< . ("<" . ">"))
-     (?> . ("<" . ">"))))
+	 ;; (?< . ("<" . ">"))
+	 ;; (?> . ("<" . ">"))
+
+	 ))
 
   :hook (after-init . global-evil-surround-mode)
   )

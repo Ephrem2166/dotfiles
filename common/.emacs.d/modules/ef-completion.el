@@ -8,7 +8,7 @@
   :ensure t
   :after (corfu orderless)
   :bind ("C-c p" . cape-prefix-map
-         )
+		 )
 
   :init
   ;; (add-hook 'completion-at-point-functions #'cape-elisp-block)
@@ -30,14 +30,14 @@
   :config
   (setq cape-dict-file (concat user-emacs-directory "etc/dictionary.txt"))
   (defun my/eglot-capf ()
-    (setq-local completion-at-point-functions
-                (cons (cape-capf-super
-                       #'eglot-completion-at-point
-                       #'cape-dabbrev
-                       #'tempel-expand
-                       #'cape-file
-                       #'tempel-complete)
-                      completion-at-point-functions)))
+	(setq-local completion-at-point-functions
+				(cons (cape-capf-super
+					   #'eglot-completion-at-point
+					   #'cape-dabbrev
+					   #'tempel-expand
+					   #'cape-file
+					   #'tempel-complete)
+					  completion-at-point-functions)))
   (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
   ;; Make capfs composable
   (advice-add #'eglot-completion-at-point :around #'cape-wrap-nonexclusive)
@@ -51,99 +51,99 @@
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
   ;; Use Company backends as Capfs.
   (setq-local completion-at-point-functions
-              (mapcar #'cape-company-to-capf
-                      (list #'company-files #'company-keywords #'company-dabbrev)))
+			  (mapcar #'cape-company-to-capf
+					  (list #'company-files #'company-keywords #'company-dabbrev)))
   ;; Merge the dabbrev, dict and keyword capfs, display candidates together.
   (setq-local completion-at-point-functions
-              (list (cape-capf-super #'cape-dabbrev #'cape-dict #'cape-keyword)))
+			  (list (cape-capf-super #'cape-dabbrev #'cape-dict #'cape-keyword)))
   ;; Eglot Tempel
   (defun init-cape-eglot-capf ()
-    (setq-local completion-at-point-functions
-                (list #'cape-file
-                      (cape-capf-super (cape-capf-buster #'eglot-completion-at-point #'string-prefix-p)
-                                       :with #'tempel-complete))))
+	(setq-local completion-at-point-functions
+				(list #'cape-file
+					  (cape-capf-super (cape-capf-buster #'eglot-completion-at-point #'string-prefix-p)
+									   :with #'tempel-complete))))
   (add-hook 'eglot-managed-mode #'init-cape-eglot-capf)
   ;; Writing
   (defun ef-writing-capf ()
-    (setq-local completion-at-point-functions
-                (list (cape-capf-super
-                       #'cape-dict
-                       #'cape-dabbrev
-                       #'cape-file
-                       #'cape-history
-                       #'cape-keyword
-                       )))
-    )
+	(setq-local completion-at-point-functions
+				(list (cape-capf-super
+					   #'cape-dict
+					   #'cape-dabbrev
+					   #'cape-file
+					   #'cape-history
+					   #'cape-keyword
+					   )))
+	)
   (add-hook 'org-mode-hook #'ef-writing-capf)
 
   ;; Prog Mode
   (defun ef-setup-completion ()
-    (setq-local completion-at-point-functions
-                (list (cape-capf-super
-                       #'cape-elisp-symbol
-                       #'cape-dabbrev
-                       #'cape-file))))
+	(setq-local completion-at-point-functions
+				(list (cape-capf-super
+					   #'cape-elisp-symbol
+					   #'cape-dabbrev
+					   #'cape-file))))
   (add-hook 'prog-mode-hook #'ef-setup-completion)
 
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   ;; Remove keywords from the candidate list
   (defun my/emacs-lisp-ignore-keywords (cand)
-    "Remove keywords from the CAND list, unless the completion text
+	"Remove keywords from the CAND list, unless the completion text
 starts with a `:'."
-    (or (not (keywordp cand))
-        (eq (char-after (car completion-in-region--data)) ?:)))
+	(or (not (keywordp cand))
+		(eq (char-after (car completion-in-region--data)) ?:)))
   (defun my/emacs-lisp-capf ()
-    "`completion-at-point-functions' for `emacs-lisp-mode', including
+	"`completion-at-point-functions' for `emacs-lisp-mode', including
 support for symbols currently unknown to Emacs, using `cape-dabbrev'.
 Also adds `cape-file' as a fallback."
-    (setq-local completion-at-point-functions
-                `(,(cape-capf-super
-                    (cape-capf-predicate
-                     #'elisp-completion-at-point
-                     #'my/emacs-lisp-ignore-keywords)
-                    #'cape-dabbrev)
-                  cape-file)
-                cape-dabbrev-min-length 5))
+	(setq-local completion-at-point-functions
+				`(,(cape-capf-super
+					(cape-capf-predicate
+					 #'elisp-completion-at-point
+					 #'my/emacs-lisp-ignore-keywords)
+					#'cape-dabbrev)
+				  cape-file)
+				cape-dabbrev-min-length 5))
   (add-hook 'emacs-lisp-mode #'my/emacs-lisp-capf)
   ;; Org Mode Setup
   (defun my/org-mode-setup-capf ()
-    "Configure CAPFs for Org buffer"
-    (when buffer-file-name
-      (setq-local completion-at-point-functions
-                  (list #'tempel-complete
-                        #'cape-tex
-                        ;; FIXME:
-                        ;; #'org-block-capf
-                        #'cape-elisp-block
-                        (cape-capf-super #'cape-dabbrev
-                                         #'cape-dict
-                                         #'cape-keyword)
-                        #'cape-emoji
-                        )))
+	"Configure CAPFs for Org buffer"
+	(when buffer-file-name
+	  (setq-local completion-at-point-functions
+				  (list #'tempel-complete
+						#'cape-tex
+						;; FIXME:
+						;; #'org-block-capf
+						#'cape-elisp-block
+						(cape-capf-super #'cape-dabbrev
+										 #'cape-dict
+										 #'cape-keyword)
+						#'cape-emoji
+						)))
 
-    )
+	)
   (add-hook 'org-mode-hook #'my/org-mode-setup-capf)
   ;; Text and Prog Mode
   (defun my/extra-completion-options ()
-    (setq-local completion-at-point-functions
-                (list #'cape-file
-                      #'cape-dabbrev
-                      #'cape-abbrev
-                      #'cape-dict))
-    )
+	(setq-local completion-at-point-functions
+				(list #'cape-file
+					  #'cape-dabbrev
+					  #'cape-abbrev
+					  #'cape-dict))
+	)
   (add-hook 'prog-mode-hook #'my/extra-completion-options)
   (add-hook 'text-mode-hook #'my/extra-completion-options)
   ;; Cape ELisp
   (let ((elisp-capf (cape-capf-super
-                     (cape-capf-nonexclusive
-                      (cape-capf-inside-code 'cape-elisp-symbol))
-                     (cape-capf-nonexclusive
-                      (cape-capf-inside-code 'cape-elisp-block)))))
+					 (cape-capf-nonexclusive
+					  (cape-capf-inside-code 'cape-elisp-symbol))
+					 (cape-capf-nonexclusive
+					  (cape-capf-inside-code 'cape-elisp-block)))))
 
-    (add-hook 'emacs-lisp-mode-hook
-              (lambda ()
-                (kill-local-variable 'completion-at-point-functions)
-                (add-hook 'completion-at-point-functions elisp-capf nil t))))
+	(add-hook 'emacs-lisp-mode-hook
+			  (lambda ()
+				(kill-local-variable 'completion-at-point-functions)
+				(add-hook 'completion-at-point-functions elisp-capf nil t))))
   :custom
   (text-mode-ispell-word-completion nil)
   )
@@ -155,9 +155,9 @@ Also adds `cape-file' as a fallback."
   :ensure t
   ;; Only in GUI mode
   :if (display-graphic-p)
-                                        ; :hook
-                                        ; ((minibufer-setup . corfu-enable-always-in-minibuffer
-                                        ;                   ))
+										; :hook
+										; ((minibufer-setup . corfu-enable-always-in-minibuffer
+										;                   ))
   :config
   (setq text-mode-ispell-word-completion nil)
   (setq read-extended-command-predicate #'command-completion-default-include-p)
@@ -165,16 +165,16 @@ Also adds `cape-file' as a fallback."
   (setq corfu-min-width 50)
   (setq corfu-max-width corfu-min-width)
   (setq corfu-cycle t
-        corfu-auto t
-        corfu-auto-prefix 3
-        corfu-auto-delay 0.1
-        corfu-count 8
-        corfu-quit-no-match t
-        corfu-preselect 'valid
-        corfu-separator ?\s  ;; use space
-        corfu-scroll-margin 5
-        corfu-on-exact-match 'insert
-        corfu-quit-at-boundary 'insert)
+		corfu-auto t
+		corfu-auto-prefix 3
+		corfu-auto-delay 0.1
+		corfu-count 8
+		corfu-quit-no-match t
+		corfu-preselect 'valid
+		corfu-separator ?\s  ;; use space
+		corfu-scroll-margin 5
+		corfu-on-exact-match 'insert
+		corfu-quit-at-boundary 'insert)
   (setq corfu-popupinfo-delay '(0.5 . 0.2))
   (setq corfu-indexed-mode t)
   ;; Enable Corfu in minibufer as long as no other completion UI is active.
@@ -184,16 +184,16 @@ Also adds `cape-file' as a fallback."
   ;;               (bound-and-true-p vertico--input))
   ;;     (setq-local corfu-auto nil)       ; Ensure auto completion is disabled
   ;;     (corfu-mode 1)))
-                                        ; (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
+										; (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
   ;; Ensure savehist is on and add corfu-history to it.
   (unless (bound-and-true-p savehist-mode) (savehist-mode 1))
   (add-to-list 'savehist-additional-variables 'corfu-history)
   (add-hook 'corfu-mode-hook
-            (lambda ()
-              ;; Settings only for Corfu
-              (setq-local completion-styles '(basic)
-                          completion-category-overrides nil
-                          completion-category-defaults nil)))
+			(lambda ()
+			  ;; Settings only for Corfu
+			  (setq-local completion-styles '(basic)
+						  completion-category-overrides nil
+						  completion-category-defaults nil)))
   ;; FIXME: Completing in the minibuffer (Annoyance)
   ;; (setq global-corfu-minibuffer
   ;;       (lambda ()
@@ -202,14 +202,14 @@ Also adds `cape-file' as a fallback."
   ;;                  (eq (current-local-map) read-passwd-map)))))
   :preface
   (defun my/corfu-enable-in-minibuffer ()
-    "Enable Corfu in the minibuffer if `completion-at-point' is bound.
+	"Enable Corfu in the minibuffer if `completion-at-point' is bound.
 
 Auto-completion is disabled."
-    (when (where-is-internal #'completion-at-point (list (current-local-map)))
+	(when (where-is-internal #'completion-at-point (list (current-local-map)))
 
-      (setq-local corfu-auto nil)
+	  (setq-local corfu-auto nil)
 
-      (corfu-mode 1)))
+	  (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'my/corfu-enable-in-minibuffer)
   :init
   (global-corfu-mode)
@@ -217,13 +217,13 @@ Auto-completion is disabled."
   ;; (corfu-popupinfo-mode)
   (corfu-indexed-mode)
   :bind (:map corfu-map
-              ("<tab>" . corfu-next)
-              ("RET" . corfu-complete)
-              ;; ("<tab>" . corfu-complete)
-              ("SPC" . corfu-insert-separator)
-              ("M-d" . corfu-info-documentation)
-              ("<esc>" . corfu-quit)
-              )
+			  ("<tab>" . corfu-next)
+			  ("RET" . corfu-complete)
+			  ;; ("<tab>" . corfu-complete)
+			  ("SPC" . corfu-insert-separator)
+			  ("M-d" . corfu-info-documentation)
+			  ("<esc>" . corfu-quit)
+			  )
 
   )
 
@@ -266,7 +266,7 @@ Auto-completion is disabled."
   :after corfu
   :config
   (unless (display-graphic-p)
-    (corfu-terminal-mode +1))
+	(corfu-terminal-mode +1))
   )
 
 ;;; Corfu Prescient
@@ -280,10 +280,10 @@ Auto-completion is disabled."
   (setopt corfu-prescient-completion-style '(prescient flex))
   (setopt corfu-prescient-completion-category-overrides
 
-          '(;; Include `partial-completion' to enable wildcards and partial paths.
-            (file (styles partial-completion prescient))
-            ;; Eglot forces `flex' by default.
-            (eglot (styles prescient flex))))
+		  '(;; Include `partial-completion' to enable wildcards and partial paths.
+			(file (styles partial-completion prescient))
+			;; Eglot forces `flex' by default.
+			(eglot (styles prescient flex))))
   :config
   (corfu-prescient-mode 1)
   )
@@ -304,41 +304,41 @@ Auto-completion is disabled."
    '(:padding 0 :stroke 0 :margin 0 :radius 0 :heigh 0.8 :scale 1.0))
   (kind-icon-mapping
    '((array          "a"   :icon "symbol-array"       :face font-lock-type-face              :collection "nerd-fonts-codicons")
-     (boolean        "b"   :icon "symbol-boolean"     :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
-     (color          "#"   :icon "symbol-color"       :face success                          :collection "nerd-fonts-codicons")
-     (command        "cm"  :icon "chevron-right"      :face default                          :collection "nerd-fonts-codicons")
-     (constant       "co"  :icon "symbol-constant"    :face font-lock-constant-face          :collection "nerd-fonts-codicons")
-     (class          "c"   :icon "symbol-class"       :face font-lock-type-face              :collection "nerd-fonts-codicons")
-     (constructor    "cn"  :icon "symbol-method"      :face font-lock-function-name-face     :collection "nerd-fonts-codicons")
-     (enum           "e"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
-     (enummember     "em"  :icon "symbol-enum-member" :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
-     (enum-member    "em"  :icon "symbol-enum-member" :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
-     (event          "ev"  :icon "symbol-event"       :face font-lock-warning-face           :collection "nerd-fonts-codicons")
-     (field          "fd"  :icon "symbol-field"       :face font-lock-variable-name-face     :collection "nerd-fonts-codicons")
-     (file           "f"   :icon "symbol-file"        :face font-lock-string-face            :collection "nerd-fonts-codicons")
-     (folder         "d"   :icon "folder"             :face font-lock-doc-face               :collection "nerd-fonts-codicons")
-     (function       "f"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "nerd-fonts-codicons")
-     (interface      "if"  :icon "symbol-interface"   :face font-lock-type-face              :collection "nerd-fonts-codicons")
-     (keyword        "kw"  :icon "symbol-keyword"     :face font-lock-keyword-face           :collection "nerd-fonts-codicons")
-     (macro          "mc"  :icon "lambda"             :face font-lock-keyword-face)
-     (magic          "ma"  :icon "lightbulb-autofix"  :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
-     (method         "m"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "nerd-fonts-codicons")
-     (module         "{"   :icon "file-code-outline"  :face font-lock-preprocessor-face)
-     (numeric        "nu"  :icon "symbol-numeric"     :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
-     (operator       "op"  :icon "symbol-operator"    :face font-lock-comment-delimiter-face :collection "nerd-fonts-codicons")
-     (param          "pa"  :icon "gear"               :face default                          :collection "nerd-fonts-codicons")
-     (property       "pr"  :icon "symbol-property"    :face font-lock-variable-name-face     :collection "nerd-fonts-codicons")
-     (reference      "rf"  :icon "library"            :face font-lock-variable-name-face     :collection "nerd-fonts-codicons")
-     (snippet        "S"   :icon "symbol-snippet"     :face font-lock-string-face            :collection "nerd-fonts-codicons")
-     (string         "s"   :icon "symbol-string"      :face font-lock-string-face            :collection "nerd-fonts-codicons")
-     (struct         "%"   :icon "symbol-structure"   :face font-lock-variable-name-face     :collection "nerd-fonts-codicons")
-     (text           "tx"  :icon "symbol-key"         :face font-lock-doc-face               :collection "nerd-fonts-codicons")
-     (typeparameter  "tp"  :icon "symbol-parameter"   :face font-lock-type-face              :collection "nerd-fonts-codicons")
-     (type-parameter "tp"  :icon "symbol-parameter"   :face font-lock-type-face              :collection "nerd-fonts-codicons")
-     (unit           "u"   :icon "symbol-ruler"       :face font-lock-constant-face          :collection "nerd-fonts-codicons")
-     (value          "v"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
-     (variable       "va"  :icon "symbol-variable"    :face font-lock-variable-name-face     :collection "nerd-fonts-codicons")
-     (t              "."   :icon "question"           :face font-lock-warning-face           :collection "nerd-fonts-codicons")))
+	 (boolean        "b"   :icon "symbol-boolean"     :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
+	 (color          "#"   :icon "symbol-color"       :face success                          :collection "nerd-fonts-codicons")
+	 (command        "cm"  :icon "chevron-right"      :face default                          :collection "nerd-fonts-codicons")
+	 (constant       "co"  :icon "symbol-constant"    :face font-lock-constant-face          :collection "nerd-fonts-codicons")
+	 (class          "c"   :icon "symbol-class"       :face font-lock-type-face              :collection "nerd-fonts-codicons")
+	 (constructor    "cn"  :icon "symbol-method"      :face font-lock-function-name-face     :collection "nerd-fonts-codicons")
+	 (enum           "e"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
+	 (enummember     "em"  :icon "symbol-enum-member" :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
+	 (enum-member    "em"  :icon "symbol-enum-member" :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
+	 (event          "ev"  :icon "symbol-event"       :face font-lock-warning-face           :collection "nerd-fonts-codicons")
+	 (field          "fd"  :icon "symbol-field"       :face font-lock-variable-name-face     :collection "nerd-fonts-codicons")
+	 (file           "f"   :icon "symbol-file"        :face font-lock-string-face            :collection "nerd-fonts-codicons")
+	 (folder         "d"   :icon "folder"             :face font-lock-doc-face               :collection "nerd-fonts-codicons")
+	 (function       "f"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "nerd-fonts-codicons")
+	 (interface      "if"  :icon "symbol-interface"   :face font-lock-type-face              :collection "nerd-fonts-codicons")
+	 (keyword        "kw"  :icon "symbol-keyword"     :face font-lock-keyword-face           :collection "nerd-fonts-codicons")
+	 (macro          "mc"  :icon "lambda"             :face font-lock-keyword-face)
+	 (magic          "ma"  :icon "lightbulb-autofix"  :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
+	 (method         "m"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "nerd-fonts-codicons")
+	 (module         "{"   :icon "file-code-outline"  :face font-lock-preprocessor-face)
+	 (numeric        "nu"  :icon "symbol-numeric"     :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
+	 (operator       "op"  :icon "symbol-operator"    :face font-lock-comment-delimiter-face :collection "nerd-fonts-codicons")
+	 (param          "pa"  :icon "gear"               :face default                          :collection "nerd-fonts-codicons")
+	 (property       "pr"  :icon "symbol-property"    :face font-lock-variable-name-face     :collection "nerd-fonts-codicons")
+	 (reference      "rf"  :icon "library"            :face font-lock-variable-name-face     :collection "nerd-fonts-codicons")
+	 (snippet        "S"   :icon "symbol-snippet"     :face font-lock-string-face            :collection "nerd-fonts-codicons")
+	 (string         "s"   :icon "symbol-string"      :face font-lock-string-face            :collection "nerd-fonts-codicons")
+	 (struct         "%"   :icon "symbol-structure"   :face font-lock-variable-name-face     :collection "nerd-fonts-codicons")
+	 (text           "tx"  :icon "symbol-key"         :face font-lock-doc-face               :collection "nerd-fonts-codicons")
+	 (typeparameter  "tp"  :icon "symbol-parameter"   :face font-lock-type-face              :collection "nerd-fonts-codicons")
+	 (type-parameter "tp"  :icon "symbol-parameter"   :face font-lock-type-face              :collection "nerd-fonts-codicons")
+	 (unit           "u"   :icon "symbol-ruler"       :face font-lock-constant-face          :collection "nerd-fonts-codicons")
+	 (value          "v"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "nerd-fonts-codicons")
+	 (variable       "va"  :icon "symbol-variable"    :face font-lock-variable-name-face     :collection "nerd-fonts-codicons")
+	 (t              "."   :icon "question"           :face font-lock-warning-face           :collection "nerd-fonts-codicons")))
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
@@ -357,7 +357,7 @@ Auto-completion is disabled."
   :ensure t
   :after vertico
   :bind (:map minibuffer-local-map
-              ("M-A" . marginalia-cycle))
+			  ("M-A" . marginalia-cycle))
   :config
   ;; (setq marginalia-annotators '(marginalia-annotators-heavy
   ;;                               marginalia-annotators-light
@@ -381,10 +381,10 @@ Auto-completion is disabled."
   :config
   (setq orderless-component-separator 'orderless-escapable-split-on-space)
   (setq orderless-matching-styles '(
-                                    orderless-prefixes
-                                    orderless-regexp
-                                    orderless-initialism
-                                    orderless-literal))
+									orderless-prefixes
+									orderless-regexp
+									orderless-initialism
+									orderless-literal))
   (setq completion-styles '(orderless partial-completion basic))
   (setq completion-category-overrides '((file (styles basic partial-completion))))
   ;; General
@@ -394,32 +394,32 @@ Auto-completion is disabled."
   (setq read-file-name-completion-ignore-case t)
   (setq completion-category-defaults nil)
   (setq  completion-category-overrides
-         '((file (styles partial-completion))))
+		 '((file (styles partial-completion))))
   (setq orderless-style-dispatchers
-        '(ef-orderless-literal
-          ef-orderless-literal
-          ef-orderless-beg-or-end))
+		'(ef-orderless-literal
+		  ef-orderless-literal
+		  ef-orderless-beg-or-end))
   ;; Various Functions
   ;; Style dispatchers
   (defun ef-orderless-literal (word _index _total)
-    "Read WORD= as a literal string."
-    (when (string-suffix-p "=" word)
-      ;; The `orderless-literal' is how this should be treated by
-      ;; orderless.  The `substring' form omits the `=' from the
-      ;; pattern.
-      `(orderless-literal . ,(substring word 0 -1))))
+	"Read WORD= as a literal string."
+	(when (string-suffix-p "=" word)
+	  ;; The `orderless-literal' is how this should be treated by
+	  ;; orderless.  The `substring' form omits the `=' from the
+	  ;; pattern.
+	  `(orderless-literal . ,(substring word 0 -1))))
 
   (defun ef-orderless-file-ext (word _index _total)
-    "Expand WORD. to a file suffix when completing file names."
-    (when (and minibuffer-completing-file-name
-               (string-suffix-p "." word))
-      `(orderless-regexp . ,(format "\\.%s\\'" (substring word 0 -1)))))
+	"Expand WORD. to a file suffix when completing file names."
+	(when (and minibuffer-completing-file-name
+			   (string-suffix-p "." word))
+	  `(orderless-regexp . ,(format "\\.%s\\'" (substring word 0 -1)))))
 
   (defun ef-orderless-beg-or-end (word _index _total)
-    "Expand WORD~ to \\(^WORD\\|WORD$\\)."
-    (when-let* (((string-suffix-p "~" word))
-                (word (substring word 0 -1)))
-      `(orderless-regexp . ,(format "\\(^%s\\|%s$\\)" word word))))
+	"Expand WORD~ to \\(^WORD\\|WORD$\\)."
+	(when-let* (((string-suffix-p "~" word))
+				(word (substring word 0 -1)))
+	  `(orderless-regexp . ,(format "\\(^%s\\|%s$\\)" word word))))
   ;; Orderless with eglot
   (add-to-list 'completion-category-overrides '(eglot (styles . (orderless flex))))
 
@@ -455,19 +455,19 @@ Auto-completion is disabled."
   (setq tempel-auto-reload nil)
   :init
   (defun tempel-setup-capf ()
-    (setq-local completion-at-point-functions
-                (cons #'tempel-expand
-                      completion-at-point-functions)))
+	(setq-local completion-at-point-functions
+				(cons #'tempel-expand
+					  completion-at-point-functions)))
 
   (add-hook 'conf-mode-hook 'tempel-setup-capf)
   (add-hook 'prog-mode-hook 'tempel-setup-capf)
   (add-hook 'text-mode-hook 'tempel-setup-capf)
   ;; Hippie Exapand Integration
   (defun tempel-hippie-try-expand (old)
-    "Integrate with hippie expand. Just put this function in `hippie-expand-try-functions-list'."
-    (if (not old)
-        (tempel-expand t)
-      (undo 1)))
+	"Integrate with hippie expand. Just put this function in `hippie-expand-try-functions-list'."
+	(if (not old)
+		(tempel-expand t)
+	  (undo 1)))
 
   (add-to-list 'hippie-expand-try-functions-list #'tempel-hippie-try-expand t)
   )
@@ -478,13 +478,13 @@ Auto-completion is disabled."
 (use-package vertico
   :ensure t
   :bind (:map vertico-map
-              ("C-j" . vertico-next)
-              ("C-k" . vertico-previous)
-              ("C-f" . vertico-exit-input)
-              ("C-c v r" . vertico-repeat)
-              ("C-c v s" . vertico-suspend)
-              :map minibuffer-local-map
-              ("M-h" . vertico-directory-up))
+			  ("C-j" . vertico-next)
+			  ("C-k" . vertico-previous)
+			  ("C-f" . vertico-exit-input)
+			  ("C-c v r" . vertico-repeat)
+			  ("C-c v s" . vertico-suspend)
+			  :map minibuffer-local-map
+			  ("M-h" . vertico-directory-up))
   ;;  :demand t
   ;;  :hook (after-init . vertico-mode)
   :config
@@ -520,9 +520,9 @@ Auto-completion is disabled."
   (vertico-prescient-completion-styles '(prescient flex))
   (vertico-prescient-completion-category-overrides
    '(
-     (file (styles partial-completion prescient))
-     (eglot (styles prescient flex))
-     ))
+	 (file (styles partial-completion prescient))
+	 (eglot (styles prescient flex))
+	 ))
   :config
   (vertico-prescient-mode 1)
   )
@@ -534,9 +534,9 @@ Auto-completion is disabled."
   ;; More convenient directory navigation commands
   :bind
   ( :map vertico-map
-    ("RET" . vertico-directory-enter)
-    ("DEL" . vertico-directory-delete-char)
-    ("M-DEL" . vertico-directory-delete-word))
+	("RET" . vertico-directory-enter)
+	("DEL" . vertico-directory-delete-char)
+	("M-DEL" . vertico-directory-delete-word))
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
@@ -569,17 +569,17 @@ Auto-completion is disabled."
   :after vertico
   :config
   (setq vertico-multiform-categories
-        '((file grid)
-          (imenu (vertico-count . 14))
-          (jinx grid (vertico-grid-annotate . 20))
-          ))
+		'((file grid)
+		  (imenu (vertico-count . 14))
+		  (jinx grid (vertico-grid-annotate . 20))
+		  ))
   (setq vertico-multiform-commands
-        '((consult-line buffer)
-          (consult-buffer buffer)
-          (consult-org-heading buffer)
-          (consult-imenu buffer)
-          (consult-project-buffer buffer)
-          (consult-project-extra-find buffer)))
+		'((consult-line buffer)
+		  (consult-buffer buffer)
+		  (consult-org-heading buffer)
+		  (consult-imenu buffer)
+		  (consult-project-buffer buffer)
+		  (consult-project-extra-find buffer)))
   (vertico-multiform-mode 1)
   )
 

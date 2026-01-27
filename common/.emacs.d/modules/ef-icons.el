@@ -5,7 +5,8 @@
 (use-package all-the-icons
   :ensure t
   :demand t
-  :if (display-graphic-p))
+  :if (display-graphic-p)
+  )
 
 ;;;; All the icons ibuffer
 (use-package all-the-icons-ibuffer
@@ -60,14 +61,14 @@
   (nerd-icons-ibuffer-icon-size 0.97)
   (nerd-icons-ibuffer-formats
    `((mark modified read-only ,(if (>= emacs-major-version 26) 'locked "")
-           ;; Here you may adjust by replacing :right with :center or :left
-           ;; According to taste, if you want the icon further from the name
-           " " (icon 2 2 :right)
-           " " (name 18 18 :left :elide)
-           " " (size 9 -1 :right)
-           " " (mode 16 16 :left :elide)
-           " " filename-and-process)
-     (mark " " (name 16 -1) " " filename))))
+		   ;; Here you may adjust by replacing :right with :center or :left
+		   ;; According to taste, if you want the icon further from the name
+		   " " (icon 2 2 :right)
+		   " " (name 18 18 :left :elide)
+		   " " (size 9 -1 :right)
+		   " " (mode 16 16 :left :elide)
+		   " " filename-and-process)
+	 (mark " " (name 16 -1) " " filename))))
 
 (provide 'ef-icons)
 ;;; ef-icons.el ends here
