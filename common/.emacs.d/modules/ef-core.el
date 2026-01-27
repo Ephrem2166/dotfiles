@@ -35,7 +35,7 @@
 ;; Modes
 (defalias 'sh 'shell-script-mode)
 ;; Alias man to woman globally
-(defalias 'man 'woman)
+;; (defalias 'man 'woman)
 
 ;;; Abbrev
 (use-package abbrev
@@ -1046,6 +1046,7 @@ Intended to be added to `isearch-mode-hook'."
 ;;; Man
 (use-package man
   :ensure nil
+  :hook (Man-Mode . display-line-numbers)
   :defer t
   :config
   (setq Man-notify-method 'pushy)
