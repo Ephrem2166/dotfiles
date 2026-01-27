@@ -1,5 +1,5 @@
 # interpreter for shell commands
-# set shell sh
+set shell sh
 
 # set '-eu' options for shell commands
 # These options are used to have safer shell commands. Option '-e' is used to
@@ -70,7 +70,8 @@ map gs :fzf_search
 
 set icons
 
-set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
+# set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
+set hiddenfiles .*:eln-cache:__pycache__*:*.pyc:*.o:node_modules:obj:*.elc:*~:folder*.ico:folder*.jpg:folder*.png:*.override.yml
 
 set previewer ~/.config/lf/preview
 
@@ -155,3 +156,19 @@ cmd on-cd &{{
     fmt="$(STARSHIP_SHELL= starship prompt | sed 's/\\/\\\\/g;s/"/\\"/g')"
     lf -remote "send $id set promptfmt \"$fmt\""
 }}
+
+
+## inspect folder sizes
+map du du
+# cmd du !du --max-depth=1 -h --apparent-size
+cmd du !{{
+  max_depth=0
+  if [ -z "$fs" ]; then
+    fx="."
+    max_depth=1
+  fi
+  echo "$fx" | xargs -r -d "\n" du --max-depth="$max_depth" -h --apparent-size
+}}
+
+map dU du-sorted
+cmd du-sorted !du --max-depth=1 -h --apparent-size | sort -rh
