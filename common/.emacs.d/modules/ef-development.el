@@ -11,29 +11,29 @@
   (setq apheleia-formatters-respect-fill-column t)
   (setq apheleia-formatters-respect-indent-level t)
   (setq apheleia-formatters
-        (append
-         '((prettier . ("prettier" "--stdin-filepath" filepath))
-           (black . ("black" "-"))
-           (biome . ("biome"))
-           (stylua . ("stylua" "-"))
-           (shfmt . ("shfmt" "-i" "2" "-ci" "-"))
-           (tombi . ("tombi" "format" "-"))
-           )
-         apheleia-formatters))
+		(append
+		 '((prettier . ("prettier" "--stdin-filepath" filepath))
+		   (black . ("black" "-"))
+		   (biome . ("biome"))
+		   (stylua . ("stylua" "-"))
+		   (shfmt . ("shfmt" "-i" "2" "-ci" "-"))
+		   (tombi . ("tombi" "format" "-"))
+		   )
+		 apheleia-formatters))
 
   ;; Customize mode-to-formatter mapping.
   (setq apheleia-mode-alist
-        '((python-mode . black)
-          ;; (javascript-mode . prettier)
-          ;; (typescript-mode . prettier)
-          (ruby-mode . rubocop)
-          (sh-mode . shfmt)
-          (lua-mode . stylua)
-          (yaml-ts-mode . prettier)
-          ;;; TRYING biome
-          ((css-mode css-ts-mode js-json-mode js-mode json-mode json-ts-mode tsx-ts-mode) . biome)
-          ((toml-ts-mode toml-mode) . tombi)
-          )        )
+		'((python-mode . black)
+		  ;; (javascript-mode . prettier)
+		  ;; (typescript-mode . prettier)
+		  (ruby-mode . rubocop)
+		  (sh-mode . shfmt)
+		  (lua-mode . stylua)
+		  (yaml-ts-mode . prettier)
+		  ;;; TRYING biome
+		  ((css-mode css-ts-mode js-json-mode js-mode json-mode json-ts-mode tsx-ts-mode) . biome)
+		  ((toml-ts-mode toml-mode) . tombi)
+		  )        )
   :init
   (apheleia-global-mode 1))
 
@@ -66,16 +66,16 @@
   ;; :disabled
   ;; :defer t
   :bind (
-         ("C-c e i" . eglot-find-implementation)
-         ("C-c e e" . eglot)
-         ("C-c e d" . eglot-shutdown-all)
-         ("C-c e r" . eglot-rename)
-         ("C-c e R" . eglot-reconnect)
-         ("C-c e a" . eglot-code-actions)
-         ("C-c e m" . eglot-menu)
-         ("C-c e f" . eglot-format-buffer)
-         ("C-c e h" . eglot-inlay-hints-mode)
-         )
+		 ("C-c e i" . eglot-find-implementation)
+		 ("C-c e e" . eglot)
+		 ("C-c e d" . eglot-shutdown-all)
+		 ("C-c e r" . eglot-rename)
+		 ("C-c e R" . eglot-reconnect)
+		 ("C-c e a" . eglot-code-actions)
+		 ("C-c e m" . eglot-menu)
+		 ("C-c e f" . eglot-format-buffer)
+		 ("C-c e h" . eglot-inlay-hints-mode)
+		 )
   ;; :hook (
   ;;        (bash-ts-mode . eglot-ensure)
   ;;        (c++-ts-mode . eglot-ensure)
@@ -121,37 +121,37 @@
   (setq jsonrpc-event-hook nil)
   (setq eglot-events-buffer-config '(:size 0 :format full))
   (with-eval-after-load 'eglot
-    (add-to-list
-     'eglot-server-programs
-     '(markdown-mode . ("marksman"))))
+	(add-to-list
+	 'eglot-server-programs
+	 '(markdown-mode . ("marksman"))))
   (with-eval-after-load 'eglot
-    (add-to-list
-     'eglot-server-programs
-     '((html-mode) .  ("vscode-html-language-server" "--stdio"))
+	(add-to-list
+	 'eglot-server-programs
+	 '((html-mode) .  ("vscode-html-language-server" "--stdio"))
 
-     ))
+	 ))
   (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("tombi" "--stdio")))
   ;; Don't log every event
   (fset #'jsonrpc--log-event #'ignore)
   ;; (advice-add 'jsonrpc--log-event :override #'ignore)
   (setq completion-category-overrides '((eglot (styles orderless))))
   (defun my/eglot-setup ()
-    "Setup eglot mode with specific exclusions."
-    (unless (eq major-mode 'emacs-lisp-mode)
-      (eglot-ensure)))
+	"Setup eglot mode with specific exclusions."
+	(unless (eq major-mode 'emacs-lisp-mode)
+	  (eglot-ensure)))
 
   (add-hook 'prog-mode-hook #'my/eglot-setup)
   ;; Eldoc Integration
   (add-hook 'eglot-managed-mode-hook
-            (lambda ()
-              (setq eldoc-documentation-functions
-                    (cons #'flymake-eldoc-function
-                          (remove #'flymake-eldoc-function eldoc-documentation-functions))
-                    )
+			(lambda ()
+			  (setq eldoc-documentation-functions
+					(cons #'flymake-eldoc-function
+						  (remove #'flymake-eldoc-function eldoc-documentation-functions))
+					)
 
-              )
+			  )
 
-            )
+			)
 
   )
 
@@ -179,7 +179,7 @@
   ;; Disable the legacy proc backend.
   (setq-default flymake-diagnostic-functions nil)
   (with-eval-after-load 'flymake-proc
-    (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
+	(remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
   (setq elisp-flymake-byte-compile-load-path '("./"))
   (setq flymake-fringe-indicator-position 'left-fringe)
   (setq flymake-margin-indicator-position 'right-margin)
@@ -190,17 +190,17 @@
   ;; (setq flymake-proc-compilation-prevents-syntax-check t)
   (setq flymake-wrap-around nil)
   (setq flymake-mode-line-format
-        '("" flymake-mode-line-exception flymake-mode-line-counters))
+		'("" flymake-mode-line-exception flymake-mode-line-counters))
   (setq flymake-mode-line-counter-format
-        '("" flymake-mode-line-error-counter
-          flymake-mode-line-warning-counter
-          flymake-mode-line-note-counter ""))
+		'("" flymake-mode-line-error-counter
+		  flymake-mode-line-warning-counter
+		  flymake-mode-line-note-counter ""))
   (setq flymake-show-diagnostics-at-end-of-line nil)
   (setq flymake-indicator-type nil)
   (setq flymake-margin-indicators-string
-        '((error   "X" compilation-error)
-          (warning "!" compilation-warning)
-          (note    "■" compilation-info)))
+		'((error   "X" compilation-error)
+		  (warning "!" compilation-warning)
+		  (note    "■" compilation-info)))
 
   (flymake-mode t)
   )
@@ -255,18 +255,18 @@
   :hook (prog-mode . prog-mode-setup)
   :preface
   (defun prog-mode-setup ()
-    (setq-local fill-column 80)
-    (prettify-symbols-mode t)
-    (hl-line-mode t)
-    (whitespace-mode t)
-    )
+	(setq-local fill-column 80)
+	(prettify-symbols-mode t)
+	(hl-line-mode t)
+	(whitespace-mode t)
+	)
   :init
   (add-to-list 'safe-local-variable-values '(fill-column . 120))
 
   (add-hook 'prog-mode-hook
-            (lambda ()
-              (font-lock-add-keywords nil
-                                      '(("\\<\\(NOTE\\|FIXME\\|TODO\\|BUG\\|HACK\\|REFACTOR\\|THE HORROR\\)" 1 font-lock-warning-face t)))))
+			(lambda ()
+			  (font-lock-add-keywords nil
+									  '(("\\<\\(NOTE\\|FIXME\\|TODO\\|BUG\\|HACK\\|REFACTOR\\|THE HORROR\\)" 1 font-lock-warning-face t)))))
   )
 
 ;;; Sh-Script
@@ -287,7 +287,7 @@
 
   :hook (after-save . executable-make-buffer-file-executable-if-script-p)
   :bind (:map sh-mode-map
-              ([remap display-local-help] . man))
+			  ([remap display-local-help] . man))
   :custom
   (sh-basic-offset 2)
   (sh-indentation  2)
@@ -302,59 +302,59 @@
   :init
   (setq treesit-font-lock-level 4)
   (setq treesit-language-source-alist
-        '(
-          (bash "https://github.com/tree-sitter/tree-sitter-bash")
-          (c . ("https://github.com/tree-sitter/tree-sitter-c"))
-          (cmake           . ("https://github.com/uyha/tree-sitter-cmake"))
-          (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp"))
-          (css "https://github.com/tree-sitter/tree-sitter-css")
-          (dockerfile      . ("https://github.com/camdencheek/tree-sitter-dockerfile"))
-          (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-          (html . ("https://github.com/tree-sitter/tree-sitter-html"))
-          (java            . ("https://github.com/tree-sitter/tree-sitter-java"))
-          (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
-          (json            . ("https://github.com/tree-sitter/tree-sitter-json"))
-          (jsdoc . "https://github.com/tree-sitter/tree-sitter-jsdoc" )
-          (latex           . ("https://github.com/latex-lsp/tree-sitter-latex"))
-          ;; (lua . ("https://github.com/Azganoth/tree-sitter-lua"))
-          (lua             . ("https://github.com/tree-sitter-grammars/tree-sitter-lua"))
-          (json "https://github.com/tree-sitter/tree-sitter-json")
-          (make . ("https://github.com/alemuller/tree-sitter-make"))
-          (markdown . https://github.com/tree-sitter-grammars/tree-sitter-markdown )
-          (markdown-inline . "https://github.com/tree-sitter-grammars/tree-sitter-markdown")
-          ;; (php . ("https://github.com/tree-sitter/tree-sitter-php"))
-          (python . "https://github.com/tree-sitter/tree-sitter-python")
-          ;; (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
-          ;; (sql . ("https://github.com/m-novikov/tree-sitter-sql"))
-          (typescript . "https://github.com/tree-sitter/tree-sitter-typescript")
-          (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
-          (yaml .  "https://github.com/tree-sitter-grammars/tree-sitter-yaml")
+		'(
+		  (bash "https://github.com/tree-sitter/tree-sitter-bash")
+		  (c . ("https://github.com/tree-sitter/tree-sitter-c"))
+		  (cmake           . ("https://github.com/uyha/tree-sitter-cmake"))
+		  (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp"))
+		  (css "https://github.com/tree-sitter/tree-sitter-css")
+		  (dockerfile      . ("https://github.com/camdencheek/tree-sitter-dockerfile"))
+		  (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+		  (html . ("https://github.com/tree-sitter/tree-sitter-html"))
+		  (java            . ("https://github.com/tree-sitter/tree-sitter-java"))
+		  (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
+		  (json            . ("https://github.com/tree-sitter/tree-sitter-json"))
+		  (jsdoc . "https://github.com/tree-sitter/tree-sitter-jsdoc" )
+		  (latex           . ("https://github.com/latex-lsp/tree-sitter-latex"))
+		  ;; (lua . ("https://github.com/Azganoth/tree-sitter-lua"))
+		  (lua             . ("https://github.com/tree-sitter-grammars/tree-sitter-lua"))
+		  (json "https://github.com/tree-sitter/tree-sitter-json")
+		  (make . ("https://github.com/alemuller/tree-sitter-make"))
+		  (markdown . https://github.com/tree-sitter-grammars/tree-sitter-markdown )
+		  (markdown-inline . "https://github.com/tree-sitter-grammars/tree-sitter-markdown")
+		  ;; (php . ("https://github.com/tree-sitter/tree-sitter-php"))
+		  (python . "https://github.com/tree-sitter/tree-sitter-python")
+		  ;; (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
+		  ;; (sql . ("https://github.com/m-novikov/tree-sitter-sql"))
+		  (typescript . "https://github.com/tree-sitter/tree-sitter-typescript")
+		  (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
+		  (yaml .  "https://github.com/tree-sitter-grammars/tree-sitter-yaml")
 
 
-          ))
+		  ))
   :config
   (dolist (lang '(bash c cmake cpp elisp html javascript json lua make yaml css python toml))
-    (unless (treesit-language-available-p lang)
-      (treesit-install-language-grammar lang)))
+	(unless (treesit-language-available-p lang)
+	  (treesit-install-language-grammar lang)))
   (setq major-mode-remap-alist
-        '((bash-mode . bash-ts-mode)
-          (c-mode . c-ts-mode)
-          (c++-mode . c++-ts-mode)
-          (cpp-mode . cpp-ts-mode)
-          (html-mode . html-ts-mode)
-          (javascript-mode . javascript-ts-mode)
-          (json-mode . json-ts-mode)
-          (lua-mode . lua-ts-mode)
-          (css-mode . css-ts-mode)
-          (elisp-mode . elisp-ts-mode)
-          ;; (markdown-mode . markdown-ts-mode)
-          ;; (php-mode . php-ts-mode)
-          (python-mode . python-ts-mode)
-          ;; (rust-mode . rust-ts-mode)
-          (sh-mode . bash-ts-mode)
-          (shell-script-mode . bash-ts-mode)
-          (toml-mode . toml-ts-mode)
-          (yaml-mode . yaml-ts-mode)))
+		'((bash-mode . bash-ts-mode)
+		  (c-mode . c-ts-mode)
+		  (c++-mode . c++-ts-mode)
+		  (cpp-mode . cpp-ts-mode)
+		  (html-mode . html-ts-mode)
+		  (javascript-mode . javascript-ts-mode)
+		  (json-mode . json-ts-mode)
+		  (lua-mode . lua-ts-mode)
+		  (css-mode . css-ts-mode)
+		  (elisp-mode . elisp-ts-mode)
+		  ;; (markdown-mode . markdown-ts-mode)
+		  ;; (php-mode . php-ts-mode)
+		  (python-mode . python-ts-mode)
+		  ;; (rust-mode . rust-ts-mode)
+		  (sh-mode . bash-ts-mode)
+		  (shell-script-mode . bash-ts-mode)
+		  (toml-mode . toml-ts-mode)
+		  (yaml-mode . yaml-ts-mode)))
   ;; Alternative
   (push '(css-mode . css-ts-mode) major-mode-remap-alist)
   (push '(typescript-mode . tsx-ts-mode) major-mode-remap-alist)

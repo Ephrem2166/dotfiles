@@ -41,21 +41,21 @@
   "Enable variable-pitch-mode for relevant org-mode text."
   (variable-pitch-mode 1)
   (set-face-attribute 'variable-pitch nil
-                      :family "Iosevka Aile"
-                      :height 120)
+					  :family "Iosevka Aile"
+					  :height 120)
   ;; keep code related stuff clean
   (dolist (face '(org-block
-                  org-document-title
-                  org-table
-                  org-verbatim
-                  org-drawer
-                  org-date
-                  org-code
-                  org-block-begin-line
-                  org-block-end-line
-                  org-meta-line
-                  org-document-info-keyword))
-    (set-face-attribute face nil :inherit 'fixed-pitch)))
+				  org-document-title
+				  org-table
+				  org-verbatim
+				  org-drawer
+				  org-date
+				  org-code
+				  org-block-begin-line
+				  org-block-end-line
+				  org-meta-line
+				  org-document-info-keyword))
+	(set-face-attribute face nil :inherit 'fixed-pitch)))
 
 (add-hook 'org-mode-hook #'my/enable-variable-pitch-mode)
 
@@ -92,32 +92,32 @@
   :ensure nil
   :config
   (defun my-adjoin-to-list-or-symbol (element list-or-symbol)
-    (let ((list (if (not (listp list-or-symbol))
-                    (list list-or-symbol)
-                  list-or-symbol)))
-      (require 'cl-lib)
-      (cl-adjoin element list)))
+	(let ((list (if (not (listp list-or-symbol))
+					(list list-or-symbol)
+				  list-or-symbol)))
+	  (require 'cl-lib)
+	  (cl-adjoin element list)))
 
   (eval-after-load "org"
-    '(mapc
-      (lambda (face)
-        (set-face-attribute
-         face nil
-         :inherit
-         (my-adjoin-to-list-or-symbol
-          'fixed-pitch
-          (face-attribute face :inherit))))
-      (list 'org-code 'org-block
-            ;; 'org-table 'org-block-background
-            )))
+	'(mapc
+	  (lambda (face)
+		(set-face-attribute
+		 face nil
+		 :inherit
+		 (my-adjoin-to-list-or-symbol
+		  'fixed-pitch
+		  (face-attribute face :inherit))))
+	  (list 'org-code 'org-block
+			;; 'org-table 'org-block-background
+			)))
   )
 
 ;;; Org General Settings
 (use-package org
   :ensure nil
   :defer-incrementally (calendar find-func format-spec org-macs org-compat org-faces org-entities
-                                 org-list org-pcomplete org-src org-footnote org-macro ob org org-agenda
-                                 org-capture)
+								 org-list org-pcomplete org-src org-footnote org-macro ob org org-agenda
+								 org-capture)
   :init
   (setq-default org-directory "~/Org/")
   :config
@@ -152,17 +152,17 @@
 
   ;; Automatically change the list bullets when you change list levels
   (setq org-list-demote-modify-bullet '(("+" . "-")
-                                        ("*" . "-")
-                                        ("1." . "-")
-                                        ("1)" . "-")
-                                        ("A)" . "-")
-                                        ("B)" . "-")
-                                        ("a)" . "-")
-                                        ("b)" . "-")
-                                        ("A." . "-")
-                                        ("B." . "-")
-                                        ("a." . "-")
-                                        ("b." . "-")))
+										("*" . "-")
+										("1." . "-")
+										("1)" . "-")
+										("A)" . "-")
+										("B)" . "-")
+										("a)" . "-")
+										("b)" . "-")
+										("A." . "-")
+										("B." . "-")
+										("a." . "-")
+										("b." . "-")))
 
 
   ;; (setq org-highlight-latex-and-related nil)
@@ -188,10 +188,10 @@
 
   ;; Blank line before new entry
   (setq org-blank-before-new-entry
-        '(
-          (heading . t)
-          (plain-list-item . auto)
-          ))
+		'(
+		  (heading . t)
+		  (plain-list-item . auto)
+		  ))
 
   ;; Allow a, A, a) and A) as list elements
   (setq org-list-allow-alphabetical t)
@@ -209,9 +209,9 @@
   :ensure nil
   :config
   (setq org-priority-faces
-        '((?A . error)
-          (?B . warning)
-          (?C . success)))
+		'((?A . error)
+		  (?B . warning)
+		  (?C . success)))
   (setq org-fontify-emphasized-text t)
   (setq org-fontify-todo-headline t)
   (setq org-fontify-done-headline t)
@@ -226,13 +226,13 @@
   :after org
   :config
   (define-auto-insert 'org-mode
-    '(t
-      "#+TITLE: " (read-string "Title: ") "\n"
-      "#+AUTHOR: " (user-full-name) "\n"
-      (if (y-or-n-p "Add Date? ") (concat "#+DATE: " (format-time-string "%Y-%m-%d") "\n"))
-      ;; Startup options completion
-      ;; "#+startup: " ((completing-read "Startup: " org-startup-options nil t) str " ") "\n"
-      )    )
+	'(t
+	  "#+TITLE: " (read-string "Title: ") "\n"
+	  "#+AUTHOR: " (user-full-name) "\n"
+	  (if (y-or-n-p "Add Date? ") (concat "#+DATE: " (format-time-string "%Y-%m-%d") "\n"))
+	  ;; Startup options completion
+	  ;; "#+startup: " ((completing-read "Startup: " org-startup-options nil t) str " ") "\n"
+	  )    )
 
   )
 
@@ -246,7 +246,7 @@
 ;;   (org-num-skip-unnumbered t))
 
 
-                                        ;Org Indent
+										;Org Indent
 ;; (use-package org
 ;;   :ensure nil
 ;;   :config
@@ -260,8 +260,8 @@
   :ensure nil
   :config
   (setq org-refile-targets
-        '((org-agenda-files . (:maxlevel . 2))
-          (nil . (:maxlevel . 2))))
+		'((org-agenda-files . (:maxlevel . 2))
+		  (nil . (:maxlevel . 2))))
   (setq org-refile-use-outline-path t)
   (setq org-refile-allow-creating-parent-nodes 'confirm)
   (setq org-refile-use-cache t)
@@ -278,26 +278,26 @@
   :ensure nil
   :config
   (setq org-todo-keywords
-        '((sequence "TODO" "|" "IN-PROGRESS" "|" "DONE" "|" "CANCELED")
-          (sequence "TOREAD" "|" "READ")
-          (sequence "TOWATCH" "|" "WATCHED")
-          ))
+		'((sequence "TODO" "|" "IN-PROGRESS" "|" "DONE" "|" "CANCELED")
+		  (sequence "TOREAD" "|" "READ")
+		  (sequence "TOWATCH" "|" "WATCHED")
+		  ))
 
   (setq org-todo-keyword-faces
-        '(("TODO" . "#BF616A")        ;; Polar Night Red
-          ("NEXT" . "#D08770")
-          ("IN-PROGRESS" . "#EBCB8B") ;; Nordic Yellow
-          ("WAITING" . "#B48EAD")     ;; Nordic Purple
-          ("HOLD" . "#4C566A")        ;; Dark Gray (Polar Night)
-          ("DONE" . "#A3BE8C")        ;; Nordic Green
-          ("CANCELED" . "#BF616A")
-          ("DELEGATED" . "#81A1C1")   ;; Nordic Blue
-          ("REVIEW" . "#88C0D0")      ;; Light Blue
-          ("READ" . "#BF616A")
-          ("WATCH" . "#BF616A")
-          ("WATCHED" . "#A3BE8C")        ;; Nordic Green
-          ("BLOCKED" . "#5E81AC"))
-        )   ;; Deep Blue
+		'(("TODO" . "#BF616A")        ;; Polar Night Red
+		  ("NEXT" . "#D08770")
+		  ("IN-PROGRESS" . "#EBCB8B") ;; Nordic Yellow
+		  ("WAITING" . "#B48EAD")     ;; Nordic Purple
+		  ("HOLD" . "#4C566A")        ;; Dark Gray (Polar Night)
+		  ("DONE" . "#A3BE8C")        ;; Nordic Green
+		  ("CANCELED" . "#BF616A")
+		  ("DELEGATED" . "#81A1C1")   ;; Nordic Blue
+		  ("REVIEW" . "#88C0D0")      ;; Light Blue
+		  ("READ" . "#BF616A")
+		  ("WATCH" . "#BF616A")
+		  ("WATCHED" . "#A3BE8C")        ;; Nordic Green
+		  ("BLOCKED" . "#5E81AC"))
+		)   ;; Deep Blue
   (setq org-use-fast-todo-selection t)
   )
 
@@ -308,19 +308,19 @@
   :ensure nil
   :config
   (setq org-structure-template-alist
-        '(("s" . "src")
-          ("S" . "src sh")
-          ("c" . "comment")
-          ("C" . "center")
-          ("v" . "verse")
-          ("l" . "latex")
-          ("e" . "src emacs-lisp")
-          ("E" . "src emacs-lisp :results value code :lexical t")
-          ("t" . "src emacs-lisp :tangle FILENAME")
-          ("T" . "src emacs-lisp :tangle FILENAME :mkdirp yes")
-          ("x" . "example")
-          ("X" . "export")
-          ("q" . "quote")))
+		'(("s" . "src")
+		  ("S" . "src sh")
+		  ("c" . "comment")
+		  ("C" . "center")
+		  ("v" . "verse")
+		  ("l" . "latex")
+		  ("e" . "src emacs-lisp")
+		  ("E" . "src emacs-lisp :results value code :lexical t")
+		  ("t" . "src emacs-lisp :tangle FILENAME")
+		  ("T" . "src emacs-lisp :tangle FILENAME :mkdirp yes")
+		  ("x" . "example")
+		  ("X" . "export")
+		  ("q" . "quote")))
   )
 
 ;;; Pretty Symbol List
@@ -328,57 +328,57 @@
   :ensure nil
   :config
   (setq-default prettify-symbols-alist '(
-                                         ;; SRC CODE
-                                         ("#+BEGIN_SRC" . "»")
-                                         ("#+END_SRC" . "«")
-                                         ("#+begin_src" . "»")
-                                         ("#+end_src" . "«")
-                                         ;; Quote
-                                         ("#+begin_quote" . "")
-                                         ("#+end_quote" . "―")
-                                         ;; Greek Symbols
-                                         ("delta"  . ?Δ)
-                                         ("gamma"  . ?Γ)
-                                         ("phi"    . ?φ)
-                                         ("psi"    . ?ψ)
-                                         ("lambda"  . "λ")
-                                         ;; Arrow
-                                         ("->" . "→")
-                                         ("->>" . "↠")
-                                        ; Agenda tags 
-                                         (":@projects:"  . ?☕)
-                                         (":work:"       . ?🚀)
-                                         (":@inbox:"     . ?✉)
-                                         (":goal:"       . ?🎯)
-                                         (":task:"       . ?📋)
-                                         (":@thesis:"    . ?📝)
-                                         (":thesis:"     . ?📝)
-                                         (":emacs:"      . ?)
-                                         (":learn:"      . ?🌱)
-                                         (":code:"       . ?💻)
-                                         (":fix:"        . ?🛠)
-                                         (":bug:"        . ?🚩)
-                                         (":read:"       . ?📚)
-                                        ; Drawers
-                                         (":properties:" . ?)
-                                        ; Agenda scheduling
-                                         ("#+STARTUP:" . "")
-                                         ("#+TITLE: " . "")
-                                         ("#+title: " . "")
-                                         ("#+RESULTS:" . "")
-                                         ("#+NAME:" . "")
-                                         ("#+ROAM_TAGS:" . "")
-                                         ("#+FILETAGS:" . "")
-                                         ("#+HTML_HEAD:" . "")
-                                         ("#+SUBTITLE:" . "")
-                                         ("#+AUTHOR:" . "")
-                                         (":Effort:" . "")
-                                         ("SCHEDULED:" . "")
-                                         ("DEADLINE:" . "")
-                                         ("SCHEDULED:"   . ?🕘)
-                                         ("DEADLINE:"    . ?⏰)
+										 ;; SRC CODE
+										 ("#+BEGIN_SRC" . "»")
+										 ("#+END_SRC" . "«")
+										 ("#+begin_src" . "»")
+										 ("#+end_src" . "«")
+										 ;; Quote
+										 ("#+begin_quote" . "")
+										 ("#+end_quote" . "―")
+										 ;; Greek Symbols
+										 ("delta"  . ?Δ)
+										 ("gamma"  . ?Γ)
+										 ("phi"    . ?φ)
+										 ("psi"    . ?ψ)
+										 ("lambda"  . "λ")
+										 ;; Arrow
+										 ("->" . "→")
+										 ("->>" . "↠")
+										; Agenda tags 
+										 (":@projects:"  . ?☕)
+										 (":work:"       . ?🚀)
+										 (":@inbox:"     . ?✉)
+										 (":goal:"       . ?🎯)
+										 (":task:"       . ?📋)
+										 (":@thesis:"    . ?📝)
+										 (":thesis:"     . ?📝)
+										 (":emacs:"      . ?)
+										 (":learn:"      . ?🌱)
+										 (":code:"       . ?💻)
+										 (":fix:"        . ?🛠)
+										 (":bug:"        . ?🚩)
+										 (":read:"       . ?📚)
+										; Drawers
+										 (":properties:" . ?)
+										; Agenda scheduling
+										 ("#+STARTUP:" . "")
+										 ("#+TITLE: " . "")
+										 ("#+title: " . "")
+										 ("#+RESULTS:" . "")
+										 ("#+NAME:" . "")
+										 ("#+ROAM_TAGS:" . "")
+										 ("#+FILETAGS:" . "")
+										 ("#+HTML_HEAD:" . "")
+										 ("#+SUBTITLE:" . "")
+										 ("#+AUTHOR:" . "")
+										 (":Effort:" . "")
+										 ("SCHEDULED:" . "")
+										 ("DEADLINE:" . "")
+										 ("SCHEDULED:"   . ?🕘)
+										 ("DEADLINE:"    . ?⏰)
 
-                                         ))
+										 ))
 
   (setq prettify-symbols-unprettify-at-point 'right-edge))
 
@@ -419,19 +419,19 @@
   (org-attach-archive-delete 'query) ; If subtree is deleted or archived, ask user
   (org-attach-id-to-path-function-list
    '(org-attach-id-ts-folder-format
-     org-attach-id-uuid-folder-format
-     org-attach-id-fallback-folder-format)))
+	 org-attach-id-uuid-folder-format
+	 org-attach-id-fallback-folder-format)))
 
 ;;; Org Text Colors
 (use-package org
   :ensure nil
   :config
   (setq org-emphasis-alist '(("*" (bold :foreground "#BF616a"))
-                             ("/" (italic :foreground "#8aadf4"))
-                             ("_" underline)
-                             ("=" (:foreground "#a3be8c" :family "Berkeley Nerd Font"))
-                             ("~" (:foreground "#d08770" :family "Berkeley Nerd Font"))
-                             )))
+							 ("/" (italic :foreground "#8aadf4"))
+							 ("_" underline)
+							 ("=" (:foreground "#a3be8c" :family "Berkeley Nerd Font"))
+							 ("~" (:foreground "#d08770" :family "Berkeley Nerd Font"))
+							 )))
 
 ;;; Org SRC Blocks
 (use-package org
@@ -466,20 +466,20 @@
   ;; (setq org-tag-alist nil)
   ;; Tags with fast selection keys
   (setq org-tag-alist (quote ((:startgroup)
-                              ("WAITING" . ?w)
-                              ("HOLD" . ?h)
-                              ("MEETING" . ?m)
-                              ("REVIEW" . ?r)
-                              ("NOTE" . ?n)
-                              (:endgroup)
-                              ("PERSONAL" . ?p)
-                              ("WORK" . ?W)
-                              ("crypt" . ?c)
-                              ("EMACS" . ?e)
-                              ("CLASS" . ?c)
-                              ("IDEA" . ?i)
-                              ("LINUX" . ?l)
-                              ("FLAGGED" . ??))))
+							  ("WAITING" . ?w)
+							  ("HOLD" . ?h)
+							  ("MEETING" . ?m)
+							  ("REVIEW" . ?r)
+							  ("NOTE" . ?n)
+							  (:endgroup)
+							  ("PERSONAL" . ?p)
+							  ("WORK" . ?W)
+							  ("crypt" . ?c)
+							  ("EMACS" . ?e)
+							  ("CLASS" . ?c)
+							  ("IDEA" . ?i)
+							  ("LINUX" . ?l)
+							  ("FLAGGED" . ??))))
   (setq org-auto-align-tags nil)
   ;; Allow setting single tags without the menu
   (setq org-fast-tag-selection-single-key (quote expert))
@@ -502,10 +502,10 @@
   :after org
   :config
   (setq org-link-abbrev-alist
-        '(("github"      . "https://github.com/%s")
-          ("youtube"     . "https://youtube.com/watch?v=%s")
-          ("google"      . "https://google.com/search?q=")
-          ("wikipedia"   . "https://en.wikipedia.org/wiki/%s")))
+		'(("github"      . "https://github.com/%s")
+		  ("youtube"     . "https://youtube.com/watch?v=%s")
+		  ("google"      . "https://google.com/search?q=")
+		  ("wikipedia"   . "https://en.wikipedia.org/wiki/%s")))
 
   (setq org-link-context-for-files t)
   (setq org-link-keep-stored-after-insertion nil)
@@ -528,28 +528,28 @@
   :ensure nil
   :after org
   :hook (after-init . (lambda ()
-                        "Activate Languages"
-                        (org-babel-do-load-languages
-                         'org-babel-load-languages
-                         '((emacs-lisp . t)
-                           (python . t)
-                           (shell . t)
-                           ;; (mermaid . t)
-                           (org . t)
-                           (plantuml . t)
-                           (latex . t)
-                           (js . t)
-                           ))))
+						"Activate Languages"
+						(org-babel-do-load-languages
+						 'org-babel-load-languages
+						 '((emacs-lisp . t)
+						   (python . t)
+						   (shell . t)
+						   ;; (mermaid . t)
+						   (org . t)
+						   (plantuml . t)
+						   (latex . t)
+						   (js . t)
+						   ))))
   :config
   (setq org-babel-default-header-args
-        '((:session . "none")
-          (:results . "replace")
-          (:exports . "code")
-          (:cache . "no")
-          (:noweb . "no")
-          (:hlines . "no")
-          (:tangle . "no")
-          (:comments . "link")))
+		'((:session . "none")
+		  (:results . "replace")
+		  (:exports . "code")
+		  (:cache . "no")
+		  (:noweb . "no")
+		  (:hlines . "no")
+		  (:tangle . "no")
+		  (:comments . "link")))
   (setq org-confirm-babel-evaluate t))
 
 ;;; Better Org-Return
@@ -557,115 +557,115 @@
 (use-package org
   :ensure nil
   :bind (:map org-mode-map
-              ("RET" . my/org-return-dwim))
+			  ("RET" . my/org-return-dwim))
   :config
 
   (defun my/org-element-descendant-of (type element)
-    "Return non-nil if ELEMENT is a descendant of TYPE.
+	"Return non-nil if ELEMENT is a descendant of TYPE.
 TYPE should be an element type, like `item' or `paragraph'.
 ELEMENT should be a list like that returned by `org-element-context'."
-    ;; MAYBE: Use `org-element-lineage'.
-    (when-let* ((parent (org-element-property :parent element)))
-      (or (eq type (car parent))
-          (my/org-element-descendant-of type parent))))
+	;; MAYBE: Use `org-element-lineage'.
+	(when-let* ((parent (org-element-property :parent element)))
+	  (or (eq type (car parent))
+		  (my/org-element-descendant-of type parent))))
 
   (defun my/org-return-dwim (&optional default)
-    "A helpful replacement for `org-return'.  With prefix, call `org-return'.
+	"A helpful replacement for `org-return'.  With prefix, call `org-return'.
 
 On headings, move point to position after entry content.  In
 lists, insert a new item or end the list, with checkbox if
 appropriate.  In tables, insert a new row or end the table."
-    ;; Inspired by John Kitchin:
-    ;; http://kitchingroup.cheme.cmu.edu/blog/2017/04/09/A-better-return-in-org-mode/
-    (interactive "P")
-    (if default
-        (org-return)
-      (cond
-       ;; Act depending on context around point.
+	;; Inspired by John Kitchin:
+	;; http://kitchingroup.cheme.cmu.edu/blog/2017/04/09/A-better-return-in-org-mode/
+	(interactive "P")
+	(if default
+		(org-return)
+	  (cond
+	   ;; Act depending on context around point.
 
-       ((and (eq 'link (car (org-element-context)))
-             org-return-follows-link)
-        ;; Link: Open it.
-        (org-open-at-point-global))
+	   ((and (eq 'link (car (org-element-context)))
+			 org-return-follows-link)
+		;; Link: Open it.
+		(org-open-at-point-global))
 
-       ;; ((or (eq
-       ;;       (get-char-property (min (1+ (point)) (point-max)) 'org-overlay-type)
-       ;;       'org-latex-overlay)
-       ;;      (let ((context (org-element-context)))
-       ;;        (and (memq (org-element-type context)
-       ;;                   '(latex-fragment latex-environment))
-       ;;             (eq (point)
-       ;;                 (save-excursion
-       ;;                   (goto-char (org-element-property :end context))
-       ;;                   (skip-chars-backward "\n\r\t ")
-       ;;                   (point))))))
-       ;;  (org-latex-preview))
+	   ;; ((or (eq
+	   ;;       (get-char-property (min (1+ (point)) (point-max)) 'org-overlay-type)
+	   ;;       'org-latex-overlay)
+	   ;;      (let ((context (org-element-context)))
+	   ;;        (and (memq (org-element-type context)
+	   ;;                   '(latex-fragment latex-environment))
+	   ;;             (eq (point)
+	   ;;                 (save-excursion
+	   ;;                   (goto-char (org-element-property :end context))
+	   ;;                   (skip-chars-backward "\n\r\t ")
+	   ;;                   (point))))))
+	   ;;  (org-latex-preview))
 
-       ((org-at-heading-p)
-        ;; Heading: Move to position after entry content.
-        ;; NOTE: This is probably the most interesting feature of this function.
-        (let ((heading-start (org-entry-beginning-position)))
-          (goto-char (org-entry-end-position))
-          (cond ((and (org-at-heading-p)
-                      (= heading-start (org-entry-beginning-position)))
-                 ;; Entry ends on its heading; add newline after
-                 (end-of-line)
-                 (insert "\n\n"))
-                (t
-                 ;; Entry ends after its heading; back up
-                 (forward-line -1)
-                 (end-of-line)
-                 (when (org-at-heading-p)
-                   ;; At the same heading
-                   (forward-line)
-                   (insert "\n")
-                   (forward-line -1))
-                 ;; FIXME: looking-back is supposed to be called with more arguments.
-                 (while (not (looking-back (rx (repeat 3 (seq (optional blank) "\n")))))
-                   (insert "\n"))
-                 (forward-line -1)))))
+	   ((org-at-heading-p)
+		;; Heading: Move to position after entry content.
+		;; NOTE: This is probably the most interesting feature of this function.
+		(let ((heading-start (org-entry-beginning-position)))
+		  (goto-char (org-entry-end-position))
+		  (cond ((and (org-at-heading-p)
+					  (= heading-start (org-entry-beginning-position)))
+				 ;; Entry ends on its heading; add newline after
+				 (end-of-line)
+				 (insert "\n\n"))
+				(t
+				 ;; Entry ends after its heading; back up
+				 (forward-line -1)
+				 (end-of-line)
+				 (when (org-at-heading-p)
+				   ;; At the same heading
+				   (forward-line)
+				   (insert "\n")
+				   (forward-line -1))
+				 ;; FIXME: looking-back is supposed to be called with more arguments.
+				 (while (not (looking-back (rx (repeat 3 (seq (optional blank) "\n")))))
+				   (insert "\n"))
+				 (forward-line -1)))))
 
-       ((org-in-item-p)
-        ;; Plain list.  Yes, this gets a little complicated...
-        (let ((context (org-element-context)))
-          (if (or (eq 'plain-list (car context))  ; First item in list
-                  (and (eq 'item (car context))
-                       (not (eq (org-element-property :contents-begin context)
-                                (org-element-property :contents-end context))))
-                  (my/org-element-descendant-of 'item context))  ; Element in list item, e.g. a link
-              ;; Non-empty item: Add new item.
-              (if (org-at-item-checkbox-p)
-                  (org-insert-todo-heading nil)
-                (org-insert-item))
-            ;; Empty item: Close the list.
-            ;; TODO: Do this with org functions rather than operating on the
-            ;; text. Can't seem to find the right function.
-            (delete-region (line-beginning-position) (line-end-position))
-            (insert "\n"))))
+	   ((org-in-item-p)
+		;; Plain list.  Yes, this gets a little complicated...
+		(let ((context (org-element-context)))
+		  (if (or (eq 'plain-list (car context))  ; First item in list
+				  (and (eq 'item (car context))
+					   (not (eq (org-element-property :contents-begin context)
+								(org-element-property :contents-end context))))
+				  (my/org-element-descendant-of 'item context))  ; Element in list item, e.g. a link
+			  ;; Non-empty item: Add new item.
+			  (if (org-at-item-checkbox-p)
+				  (org-insert-todo-heading nil)
+				(org-insert-item))
+			;; Empty item: Close the list.
+			;; TODO: Do this with org functions rather than operating on the
+			;; text. Can't seem to find the right function.
+			(delete-region (line-beginning-position) (line-end-position))
+			(insert "\n"))))
 
-       ((when (fboundp 'org-inlinetask-in-task-p)
-          (org-inlinetask-in-task-p))
-        ;; Inline task: Don't insert a new heading.
-        (org-return))
+	   ((when (fboundp 'org-inlinetask-in-task-p)
+		  (org-inlinetask-in-task-p))
+		;; Inline task: Don't insert a new heading.
+		(org-return))
 
-       ((org-at-table-p)
-        (cond ((save-excursion
-                 (beginning-of-line)
-                 ;; See `org-table-next-field'.
-                 (cl-loop with end = (line-end-position)
-                          for cell = (org-element-table-cell-parser)
-                          always (equal (org-element-property :contents-begin cell)
-                                        (org-element-property :contents-end cell))
-                          while (re-search-forward "|" end t)))
-               ;; Empty row: end the table.
-               (delete-region (line-beginning-position) (line-end-position))
-               (org-return))
-              (t
-               ;; Non-empty row: call `org-return'.
-               (org-return))))
-       (t
-        ;; All other cases: call `org-return'.
-        (org-return))))))
+	   ((org-at-table-p)
+		(cond ((save-excursion
+				 (beginning-of-line)
+				 ;; See `org-table-next-field'.
+				 (cl-loop with end = (line-end-position)
+						  for cell = (org-element-table-cell-parser)
+						  always (equal (org-element-property :contents-begin cell)
+										(org-element-property :contents-end cell))
+						  while (re-search-forward "|" end t)))
+			   ;; Empty row: end the table.
+			   (delete-region (line-beginning-position) (line-end-position))
+			   (org-return))
+			  (t
+			   ;; Non-empty row: call `org-return'.
+			   (org-return))))
+	   (t
+		;; All other cases: call `org-return'.
+		(org-return))))))
 
 
 
@@ -679,10 +679,10 @@ context.  When called with an argument, unconditionally call
   (interactive "P")
   (org-check-before-invisible-edit 'insert)
   (or (run-hook-with-args-until-success 'org-metareturn-hook)
-      (call-interactively (cond (arg #'org-insert-heading)
-                                ((org-at-table-p) #'org-table-wrap-region)
-                                ((org-in-item-p) #'org-insert-item)
-                                (t #'org-insert-heading)))))
+	  (call-interactively (cond (arg #'org-insert-heading)
+								((org-at-table-p) #'org-table-wrap-region)
+								((org-in-item-p) #'org-insert-item)
+								(t #'org-insert-heading)))))
 (advice-add 'org-meta-return :override #'my/org-meta-return)
 ;;; TODO Org-Refile
 ;; (defconst my-org-todos "~/Org/Capture/")
@@ -696,11 +696,11 @@ context.  When called with an argument, unconditionally call
   (setq org-fontify-done-headline t)
   (custom-set-faces
    '(org-done ((t (:foreground "PaleGreen"
-                               :weight normal
-                               :strike-through t))))
+							   :weight normal
+							   :strike-through t))))
    '(org-headline-done
-     ((((class color) (min-colors 16) (background dark))
-       (:foreground "LightSalmon" :strike-through t))))))
+	 ((((class color) (min-colors 16) (background dark))
+	   (:foreground "LightSalmon" :strike-through t))))))
 
 ;; Remove hooks
 ;; For better tables
@@ -717,69 +717,69 @@ context.  When called with an argument, unconditionally call
   :config
   ;;; Better Org Modern
   (defun my/org-modern-hook ()
-    "Enabling org-modern and changing all sorts of settings according to its README."
-    (interactive)
+	"Enabling org-modern and changing all sorts of settings according to its README."
+	(interactive)
 
-    ;; Option 1: Per buffer
-    (add-hook 'org-mode-hook #'org-modern-mode)
-    (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+	;; Option 1: Per buffer
+	(add-hook 'org-mode-hook #'org-modern-mode)
+	(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 
-    ;; Option 2: Globally
-    (global-org-modern-mode)
+	;; Option 2: Globally
+	(global-org-modern-mode)
 
-    ;; Minimal UI
-    (package-initialize)
-    (menu-bar-mode -1)
-    (tool-bar-mode -1)
-    (scroll-bar-mode -1)
-                                        ;  (modus-themes-load-operandi)
+	;; Minimal UI
+	(package-initialize)
+	(menu-bar-mode -1)
+	(tool-bar-mode -1)
+	(scroll-bar-mode -1)
+										;  (modus-themes-load-operandi)
 
-    ;; Choose some fonts
-    (set-face-attribute 'default nil :family "Berkeley Nerd Font")
-    (set-face-attribute 'variable-pitch nil :family "SN Pro")
-    (set-face-attribute 'org-modern-symbol nil :family "Berkeley Nerd Font")
+	;; Choose some fonts
+	(set-face-attribute 'default nil :family "Berkeley Nerd Font")
+	(set-face-attribute 'variable-pitch nil :family "SN Pro")
+	(set-face-attribute 'org-modern-symbol nil :family "Berkeley Nerd Font")
 
-    ;; Add frame borders and window dividers
-    (modify-all-frames-parameters
-     '((right-divider-width . 40)
-       (internal-border-width . 40)))
-    (dolist (face '(window-divider
-                    window-divider-first-pixel
-                    window-divider-last-pixel))
-      (face-spec-reset-face face)
-      (set-face-foreground face (face-attribute 'default :background)))
-    (set-face-background 'fringe (face-attribute 'default :background))
+	;; Add frame borders and window dividers
+	(modify-all-frames-parameters
+	 '((right-divider-width . 40)
+	   (internal-border-width . 40)))
+	(dolist (face '(window-divider
+					window-divider-first-pixel
+					window-divider-last-pixel))
+	  (face-spec-reset-face face)
+	  (set-face-foreground face (face-attribute 'default :background)))
+	(set-face-background 'fringe (face-attribute 'default :background))
 
-    (setq
-     ;; Edit settings
-     org-auto-align-tags nil
-     org-tags-column 0
-     org-catch-invisible-edits 'show-and-error
-     org-special-ctrl-a/e t
-     org-insert-heading-respect-content t
+	(setq
+	 ;; Edit settings
+	 org-auto-align-tags nil
+	 org-tags-column 0
+	 org-catch-invisible-edits 'show-and-error
+	 org-special-ctrl-a/e t
+	 org-insert-heading-respect-content t
 
-     ;; Org styling, hide markup etc.
-     org-hide-emphasis-markers t
-     org-pretty-entities t
-     org-ellipsis "…"
+	 ;; Org styling, hide markup etc.
+	 org-hide-emphasis-markers t
+	 org-pretty-entities t
+	 org-ellipsis "…"
 
-     ;; Do not add source block fringe markers if org-indent-mode is
-     ;; enabled. org-indent-mode uses line prefixes for indentation.
-     ;; Therefore we cannot have both.
+	 ;; Do not add source block fringe markers if org-indent-mode is
+	 ;; enabled. org-indent-mode uses line prefixes for indentation.
+	 ;; Therefore we cannot have both.
 
-     ;; Agenda styling
-     org-agenda-tags-column 0
-     org-agenda-block-separator ?─
-     org-agenda-time-grid
-     '((daily today require-timed)
-       (800 1000 1200 1400 1600 1800 2000)
-       " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-     org-agenda-current-time-string
-     "⭠ now ─────────────────────────────────────────────────")
+	 ;; Agenda styling
+	 org-agenda-tags-column 0
+	 org-agenda-block-separator ?─
+	 org-agenda-time-grid
+	 '((daily today require-timed)
+	   (800 1000 1200 1400 1600 1800 2000)
+	   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+	 org-agenda-current-time-string
+	 "⭠ now ─────────────────────────────────────────────────")
 
-    ;; (global-org-modern-mode)
+	;; (global-org-modern-mode)
 
-    )
+	)
 
 
   )
@@ -790,59 +790,154 @@ context.  When called with an argument, unconditionally call
   "Configure `org-mode' fonts and faces."
   (interactive)
   (when window-system
-    ;; First step is to make all Org header levels to use the variable
-    ;; font, and be the same color as the default text:
-    (let ((default-color (face-attribute 'default :foreground)))
-      (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
-                                  org-level-5 org-level-6 org-level-7 org-level-8))
-        (set-face-attribute face nil :height 1.1
-                            :foreground default-color :weight 'bold
-                            :font "Berkeley Nerd Font")))
+	;; First step is to make all Org header levels to use the variable
+	;; font, and be the same color as the default text:
+	(let ((default-color (face-attribute 'default :foreground)))
+	  (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
+								  org-level-5 org-level-6 org-level-7 org-level-8))
+		(set-face-attribute face nil :height 1.1
+							:foreground default-color :weight 'bold
+							:font "Berkeley Nerd Font")))
 
-    ;; Change the header sizes to show their level visually:
-    (set-face-attribute 'org-level-1 nil :height 2.2)
-    (set-face-attribute 'org-level-2 nil :height 1.8)
-    (set-face-attribute 'org-level-3 nil :height 1.4)
-    (set-face-attribute 'org-level-4 nil :height 1.2)
+	;; Change the header sizes to show their level visually:
+	(set-face-attribute 'org-level-1 nil :height 2.2)
+	(set-face-attribute 'org-level-2 nil :height 1.8)
+	(set-face-attribute 'org-level-3 nil :height 1.4)
+	(set-face-attribute 'org-level-4 nil :height 1.2)
 
-    (dolist (face '(org-block org-code org-verbatim org-table org-drawer
-                              org-table org-formula org-special-keyword org-block
-                              org-property-value org-document-info-keyword))
-      (set-face-attribute face nil :inherit 'fixed-pitch :height 'unspecified))
+	(dolist (face '(org-block org-code org-verbatim org-table org-drawer
+							  org-table org-formula org-special-keyword org-block
+							  org-property-value org-document-info-keyword))
+	  (set-face-attribute face nil :inherit 'fixed-pitch :height 'unspecified))
 
-    (set-face-attribute 'org-block-begin-line nil :height 0.85)
-    (set-face-attribute 'org-block-end-line nil :height 0.8)
+	(set-face-attribute 'org-block-begin-line nil :height 0.85)
+	(set-face-attribute 'org-block-end-line nil :height 0.8)
 
-    (set-face-attribute 'org-drawer nil :height 0.8)
-    (set-face-attribute 'org-property-value nil :height 0.85)
-    (set-face-attribute 'org-special-keyword nil :height 0.85)))
+	(set-face-attribute 'org-drawer nil :height 0.8)
+	(set-face-attribute 'org-property-value nil :height 0.85)
+	(set-face-attribute 'org-special-keyword nil :height 0.85)))
 
 ;;; Better Checkboxes
 (use-package org
   :ensure nil
   :config
   (add-hook 'org-mode-hook (lambda ()
-                             "Beautify Org Checkbox Symbol"
-                             (push '("[ ]" .  "☐") prettify-symbols-alist)
-                             (push '("[X]" . "☑" ) prettify-symbols-alist)
-                             (push '("[-]" . "❍" ) prettify-symbols-alist)
-                             (prettify-symbols-mode)))
+							 "Beautify Org Checkbox Symbol"
+							 (push '("[ ]" .  "☐") prettify-symbols-alist)
+							 (push '("[X]" . "☑" ) prettify-symbols-alist)
+							 (push '("[-]" . "❍" ) prettify-symbols-alist)
+							 (prettify-symbols-mode)))
   ;; Strikethrough
   (defface org-checkbox-done-text
-    '((t (:foreground "#71696A" :strike-through t)))
-    "Face for the text part of a checked org-mode checkbox.")
+	'((t (:foreground "#71696A" :strike-through t)))
+	"Face for the text part of a checked org-mode checkbox.")
 
   (font-lock-add-keywords
    'org-mode
    `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)"
-      1 'org-checkbox-done-text prepend))
+	  1 'org-checkbox-done-text prepend))
    'append)
   )
 
+;;; Force org-code use monospace fonts for better visualization
+(define-minor-mode unpackaged/org-table-face-mode
+  "Apply `org-table' face family to all text in Org tables.
+Useful for forcibly applying the face to portions of table data
+that might have a different face, which could affect alignment."
+  :global nil
+  (let ((keywords '((unpackaged/org-table-face-matcher 0 'org-table))))
+	(if unpackaged/org-table-face-mode
+		(font-lock-add-keywords nil keywords 'append)
+	  (font-lock-remove-keywords nil keywords))
+	(font-lock-flush)))
+
+(cl-defun unpackaged/org-table-face-matcher
+	(limit &optional (face `(:family ,(face-attribute 'org-table :family))))
+  "Apply FACE to entire Org tables.
+A `font-lock-keywords' function that searches up to LIMIT."
+  (cl-flet* ((find-face (face &optional limit not)
+			   ;; Return next position up to LIMIT that has FACE, or doesn't if NOT.
+			   (cl-loop with prev-pos
+						with pos = (point)
+						while (not (eobp))
+						do (setf pos (next-single-property-change pos 'face nil limit))
+						while (and pos (not (equal pos prev-pos)))
+						for face-at = (get-text-property pos 'face)
+						for face-matches-p = (or (eq face-at face)
+												 (when (listp face-at)
+												   (member face face-at)))
+						when (or (and not (not face-matches-p))
+								 face-matches-p)
+						return pos
+						do (setf prev-pos pos)))
+			 (apply-face-from (pos face)
+			   (unless (eobp)
+				 (let* ((property-at-start (get-text-property pos 'face))
+						(table-face-start (if (or (eq property-at-start 'org-table)
+												  (when (listp property-at-start)
+													(member 'org-table property-at-start)))
+											  (point)
+											(find-face 'org-table limit)))
+						table-face-end)
+				   (when table-face-start
+					 (goto-char table-face-start)
+					 (setf table-face-end (line-end-position))
+					 (add-face-text-property table-face-start table-face-end face)
+					 (goto-char table-face-end))))))
+	(cl-loop with applied-p
+			 for applied = (apply-face-from (point) face)
+			 when applied
+			 do (setf applied-p t)
+			 while applied
+			 finally return applied-p)))
+
+(add-hook 'org-mode-hook #'unpackaged/org-table-face-mode)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; ;;; Org Export ;;
 ;;;;;;;;;;;;;;;;;;;;
+
+;;; Outline number overlays
+;;;###autoload
+(defun unpackaged/org-outline-numbers (&optional remove-p)
+  "Add outline number overlays to the current buffer.
+When REMOVE-P is non-nil (interactively, with prefix), remove
+them.  Overlays are not automatically updated when the outline
+structure changes."
+  ;; NOTE: This does not necessarily play nicely with org-indent-mode
+  ;; or org-bullets, but it probably wouldn't be too hard to fix that.
+  (interactive (list current-prefix-arg))
+  (cl-labels ((heading-number ()
+				(or (when-let ((num (previous-sibling-number)))
+					  (1+ num))
+					1))
+			  (previous-sibling-number ()
+				(save-excursion
+				  (let ((pos (point)))
+					(org-backward-heading-same-level 1)
+					(when (/= pos (point))
+					  (heading-number)))))
+			  (number-list ()
+				(let ((ancestor-numbers (save-excursion
+										  (cl-loop while (org-up-heading-safe)
+												   collect (heading-number)))))
+				  (nreverse (cons (heading-number) ancestor-numbers))))
+			  (add-overlay ()
+				(let* ((ov-length (org-current-level))
+					   (ov (make-overlay (point) (+ (point) ov-length)))
+					   (ov-string (concat (mapconcat #'number-to-string (number-list) ".")
+										  ".")))
+				  (overlay-put ov 'org-outline-numbers t)
+				  (overlay-put ov 'display ov-string))))
+	(remove-overlays nil nil 'org-outline-numbers t)
+	(unless remove-p
+	  (org-with-wide-buffer
+	   (goto-char (point-min))
+	   (when (org-before-first-heading-p)
+		 (outline-next-heading))
+	   (cl-loop do (add-overlay)
+				while (outline-next-heading))))))
+
 ;;; Org OX
 (use-package ox
   :ensure nil
@@ -858,10 +953,10 @@ context.  When called with an argument, unconditionally call
   (setq org-export-async-debug t)
   (setq org-export-with-section-numbers nil)
   (setq org-time-stamp-formats
-        '("%Y-%m-%d %a" . "%Y-%m-%d %a %H:%M"))
+		'("%Y-%m-%d %a" . "%Y-%m-%d %a %H:%M"))
   (setq org-display-custom-times t)
   (setq org-time-stamp-custom-formats
-        '("%a, %b %-d" . "%a, %b %-d (%-H:%M%p)"))
+		'("%a, %b %-d" . "%a, %b %-d (%-H:%M%p)"))
   (setq org-image-actual-width 700)
   (setq org-export-in-background nil)
 

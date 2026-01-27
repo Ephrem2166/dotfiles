@@ -15,15 +15,15 @@
   :hook (org-mode . org-appear-mode)
   :config
   (setq org-appear-autoemphasis   t
-        org-hide-emphasis-markers t
-        org-appear-autolinks      'just-brackets
-        org-appear-autoentities   t
-        org-appear-autosubmarkers t
-        org-appear-delay 0.0
-        org-appear-autokeywords t
-        org-appear-inside-latex t
-        org-appear-triggger 'always
-        )
+		org-hide-emphasis-markers t
+		org-appear-autolinks      'just-brackets
+		org-appear-autoentities   t
+		org-appear-autosubmarkers t
+		org-appear-delay 0.0
+		org-appear-autokeywords t
+		org-appear-inside-latex t
+		org-appear-triggger 'always
+		)
   (run-at-time nil nil #'org-appear--set-elements))
 
 
@@ -113,9 +113,9 @@
    )
   :config
   (defun ef/org-modern-spacing ()
-    (setq-local line-spacing
-                (if org-modern-mode
-                    0.3 0.0)))
+	(setq-local line-spacing
+				(if org-modern-mode
+					0.3 0.0)))
   :custom
   (org-catch-invisible-edits 'show-and-error)
   (org-modern-block-fringe nil)
@@ -125,11 +125,11 @@
   (org-modern-todo nil)
   (org-modern-todo-faces
    '(("NEXT" :inherit (bold success org-modern-todo))
-     ("TODO" :inherit (org-todo org-modern-todo))
-     ("HOLD" :inherit (shadow error org-modern-todo))
-     ("MAYBE" :inherit (shadow org-todo org-modern-todo))
-     ("DONE" :inherit (bold org-done org-modern-todo))
-     ("CANCELED" :inherit (error org-modern-todo))))
+	 ("TODO" :inherit (org-todo org-modern-todo))
+	 ("HOLD" :inherit (shadow error org-modern-todo))
+	 ("MAYBE" :inherit (shadow org-todo org-modern-todo))
+	 ("DONE" :inherit (bold org-done org-modern-todo))
+	 ("CANCELED" :inherit (error org-modern-todo))))
   (org-modern-horizontal-rule (make-string 36 ?─))
   ;; Label
   (org-modern-label-border 1)
@@ -140,17 +140,17 @@
   (org-modern-tag nil)
   (org-modern-tag-faces
    `(("project"
-      :foreground ,(face-background 'default nil t)
-      :background ,(face-foreground 'default nil t))))
+	  :foreground ,(face-background 'default nil t)
+	  :background ,(face-foreground 'default nil t))))
   ;; Priority
   (org-modern-priority t)
   (org-modern-priority-faces
    '((?A :inverse-video t :inherit (bold org-priority))
-     (?B :inverse-video t :inherit (bold org-priority))
-     (?C :inverse-video t :inherit org-priority)
-     (?D :inverse-video t :inherit org-priority)
-     (?E :inverse-video t :inherit (shadow org-priority))
-     (?F :inverse-video t :inherit (shadow org-priority))))
+	 (?B :inverse-video t :inherit (bold org-priority))
+	 (?C :inverse-video t :inherit org-priority)
+	 (?D :inverse-video t :inherit org-priority)
+	 (?E :inverse-video t :inherit (shadow org-priority))
+	 (?F :inverse-video t :inherit (shadow org-priority))))
   ;; Table
   (org-modern-table nil)
   (org-modern-table-vertical nil)
@@ -158,8 +158,8 @@
   (org-modern-horizontal-rule t)
   ;; List
   (org-modern-list '((?+ . "+")
-                     (?- . "-")
-                     (?* . "•")))
+					 (?- . "-")
+					 (?* . "•")))
   ;; Org Modern Star Options
   (org-modern-star '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
   ;; (org-modern-star ["◉" "○" "✸" "✳" "◈" "◇" "✿" "❀" "✜"])
@@ -168,8 +168,8 @@
 
   (org-modern-checkbox
    '((?X . " ")
-     (?- . "▣")
-     (?\s . "")))
+	 (?- . "▣")
+	 (?\s . "")))
   ;;org-modern-star '("◉" "○" "◎" "▣" "▢" "◈" "◇")
   ;; (org-modern-fold-stars
   ;; '(("▶" . "▼")
@@ -189,53 +189,53 @@
   ;; Another Option
   (org-modern-block-name
    '((t . t)
-     ("src" "»" "∥")
-     ("example" "»–" "∥")
-     ("quote" "❝" "❞")))
+	 ("src" "»" "∥")
+	 ("example" "»–" "∥")
+	 ("quote" "❝" "❞")))
 
   ;; Keyword
   (org-modern-keyword "‣ ")
   (org-modern-keyword
    '((t . t)
-     ("title" . "𝙏")
-     ("subtitle" . "𝙩")
-     ("author" . "𝘼")
-     ("email" . "")
-     ("date" . "𝘿")
-     ("property" . "󰠳")
-     ("options" . #("󰘵" 0 1 (display (height 0.75))))
-     ("startup" . "⏻")
-     ("macro" . "𝓜")
-     ("bind" . "󰌷")
-     ("bibliography" . "")
-     ("print_bibliography" . "󰌱")
-     ("cite_export" . "⮭")
-     ("print_glossary" . "󰌱ᴬᶻ")
-     ("glossary_sources" . "󰒻")
-     ("include" . "⇤")
-     ("setupfile" . "⇚")
-     ("call" . "󰜎")
-     ("name" . "⁍")
-     ("header" . "›")
-     ("caption" . "☰")
-     ("results" . "∴")
-     ("options" . "  ")
-     ("property" . "  ")
-     ("reveal" . " 󰐩 ")
-     ("logbook" . "  ")
-     ("language" . " 󰗊 ")
-     ("todo" . "  ")
-     ("tags" . "  ")
-     ("exclude_tags" . " 󱈣 ")
-     ("latex" . "  ")
-     ("latex_compiler" . "  ")
-     ("latex_class" . "  ")
-     ("latex_header" . "  ")
-     ("html_head" . "  ")
+	 ("title" . "𝙏")
+	 ("subtitle" . "𝙩")
+	 ("author" . "𝘼")
+	 ("email" . "")
+	 ("date" . "𝘿")
+	 ("property" . "󰠳")
+	 ("options" . #("󰘵" 0 1 (display (height 0.75))))
+	 ("startup" . "⏻")
+	 ("macro" . "𝓜")
+	 ("bind" . "󰌷")
+	 ("bibliography" . "")
+	 ("print_bibliography" . "󰌱")
+	 ("cite_export" . "⮭")
+	 ("print_glossary" . "󰌱ᴬᶻ")
+	 ("glossary_sources" . "󰒻")
+	 ("include" . "⇤")
+	 ("setupfile" . "⇚")
+	 ("call" . "󰜎")
+	 ("name" . "⁍")
+	 ("header" . "›")
+	 ("caption" . "☰")
+	 ("results" . "∴")
+	 ("options" . "  ")
+	 ("property" . "  ")
+	 ("reveal" . " 󰐩 ")
+	 ("logbook" . "  ")
+	 ("language" . " 󰗊 ")
+	 ("todo" . "  ")
+	 ("tags" . "  ")
+	 ("exclude_tags" . " 󱈣 ")
+	 ("latex" . "  ")
+	 ("latex_compiler" . "  ")
+	 ("latex_class" . "  ")
+	 ("latex_header" . "  ")
+	 ("html_head" . "  ")
 
 
 
-     )
+	 )
 
    )
   ;; Miscellaneous
@@ -243,7 +243,7 @@
 
   (modify-all-frames-parameters
    '((right-divider-width . 2)
-     (internal-border-width . 0)))
+	 (internal-border-width . 0)))
 
   )
 
@@ -285,27 +285,27 @@
   :after org
   :preface
   (defun my/org-present-start (&rest args)
-    (menu-bar--display-line-numbers-mode-none)
-    (visual-line-mode 1)
-    (org-display-inline-images)
-    (org-present-hide-cursor)
-    (org-present-read-only)
-    (org-present-big)
-    (setq header-line-format " "))
+	(menu-bar--display-line-numbers-mode-none)
+	(visual-line-mode 1)
+	(org-display-inline-images)
+	(org-present-hide-cursor)
+	(org-present-read-only)
+	(org-present-big)
+	(setq header-line-format " "))
   (defun my/org-present-end (&rest args)
-    (menu-bar--display-line-numbers-mode-visual)
-    (visual-line-mode 0)
-    (org-remove-inline-images)
-    (org-present-show-cursor)
-    (org-present-read-write)
-    (setq header-line-format nil))
+	(menu-bar--display-line-numbers-mode-visual)
+	(visual-line-mode 0)
+	(org-remove-inline-images)
+	(org-present-show-cursor)
+	(org-present-read-write)
+	(setq header-line-format nil))
   (defun my/org-present-prepare-slide (buffer-name heading)
-    ;; Show only top-level headlines
-    (org-overview)
-    ;; Unfold the current entry
-    (org-fold-show-entry)
-    ;; Show only direct subheadings of the slide but don't expand them
-    (org-fold-show-children))
+	;; Show only top-level headlines
+	(org-overview)
+	;; Unfold the current entry
+	(org-fold-show-entry)
+	;; Show only direct subheadings of the slide but don't expand them
+	(org-fold-show-children))
   :hook (org-present-mode . my/org-present-start)
   :hook (org-present-mode-quit . my/org-present-end)
   :custom
@@ -321,37 +321,37 @@
   :hook (on-first-file . org-remark-global-tracking-mode)
   :after org
   :bind (;; :bind keyword also implicitly defers org-remark itself.
-         ;; Keybindings before :map is set for global-map. Adjust the keybinds
-         ;; as you see fit.
-         ("C-c o m" . org-remark-mark)
-         ("C-c o l" . org-remark-mark-line)
-         :map org-remark-mode-map
-         ("C-c o o" . org-remark-open)
-         ("C-c o ]" . org-remark-view-next)
-         ("C-c o [" . org-remark-view-prev)
-         ("C-c o r" . org-remark-remove)
-         ("C-c o d" . org-remark-delete))
+		 ;; Keybindings before :map is set for global-map. Adjust the keybinds
+		 ;; as you see fit.
+		 ("C-c o m" . org-remark-mark)
+		 ("C-c o l" . org-remark-mark-line)
+		 :map org-remark-mode-map
+		 ("C-c o o" . org-remark-open)
+		 ("C-c o ]" . org-remark-view-next)
+		 ("C-c o [" . org-remark-view-prev)
+		 ("C-c o r" . org-remark-remove)
+		 ("C-c o d" . org-remark-delete))
   :custom
   (org-remark-source-file-name 'abbreviate-file-name)
   (org-remark-notes-file-name
    (no-littering-expand-var-file-name "org-remark/marginalia.org"))
   (org-remark-notes-display-buffer-action `((display-buffer-in-side-window)
-                                            (side . right)
-                                            (slot . 1)))
+											(side . right)
+											(slot . 1)))
   (org-remark-create-default-pen-set nil)
   (org-remark-notes-auto-delete nil)
   :config
   (with-eval-after-load 'eww
-    (org-remark-eww-mode 1))
+	(org-remark-eww-mode 1))
   (with-eval-after-load 'nov
-    (org-remark-nov-mode 1))
+	(org-remark-nov-mode 1))
   (with-eval-after-load 'info
-    (org-remark-info-mode 1))
+	(org-remark-info-mode 1))
 
   (with-eval-after-load 'all-the-icons
-    (setopt org-remark-icon-notes (all-the-icons-material "details")
-            org-remark-icon-position-adjusted (all-the-icons-material "error")
-            org-remark-line-icon (all-the-icons-faicon "sticky-note"))))
+	(setopt org-remark-icon-notes (all-the-icons-material "details")
+			org-remark-icon-position-adjusted (all-the-icons-material "error")
+			org-remark-line-icon (all-the-icons-faicon "sticky-note"))))
 
 
 
@@ -363,8 +363,8 @@
   :hook (org-mode . org-superstar-mode)
   :init
   (setq org-superstar-headline-bullets-list '("✖" "✚" "◉" "○" "▶")
-        ;; org-superstar-special-todo-items t
-        org-ellipsis " ↴ ")
+		;; org-superstar-special-todo-items t
+		org-ellipsis " ↴ ")
   :custom
   (org-hide-leading-stars nil)
   (org-indent-mode-turns-on-hiding-stars nil)
@@ -377,20 +377,20 @@
   ;; Update when I change `org-todo-keywords'
   (org-superstar-todo-bullet-alist
    '(("NEXT" . ?☐)
-     ("TODO" . ?☐)
-     ("HOLD" . ?☐)
-     ("DONE" . ?☑)
-     ("CANCELED" . ?☑)
-     ("[ ]"  . ?☐)
-     ("[X]"  . ?☑)))
+	 ("TODO" . ?☐)
+	 ("HOLD" . ?☐)
+	 ("DONE" . ?☑)
+	 ("CANCELED" . ?☑)
+	 ("[ ]"  . ?☐)
+	 ("[X]"  . ?☑)))
 
   ;; Plain lists
   (org-superstar-prettify-item-bullets t)
   (org-superstar-first-inlinetask-bullet ?▶)
   (org-superstar-item-bullet-alist
    '((?+ . "◦")                         ; List taken from `org-modern'
-     (?- . "–")
-     (?* . "‣"))) )
+	 (?- . "–")
+	 (?* . "‣"))) )
 
 ;;; toc-org
 ;; Add table of contents to org mode files
@@ -401,7 +401,7 @@
   :init
   (add-hook 'org-mode-hook 'toc-org-enable)
   (add-to-list 'org-tag-alist '("TOC" . ?T))
-  :hook (markdown-mode . toc-org-enable)  )
+  :hook (markdown-mode . toc-org-mode)  )
 
 ;;; Org Make TOC
 ;; (use-package org-make-toc
