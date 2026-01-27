@@ -32,3 +32,16 @@
 --color=always
 --decorations=always
 --tabs 4
+
+
+# Syntax mappings: map a certain filename pattern to a language.
+#   Example 1: use the C++ syntax for .ino files
+#   Example 2: Use ".gitignore"-style highlighting for ".ignore" files
+#--map-syntax "*.ino:C++"
+--map-syntax ".ignore:Git Ignore"
+--map-syntax ".config:Clojure"
+--map-syntax "*.csproj:XML"
+--map-syntax "*.docker:Dockerfile"
+--map-syntax "Dockerfile.*:Dockerfile"
+--map-syntax "*.vcxproj*:XML"
+--map-syntax "*.cron*:Crontab"
