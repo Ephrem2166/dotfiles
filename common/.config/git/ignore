@@ -52,3 +52,36 @@ __pycache__/
 
 # Node
 node_modules/
+
+# Languages
+# Java
+*.class
+*.ear
+*.jar
+*.war
+
+# Emacs Lisp
+*.elc
+.cask/
+
+# Python/IPython
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+
+
+# OS X
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# KDE directory preferences
+.directory
+
+# Windows
+Desktop.ini
+Thumbs.db
+ehthumbs.db
+$RECYCLE.BIN/
+Icon?
