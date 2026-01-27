@@ -94,6 +94,12 @@ setopt NUMERIC_GLOB_SORT
 # Append trailing / to filename expansion when they match a directory
 setopt MARK_DIRS
 
+# Interrupt me to let me know a background jobs finished.
+setopt NOTIFY
+
+# Ambiguous completion candidate automatically shows options on tab.
+setopt AUTOLIST
+
 # Display red dots whilst waiting for commands to complete.
 # COMPLETION_WAITING_DOTS="true"
 # COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"

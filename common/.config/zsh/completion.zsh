@@ -178,3 +178,21 @@ zstyle ':fzf-tab:*' fzf-min-height 100
 
 # do not save in public dotfile repo
 # export ZSH_COMPDUMP="$HOME/.local/share/zsh/zcompdump"
+
+
+# menuselect
+## offers interactive completion selection
+zmodload -i zsh/complist
+# zstyle ':completion:*' menu select=1
+bindkey '^[[Z' reverse-menu-complete # backtab
+
+bindkey -M menuselect "^p" backward-char
+bindkey -M menuselect "^n" forward-char
+
+bindkey -M menuselect "^h" backward-char
+bindkey -M menuselect "^j" down-line-or-history
+bindkey -M menuselect "^k" up-line-or-history
+bindkey -M menuselect "^l" forward-char
+
+# bindkey -M menuselect "^l" accept-line
+bindkey -M menuselect "^o" accept-and-infer-next-history
