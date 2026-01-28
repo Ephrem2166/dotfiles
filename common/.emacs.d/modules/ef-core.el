@@ -2,9 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 ;;; Wrapper
-(defun inhibit-messages-wrapper! (func &rest args)
+(defun inhibit-messages-wrapper! (function)
+  "Prevent FUNCTION from showing messages in the echo area"
   (let ((inhibit-message t))
-	(apply func args)))
+	(funcall function)))
 
 ;;; Alias
 ;; Text Manipulation
@@ -1269,6 +1270,7 @@ unless already there."
   (recentf-filename-handlers nil)
   (recentf-show-file-shortcuts-flag nil)
   :config
+  (advice-add 'recentf-save-list :around #'inhibit-messages-wrapper!)
   (advice-add 'recentf-load-list :around #'inhibit-messages-wrapper!)
   ;; (quiet! (recentf-mode 1))
   (setq recentf-exclude
