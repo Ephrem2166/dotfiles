@@ -36,13 +36,13 @@ The DWIM behaviour of this command is as follows:
   (interactive)
   (cond
    ((region-active-p)
-    (keyboard-quit))
+	(keyboard-quit))
    ((derived-mode-p 'completion-list-mode)
-    (delete-completion-window))
+	(delete-completion-window))
    ((> (minibuffer-depth) 0)
-    (abort-recursive-edit))
+	(abort-recursive-edit))
    (t
-    (keyboard-quit))))
+	(keyboard-quit))))
 
 ;; (define-key global-map (kbd "C-g") #'ef/keyboard-quit-dwim)
 
@@ -95,19 +95,19 @@ all hooks after it are ignored.")
   "Run `doom-escape-hook'."
   (interactive (list 'interactive))
   (let ((inhibit-quit t))
-    (cond ((minibuffer-window-active-p (minibuffer-window))
-           ;; quit the minibuffer if open.
-           (when interactive
-             (setq this-command 'abort-recursive-edit))
-           (abort-recursive-edit))
-          ;; Run all escape hooks. If any returns non-nil, then stop there.
-          ((run-hook-with-args-until-success 'doom-escape-hook))
-          ;; don't abort macros
-          ((or defining-kbd-macro executing-kbd-macro) nil)
-          ;; Back to the default
-          ((unwind-protect (keyboard-quit)
-             (when interactive
-               (setq this-command 'keyboard-quit)))))))
+	(cond ((minibuffer-window-active-p (minibuffer-window))
+		   ;; quit the minibuffer if open.
+		   (when interactive
+			 (setq this-command 'abort-recursive-edit))
+		   (abort-recursive-edit))
+		  ;; Run all escape hooks. If any returns non-nil, then stop there.
+		  ((run-hook-with-args-until-success 'doom-escape-hook))
+		  ;; don't abort macros
+		  ((or defining-kbd-macro executing-kbd-macro) nil)
+		  ;; Back to the default
+		  ((unwind-protect (keyboard-quit)
+			 (when interactive
+			   (setq this-command 'keyboard-quit)))))))
 
 (with-eval-after-load 'eldoc
   (eldoc-add-command 'doom/escape))
@@ -131,40 +131,40 @@ all hooks after it are ignored.")
 ;; EXIT MESSAGES form doom emacs
 (defvar my/quit-messages
   `(;; from Doom 1
-    "Please don't leave, there's more demons to toast!"
-    "Let's beat it -- This is turning into a bloodbath!"
-    ,(format "I wouldn't leave if I were you. %s is much worse."
-             (if (featurep :system 'windows) "DOS" "UNIX"))
-    "Don't leave yet -- There's a demon around that corner!"
-    "Ya know, next time you come in here I'm gonna toast ya."
-    "Go ahead and leave. See if I care."
-    "Are you sure you want to quit this great editor?"
-    ;; from Portal
-    "Thank you for participating in this Aperture Science computer-aided enrichment activity."
-    "You can't fire me, I quit!"
-    "I don't know what you think you are doing, but I don't like it. I want you to stop."
-    "This isn't brave. It's murder. What did I ever do to you?"
-    "I'm the man who's going to burn your house down! With the lemons!"
-    "Okay, look. We've both said a lot of things you're going to regret..."
-    ;; Custom
-    "(setq nothing t everything 'permitted)"
-    "Emacs will remember that."
-    "Emacs, Emacs never changes."
-    "Hey! Hey, M-x listen!"
-    "It's not like I'll miss you or anything, b-baka!"
-    "Wake up, Mr. Stallman. Wake up and smell the ashes."
-    "You are *not* prepared!"
-    "Please don't go. The drones need you. They look up to you.")
+	"Please don't leave, there's more demons to toast!"
+	"Let's beat it -- This is turning into a bloodbath!"
+	,(format "I wouldn't leave if I were you. %s is much worse."
+			 (if (featurep :system 'windows) "DOS" "UNIX"))
+	"Don't leave yet -- There's a demon around that corner!"
+	"Ya know, next time you come in here I'm gonna toast ya."
+	"Go ahead and leave. See if I care."
+	"Are you sure you want to quit this great editor?"
+	;; from Portal
+	"Thank you for participating in this Aperture Science computer-aided enrichment activity."
+	"You can't fire me, I quit!"
+	"I don't know what you think you are doing, but I don't like it. I want you to stop."
+	"This isn't brave. It's murder. What did I ever do to you?"
+	"I'm the man who's going to burn your house down! With the lemons!"
+	"Okay, look. We've both said a lot of things you're going to regret..."
+	;; Custom
+	"(setq nothing t everything 'permitted)"
+	"Emacs will remember that."
+	"Emacs, Emacs never changes."
+	"Hey! Hey, M-x listen!"
+	"It's not like I'll miss you or anything, b-baka!"
+	"Wake up, Mr. Stallman. Wake up and smell the ashes."
+	"You are *not* prepared!"
+	"Please don't go. The drones need you. They look up to you.")
   "A list of quit messages, picked randomly by `+doom-quit'. Taken from
 http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
 
 (defun my/quit-emacs (&rest _)
   (yes-or-no-p
    (format "%s  %s"
-           (propertize (nth (random (length my/quit-messages))
-                            my/quit-messages)
-                       'face '(italic default))
-           "Really quit Emacs?")))
+		   (propertize (nth (random (length my/quit-messages))
+							my/quit-messages)
+					   'face '(italic default))
+		   "Really quit Emacs?")))
 
 (setq confirm-kill-emacs #'my/quit-emacs)
 
@@ -175,16 +175,16 @@ http://doom.wikia.com/wiki/Quit_messages and elsewhere.")
 ;;;; Open Files Externally
 (defun my/open-with (arg)
   "Open visited file in default external program.
-      With a prefix ARG always prompt for command to use."
+	  With a prefix ARG always prompt for command to use."
   (interactive "P")
   (when buffer-file-name
-    (shell-command (concat
-                    (cond
-                     ((and (not arg) (eq system-type 'darwin)) "open")
-                     ((and (not arg) (member system-type '(gnu gnu/linux gnu/kfreebsd))) "xdg-open")
-                     (t (read-shell-command "Open current file with: ")))
-                    " "
-                    (shell-quote-argument buffer-file-name)))))
+	(shell-command (concat
+					(cond
+					 ((and (not arg) (eq system-type 'darwin)) "open")
+					 ((and (not arg) (member system-type '(gnu gnu/linux gnu/kfreebsd))) "xdg-open")
+					 (t (read-shell-command "Open current file with: ")))
+					" "
+					(shell-quote-argument buffer-file-name)))))
 
 ;;;; Eval Buffer or Region
 (defun my/eval-buffer-or-region (&optional start end)
@@ -193,26 +193,26 @@ It uses `ef/reload-config'
 "
   (interactive)
   (if (and buffer-file-name
-           (member (file-truename buffer-file-name)
-                   (list
-                    (when (bound-and-true-p early-init-file)
-                      (file-truename early-init-file))
-                    (file-truename user-init-file)))
-           (not (region-active-p)))
-      (ef/reload-config)
-    (let ((name nil))
-      (if (region-active-p)
-          (progn
-            (setq start (region-beginning))
-            (setq end (region-end))
-            (setq name "region"))
-        (setq start (point-min))
-        (setq end (point-max))
-        (setq name (buffer-name)))
-      (let ((load-file-name (buffer-file-name)))
-        (message "Evaluating %s..." name)
-        (eval-region start end)
-        (message "Evaluating %s...done" name)))))
+		   (member (file-truename buffer-file-name)
+				   (list
+					(when (bound-and-true-p early-init-file)
+					  (file-truename early-init-file))
+					(file-truename user-init-file)))
+		   (not (region-active-p)))
+	  (ef/reload-config)
+	(let ((name nil))
+	  (if (region-active-p)
+		  (progn
+			(setq start (region-beginning))
+			(setq end (region-end))
+			(setq name "region"))
+		(setq start (point-min))
+		(setq end (point-max))
+		(setq name (buffer-name)))
+	  (let ((load-file-name (buffer-file-name)))
+		(message "Evaluating %s..." name)
+		(eval-region start end)
+		(message "Evaluating %s...done" name)))))
 
 ;;;; Insert Current Time As a String
 ;; (defun my/current-time-as-string ()
@@ -231,17 +231,17 @@ It uses `ef/reload-config'
   "Add a minimal header and footer to an elisp buffer."
   (interactive)
   (let ((fname (if (buffer-file-name)
-                   (file-name-nondirectory (buffer-file-name))
-                 (error "This buffer is not visiting a file"))))
-    (save-excursion
-      (goto-char (point-min))
-      (insert ";;; " fname "  -*- lexical-binding: t; no-byte-compile: t; -*-\n"
-              ";;; Commentary:\n"
-              ";;; Code:\n\n")
-      (goto-char (point-max))
-      (setq name (file-name-nondirectory (file-name-sans-extension fname)))
-      (insert "(provide '"name")\n")
-      (insert ";;; " fname " ends here\n"))))
+				   (file-name-nondirectory (buffer-file-name))
+				 (error "This buffer is not visiting a file"))))
+	(save-excursion
+	  (goto-char (point-min))
+	  (insert ";;; " fname "  -*- lexical-binding: t; no-byte-compile: t; -*-\n"
+			  ";;; Commentary:\n"
+			  ";;; Code:\n\n")
+	  (goto-char (point-max))
+	  (setq name (file-name-nondirectory (file-name-sans-extension fname)))
+	  (insert "(provide '"name")\n")
+	  (insert ";;; " fname " ends here\n"))))
 
 ;;; Buffer
 
@@ -259,10 +259,10 @@ the window configuration, moving to the previous window in the
 cyclic order."
   (interactive)
   (if (one-window-p t)
-      ;; Switch to the previous buffer.
-      (switch-to-buffer (other-buffer (current-buffer) 1))
-    ;; Move to the previous window in a multi-window configuration.
-    (other-window -1)))
+	  ;; Switch to the previous buffer.
+	  (switch-to-buffer (other-buffer (current-buffer) 1))
+	;; Move to the previous window in a multi-window configuration.
+	(other-window -1)))
 
 (global-set-key (kbd "C-z 0") #'my/switch-or-rotate-buffer)
 
@@ -279,12 +279,12 @@ If there are multiple windows in the frame, this function will delete all other
 windows, leaving only the currently active window visible."
   (interactive)
   (cond ((one-window-p t)
-         (select-window
-          (if (> (frame-width) split-width-threshold)
-              (split-window-right)
-            (split-window-below))))
-        (t
-         (delete-other-windows))))
+		 (select-window
+		  (if (> (frame-width) split-width-threshold)
+			  (split-window-right)
+			(split-window-below))))
+		(t
+		 (delete-other-windows))))
 
 (global-set-key (kbd "<f5>") #'my/toggle-or-delete-window-layout)
 
@@ -294,11 +294,11 @@ windows, leaving only the currently active window visible."
   "Toggle whether the current active window is dedicated or not."
   (interactive)
   (let* ((window (selected-window))
-         (dedicated (window-dedicated-p window)))
-    (set-window-dedicated-p window (not dedicated))
-    (message "[Window %sdedicated to %s]"
-             (if dedicated "no longer " "")
-             (buffer-name))))
+		 (dedicated (window-dedicated-p window)))
+	(set-window-dedicated-p window (not dedicated))
+	(message "[Window %sdedicated to %s]"
+			 (if dedicated "no longer " "")
+			 (buffer-name))))
 
 ;; Press [pause] key in each window you want to "freeze".
 (global-set-key (kbd "C-z ;") #'my/sticky-window)
@@ -343,8 +343,8 @@ windows, leaving only the currently active window visible."
 (defun my/switch-theme (theme)
   (interactive
    (list (intern (completing-read "Load custom theme: "
-                                  (mapcar #'symbol-name
-                                          (custom-available-themes))))))
+								  (mapcar #'symbol-name
+										  (custom-available-themes))))))
   (mapc #'disable-theme custom-enabled-themes)
   ;; (cl-loop for enabled-theme in custom-enabled-themes
   ;;          if (not (or (eq enabled-theme 'my-theme-1)
@@ -357,7 +357,7 @@ windows, leaving only the currently active window visible."
 ;;; Advice for a better load-theme
 ;; This will make load-theme disable old theme before loading new one
 (defadvice load-theme
-    (before disable-before-load (theme &optional no-confirm no-enable) activate)
+	(before disable-before-load (theme &optional no-confirm no-enable) activate)
   (mapc 'disable-theme custom-enabled-themes))
 
 ;;;; Better way to load themes
@@ -369,14 +369,14 @@ Load THEME exclusively, disabling any other enabled theme.
 When called with universal arg, it will append the theme to `custom-enabled-themes'."
   (interactive
    (list
-    (intern (completing-read "Load custom theme: "
-                             (mapcar #'symbol-name
-                                     (custom-available-themes))))))
+	(intern (completing-read "Load custom theme: "
+							 (mapcar #'symbol-name
+									 (custom-available-themes))))))
   (unless (custom-theme-name-valid-p theme)
-    (error "Invalid theme name `%s'" theme))
+	(error "Invalid theme name `%s'" theme))
   (unless current-prefix-arg
-    (dolist (theme custom-enabled-themes) (disable-theme theme))
-    (setq custom-enabled-themes nil))
+	(dolist (theme custom-enabled-themes) (disable-theme theme))
+	(setq custom-enabled-themes nil))
   (load-theme theme t))
 
 ;;; Functions from Doom Emacs
@@ -395,9 +395,9 @@ These thresholds are in MB, and is used by `doom--optimize-for-large-files-a'.")
 
 (defvar doom-large-file-excluded-modes
   '(so-long-mode
-    special-mode archive-mode tar-mode jka-compr
-    git-commit-mode image-mode doc-view-mode doc-view-mode-maybe
-    ebrowse-tree-mode pdf-view-mode tags-table-mode)
+	special-mode archive-mode tar-mode jka-compr
+	git-commit-mode image-mode doc-view-mode doc-view-mode-maybe
+	ebrowse-tree-mode pdf-view-mode tags-table-mode)
   "Major modes that `doom-check-large-file-h' will ignore.")
 
 (defun doom--optimize-for-large-files-a (orig-fn &rest args)
@@ -408,22 +408,22 @@ Uses `doom-large-file-size-alist' to determine when a file is too large. When
 runtime costs (or disable themselves) to ensure the buffer is as fast as
 possible."
   (if (setq doom-large-file-p
-            (and buffer-file-name
-                 (not doom-large-file-p)
-                 (file-exists-p buffer-file-name)
-                 (ignore-errors
-                   (> (nth 7 (file-attributes buffer-file-name))
-                      (* 1024 1024
-                         (assoc-default buffer-file-name
-                                        doom-large-file-size-alist
-                                        #'string-match-p))))))
-      (prog1 (apply orig-fn args)
-        (if (memq major-mode doom-large-file-excluded-modes)
-            (setq doom-large-file-p nil)
-          (when (fboundp 'so-long-minor-mode) ; in case the user disabled it
-            (so-long-minor-mode))
-          (message "Large file! Cutting corners to improve performance")))
-    (apply orig-fn args)))
+			(and buffer-file-name
+				 (not doom-large-file-p)
+				 (file-exists-p buffer-file-name)
+				 (ignore-errors
+				   (> (nth 7 (file-attributes buffer-file-name))
+					  (* 1024 1024
+						 (assoc-default buffer-file-name
+										doom-large-file-size-alist
+										#'string-match-p))))))
+	  (prog1 (apply orig-fn args)
+		(if (memq major-mode doom-large-file-excluded-modes)
+			(setq doom-large-file-p nil)
+		  (when (fboundp 'so-long-minor-mode) ; in case the user disabled it
+			(so-long-minor-mode))
+		  (message "Large file! Cutting corners to improve performance")))
+	(apply orig-fn args)))
 
 (advice-add 'after-find-file :around #'doom--optimize-for-large-files-a)
 
@@ -436,9 +436,9 @@ sub-packages. For example, `org' is comprised of many packages, and can be
 broken up into:
   (doom-load-packages-incrementally
    '(calendar find-func format-spec org-macs org-compat
-     org-faces org-entities org-list org-pcomplete org-src
-     org-footnote org-macro ob org org-clock org-agenda
-     org-capture))
+	 org-faces org-entities org-list org-pcomplete org-src
+	 org-footnote org-macro ob org org-clock org-agenda
+	 org-capture))
 This is already done by the lang/org module, however.
 If you want to disable incremental loading altogether, either remove
 `doom-load-packages-incrementally-h' from `emacs-startup-hook' or set
@@ -464,41 +464,41 @@ Set this to nil to disable incremental loading.")
 If NOW is non-nil, load PACKAGES incrementally, in `doom-incremental-idle-timer'
 intervals."
   (if (not now)
-      (appendq! doom-incremental-packages packages)
-    (while packages
-      (let ((req (pop packages)))
-        (unless (featurep req)
-          (message "Incrementally loading %s" req)
-          (condition-case e
-              (or (while-no-input
-                    ;; If `default-directory' is a directory that doesn't exist
-                    ;; or is unreadable, Emacs throws up file-missing errors, so
-                    ;; we set it to a directory we know exists and is readable.
-                    (let ((default-directory user-emacs-directory)
-                          (gc-cons-threshold most-positive-fixnum)
-                          file-name-handler-alist)
-                      (require req nil t))
-                    t)
-                  (push req packages))
-            ((error debug)
-             (message "Failed to load '%s' package incrementally, because: %s"
-                      req e)))
-          (if (not packages)
-              (message "Finished incremental loading")
-            (run-with-idle-timer doom-incremental-idle-timer
-                                 nil #'doom-load-packages-incrementally
-                                 packages t)
-            (setq packages nil)))))))
+	  (appendq! doom-incremental-packages packages)
+	(while packages
+	  (let ((req (pop packages)))
+		(unless (featurep req)
+		  (message "Incrementally loading %s" req)
+		  (condition-case e
+			  (or (while-no-input
+					;; If `default-directory' is a directory that doesn't exist
+					;; or is unreadable, Emacs throws up file-missing errors, so
+					;; we set it to a directory we know exists and is readable.
+					(let ((default-directory user-emacs-directory)
+						  (gc-cons-threshold most-positive-fixnum)
+						  file-name-handler-alist)
+					  (require req nil t))
+					t)
+				  (push req packages))
+			((error debug)
+			 (message "Failed to load '%s' package incrementally, because: %s"
+					  req e)))
+		  (if (not packages)
+			  (message "Finished incremental loading")
+			(run-with-idle-timer doom-incremental-idle-timer
+								 nil #'doom-load-packages-incrementally
+								 packages t)
+			(setq packages nil)))))))
 
 (defun doom-load-packages-incrementally-h ()
   "Begin incrementally loading packages in `doom-incremental-packages'.
 If this is a daemon session, load them all immediately instead."
   (if doom-incremental-load-immediately
-      (mapc #'require (cdr doom-incremental-packages))
-    (when (numberp doom-incremental-first-idle-timer)
-      (run-with-idle-timer doom-incremental-first-idle-timer
-                           nil #'doom-load-packages-incrementally
-                           (cdr doom-incremental-packages) t))))
+	  (mapc #'require (cdr doom-incremental-packages))
+	(when (numberp doom-incremental-first-idle-timer)
+	  (run-with-idle-timer doom-incremental-first-idle-timer
+						   nil #'doom-load-packages-incrementally
+						   (cdr doom-incremental-packages) t))))
 
 ;;; Explicit Approach
 ;; (doom-load-packages-incrementally
@@ -509,12 +509,12 @@ If this is a daemon session, load them all immediately instead."
 
 (doom-load-packages-incrementally
  '(calendar find-func format-spec org-macs org-compat
-            org-faces org-entities org-list org-pcomplete org-src
-            org-footnote org-macro ob org org-clock org-agenda org-capture
-            org-attach magit-log magit-diff magit-status bookmark
-            eshell em-alias em-banner em-basic em-cmpl em-glob em-hist em-ls
-            em-prompt em-script em-term em-unix em-smart
-            init-eglot)
+			org-faces org-entities org-list org-pcomplete org-src
+			org-footnote org-macro ob org org-clock org-agenda org-capture
+			org-attach magit-log magit-diff magit-status bookmark
+			eshell em-alias em-banner em-basic em-cmpl em-glob em-hist em-ls
+			em-prompt em-script em-term em-unix em-smart
+			init-eglot)
  )
 ;;;;
 ;; Adds two keywords to `use-package' to expand its lazy-loading capabilities:
@@ -525,18 +525,18 @@ If this is a daemon session, load them all immediately instead."
 ;; Check out `use-package!'s documentation for more about these two.
 (eval-when-compile
   (dolist (keyword '(:defer-incrementally :after-call))
-    (push keyword use-package-deferring-keywords)
-    (setq use-package-keywords
-          (use-package-list-insert keyword use-package-keywords :after)))
+	(push keyword use-package-deferring-keywords)
+	(setq use-package-keywords
+		  (use-package-list-insert keyword use-package-keywords :after)))
 
   (defalias 'use-package-normalize/:defer-incrementally #'use-package-normalize-symlist)
   (defun use-package-handler/:defer-incrementally (name _keyword targets rest state)
-    (use-package-concat
-     `((doom-load-packages-incrementally
-        ',(if (equal targets '(t))
-              (list name)
-            (append targets (list name)))))
-     (use-package-process-keywords name rest state))))
+	(use-package-concat
+	 `((doom-load-packages-incrementally
+		',(if (equal targets '(t))
+			  (list name)
+			(append targets (list name)))))
+	 (use-package-process-keywords name rest state))))
 
 (add-hook 'emacs-startup-hook #'doom-load-packages-incrementally-h)
 
@@ -548,50 +548,50 @@ If this is a daemon session, load them all immediately instead."
 ;; Check out `use-package!'s documentation for more about these two.
 (eval-when-compile
   (dolist (keyword '(:defer-incrementally :after-call))
-    (push keyword use-package-deferring-keywords)
-    (setq use-package-keywords
-          (use-package-list-insert keyword use-package-keywords :after)))
+	(push keyword use-package-deferring-keywords)
+	(setq use-package-keywords
+		  (use-package-list-insert keyword use-package-keywords :after)))
 
   (defalias 'use-package-normalize/:defer-incrementally #'use-package-normalize-symlist)
   (defun use-package-handler/:defer-incrementally (name _keyword targets rest state)
-    (use-package-concat
-     `((doom-load-packages-incrementally
-        ',(if (equal targets '(t))
-              (list name)
-            (append targets (list name)))))
-     (use-package-process-keywords name rest state))))
+	(use-package-concat
+	 `((doom-load-packages-incrementally
+		',(if (equal targets '(t))
+			  (list name)
+			(append targets (list name)))))
+	 (use-package-process-keywords name rest state))))
 
 ;;; Move Text Up and Down
 (defun move-text-internal (arg)
   (cond
    ((and mark-active transient-mark-mode)
-    (if (> (point) (mark))
-        (exchange-point-and-mark))
-    (let ((column (current-column))
-          (text (delete-and-extract-region (point) (mark))))
-      (forward-line arg)
-      (move-to-column column t)
-      (set-mark (point))
-      (insert text)
-      (exchange-point-and-mark)
-      (setq deactivate-mark nil)))
+	(if (> (point) (mark))
+		(exchange-point-and-mark))
+	(let ((column (current-column))
+		  (text (delete-and-extract-region (point) (mark))))
+	  (forward-line arg)
+	  (move-to-column column t)
+	  (set-mark (point))
+	  (insert text)
+	  (exchange-point-and-mark)
+	  (setq deactivate-mark nil)))
    (t
-    (let ((column (current-column)))
-      (beginning-of-line)
-      (when (or (> arg 0) (not (bobp)))
-        (forward-line)
-        (when (or (< arg 0) (not (eobp)))
-          (transpose-lines arg)
-          ;; ;; Account for changes to transpose-lines in Emacs 24.3
-          ;; (when (and (eval-when-compile
-          ;;              (not (version-list-<
-          ;;                    (version-to-list emacs-version)
-          ;;                    '(24 3 50 0))))
-          ;;            (< arg 0))
-          ;;   (forward-line -1))
-          )
-        (forward-line -1))
-      (move-to-column column t)))))
+	(let ((column (current-column)))
+	  (beginning-of-line)
+	  (when (or (> arg 0) (not (bobp)))
+		(forward-line)
+		(when (or (< arg 0) (not (eobp)))
+		  (transpose-lines arg)
+		  ;; ;; Account for changes to transpose-lines in Emacs 24.3
+		  ;; (when (and (eval-when-compile
+		  ;;              (not (version-list-<
+		  ;;                    (version-to-list emacs-version)
+		  ;;                    '(24 3 50 0))))
+		  ;;            (< arg 0))
+		  ;;   (forward-line -1))
+		  )
+		(forward-line -1))
+	  (move-to-column column t)))))
 
 (defun move-text-down (arg)
   "Move region (transient-mark-mode active) or current line
@@ -617,15 +617,15 @@ before existing. Replaces ‘save-buffers-kill-terminal’.
 From https://archive.casouri.cc/note/2021/clean-exit/index.html"
   (interactive)
   (if (frame-parameter nil 'client)
-      (server-save-buffers-kill-terminal nil)
-    (if-let* ((buf-list (seq-filter (lambda (buf)
-                                      (and (buffer-modified-p buf)
-                                           (buffer-file-name buf)))
-                                    (buffer-list))))
-        (progn
-          (pop-to-buffer (list-buffers-noselect t buf-list))
-          (message "s to save, C-k to kill, x to execute"))
-      (save-buffers-kill-terminal))))
+	  (server-save-buffers-kill-terminal nil)
+	(if-let* ((buf-list (seq-filter (lambda (buf)
+									  (and (buffer-modified-p buf)
+										   (buffer-file-name buf)))
+									(buffer-list))))
+		(progn
+		  (pop-to-buffer (list-buffers-noselect t buf-list))
+		  (message "s to save, C-k to kill, x to execute"))
+	  (save-buffers-kill-terminal))))
 
 ;;;; Old Version
 (defun my/restart-or-kill-emacs (&optional arg restart)
@@ -644,8 +644,8 @@ Emacs instead. Passes ARG to `save-buffers-kill-emacs'."
   "Delete frame or kill Emacs if there is only one frame."
   (interactive)
   (if (> (length (frame-list)) 1)
-      (delete-frame)
-    (save-buffers-kill-terminal)))
+	  (delete-frame)
+	(save-buffers-kill-terminal)))
 (global-set-key (kbd "C-c 0") 'my/delete-frame-or-kill-emacs)
 
 ;;; Toggle line truncate without message
@@ -654,7 +654,7 @@ Emacs instead. Passes ARG to `save-buffers-kill-emacs'."
 (defun my/common-truncate-lines-silently ()
   "Toggle line truncation without printing messages."
   (let ((inhibit-message t))
-    (toggle-truncate-lines t)))
+	(toggle-truncate-lines t)))
 (add-hook 'text-mode-hook #'my/common-truncate-lines-silently)
 (add-hook 'prog-mode-hook #'my/common-truncate-lines-silently)
 
@@ -670,14 +670,14 @@ Repeat to extend the region forward to the next symbolic
 expression."
   (interactive)
   (if (and (region-active-p)
-           (eq last-command this-command))
-      (ignore-errors (forward-sexp 1))
-    (when-let* ((thing (cond
-                        ((thing-at-point 'url) 'url)
-                        ((thing-at-point 'sexp) 'sexp)
-                        ((thing-at-point 'string) 'string)
-                        ((thing-at-point 'word) 'word))))
-      (my/simple-mark (bounds-of-thing-at-point thing)))))
+		   (eq last-command this-command))
+	  (ignore-errors (forward-sexp 1))
+	(when-let* ((thing (cond
+						((thing-at-point 'url) 'url)
+						((thing-at-point 'sexp) 'sexp)
+						((thing-at-point 'string) 'string)
+						((thing-at-point 'word) 'word))))
+	  (my/simple-mark (bounds-of-thing-at-point thing)))))
 
 ;; (define-key global-map (kbd "C-}") #'my/simple-mark-sexp)
 
@@ -738,18 +738,18 @@ If FORCE-P, delete without confirmation."
   (interactive
    (list (buffer-file-name (buffer-base-buffer)) current-prefix-arg))
   (let* ((path (or path (buffer-file-name (buffer-base-buffer))))
-         (short-path (abbreviate-file-name path)))
-    (unless (and path (file-exists-p path))
-      (user-error "Buffer is not visiting any file"))
-    (unless (file-exists-p path)
-      (error "File doesn't exist: %s" path))
-    (unless (or force-p (y-or-n-p (format "Really delete %S?" short-path)))
-      (user-error "Aborted"))
-    (unwind-protect
-        (progn (delete-file path delete-by-moving-to-trash) t)
-      (when (file-exists-p path)
-        (error "Failed to delete %S" short-path)))
-    )
+		 (short-path (abbreviate-file-name path)))
+	(unless (and path (file-exists-p path))
+	  (user-error "Buffer is not visiting any file"))
+	(unless (file-exists-p path)
+	  (error "File doesn't exist: %s" path))
+	(unless (or force-p (y-or-n-p (format "Really delete %S?" short-path)))
+	  (user-error "Aborted"))
+	(unwind-protect
+		(progn (delete-file path delete-by-moving-to-trash) t)
+	  (when (file-exists-p path)
+		(error "Failed to delete %S" short-path)))
+	)
   (kill-this-buffer)
   )
 
@@ -758,14 +758,14 @@ If FORCE-P, delete without confirmation."
   "Renames both current buffer and file it's visiting to NEW-NAME."
   (interactive "sNew name: ")
   (let ((name (buffer-name))
-        (filename (buffer-file-name)))
-    (unless filename
-      (error "Buffer '%s' is not visiting a file!" name))
-    (progn
-      (when (file-exists-p filename)
-        (rename-file filename new-name 1))
-      (set-visited-file-name new-name)
-      (rename-buffer new-name))))
+		(filename (buffer-file-name)))
+	(unless filename
+	  (error "Buffer '%s' is not visiting a file!" name))
+	(progn
+	  (when (file-exists-p filename)
+		(rename-file filename new-name 1))
+	  (set-visited-file-name new-name)
+	  (rename-buffer new-name))))
 
 ;;; Comment DWIM
 ;; (defun my/comment-dwim ()
@@ -785,12 +785,12 @@ If FORCE-P, delete without confirmation."
   "Maximize buffer."
   (interactive)
   (save-excursion
-    (if (and (= 1 (length (window-list)))
-             (assoc ?_ register-alist))
-        (jump-to-register ?_)
-      (progn
-        (window-configuration-to-register ?_)
-        (delete-other-windows)))))
+	(if (and (= 1 (length (window-list)))
+			 (assoc ?_ register-alist))
+		(jump-to-register ?_)
+	  (progn
+		(window-configuration-to-register ?_)
+		(delete-other-windows)))))
 (define-key ef-buffer-keymap (kbd "m") #'my/toggle-maximize-buffer)
 
 ;;; Indent Region or Buffer
@@ -799,17 +799,17 @@ If FORCE-P, delete without confirmation."
 if prefix argument ARG is given, `untabify' first."
   (interactive)
   (save-excursion
-    (if (region-active-p)
-        (progn
-          (when arg
-            (untabify (region-beginning) (region-end)))
-          (indent-region (region-beginning) (region-end))
-          (message "Indented selected region."))
-      (progn
-        (when arg
-          (untabify (region-beginning) (region-end)))
-        (indent-region (point-min) (point-max))
-        (message "Indented buffer.")))))
+	(if (region-active-p)
+		(progn
+		  (when arg
+			(untabify (region-beginning) (region-end)))
+		  (indent-region (region-beginning) (region-end))
+		  (message "Indented selected region."))
+	  (progn
+		(when arg
+		  (untabify (region-beginning) (region-end)))
+		(indent-region (point-min) (point-max))
+		(message "Indented buffer.")))))
 (define-key ef-buffer-keymap (kbd "i") #'my/indent-region-or-buffer)
 
 ;;; Switch to scratch buffer
@@ -818,8 +818,8 @@ if prefix argument ARG is given, `untabify' first."
 if prefix argument ARG is given, switch to it in an other, possibly new window."
   (interactive "P")
   (if arg
-      (switch-to-buffer-other-window (get-buffer-create "*scratch*"))
-    (switch-to-buffer (get-buffer-create "*scratch*"))))
+	  (switch-to-buffer-other-window (get-buffer-create "*scratch*"))
+	(switch-to-buffer (get-buffer-create "*scratch*"))))
 (define-key ef-buffer-keymap (kbd "s") #'my/switch-to-scratch-buffer)
 
 ;;; Switch Message Buffer
@@ -828,10 +828,10 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
 if prefix argument ARG is given, switch to it directly."
   (interactive "P")
   (with-current-buffer (messages-buffer)
-    (goto-char (point-max))
-    (if arg
-        (switch-to-buffer (current-buffer))
-      (switch-to-buffer-other-window (current-buffer)))))
+	(goto-char (point-max))
+	(if arg
+		(switch-to-buffer (current-buffer))
+	  (switch-to-buffer-other-window (current-buffer)))))
 (define-key ef-buffer-keymap (kbd "0") #'my/switch-to-messages-buffer)
 
 ;;; Switch to Help Buffer
@@ -844,7 +844,7 @@ if prefix argument ARG is given, switch to it directly."
   "Switch to minibuffer window (if active)."
   (interactive)
   (when (active-minibuffer-window)
-    (select-window (active-minibuffer-window))))
+	(select-window (active-minibuffer-window))))
 (define-key ef-buffer-keymap (kbd ",") #'my/switch-to-minibuffer-window)
 
 ;;; Window Split
@@ -877,8 +877,8 @@ if prefix argument ARG is given, switch to it directly."
 (defun my/make-temp-buffer ()
   (interactive)
   (let ((temp-buffer-name (format "*temp-%d*" temp-buffer-count)))
-    (switch-to-buffer temp-buffer-name)
-    (message "New temp buffer (%s) created." temp-buffer-name))
+	(switch-to-buffer temp-buffer-name)
+	(message "New temp buffer (%s) created." temp-buffer-name))
   (setq temp-buffer-count (1+ temp-buffer-count)))
 
 (define-key ef-buffer-keymap (kbd "n") #'my/make-temp-buffer)                                       ; Key Bindings
@@ -896,15 +896,15 @@ if prefix argument ARG is given, switch to it directly."
   "Toggle transparency."
   (interactive)
   (let ((alpha-background (frame-parameter nil 'alpha-background)))
-    (set-frame-parameter
-     nil 'alpha-background
-     (if (eql (cond ((numberp alpha-background) alpha-background)
-                    ((numberp (cdr alpha-background)) (cdr alpha-background))
-                    ;; Also handle undocumented (<active> <inactive>) form.
-                    ((numberp (cadr alpha-background)) (cadr alpha-background)))
-              100)
-         70
-       100))))
+	(set-frame-parameter
+	 nil 'alpha-background
+	 (if (eql (cond ((numberp alpha-background) alpha-background)
+					((numberp (cdr alpha-background)) (cdr alpha-background))
+					;; Also handle undocumented (<active> <inactive>) form.
+					((numberp (cadr alpha-background)) (cadr alpha-background)))
+			  100)
+		 70
+	   100))))
 
 ;;;; Better Transparency
 (defun my/set-opacity (opacity &optional frames)
@@ -917,20 +917,20 @@ arg)."
   (interactive
    (list 'interactive (if current-prefix-arg t (list (selected-frame)))))
   (let* ((parameter
-          (if (eq window-system 'pgtk)
-              'alpha-background
-            'alpha))
-         (opacity
-          (if (eq opacity 'interactive)
-              (read-number "Opacity (0-100): "
-                           (or (frame-parameter nil parameter)
-                               100))
-            opacity))
-         (alist `((,parameter . ,opacity))))
-    (if (eq frames t)
-        (modify-all-frames-parameters alist)
-      (dolist (frame frames)
-        (modify-frame-parameters frame alist)))))
+		  (if (eq window-system 'pgtk)
+			  'alpha-background
+			'alpha))
+		 (opacity
+		  (if (eq opacity 'interactive)
+			  (read-number "Opacity (0-100): "
+						   (or (frame-parameter nil parameter)
+							   100))
+			opacity))
+		 (alist `((,parameter . ,opacity))))
+	(if (eq frames t)
+		(modify-all-frames-parameters alist)
+	  (dolist (frame frames)
+		(modify-frame-parameters frame alist)))))
 
 ;;;; Adjust transparency using arrow keys
 (defun my/frame-transparency-adjust ()
@@ -939,26 +939,26 @@ arg)."
   (interactive)
   ;; If `alpha' is not a number in [0, 100], reset to 100
   (pcase (frame-parameter nil 'alpha)
-    ((and (pred numberp) n (guard (<= 0 n 100))))
-    (_ (setf (frame-parameter nil 'alpha) 100)))
+	((and (pred numberp) n (guard (<= 0 n 100))))
+	(_ (setf (frame-parameter nil 'alpha) 100)))
   (while (pcase (read-key (format "%2d%%  Press <up> and <down> to adjust"
-                                  (frame-parameter nil 'alpha)))
-           ((or (and 'up   (let new-alpha (1+ (frame-parameter nil 'alpha))))
-                (and 'down (let new-alpha (1- (frame-parameter nil 'alpha)))))
-            (when (<= 0 new-alpha 100)
-              (setf (frame-parameter nil 'alpha) new-alpha))
-            t))))
+								  (frame-parameter nil 'alpha)))
+		   ((or (and 'up   (let new-alpha (1+ (frame-parameter nil 'alpha))))
+				(and 'down (let new-alpha (1- (frame-parameter nil 'alpha)))))
+			(when (<= 0 new-alpha 100)
+			  (setf (frame-parameter nil 'alpha) new-alpha))
+			t))))
 
 ;;; Invisible window dividers for themes
 (defun my/invisible-window-dividers (_theme)
   "Make windows dividers for THEME invisible."
   (let ((bg (face-background 'default)))
-    (custom-set-faces
-     `(fringe ((t :background ,bg :foreground ,bg)))
-     ;; `(vertical-border ((t :background ,bg :foreground ,bg)))
-     `(window-divider ((t :background ,bg :foreground ,bg)))
-     `(window-divider-first-pixel ((t :background ,bg :foreground ,bg)))
-     `(window-divider-last-pixel ((t :background ,bg :foreground ,bg))))))
+	(custom-set-faces
+	 `(fringe ((t :background ,bg :foreground ,bg)))
+	 ;; `(vertical-border ((t :background ,bg :foreground ,bg)))
+	 `(window-divider ((t :background ,bg :foreground ,bg)))
+	 `(window-divider-first-pixel ((t :background ,bg :foreground ,bg)))
+	 `(window-divider-last-pixel ((t :background ,bg :foreground ,bg))))))
 
 (add-hook 'enable-theme-functions #'my/invisible-window-dividers)
 
@@ -984,25 +984,25 @@ arg)."
 (defun my/kill-buffer-and-windows (buffer)
   "Kill the buffer and delete all the windows it's displayed in."
   (dolist (window (get-buffer-window-list buffer))
-    (unless (one-window-p t)
-      (delete-window window)))
+	(unless (one-window-p t)
+	  (delete-window window)))
   (kill-buffer buffer))
 
 ;;; Delete Whitespace backward
 (defun my/backward-delete-whitespace ()
   (interactive)
   (save-match-data
-    (let ((st (point))
-          (en (progn
-                (re-search-backward "[^ \t\r\n]+" nil t)
-                (forward-char 1)
-                (point))))
-      (if (= st en)
-          (progn
-            (while (looking-back ")")
-              (backward-char))
-            (backward-kill-word 1))
-        (delete-region st en)))))
+	(let ((st (point))
+		  (en (progn
+				(re-search-backward "[^ \t\r\n]+" nil t)
+				(forward-char 1)
+				(point))))
+	  (if (= st en)
+		  (progn
+			(while (looking-back ")")
+			  (backward-char))
+			(backward-kill-word 1))
+		(delete-region st en)))))
 
 ;;; FIXME Delete Whitespace
 ;; Remove useless whitespace before saving a file
@@ -1011,33 +1011,33 @@ arg)."
 The original function deletes trailing whitespace of the current line."
   (interactive)
   (let ((begin (line-beginning-position))
-        (end (line-end-position)))
-    (save-excursion
-      (when (< (point-min) (1- begin))
-        (save-restriction
-          (narrow-to-region (point-min) (1- begin))
-          (delete-trailing-whitespace)
-          (widen)))
-      (when (> (point-max) (+ end 2))
-        (save-restriction
-          (narrow-to-region (+ end 2) (point-max))
-          (delete-trailing-whitespace)
-          (widen))))))
+		(end (line-end-position)))
+	(save-excursion
+	  (when (< (point-min) (1- begin))
+		(save-restriction
+		  (narrow-to-region (point-min) (1- begin))
+		  (delete-trailing-whitespace)
+		  (widen)))
+	  (when (> (point-max) (+ end 2))
+		(save-restriction
+		  (narrow-to-region (+ end 2) (point-max))
+		  (delete-trailing-whitespace)
+		  (widen))))))
 
 (defun smart-delete-trailing-whitespace ()
   "Invoke `delete-trailing-whitespace-except-current-line' on selected major modes only."
   (unless (member major-mode '(diff-mode))
-    (delete-trailing-whitespace-except-current-line)))
+	(delete-trailing-whitespace-except-current-line)))
 
 (defun toggle-auto-trailing-ws-removal ()
   "Toggle trailing whitespace removal."
   (interactive)
   (if (member #'smart-delete-trailing-whitespace before-save-hook)
-      (progn
-        (remove-hook 'before-save-hook #'smart-delete-trailing-whitespace)
-        (message "Disabled auto remove trailing whitespace."))
-    (add-hook 'before-save-hook #'smart-delete-trailing-whitespace)
-    (message "Enabled auto remove trailing whitespace.")))
+	  (progn
+		(remove-hook 'before-save-hook #'smart-delete-trailing-whitespace)
+		(message "Disabled auto remove trailing whitespace."))
+	(add-hook 'before-save-hook #'smart-delete-trailing-whitespace)
+	(message "Enabled auto remove trailing whitespace.")))
 ;; Add to hook during startup
 (add-hook 'before-save-hook #'smart-delete-trailing-whitespace)
 
@@ -1046,12 +1046,12 @@ The original function deletes trailing whitespace of the current line."
   "Delete all blank lines surrounding point or, between point and mark."
   (interactive)
   (let ((regexp "^[ \t]*$")
-        (col (current-column)))
-    (if (region-active-p)
-        (flush-lines regexp (region-beginning) (region-end) nil)
-      (delete-blank-lines)
-      (if (looking-at regexp) (delete-blank-lines)))
-    (move-to-column col)))
+		(col (current-column)))
+	(if (region-active-p)
+		(flush-lines regexp (region-beginning) (region-end) nil)
+	  (delete-blank-lines)
+	  (if (looking-at regexp) (delete-blank-lines)))
+	(move-to-column col)))
 ;; (define-key ef-file-keymap (kbd "o") #'my/delete-blank-lines-dwim)
 
 ;;; Delete Blank Lines
@@ -1061,11 +1061,11 @@ URL `http://ergoemacs.org/emacs/emacs_shrink_whitespace.html'
 Version 2018-04-02"
   (interactive)
   (let ($p3 $p4)
-    (skip-chars-backward "\n")
-    (setq $p3 (point))
-    (skip-chars-forward "\n")
-    (setq $p4 (point))
-    (delete-region $p3 $p4)))
+	(skip-chars-backward "\n")
+	(setq $p3 (point))
+	(skip-chars-forward "\n")
+	(setq $p4 (point))
+	(delete-region $p3 $p4)))
 
 ;;; Delete Backward Whitespace or Word
 (defun my/kill-whitespace-or-word (arg)
@@ -1074,14 +1074,14 @@ With argument ARG, do this that many times.
 Restricts the effect of `kill-word' to the current line."
   (interactive "p")
   (if (looking-at-p "[ \t\n]")
-      (let ((pt (point)))
-        (re-search-forward "[^ \t\n]" nil :no-error)
-        (backward-char)
-        (kill-region pt (point)))
-    (save-restriction
-      (narrow-to-region (line-beginning-position) (line-end-position))
-      (kill-word arg)
-      (widen))))
+	  (let ((pt (point)))
+		(re-search-forward "[^ \t\n]" nil :no-error)
+		(backward-char)
+		(kill-region pt (point)))
+	(save-restriction
+	  (narrow-to-region (line-beginning-position) (line-end-position))
+	  (kill-word arg)
+	  (widen))))
 
 (defun my/backward-kill-whitespace-or-word (arg)
   "Kill backward whitespace or word.
@@ -1089,14 +1089,14 @@ With argument ARG, do this that many times.
 Restricts the effect of `backward-kill-word' to the current line."
   (interactive "p")
   (if (save-excursion (backward-char) (looking-at-p "[ \t\n]"))
-      (let ((pt (point)))
-        (re-search-backward "[^ \t\n]" nil :no-error)
-        (forward-char)
-        (kill-region pt (point)))
-    (save-restriction
-      (narrow-to-region (line-beginning-position) (line-end-position))
-      (backward-kill-word arg)
-      (widen))))
+	  (let ((pt (point)))
+		(re-search-backward "[^ \t\n]" nil :no-error)
+		(forward-char)
+		(kill-region pt (point)))
+	(save-restriction
+	  (narrow-to-region (line-beginning-position) (line-end-position))
+	  (backward-kill-word arg)
+	  (widen))))
 
 
 
@@ -1146,9 +1146,9 @@ is to produce the opposite effect of both `fill-paragraph' and
 `fill-region'."
   (interactive "r")
   (let ((fill-column most-positive-fixnum))
-    (if (use-region-p)
-        (fill-region beg end)
-      (fill-paragraph))))
+	(if (use-region-p)
+		(fill-region beg end)
+	  (fill-paragraph))))
 ;; (bind-key "M-Q" #'my/unfill-region-or-paragraph)
 
 ;;; Better Fill and Unfill Paragraph
@@ -1160,16 +1160,16 @@ is to produce the opposite effect of both `fill-paragraph' and
   In Org mode, uses `org-fill-paragraph` for specialized formatting."
   (interactive "P")
   (let ((fill-column (cond
-                      (arg
-                       (prefix-numeric-value arg))
-                      ((eq last-command 'my/toggle-paragraph-fill)
-                       (setq this-command nil)
-                       (point-max))
-                      (t
-                       fill-column))))
-    (if (derived-mode-p 'org-mode)
-        (org-fill-paragraph)
-      (fill-paragraph))))
+					  (arg
+					   (prefix-numeric-value arg))
+					  ((eq last-command 'my/toggle-paragraph-fill)
+					   (setq this-command nil)
+					   (point-max))
+					  (t
+					   fill-column))))
+	(if (derived-mode-p 'org-mode)
+		(org-fill-paragraph)
+	  (fill-paragraph))))
 
 ;; M-q.
 (global-set-key [remap fill-paragraph] #'my/toggle-paragraph-fill)
@@ -1188,12 +1188,12 @@ is to produce the opposite effect of both `fill-paragraph' and
   (interactive "r")
 
   (let ((e (copy-marker e t)))
-    (goto-char b)
-    (end-of-line)
-    (insert-char ?  (- fill-column (current-column)))
-    (comment-box b e 1)
-    (goto-char e)
-    (set-marker e nil)))
+	(goto-char b)
+	(end-of-line)
+	(insert-char ?  (- fill-column (current-column)))
+	(comment-box b e 1)
+	(goto-char e)
+	(set-marker e nil)))
 (global-set-key (kbd "C-c e b") 'my/comment-box)
 
 ;;; Toggle Dark and Bright Theme
@@ -1204,18 +1204,18 @@ is to produce the opposite effect of both `fill-paragraph' and
   "Toggle between dark emacs theme and bright emacs theme"
   (interactive)
   (cond (my-toggle-dark-bright-theme-status
-         (message "Loading bright theme")
-         (disable-theme 'doom-nord)
-         (load-theme 'modus-operandi-deuteranopia t)
-         (setq my-toggle-dark-bright-theme-status nil)
-         )
-        (t
-         (message "Loading dark theme")
-         (disable-theme 'modus-operandi-deuteranopia)
-         (load-theme 'doom-nord t) ;; dark theme
-         (setq my-toggle-dark-bright-theme-status t)
-         )
-        )
+		 (message "Loading bright theme")
+		 (disable-theme 'doom-nord)
+		 (load-theme 'modus-operandi-deuteranopia t)
+		 (setq my-toggle-dark-bright-theme-status nil)
+		 )
+		(t
+		 (message "Loading dark theme")
+		 (disable-theme 'modus-operandi-deuteranopia)
+		 (load-theme 'doom-nord t) ;; dark theme
+		 (setq my-toggle-dark-bright-theme-status t)
+		 )
+		)
   )
 
 (global-set-key [(shift f12)] 'my-toggle-dark-bright-theme)
@@ -1225,8 +1225,8 @@ is to produce the opposite effect of both `fill-paragraph' and
   "Indent the entire buffer without affecting point or mark."
   (interactive)
   (save-excursion
-    (save-restriction
-      (indent-region (point-min) (point-max)))))
+	(save-restriction
+	  (indent-region (point-min) (point-max)))))
 
 (global-set-key (kbd "C-c TAB") 'my/indent-whole-buffer)
 
@@ -1234,7 +1234,7 @@ is to produce the opposite effect of both `fill-paragraph' and
 (defun abort-minibuffer-using-mouse ()
   "Abort the minibuffer when using the mouse."
   (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
-    (abort-recursive-edit)))
+	(abort-recursive-edit)))
 
 (add-hook 'mouse-leave-buffer-hook 'abort-minibuffer-using-mouse)
 
@@ -1251,10 +1251,10 @@ is to produce the opposite effect of both `fill-paragraph' and
   "Kill word backward if region is inactive; else kill region"
   (interactive "p")
   (if (region-active-p)
-      (kill-region (region-beginning) (region-end))
-    (if (looking-back "^[ \t]+" (line-beginning-position))
-        (delete-region (line-beginning-position) (point))
-      (backward-kill-word arg))))
+	  (kill-region (region-beginning) (region-end))
+	(if (looking-back "^[ \t]+" (line-beginning-position))
+		(delete-region (line-beginning-position) (point))
+	  (backward-kill-word arg))))
 
 (global-set-key (kbd "C-w") 'backward-kill-word-or-region)
 
@@ -1262,12 +1262,12 @@ is to produce the opposite effect of both `fill-paragraph' and
 (defun my/replace-in-buffer ()
   (interactive)
   (save-excursion
-    (if (equal mark-active nil) (mark-word))
-    (setq curr-word (buffer-substring-no-properties (mark) (point)))
-    (setq old-string (read-string "OLD string:\n" curr-word))
-    (setq new-string (read-string "NEW string:\n" old-string))
-    (query-replace old-string new-string nil (point-min) (point-max))
-    )
+	(if (equal mark-active nil) (mark-word))
+	(setq curr-word (buffer-substring-no-properties (mark) (point)))
+	(setq old-string (read-string "OLD string:\n" curr-word))
+	(setq new-string (read-string "NEW string:\n" old-string))
+	(query-replace old-string new-string nil (point-min) (point-max))
+	)
   )
 
 (global-set-key (kbd "C-c s w") 'replace-in-buffer)
@@ -1277,18 +1277,18 @@ is to produce the opposite effect of both `fill-paragraph' and
   "Prompt user for pairs of strings to search/replace, then do so in the current buffer"
   (interactive (list (batch-replace-strings-prompt)))
   (dolist (pair replacement-alist)
-    (save-excursion
-      (replace-string (car pair) (cdr pair) nil (region-beginning) (region-end)))))
+	(save-excursion
+	  (replace-string (car pair) (cdr pair) nil (region-beginning) (region-end)))))
 
 (defun batch-replace-strings-prompt ()
   "prompt for string pairs and return as an association list"
   (let (from-string
-        ret-alist)
-    (while (not (string-equal "" (setq from-string (read-string "String to search (RET to stop): "))))
-      (setq ret-alist
-            (cons (cons from-string (read-string (format "Replace %s with: " from-string)))
-                  ret-alist)))
-    ret-alist))
+		ret-alist)
+	(while (not (string-equal "" (setq from-string (read-string "String to search (RET to stop): "))))
+	  (setq ret-alist
+			(cons (cons from-string (read-string (format "Replace %s with: " from-string)))
+				  ret-alist)))
+	ret-alist))
 
 (global-set-key (kbd "C-c s r") 'my/batch-replace-strings)
 
@@ -1297,10 +1297,10 @@ is to produce the opposite effect of both `fill-paragraph' and
   "Find the current file or directory using `sudo'."
   (interactive)
   (let ((destination (or buffer-file-name default-directory))
-        (auto-save-default nil))
-    (if (string= (file-remote-p destination 'method) "sudo")
-        (user-error "Already using `sudo'")
-      (find-file (format "/sudo::/%s" destination)))))
+		(auto-save-default nil))
+	(if (string= (file-remote-p destination 'method) "sudo")
+		(user-error "Already using `sudo'")
+	  (find-file (format "/sudo::/%s" destination)))))
 
 ;;;; Sudo Edit
 ;; The simplest solution is C-x C-f /sudo:user@localhost:/etc/motd RET
@@ -1311,9 +1311,9 @@ Will also prompt for a file to visit if current
 buffer is not visiting a file."
   (interactive "P")
   (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:root@localhost:"
-                         (ido-read-file-name "Find file(as root): ")))
-    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+	  (find-file (concat "/sudo:root@localhost:"
+						 (ido-read-file-name "Find file(as root): ")))
+	(find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
 ;;; Sudo save
 ;; If the current buffer is not writable, ask if it should be saved with sudo.
@@ -1321,27 +1321,27 @@ buffer is not visiting a file."
   "Prepend '/sudo:root@`system-name`:' to FILENAME if appropriate.
 This is, when it doesn't already have a sudo-prefix."
   (if (not (or (string-prefix-p "/sudo:root@localhost:"
-                                filename)
-               (string-prefix-p (format "/sudo:root@%s:" system-name)
-                                filename)))
-      (format "/sudo:root@%s:%s" system-name filename)
-    filename))
+								filename)
+			   (string-prefix-p (format "/sudo:root@%s:" system-name)
+								filename)))
+	  (format "/sudo:root@%s:%s" system-name filename)
+	filename))
 
 (defun my/sudo-save-buffer ()
   "Save FILENAME with sudo if the user approves."
   (interactive)
   (when buffer-file-name
-    (let ((file (ph/sudo-file-name buffer-file-name)))
-      (if (yes-or-no-p (format "Save file as %s ? " file))
-          (write-file file)))))
+	(let ((file (ph/sudo-file-name buffer-file-name)))
+	  (if (yes-or-no-p (format "Save file as %s ? " file))
+		  (write-file file)))))
 
 (advice-add 'save-buffer :around
-            '(lambda (fn &rest args)
-               (when (or (not (buffer-file-name))
-                         (not (buffer-modified-p))
-                         (file-writable-p (buffer-file-name))
-                         (not (ph/sudo-save-buffer)))
-                 (call-interactively fn args))))
+			'(lambda (fn &rest args)
+			   (when (or (not (buffer-file-name))
+						 (not (buffer-modified-p))
+						 (file-writable-p (buffer-file-name))
+						 (not (ph/sudo-save-buffer)))
+				 (call-interactively fn args))))
 
 ;;;; Sudo Notify File When It Requires It
 
@@ -1349,14 +1349,14 @@ This is, when it doesn't already have a sudo-prefix."
   "Notify myself when edit a file owned by root.
 This should be add to `find-file-hook'."
   (let ((old-msg (current-message)))
-    (when (and old-msg
-               (string= old-msg "Note: file is write protected")
-               ;; `chunyang-sudo-edit' doesn't work for remote files
-               ;; for now
-               (not (file-remote-p (buffer-file-name))))
-      (message "%s, %s"
-               old-msg
-               "use M-x sudo-edit RET to edit via sudo"))))
+	(when (and old-msg
+			   (string= old-msg "Note: file is write protected")
+			   ;; `chunyang-sudo-edit' doesn't work for remote files
+			   ;; for now
+			   (not (file-remote-p (buffer-file-name))))
+	  (message "%s, %s"
+			   old-msg
+			   "use M-x sudo-edit RET to edit via sudo"))))
 (add-hook 'find-file-hook #'my/sudo-edit-notify)
 
 ;;; Dictionary Lookup
@@ -1387,16 +1387,16 @@ This should be add to `find-file-hook'."
   (cond
    ;; If you see a word, delete all of it
    ((looking-back (rx (char word)) 1)
-    (my/delete-dont-kill 1))
+	(my/delete-dont-kill 1))
    ;; If you see a single whitespace and a word, delete both together
    ((looking-back (rx (seq (char word) (= 1 blank))) 1)
-    (my/delete-dont-kill 1))
+	(my/delete-dont-kill 1))
    ;; If you see several whitespaces, delete them until the next word
    ((looking-back (rx (char blank)) 1)
-    (delete-horizontal-space t))
+	(delete-horizontal-space t))
    ;; If you see a single non-word character, delete that
    (t
-    (backward-delete-char-untabify 1))))
+	(backward-delete-char-untabify 1))))
 (global-set-key (kbd "C-<backspace>") 'my/backward-delete)
 
 
@@ -1405,8 +1405,8 @@ This should be add to `find-file-hook'."
   "Removes whitespace before and after the point."
   (interactive)
   (if (version< emacs-version "24.4")
-      (just-one-space -1)
-    (cycle-spacing -1)))
+	  (just-one-space -1)
+	(cycle-spacing -1)))
 (define-key ef-file-keymap (kbd "x") 'my/spacing-delete-newlines)
 
 ;;; Search Backward and Forward for Word Under Cursor
@@ -1415,16 +1415,16 @@ This should be add to `find-file-hook'."
   "Jumps to the next symbol near the point if such a symbol
 exists. If BACKWARDP is non-nil it jumps backward."
   (let* ((point (point))
-         (bounds (find-tag-default-bounds))
-         (beg (car bounds)) (end (cdr bounds))
-         (str (isearch-symbol-regexp (find-tag-default)))
-         (search (if backwardp 'search-backward-regexp
-                   'search-forward-regexp)))
-    (goto-char (if backwardp beg end))
-    (funcall search str nil t)
-    (cond ((<= beg (point) end) (goto-char point))
-          (backwardp (forward-char (- point beg)))
-          (t  (backward-char (- end point))))))
+		 (bounds (find-tag-default-bounds))
+		 (beg (car bounds)) (end (cdr bounds))
+		 (str (isearch-symbol-regexp (find-tag-default)))
+		 (search (if backwardp 'search-backward-regexp
+				   'search-forward-regexp)))
+	(goto-char (if backwardp beg end))
+	(funcall search str nil t)
+	(cond ((<= beg (point) end) (goto-char point))
+		  (backwardp (forward-char (- point beg)))
+		  (t  (backward-char (- end point))))))
 
 (defun my/jump-to-previous-like-this ()
   "Jumps to the previous occurrence of the symbol at point."
@@ -1448,27 +1448,27 @@ exists. If BACKWARDP is non-nil it jumps backward."
 (defun make-list* (n fun &rest args)
   "Call FUN with ARGS N times and return a list of the results."
   (let ((res '()))
-    (dotimes (_ n)
-      (push (apply fun args) res))
-    res))
+	(dotimes (_ n)
+	  (push (apply fun args) res))
+	res))
 
 (defun insert-random-password (len)
   "Insert a password-friendly random string of length LEN."
   (interactive "NLength: ")
   (insert
    (random-string
-    "!#%+23456789:=?@ABCDEFGHJKLMNPRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-    len)))
+	"!#%+23456789:=?@ABCDEFGHJKLMNPRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+	len)))
 
 (defun insert-random-string (len)
   "Insert a random alphanumeric ASCII-string of length LEN."
   (interactive "NLength: ")
   (insert
    (random-string
-    (append (number-sequence ?0 ?9)
-            (number-sequence ?a ?z)
-            (number-sequence ?A ?Z))
-    len)))
+	(append (number-sequence ?0 ?9)
+			(number-sequence ?a ?z)
+			(number-sequence ?A ?Z))
+	len)))
 
 ;;; Generate Password
 (defun my/generate-password-non-interactive ()
@@ -1479,7 +1479,7 @@ exists. If BACKWARDP is non-nil it jumps backward."
   (interactive)
   (insert
    (shell-command-to-string
-    (concat "pwgen -A " (read-string "Length: " "24") " 1"))))
+	(concat "pwgen -A " (read-string "Length: " "24") " 1"))))
 
 
 ;;; Create New Frame
@@ -1539,27 +1539,27 @@ See `sort-regexp-fields'."
   "Toggles the window split between horizontal and vertical when
 the fram has exactly two windows."
   (if (= (count-windows) 2)
-      (let* ((this-win-buffer (window-buffer))
-             (next-win-buffer (window-buffer (next-window)))
-             (this-win-edges (window-edges (selected-window)))
-             (next-win-edges (window-edges (next-window)))
-             (this-win-2nd (not (and (<= (car this-win-edges)
-                                         (car next-win-edges))
-                                     (<= (cadr this-win-edges)
-                                         (cadr next-win-edges)))))
-             (splitter
-              (if (= (car this-win-edges)
-                     (car (window-edges (next-window))))
-                  'split-window-horizontally
-                'split-window-vertically)))
-        (delete-other-windows)
-        (let ((first-win (selected-window)))
-          (funcall splitter)
-          (if this-win-2nd (other-window 1))
-          (set-window-buffer (selected-window) this-win-buffer)
-          (set-window-buffer (next-window) next-win-buffer)
-          (select-window first-win)
-          (if this-win-2nd (other-window 1))))))
+	  (let* ((this-win-buffer (window-buffer))
+			 (next-win-buffer (window-buffer (next-window)))
+			 (this-win-edges (window-edges (selected-window)))
+			 (next-win-edges (window-edges (next-window)))
+			 (this-win-2nd (not (and (<= (car this-win-edges)
+										 (car next-win-edges))
+									 (<= (cadr this-win-edges)
+										 (cadr next-win-edges)))))
+			 (splitter
+			  (if (= (car this-win-edges)
+					 (car (window-edges (next-window))))
+				  'split-window-horizontally
+				'split-window-vertically)))
+		(delete-other-windows)
+		(let ((first-win (selected-window)))
+		  (funcall splitter)
+		  (if this-win-2nd (other-window 1))
+		  (set-window-buffer (selected-window) this-win-buffer)
+		  (set-window-buffer (next-window) next-win-buffer)
+		  (select-window first-win)
+		  (if this-win-2nd (other-window 1))))))
 (global-set-key (kbd "C-x -") 'my/toggle-window-split)
 
 ;;; Erase the Contents of a buffer
@@ -1568,10 +1568,10 @@ the fram has exactly two windows."
   (interactive "P")
   (barf-if-buffer-read-only)
   (when (or prefix
-            (y-or-n-p (concat "Erase content of buffer "
-                              (buffer-name)
-                              " ?")))
-    (erase-buffer)))
+			(y-or-n-p (concat "Erase content of buffer "
+							  (buffer-name)
+							  " ?")))
+	(erase-buffer)))
 
 ;;; Lists faces at point
 ;;;; Good for testing faces
@@ -1579,11 +1579,11 @@ the fram has exactly two windows."
   (interactive "d")
   (or point (setq point (point)))
   (let ((faces (remq nil
-                     `(,(get-char-property point 'read-face-name)
-                       ,(get-char-property point 'face)
-                       ,(plist-get (text-properties-at point) 'face)))))
-    (and (called-interactively-p 'any) (message (format "%s" faces)))
-    faces))
+					 `(,(get-char-property point 'read-face-name)
+					   ,(get-char-property point 'face)
+					   ,(plist-get (text-properties-at point) 'face)))))
+	(and (called-interactively-p 'any) (message (format "%s" faces)))
+	faces))
 
 ;;; Toggle Relative Line Numbers
 (defun my/toggle-relative-linum (&optional arg)
@@ -1593,12 +1593,12 @@ otherwise if ARG is greater than 0 then they're enabled and if ARG is
 nil then relative line-numbers are toggled."
   (interactive "P")
   (setq display-line-numbers
-        (cond
-         ((and arg (zerop (prefix-numeric-value arg)))
-          t)
-         (arg 'relative)
-         (t
-          (if (eq display-line-numbers 'relative) t 'relative)))))
+		(cond
+		 ((and arg (zerop (prefix-numeric-value arg)))
+		  t)
+		 (arg 'relative)
+		 (t
+		  (if (eq display-line-numbers 'relative) t 'relative)))))
 
 
 ;;; Better Toggle line numbers
@@ -1613,18 +1613,18 @@ See `display-line-numbers' for what these values mean."
   (interactive)
   (defvar doom--line-number-style display-line-numbers-type)
   (let* ((styles `(t ,(if visual-line-mode 'visual 'relative) nil))
-         (order (cons display-line-numbers-type (remq display-line-numbers-type styles)))
-         (queue (memq doom--line-number-style order))
-         (next (if (= (length queue) 1)
-                   (car order)
-                 (car (cdr queue)))))
-    (setq doom--line-number-style next)
-    (setq display-line-numbers next)
-    (message "Switched to %s line numbers"
-             (pcase next
-               (`t "normal")
-               (`nil "disabled")
-               (_ (symbol-name next))))))
+		 (order (cons display-line-numbers-type (remq display-line-numbers-type styles)))
+		 (queue (memq doom--line-number-style order))
+		 (next (if (= (length queue) 1)
+				   (car order)
+				 (car (cdr queue)))))
+	(setq doom--line-number-style next)
+	(setq display-line-numbers next)
+	(message "Switched to %s line numbers"
+			 (pcase next
+			   (`t "normal")
+			   (`nil "disabled")
+			   (_ (symbol-name next))))))
 
 
 
@@ -1639,9 +1639,9 @@ See `display-line-numbers' for what these values mean."
   (delete-other-windows)
   (switch-to-buffer "*Clipboard*")
   (let ((inhibit-read-only t))
-    (erase-buffer)
-    (clipboard-yank)
-    (goto-char (point-min))))
+	(erase-buffer)
+	(clipboard-yank)
+	(goto-char (point-min))))
 
 ;;; Kill All Buffers Except Current Buffer
 (defun my/kill-all-but-current-buffer ()
@@ -1655,9 +1655,9 @@ See `display-line-numbers' for what these values mean."
   "Kill all open dired buffers."
   (interactive)
   (mapc (lambda (buffer)
-          (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
-            (kill-buffer buffer)))
-        (buffer-list)))
+		  (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
+			(kill-buffer buffer)))
+		(buffer-list)))
 
 ;;; Advice to `kill-region'
 ;; With this it can either kill region or line
@@ -1671,19 +1671,19 @@ See `display-line-numbers' for what these values mean."
   "Cut the selected region or the current line if no region is active and
 called interactively."
   (interactive (if (use-region-p)
-                   (list (region-beginning) (region-end))
-                 (list (line-beginning-position) (line-beginning-position 2))))
+				   (list (region-beginning) (region-end))
+				 (list (line-beginning-position) (line-beginning-position 2))))
   (if (called-interactively-p 'any)
-      (let ((region-active (and (mark t) (use-region-p))))
-        (if region-active
-            ;; Region is active and mark is set, use the region bounds.
-            (apply orig-fn (region-beginning) (region-end) args)
-          ;; No active region or mark not set, cut the current line.
-          (progn
-            (message "[Cut the current line]")
-            (apply orig-fn (line-beginning-position) (line-beginning-position 2) args))))
-    ;; If not called interactively, pass the original arguments unchanged.
-    (apply orig-fn beg end args)))
+	  (let ((region-active (and (mark t) (use-region-p))))
+		(if region-active
+			;; Region is active and mark is set, use the region bounds.
+			(apply orig-fn (region-beginning) (region-end) args)
+		  ;; No active region or mark not set, cut the current line.
+		  (progn
+			(message "[Cut the current line]")
+			(apply orig-fn (line-beginning-position) (line-beginning-position 2) args))))
+	;; If not called interactively, pass the original arguments unchanged.
+	(apply orig-fn beg end args)))
 
 (advice-add 'kill-region :around #'my/better-cut-region)
 
@@ -1693,19 +1693,19 @@ called interactively."
   "Copy the selected region or the current line if no region is active and
 called interactively."
   (interactive (if (use-region-p)
-                   (list (region-beginning) (region-end))
-                 (list (line-beginning-position) (line-beginning-position 2))))
+				   (list (region-beginning) (region-end))
+				 (list (line-beginning-position) (line-beginning-position 2))))
   (if (called-interactively-p 'any)
-      (let ((region-active (and (mark t) (use-region-p))))
-        (if region-active
-            ;; Region is active and mark is set, use the region bounds.
-            (apply orig-fn (region-beginning) (region-end) args)
-          ;; No active region or mark not set, copy the current line.
-          (progn
-            (message "[Copied the current line]")
-            (apply orig-fn (line-beginning-position) (line-beginning-position 2) args))))
-    ;; If not called interactively, pass the original arguments unchanged.
-    (apply orig-fn beg end args)))
+	  (let ((region-active (and (mark t) (use-region-p))))
+		(if region-active
+			;; Region is active and mark is set, use the region bounds.
+			(apply orig-fn (region-beginning) (region-end) args)
+		  ;; No active region or mark not set, copy the current line.
+		  (progn
+			(message "[Copied the current line]")
+			(apply orig-fn (line-beginning-position) (line-beginning-position 2) args))))
+	;; If not called interactively, pass the original arguments unchanged.
+	(apply orig-fn beg end args)))
 
 (advice-add 'kill-ring-save :around #'my/better-copy-region)
 
@@ -1716,49 +1716,49 @@ called interactively."
   (interactive)
   (cond
    ((derived-mode-p 'org-agenda-mode)
-    (if (window-parent) (delete-window) (bury-buffer)))
+	(if (window-parent) (delete-window) (bury-buffer)))
    ((get-buffer "*Org Agenda*")
-    (switch-to-buffer-other-window "*Org Agenda*"))
+	(switch-to-buffer-other-window "*Org Agenda*"))
    (t (org-agenda nil "a"))))
 
 ;;; Better move to the beginning of the line
 (defun my/smarter-move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
 
-      Move point to the first non-whitespace character on this line.
-      If point is already there, move to the beginning of the line.
-      Effectively toggle between the first non-whitespace character and
-      the beginning of the line.
+	  Move point to the first non-whitespace character on this line.
+	  If point is already there, move to the beginning of the line.
+	  Effectively toggle between the first non-whitespace character and
+	  the beginning of the line.
 
-      If ARG is not nil or 1, move forward ARG - 1 lines first.  If
-      point reaches the beginning or end of the buffer, stop there."
+	  If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+	  point reaches the beginning or end of the buffer, stop there."
   (interactive "^p")
   (setq arg (or arg 1))
 
   ;; Move lines first
   (when (/= arg 1)
-    (let ((line-move-visual nil))
-      (forward-line (1- arg))))
+	(let ((line-move-visual nil))
+	  (forward-line (1- arg))))
 
   (let ((orig-point (point)))
-    (back-to-indentation)
-    (when (= orig-point (point))
-      (move-beginning-of-line 1))))
+	(back-to-indentation)
+	(when (= orig-point (point))
+	  (move-beginning-of-line 1))))
 
 ;;; remap C-a to `smarter-move-beginning-of-line'
 (global-set-key [remap move-beginning-of-line]
-                'my/smarter-move-beginning-of-line)
+				'my/smarter-move-beginning-of-line)
 
 ;;; Copy File Name to Clipboard
 (defun my/copy-file-name-to-clipboard ()
   "Copy the current buffer file name to the clipboard."
   (interactive)
   (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (when filename
-      (kill-new filename)
-      (message "Copied buffer file name '%s' to the clipboard." filename))))
+					  default-directory
+					(buffer-file-name))))
+	(when filename
+	  (kill-new filename)
+	  (message "Copied buffer file name '%s' to the clipboard." filename))))
 
 ;;; Redact and Unredact Region
 (defun my/redact (s)
@@ -1769,20 +1769,20 @@ called interactively."
   "Redact from BEG to END."
   (interactive "r")
   (let ((overlay (make-overlay beg end)))
-    (overlay-put overlay 'redact t)
-    (overlay-put overlay 'display
-                 (cond
-                  ((functionp func)
-                   (funcall func))
-                  ((stringp func)
-                   func)
-                  (t (make-string (- end beg) ?x))))))
+	(overlay-put overlay 'redact t)
+	(overlay-put overlay 'display
+				 (cond
+				  ((functionp func)
+				   (funcall func))
+				  ((stringp func)
+				   func)
+				  (t (make-string (- end beg) ?x))))))
 
 (defun my/unredact ()
   (interactive)
   (mapc 'delete-overlay
-        (seq-filter (lambda (overlay) (overlay-get overlay 'redact))
-                    (overlays-in (point-min) (point-max)))))
+		(seq-filter (lambda (overlay) (overlay-get overlay 'redact))
+					(overlays-in (point-min) (point-max)))))
 
 ;;; Screeshot
 (defvar my-picture-dir "Pictures/")
@@ -1791,14 +1791,14 @@ called interactively."
 Saves to a temp file and puts the filename in the kill ring."
   (interactive)
   (let* ((filename
-          (expand-file-name
-           (format-time-string "%Y-%m-%d-%H-%M-%S.svg")
-           my-picture-dir))
-         (data (x-export-frames nil 'png)))
-    (with-temp-file filename
-      (insert data))
-    (kill-new filename)
-    (message filename)))
+		  (expand-file-name
+		   (format-time-string "%Y-%m-%d-%H-%M-%S.svg")
+		   my-picture-dir))
+		 (data (x-export-frames nil 'png)))
+	(with-temp-file filename
+	  (insert data))
+	(kill-new filename)
+	(message filename)))
 (keymap-global-set "C-c C-s" #'my/screenshot)
 
 ;;; Cycle through different paragraph formats
@@ -1811,34 +1811,34 @@ This is an alist of (cat count list) so we can use it for different functions.")
 This command does the inverse of `fill-paragraph'."
   (interactive)
   (let ((fill-column most-positive-fixnum))
-    (fill-paragraph)))
+	(fill-paragraph)))
 
 (defun my-fill-paragraph-semlf-long ()
   (interactive)
   (let ((fill-column most-positive-fixnum))
-    (fill-paragraph-semlf)))
+	(fill-paragraph-semlf)))
 
 (defun my-repeat-next (category &optional element-list reset)
   "Return the next element for CATEGORY.
 Initialize with ELEMENT-LIST if this is the first time."
   (let* ((counter
-          (or (assoc category my-repeat-counter)
-              (progn
-                (push (list category -1 element-list)
-                      my-repeat-counter)
-                (assoc category my-repeat-counter)))))
-    (setf (elt (cdr counter) 0)
-          (mod
-           (if reset 0 (1+ (elt (cdr counter) 0)))
-           (length (elt (cdr counter) 1))))
-    (elt (elt (cdr counter) 1) (elt (cdr counter) 0))))
+		  (or (assoc category my-repeat-counter)
+			  (progn
+				(push (list category -1 element-list)
+					  my-repeat-counter)
+				(assoc category my-repeat-counter)))))
+	(setf (elt (cdr counter) 0)
+		  (mod
+		   (if reset 0 (1+ (elt (cdr counter) 0)))
+		   (length (elt (cdr counter) 1))))
+	(elt (elt (cdr counter) 1) (elt (cdr counter) 0))))
 
 (defun my-in-prefixed-comment-p ()
   (or (member 'font-lock-comment-delimiter-face (face-at-point nil t))
-      (member 'font-lock-comment-face (face-at-point nil t))
-      (save-excursion
-        (beginning-of-line)
-        (comment-search-forward (line-end-position) t))))
+	  (member 'font-lock-comment-face (face-at-point nil t))
+	  (save-excursion
+		(beginning-of-line)
+		(comment-search-forward (line-end-position) t))))
 
 ;; It might be nice to figure out what state we're
 ;; in and then cycle to the next one if we're just
@@ -1849,33 +1849,33 @@ Initialize with ELEMENT-LIST if this is the first time."
 If a region is selected, handle all paragraphs within that region."
   (interactive)
   (let ((func (my-repeat-next 'my-reformat-paragraph
-                              '(fill-paragraph my-unfill-paragraph fill-paragraph-semlf
-                                               my-fill-paragraph-semlf-long)
-                              (not (eq this-command last-command))))
-        (deactivate-mark nil))
-    (if (region-active-p)
-        (save-restriction
-          (save-excursion
-            (narrow-to-region (region-beginning) (region-end))
-            (goto-char (point-min))
-            (while (not (eobp))
-              (skip-syntax-forward " ")
-              (let ((elem (and (derived-mode-p 'org-mode)
-                               (org-element-context))))
-                (cond
-                 ((eq (org-element-type elem) 'headline)
-                  (org-forward-paragraph))
-                 ((member (org-element-type elem)
-                          '(src-block export-block headline property-drawer))
-                  (goto-char
-                   (org-element-end (org-element-context))))
-                 (t
-                  (funcall func)
-                  (if fill-forward-paragraph-function
-                      (funcall fill-forward-paragraph-function)
-                    (forward-paragraph)))))
-              )))
-      (funcall func))))
+							  '(fill-paragraph my-unfill-paragraph fill-paragraph-semlf
+											   my-fill-paragraph-semlf-long)
+							  (not (eq this-command last-command))))
+		(deactivate-mark nil))
+	(if (region-active-p)
+		(save-restriction
+		  (save-excursion
+			(narrow-to-region (region-beginning) (region-end))
+			(goto-char (point-min))
+			(while (not (eobp))
+			  (skip-syntax-forward " ")
+			  (let ((elem (and (derived-mode-p 'org-mode)
+							   (org-element-context))))
+				(cond
+				 ((eq (org-element-type elem) 'headline)
+				  (org-forward-paragraph))
+				 ((member (org-element-type elem)
+						  '(src-block export-block headline property-drawer))
+				  (goto-char
+				   (org-element-end (org-element-context))))
+				 (t
+				  (funcall func)
+				  (if fill-forward-paragraph-function
+					  (funcall fill-forward-paragraph-function)
+					(forward-paragraph)))))
+			  )))
+	  (funcall func))))
 
 (keymap-global-set "M-q" #'my-reformat-paragraph-or-region)
 
@@ -1886,61 +1886,61 @@ If a region is selected, handle all paragraphs within that region."
   (cond
    (current-prefix-arg (copy-region-as-kill (point-min) (point-max)))
    ((and (boundp 'rectangle-mark-mode) rectangle-mark-mode)
-    (copy-region-as-kill (region-beginning) (region-end) t))
+	(copy-region-as-kill (region-beginning) (region-end) t))
    ((region-active-p) (copy-region-as-kill (region-beginning) (region-end)))
    ((eq last-command this-command)
-    (if (eobp)
-        nil
-      (progn
-        (kill-append "\n" nil)
-        (kill-append (buffer-substring (line-beginning-position) (line-end-position)) nil)
-        (end-of-line)
-        (forward-char))))
+	(if (eobp)
+		nil
+	  (progn
+		(kill-append "\n" nil)
+		(kill-append (buffer-substring (line-beginning-position) (line-end-position)) nil)
+		(end-of-line)
+		(forward-char))))
    ((eobp)
-    (if (eq (char-before) 10)
-        (progn)
-      (progn
-        (copy-region-as-kill (line-beginning-position) (line-end-position))
-        (end-of-line))))
+	(if (eq (char-before) 10)
+		(progn)
+	  (progn
+		(copy-region-as-kill (line-beginning-position) (line-end-position))
+		(end-of-line))))
    (t
-    (copy-region-as-kill (line-beginning-position) (line-end-position))
-    (end-of-line)
-    (forward-char))))
+	(copy-region-as-kill (line-beginning-position) (line-end-position))
+	(end-of-line)
+	(forward-char))))
 
 ;;; Cut Line or Region
 (defun my/cut-line-or-region ()
   (interactive)
   (if current-prefix-arg
-      (progn ; not using kill-region because we don't want to include previous kill
-        (kill-new (buffer-string))
-        (delete-region (point-min) (point-max)))
-    (progn (if (region-active-p)
-               (kill-region (region-beginning) (region-end) t)
-             (kill-region (line-beginning-position) (line-beginning-position 2))))))
+	  (progn ; not using kill-region because we don't want to include previous kill
+		(kill-new (buffer-string))
+		(delete-region (point-min) (point-max)))
+	(progn (if (region-active-p)
+			   (kill-region (region-beginning) (region-end) t)
+			 (kill-region (line-beginning-position) (line-beginning-position 2))))))
 
 ;;; Copy Region or Buffer
 
 (defun my/copy-all-or-region ()
   (interactive)
   (if (region-active-p)
-      (progn
-        (kill-new (buffer-substring (region-beginning) (region-end)))
-        (message "Text selection copied."))
-    (progn
-      (kill-new (buffer-string))
-      (message "Buffer content copied."))))
+	  (progn
+		(kill-new (buffer-substring (region-beginning) (region-end)))
+		(message "Text selection copied."))
+	(progn
+	  (kill-new (buffer-string))
+	  (message "Buffer content copied."))))
 
 ;;; Cut Region or Buffer
 (defun my/cut-all-or-region ()
   (interactive)
   (if (region-active-p)
-      (progn
-        (kill-new (buffer-substring (region-beginning) (region-end)))
-        (delete-region (region-beginning) (region-end)))
-    (progn
-      (kill-new (buffer-string))
-      (delete-region (point-min) (point-max))
-      (message "buffer text cut"))))
+	  (progn
+		(kill-new (buffer-substring (region-beginning) (region-end)))
+		(delete-region (region-beginning) (region-end)))
+	(progn
+	  (kill-new (buffer-string))
+	  (delete-region (point-min) (point-max))
+	  (message "buffer text cut"))))
 
 ;;; Paste Recursively
 (defun my/paste-or-paste-previous ()
@@ -1950,15 +1950,15 @@ If `universal-argument' is called first with a number arg, paste that many times
 "
   (interactive)
   (progn
-    (when (and delete-selection-mode (region-active-p))
-      (delete-region (region-beginning) (region-end)))
-    (if current-prefix-arg
-        (progn
-          (dotimes (_ (prefix-numeric-value current-prefix-arg))
-            (yank)))
-      (if (eq real-last-command this-command)
-          (yank-pop 1)
-        (yank)))))
+	(when (and delete-selection-mode (region-active-p))
+	  (delete-region (region-beginning) (region-end)))
+	(if current-prefix-arg
+		(progn
+		  (dotimes (_ (prefix-numeric-value current-prefix-arg))
+			(yank)))
+	  (if (eq real-last-command this-command)
+		  (yank-pop 1)
+		(yank)))))
 
 ;;; Cycle through cases
 (defun my/cycle-cases ()
@@ -1966,25 +1966,25 @@ If `universal-argument' is called first with a number arg, paste that many times
 Always cycle in this order: Init Caps, ALL CAPS, all lower."
   (interactive)
   (let ((deactivate-mark nil) xbeg xend)
-    (if (region-active-p)
-        (setq xbeg (region-beginning) xend (region-end))
-      (save-excursion
-        (skip-chars-backward "[:alnum:]")
-        (setq xbeg (point))
-        (skip-chars-forward "[:alnum:]")
-        (setq xend (point))))
-    (when (not (eq last-command this-command))
-      (put this-command 'state 0))
-    (cond
-     ((equal 0 (get this-command 'state))
-      (upcase-initials-region xbeg xend)
-      (put this-command 'state 1))
-     ((equal 1 (get this-command 'state))
-      (upcase-region xbeg xend)
-      (put this-command 'state 2))
-     ((equal 2 (get this-command 'state))
-      (downcase-region xbeg xend)
-      (put this-command 'state 0)))))
+	(if (region-active-p)
+		(setq xbeg (region-beginning) xend (region-end))
+	  (save-excursion
+		(skip-chars-backward "[:alnum:]")
+		(setq xbeg (point))
+		(skip-chars-forward "[:alnum:]")
+		(setq xend (point))))
+	(when (not (eq last-command this-command))
+	  (put this-command 'state 0))
+	(cond
+	 ((equal 0 (get this-command 'state))
+	  (upcase-initials-region xbeg xend)
+	  (put this-command 'state 1))
+	 ((equal 1 (get this-command 'state))
+	  (upcase-region xbeg xend)
+	  (put this-command 'state 2))
+	 ((equal 2 (get this-command 'state))
+	  (downcase-region xbeg xend)
+	  (put this-command 'state 0)))))
 
 ;;; Delete Current Text Block
 (defun mydelete-current-text-block ()
@@ -1992,18 +1992,18 @@ Always cycle in this order: Init Caps, ALL CAPS, all lower."
 If cursor is between blank lines, delete following blank lines."
   (interactive)
   (let (xbeg xend (xp (point)))
-    (if (region-active-p)
-        (setq xbeg (region-beginning) xend (region-end))
-      (progn
-        (setq xbeg
-              (if (re-search-backward "\n[ \t]*\n+" nil 1)
-                  (match-end 0)
-                (point)))
-        (goto-char xp)
-        (setq xend (if (re-search-forward "\n[ \t]*\n+" nil 1)
-                       (match-end 0)
-                     (point-max)))))
-    (kill-region xbeg xend)))
+	(if (region-active-p)
+		(setq xbeg (region-beginning) xend (region-end))
+	  (progn
+		(setq xbeg
+			  (if (re-search-backward "\n[ \t]*\n+" nil 1)
+				  (match-end 0)
+				(point)))
+		(goto-char xp)
+		(setq xend (if (re-search-forward "\n[ \t]*\n+" nil 1)
+					   (match-end 0)
+					 (point-max)))))
+	(kill-region xbeg xend)))
 
 ;;; Clean Empty Lines
 (defun my/clean-empty-lines ()
@@ -2011,16 +2011,16 @@ If cursor is between blank lines, delete following blank lines."
 Respects `narrow-to-region'."
   (interactive)
   (let (xbegin xend)
-    (if (region-active-p)
-        (setq xbegin (region-beginning) xend (region-end))
-      (setq xbegin (point-min) xend (point-max)))
-    (save-excursion
-      (save-restriction
-        (narrow-to-region xbegin xend)
-        (progn
-          (goto-char (point-min))
-          (while (re-search-forward "\n\n\n+" nil 1)
-            (replace-match "\n\n")))))))
+	(if (region-active-p)
+		(setq xbegin (region-beginning) xend (region-end))
+	  (setq xbegin (point-min) xend (point-max)))
+	(save-excursion
+	  (save-restriction
+		(narrow-to-region xbegin xend)
+		(progn
+		  (goto-char (point-min))
+		  (while (re-search-forward "\n\n\n+" nil 1)
+			(replace-match "\n\n")))))))
 
 ;;; Clean Whitespaces
 (defun my/clean-whitespace (&optional Begin End)
@@ -2030,25 +2030,25 @@ Works on whole buffer or selection, respects `narrow-to-region'.
 "
   (interactive)
   (let (xbeg xend)
-    (seq-setq (xbeg xend)
-              (if (and Begin End)
-                  (list Begin End)
-                (if (region-active-p)
-                    (list (region-beginning) (region-end))
-                  (list (point-min) (point-max)))))
+	(seq-setq (xbeg xend)
+			  (if (and Begin End)
+				  (list Begin End)
+				(if (region-active-p)
+					(list (region-beginning) (region-end))
+				  (list (point-min) (point-max)))))
 
-    (save-excursion
-      (save-restriction
-        (narrow-to-region xbeg xend)
-        (progn
-          (goto-char (point-min))
-          (while (re-search-forward "[ \t]+\n" nil t) (replace-match "\n")))
-        (progn
-          (goto-char (point-min))
-          (while (re-search-forward "\n\n\n+" nil t) (replace-match "\n\n")))
-        (progn
-          (goto-char (point-max))
-          (while (eq (char-before) 32) (delete-char -1))))))
+	(save-excursion
+	  (save-restriction
+		(narrow-to-region xbeg xend)
+		(progn
+		  (goto-char (point-min))
+		  (while (re-search-forward "[ \t]+\n" nil t) (replace-match "\n")))
+		(progn
+		  (goto-char (point-min))
+		  (while (re-search-forward "\n\n\n+" nil t) (replace-match "\n\n")))
+		(progn
+		  (goto-char (point-max))
+		  (while (eq (char-before) 32) (delete-char -1))))))
   (message "done xah-clean-whitespace"))
 
 ;;; Search Current Word
@@ -2058,18 +2058,18 @@ Works on whole buffer or selection, respects `narrow-to-region'.
 "
   (interactive)
   (let (xbeg xend)
-    (if (region-active-p)
-        (setq xbeg (region-beginning) xend (region-end))
-      (save-excursion
-        (skip-chars-backward "-_A-Za-z0-9")
-        (setq xbeg (point))
-        (right-char)
-        (skip-chars-forward "-_A-Za-z0-9")
-        (setq xend (point))))
-    (deactivate-mark)
-    (when (< xbeg (point)) (goto-char xbeg))
-    (isearch-mode t)
-    (isearch-yank-string (buffer-substring-no-properties xbeg xend))))
+	(if (region-active-p)
+		(setq xbeg (region-beginning) xend (region-end))
+	  (save-excursion
+		(skip-chars-backward "-_A-Za-z0-9")
+		(setq xbeg (point))
+		(right-char)
+		(skip-chars-forward "-_A-Za-z0-9")
+		(setq xend (point))))
+	(deactivate-mark)
+	(when (< xbeg (point)) (goto-char xbeg))
+	(isearch-mode t)
+	(isearch-yank-string (buffer-substring-no-properties xbeg xend))))
 
 
 ;;; Better C-g
@@ -2079,10 +2079,10 @@ This command is intended to replace key C-g , but not always work. Sometimes you
 "
   (interactive)
   (if (minibufferp (current-buffer))
-      (progn (minibuffer-keyboard-quit))
-    (if (region-active-p)
-        (progn (deactivate-mark))
-      (progn (keyboard-quit)))))
+	  (progn (minibuffer-keyboard-quit))
+	(if (region-active-p)
+		(progn (deactivate-mark))
+	  (progn (keyboard-quit)))))
 
 (define-key ef-functions-keymap (kbd "c") 'my/cancel)
 ;;; Display Keymappings For the Current Buffer
@@ -2090,42 +2090,42 @@ This command is intended to replace key C-g , but not always work. Sometimes you
   "Determine in which keymap KEY is defined."
   (interactive "kPress key: ")
   (let ((ret (list (key-binding-at-point key)
-                   (minor-mode-key-binding key)
-                   (local-key-binding key)
-                   (global-key-binding key))))
-    (when (called-interactively-p 'any)
-      (message "At Point: %s\nMinor-mode: %s\nLocal: %s\nGlobal: %s"
-               (or (nth 0 ret) "")
-               (or (mapconcat (lambda (x) (format "%s: %s" (car x) (cdr x)))
-                              (nth 1 ret) "\n             ")
-                   "")
-               (or (nth 2 ret) "")
-               (or (nth 3 ret) "")))
-    ret))
+				   (minor-mode-key-binding key)
+				   (local-key-binding key)
+				   (global-key-binding key))))
+	(when (called-interactively-p 'any)
+	  (message "At Point: %s\nMinor-mode: %s\nLocal: %s\nGlobal: %s"
+			   (or (nth 0 ret) "")
+			   (or (mapconcat (lambda (x) (format "%s: %s" (car x) (cdr x)))
+							  (nth 1 ret) "\n             ")
+				   "")
+			   (or (nth 2 ret) "")
+			   (or (nth 3 ret) "")))
+	ret))
 
 (defun key-binding-at-point (key)
   (mapcar (lambda (keymap) (lookup-key keymap key))
-          (cl-remove-if-not #'keymapp
-                            (append (mapcar (lambda (overlay)
-                                              (overlay-get overlay 'keymap))
-                                            (overlays-at (point)))
-                                    (get-text-property (point) 'keymap)
-                                    (get-text-property (point) 'local-map)))))
+		  (cl-remove-if-not #'keymapp
+							(append (mapcar (lambda (overlay)
+											  (overlay-get overlay 'keymap))
+											(overlays-at (point)))
+									(get-text-property (point) 'keymap)
+									(get-text-property (point) 'local-map)))))
 
 
 ;;; Save and Kill Buffer
 (defun my/save-and-kill-buffer ()
   (interactive)
   (progn
-    (save-buffer)
-    (kill-current-buffer)))
+	(save-buffer)
+	(kill-current-buffer)))
 
 ;;; Save and Delete Window
 (defun my/save-and-delete-window ()
   (interactive)
   (progn
-    (save-buffer)
-    (delete-window)))
+	(save-buffer)
+	(delete-window)))
 
 
 ;;; Server Restart
@@ -2134,7 +2134,7 @@ This command is intended to replace key C-g , but not always work. Sometimes you
   (interactive)
   (server-force-delete)
   (while (server-running-p)
-    (sleep-for 1))
+	(sleep-for 1))
   (server-start))
 
 ;;; Server Shutdown
@@ -2149,15 +2149,15 @@ This command is intended to replace key C-g , but not always work. Sometimes you
   "Show help for the symbol at point."
   (interactive)
   (if-let* ((sym (symbol-at-point))
-            (fn (cond ((and (fboundp sym) (boundp sym))
-                       (if (= ?v (read-char-choice (format "Ambiguous `%s', describe [v]ariable or [c]allable? " sym) '(?v ?c)))
-                           'describe-variable
-                         'describe-function))
-                      ((fboundp sym) 'describe-function)
-                      ((boundp sym) 'describe-variable)
-                      ((symbolp sym) 'describe-symbol))))
-      (funcall fn sym)
-    (user-error "There is no symbol at point")))
+			(fn (cond ((and (fboundp sym) (boundp sym))
+					   (if (= ?v (read-char-choice (format "Ambiguous `%s', describe [v]ariable or [c]allable? " sym) '(?v ?c)))
+						   'describe-variable
+						 'describe-function))
+					  ((fboundp sym) 'describe-function)
+					  ((boundp sym) 'describe-variable)
+					  ((symbolp sym) 'describe-symbol))))
+	  (funcall fn sym)
+	(user-error "There is no symbol at point")))
 
 ;;; Describe at point better
 (defun my/describe-symbol-at-point ()
@@ -2166,23 +2166,23 @@ This command is intended to replace key C-g , but not always work. Sometimes you
   (require 'help-mode)
   (describe-symbol
    (or (pcase (variable-at-point)
-         (0 nil)
-         (v v))
-       (function-called-at-point)
-       (let* ((is-symbol-p
-               (lambda (vv)
-                 (cl-some (lambda (x) (funcall (nth 1 x) vv))
-                          describe-symbol-backends)))
-              (sym
-               (or (let ((it (intern (current-word))))
-                     (when (funcall is-symbol-p it)
-                       it))
-                   (completing-read
-                    "Describe symbol: "
-                    obarray
-                    is-symbol-p
-                    t))))
-         sym))))
+		 (0 nil)
+		 (v v))
+	   (function-called-at-point)
+	   (let* ((is-symbol-p
+			   (lambda (vv)
+				 (cl-some (lambda (x) (funcall (nth 1 x) vv))
+						  describe-symbol-backends)))
+			  (sym
+			   (or (let ((it (intern (current-word))))
+					 (when (funcall is-symbol-p it)
+					   it))
+				   (completing-read
+					"Describe symbol: "
+					obarray
+					is-symbol-p
+					t))))
+		 sym))))
 
 
 ;;; Open Default Config Folder For Emacs
@@ -2192,8 +2192,8 @@ This command is intended to replace key C-g , but not always work. Sometimes you
 When ASK is non-nil (\\[universal-argument]), ask about which file to open."
   (interactive "P")
   (if ask
-      (find-file (read-file-name "Select which file to open: " user-emacs-directory))
-    (dired user-emacs-directory)))
+	  (find-file (read-file-name "Select which file to open: " user-emacs-directory))
+	(dired user-emacs-directory)))
 
 ;;; Font Increase, Decrease, Reset and Code View
 (defvar my/default-font-height 110
@@ -2207,38 +2207,38 @@ When ASK is non-nil (\\[universal-argument]), ask about which file to open."
   "Increase the font size by `my/height-modifier' amount."
   (interactive)
   (dolist (face '(default
-                  mode-line
-                  mode-line-inactive
-                  minibuffer-prompt
-                  variable-pitch))
-    (set-face-attribute face nil :height (+ (face-attribute face :height)
-                                            my/height-modifier))))
+				  mode-line
+				  mode-line-inactive
+				  minibuffer-prompt
+				  variable-pitch))
+	(set-face-attribute face nil :height (+ (face-attribute face :height)
+											my/height-modifier))))
 
 (defun my/font-size-decrease ()
   "Decreas the font size by `my/height-modifier' amount."
   (interactive)
   (dolist (face '(default
-                  mode-line
-                  mode-line-inactive
-                  minibuffer-prompt
-                  variable-pitch))
-    (set-face-attribute face nil :height (- (face-attribute face :height)
-                                            my/height-modifier))))
+				  mode-line
+				  mode-line-inactive
+				  minibuffer-prompt
+				  variable-pitch))
+	(set-face-attribute face nil :height (- (face-attribute face :height)
+											my/height-modifier))))
 
 (defun my/font-size-reset ()
   "Go back to the default font size and `line-spacing'"
   (interactive)
   (dolist (face '(default
-                  mode-line
-                  mode-line-inactive
-                  minibuffer-prompt
-                  variable-pitch))
-    (set-face-attribute face nil :height my/default-font-height))
+				  mode-line
+				  mode-line-inactive
+				  minibuffer-prompt
+				  variable-pitch))
+	(set-face-attribute face nil :height my/default-font-height))
   (text-scale-adjust 0)
   (when (fboundp 'minimap-mode)
-    (condition-case err
-        (minimap-mode 0)
-      ('error 0)))
+	(condition-case err
+		(minimap-mode 0)
+	  ('error 0)))
   (setq line-spacing 0))
 
 (defun my/code-reading-mode ()
@@ -2251,7 +2251,7 @@ to go back to a normal setup."
   (setq line-spacing 5)
   (use-package minimap :ensure t)
   (when (not minimap-mode)
-    (minimap-mode 1)))
+	(minimap-mode 1)))
 
 
 ;;; Jump between functions
@@ -2280,44 +2280,44 @@ to go back to a normal setup."
 (defun my/active-minor-modes ()
   "Return a list of active minor-mode symbols."
   (cl-loop for mode in minor-mode-list
-           if (and (boundp mode) (symbol-value mode))
-           collect mode))
+		   if (and (boundp mode) (symbol-value mode))
+		   collect mode))
 (defun my/describe-active-minor-mode (mode)
   "Get information on an active minor mode. Use `describe-minor-mode' for a
 selection of all minor-modes, active or not."
   (interactive
    (list (completing-read "Describe active mode: " (my/active-minor-modes))))
   (let ((symbol
-         (cond ((stringp mode) (intern mode))
-               ((symbolp mode) mode)
-               ((error "Expected a symbol/string, got a %s" (type-of mode)))))
-        (fn (if (fboundp symbol) #'describe-function #'describe-variable)))
-    (funcall (or (command-remapping fn) fn)
-             symbol)))
+		 (cond ((stringp mode) (intern mode))
+			   ((symbolp mode) mode)
+			   ((error "Expected a symbol/string, got a %s" (type-of mode)))))
+		(fn (if (fboundp symbol) #'describe-function #'describe-variable)))
+	(funcall (or (command-remapping fn) fn)
+			 symbol)))
 
 
 ;;; Offer to create parent directories if they do not exist
 (defun my/create-non-existent-directory ()
   "Automatically create missing directories when creating new files."
   (unless (file-remote-p buffer-file-name)
-    (let ((parent-directory (file-name-directory buffer-file-name)))
-      (and (not (file-directory-p parent-directory))
-           (y-or-n-p (format "Directory `%s' does not exist! Create it?"
-                             parent-directory))
-           (progn (make-directory parent-directory 'parents)
-                  t)
-           )
-      )))
+	(let ((parent-directory (file-name-directory buffer-file-name)))
+	  (and (not (file-directory-p parent-directory))
+		   (y-or-n-p (format "Directory `%s' does not exist! Create it?"
+							 parent-directory))
+		   (progn (make-directory parent-directory 'parents)
+				  t)
+		   )
+	  )))
 (add-hook 'find-file-not-found-functions 'my/create-non-existent-directory)
 
 ;;; Make Directory
 (defun my/make-directory-maybe ()
   "Create parent directory if not exists while visiting file."
   (let ((dir (file-name-directory buffer-file-name)))
-    (unless (file-exists-p dir)
-      (if (y-or-n-p (format "Directory %s does not exist,do you want you create it? " dir))
-          (make-directory dir t)
-        (keyboard-quit)))))
+	(unless (file-exists-p dir)
+	  (if (y-or-n-p (format "Directory %s does not exist,do you want you create it? " dir))
+		  (make-directory dir t)
+		(keyboard-quit)))))
 
 ;;; Save All Buffers
 (defun my/save-all-buffers ()
@@ -2326,25 +2326,25 @@ If the file does not yet exist on disk, create it without
 confirmation.  Non–file‑visiting buffers are ignored."
   (interactive)
   (let ((confirm-nonexistent-file-or-buffer nil)) ; suppress “create file?” prompt
-    (dolist (buf (buffer-list))
-      (with-current-buffer buf
-        (when buffer-file-name
-          (when (or (buffer-modified-p)
-                    (not (file-exists-p buffer-file-name)))
-            (save-buffer)))))))
+	(dolist (buf (buffer-list))
+	  (with-current-buffer buf
+		(when buffer-file-name
+		  (when (or (buffer-modified-p)
+					(not (file-exists-p buffer-file-name)))
+			(save-buffer)))))))
 
 ;;; Function for using tab for autocompletion
 (defun my/auto-complete-at-point ()
   (when (and (not (minibufferp))
-             auto-complete-mode
-             (looking-back "\\(\\sw\\|\\s_\\)")
-             (not (looking-at "\\sw\\|\\s_")))
-    (auto-complete)))
+			 auto-complete-mode
+			 (looking-back "\\(\\sw\\|\\s_\\)")
+			 (not (looking-at "\\sw\\|\\s_")))
+	(auto-complete)))
 
 (defun my/set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions
-        (cons 'my/auto-complete-at-point
-              (remove 'my/auto-complete-at-point completion-at-point-functions))))
+		(cons 'my/auto-complete-at-point
+			  (remove 'my/auto-complete-at-point completion-at-point-functions))))
 
 (add-hook 'auto-complete-mode-hook 'my/set-auto-complete-as-completion-at-point-function)
 
@@ -2352,7 +2352,7 @@ confirmation.  Non–file‑visiting buffers are ignored."
 ;; Minor mode to selectively hide/show code and comment blocks.
 (defun my/enable-hs ()
   (ignore-errors
-    (hs-minor-mode)))
+	(hs-minor-mode)))
 
 (add-hook 'prog-mode-hook 'my/enable-hs)
 
@@ -2365,17 +2365,17 @@ confirmation.  Non–file‑visiting buffers are ignored."
   and then restores the original state of line numbers after navigation."
   (interactive)
   (let ((line-numbers-enabled (display-line-numbers-mode))
-        (line-number (read-number "Goto line: ")))
-    (unwind-protect
-        (progn
-          (display-line-numbers-mode 1)
-          (let ((line-count (count-lines (point-min) (point-max))))
-            (if (or (< line-number 1) (> line-number line-count))
-                (error "Line number must be between 1 and %d" line-count)
-              (goto-char (point-min))
-              (forward-line (1- line-number))
-              (message "[Moved to line %d]" line-number))))
-      (display-line-numbers-mode line-numbers-enabled))))
+		(line-number (read-number "Goto line: ")))
+	(unwind-protect
+		(progn
+		  (display-line-numbers-mode 1)
+		  (let ((line-count (count-lines (point-min) (point-max))))
+			(if (or (< line-number 1) (> line-number line-count))
+				(error "Line number must be between 1 and %d" line-count)
+			  (goto-char (point-min))
+			  (forward-line (1- line-number))
+			  (message "[Moved to line %d]" line-number))))
+	  (display-line-numbers-mode line-numbers-enabled))))
 
 ;; Remap goto-line.
 (global-set-key [remap goto-line] #'my/goto-line-with-line-numbers)
@@ -2385,8 +2385,8 @@ confirmation.  Non–file‑visiting buffers are ignored."
 (defun my/active-minor-modes ()
   "Return a list of active minor-mode symbols."
   (cl-loop for mode in minor-mode-list
-           if (and (boundp mode) (symbol-value mode))
-           collect mode))
+		   if (and (boundp mode) (symbol-value mode))
+		   collect mode))
 
 
 (defun my/describe-active-minor-mode (mode)
@@ -2395,12 +2395,12 @@ selection of all minor-modes, active or not."
   (interactive
    (list (completing-read "Describe active mode: " (my/active-minor-modes))))
   (let ((symbol
-         (cond ((stringp mode) (intern mode))
-               ((symbolp mode) mode)
-               ((error "Expected a symbol/string, got a %s" (type-of mode)))))
-        (fn (if (fboundp symbol) #'describe-function #'describe-variable)))
-    (funcall (or (command-remapping fn) fn)
-             symbol)))
+		 (cond ((stringp mode) (intern mode))
+			   ((symbolp mode) mode)
+			   ((error "Expected a symbol/string, got a %s" (type-of mode)))))
+		(fn (if (fboundp symbol) #'describe-function #'describe-variable)))
+	(funcall (or (command-remapping fn) fn)
+			 symbol)))
 
 ;;; Auto save files when out of focus
 (defun my/save-all-buffers ()
@@ -2415,11 +2415,11 @@ selection of all minor-modes, active or not."
 (defun my/open-recent-files ()
   (interactive)
   (let* ((all-files recentf-list)
-         (tocpl (mapcar (function
-                         (lambda (x) (cons (file-name-nondirectory x) x))) all-files))
-         (prompt (append '("File name: ") tocpl))
-         (fname (completing-read (car prompt) (cdr prompt) nil nil)))
-    (find-file (cdr (assoc-string fname tocpl)))))
+		 (tocpl (mapcar (function
+						 (lambda (x) (cons (file-name-nondirectory x) x))) all-files))
+		 (prompt (append '("File name: ") tocpl))
+		 (fname (completing-read (car prompt) (cdr prompt) nil nil)))
+	(find-file (cdr (assoc-string fname tocpl)))))
 
 (global-set-key (kbd "C-c r") #'my/open-recent-files)
 
@@ -2428,21 +2428,21 @@ selection of all minor-modes, active or not."
 ;;; Isearch word at point
 (defun my/isearch-yank-word-hook ()
   (when (equal this-command 'my-isearch-word-at-point)
-    (let ((string (concat "\\<"
-                          (buffer-substring-no-properties
-                           (progn (skip-syntax-backward "w_") (point))
-                           (progn (skip-syntax-forward "w_") (point)))
-                          "\\>")))
-      (if (and isearch-case-fold-search
-               (eq 'not-yanks search-upper-case))
-          (setq string (downcase string)))
-      (setq isearch-string string
-            isearch-message
-            (concat isearch-message
-                    (mapconcat 'isearch-text-char-description
-                               string ""))
-            isearch-yank-flag t)
-      (isearch-search-and-update))))
+	(let ((string (concat "\\<"
+						  (buffer-substring-no-properties
+						   (progn (skip-syntax-backward "w_") (point))
+						   (progn (skip-syntax-forward "w_") (point)))
+						  "\\>")))
+	  (if (and isearch-case-fold-search
+			   (eq 'not-yanks search-upper-case))
+		  (setq string (downcase string)))
+	  (setq isearch-string string
+			isearch-message
+			(concat isearch-message
+					(mapconcat 'isearch-text-char-description
+							   string ""))
+			isearch-yank-flag t)
+	  (isearch-search-and-update))))
 
 (add-hook 'isearch-mode-hook 'my/isearch-yank-word-hook)
 
@@ -2452,8 +2452,8 @@ selection of all minor-modes, active or not."
 (defun my/isearch-occur ()
   (interactive)
   (let ((case-fold-search isearch-case-fold-search))
-    (occur
-     (if isearch-regexp isearch-string (regexp-quote isearch-string)))))
+	(occur
+	 (if isearch-regexp isearch-string (regexp-quote isearch-string)))))
 
 
 
@@ -2461,13 +2461,13 @@ selection of all minor-modes, active or not."
 (defun my/replace-word (tosearch toreplace)
   (interactive "sSearch for word: \nsReplace with: ")
   (save-excursion
-    (goto-char (point-min))
-    (let ((case-fold-search nil)
-          (count 0))
-      (while (re-search-forward (concat "\\b" tosearch "\\b") nil t)
-        (setq count (1+ count))
-        (replace-match toreplace 'fixedcase 'literal))
-      (message "Replaced %s match(es)" count))))
+	(goto-char (point-min))
+	(let ((case-fold-search nil)
+		  (count 0))
+	  (while (re-search-forward (concat "\\b" tosearch "\\b") nil t)
+		(setq count (1+ count))
+		(replace-match toreplace 'fixedcase 'literal))
+	  (message "Replaced %s match(es)" count))))
 
 ;;; Utilities
 ;; Show ASCII Table List
@@ -2478,9 +2478,9 @@ selection of all minor-modes, active or not."
   (erase-buffer)
   (insert (format "ASCII characters up to number %d.\n" 254))
   (let* ((i 0))
-    (while (< i 254)
-      (setq i (+ i 1))
-      (insert (format "%4d  %c\n " i i))))
+	(while (< i 254)
+	  (setq i (+ i 1))
+	  (insert (format "%4d  %c\n " i i))))
   (goto-char (point-min)))
 
 ;;; Add numbering to a region
@@ -2488,51 +2488,51 @@ selection of all minor-modes, active or not."
   "Add numbering to a highlighted region."
   (interactive "r")
   (let ((counter 1)
-        (end-marker (copy-marker end)))
-    (save-excursion
-      (goto-char beg)
-      (beginning-of-line)
-      (while (< (point) end-marker)
-        (insert (format "%d. " counter))
-        (setq counter (1+ counter))
-        (forward-line 1))
-      (set-marker end-marker nil))))
+		(end-marker (copy-marker end)))
+	(save-excursion
+	  (goto-char beg)
+	  (beginning-of-line)
+	  (while (< (point) end-marker)
+		(insert (format "%d. " counter))
+		(setq counter (1+ counter))
+		(forward-line 1))
+	  (set-marker end-marker nil))))
 
 ;;; Insert Lorem Ipsum
 (defun my/insert-lorem-ipsum ()
   "Insert a lorem ipsum."
   (interactive)
   (insert "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do "
-          "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim"
-          "ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
-          "aliquip ex ea commodo consequat. Duis aute irure dolor in "
-          "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
-          "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
-          "culpa qui officia deserunt mollit anim id est laborum."))
+		  "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim"
+		  "ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
+		  "aliquip ex ea commodo consequat. Duis aute irure dolor in "
+		  "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
+		  "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
+		  "culpa qui officia deserunt mollit anim id est laborum."))
 
 ;;; Better `timestamp' and datestamp
 (defun my/insert-timestamp()
   "Insert the current time in yyyy-mm-dd format."
   (interactive "*")
   (if (eq major-mode 'org-mode)
-      (progn
-        (org-insert-time-stamp nil t nil)
-        (insert " ")
-        )
-    (insert (format-time-string "%Y-%m-%d" (current-time)))
-    )
+	  (progn
+		(org-insert-time-stamp nil t nil)
+		(insert " ")
+		)
+	(insert (format-time-string "%Y-%m-%d" (current-time)))
+	)
   )
 
 (defun my/insert-datestamp()
   "Insert the current date in yyyy-mm-dd format."
   (interactive "*")
   (if (eq major-mode 'org-mode)
-      (progn
-        (org-insert-time-stamp nil nil nil)
-        (insert " ")
-        )
-    (insert (format-time-string "%Y-%m-%d" (current-time)))
-    )
+	  (progn
+		(org-insert-time-stamp nil nil nil)
+		(insert " ")
+		)
+	(insert (format-time-string "%Y-%m-%d" (current-time)))
+	)
   )
 
 ;;; Better Switcher
@@ -2548,37 +2548,37 @@ selection of all minor-modes, active or not."
 "
   (interactive)
   (let* ((buffers (mapcar #'buffer-name (buffer-list)))
-         (recent-files recentf-list)
-         (bookmarks (bookmark-all-names))
-         ;; (file-at-point (list (ffap-guesser)))
-         ;;(themes (custom-available-themes))
-         ;; (directories dired-recent-directories)
-         ;; (eyebrowse (--map (eyebrowse-format-slot it) (eyebrowse--get 'window-configs)))
-         (all-options (append
-                       buffers
-                       recent-files
-                       bookmarks
-                       ;; eyebrowse
-                       ;; directories
-                       ;; (mapcar (lambda (theme) (concat "Theme: " (symbol-name theme))) themes)
-                       ))
-         (selection (completing-read "Switch to: "
-                                     (lambda (str pred action)
-                                       (if (eq action 'metadata)
-                                           '(metadata . ((category . file)))
-                                         (complete-with-action action all-options str pred)))
-                                     nil t nil 'file-name-history)))
-    (message (concat "DEBUG: selection =" selection))
-    (pcase selection
-      ;; ((pred (lambda (sel) (member sel eyebrowse)))
-      ;;  ;; may be a bit hacky but this trick converts the string selection that looks like "3:my config" to the number 3:
-      ;;  (eyebrowse-switch-to-window-config (my-number-or-float selection)))
-      ((pred (lambda (sel) (member sel buffers))) (switch-to-buffer selection))
-      ((pred (lambda (sel) (member sel bookmarks))) (bookmark-jump selection))
-      ;; ((pred (lambda (sel) (member sel directories))) (dired selection))
-      ;;((pred (lambda (sel) (string-prefix-p "Theme: " sel)))
-      ;; (load-theme (intern (substring selection (length "Theme: "))) t))
-      (_ (find-file selection)))))
+		 (recent-files recentf-list)
+		 (bookmarks (bookmark-all-names))
+		 ;; (file-at-point (list (ffap-guesser)))
+		 ;;(themes (custom-available-themes))
+		 ;; (directories dired-recent-directories)
+		 ;; (eyebrowse (--map (eyebrowse-format-slot it) (eyebrowse--get 'window-configs)))
+		 (all-options (append
+					   buffers
+					   recent-files
+					   bookmarks
+					   ;; eyebrowse
+					   ;; directories
+					   ;; (mapcar (lambda (theme) (concat "Theme: " (symbol-name theme))) themes)
+					   ))
+		 (selection (completing-read "Switch to: "
+									 (lambda (str pred action)
+									   (if (eq action 'metadata)
+										   '(metadata . ((category . file)))
+										 (complete-with-action action all-options str pred)))
+									 nil t nil 'file-name-history)))
+	(message (concat "DEBUG: selection =" selection))
+	(pcase selection
+	  ;; ((pred (lambda (sel) (member sel eyebrowse)))
+	  ;;  ;; may be a bit hacky but this trick converts the string selection that looks like "3:my config" to the number 3:
+	  ;;  (eyebrowse-switch-to-window-config (my-number-or-float selection)))
+	  ((pred (lambda (sel) (member sel buffers))) (switch-to-buffer selection))
+	  ((pred (lambda (sel) (member sel bookmarks))) (bookmark-jump selection))
+	  ;; ((pred (lambda (sel) (member sel directories))) (dired selection))
+	  ;;((pred (lambda (sel) (string-prefix-p "Theme: " sel)))
+	  ;; (load-theme (intern (substring selection (length "Theme: "))) t))
+	  (_ (find-file selection)))))
 
 (global-set-key (kbd "C-c SPC") 'my/switch-to-thing)
 
@@ -2586,9 +2586,9 @@ selection of all minor-modes, active or not."
 ;;; Add advice to `delete-blank-lines'
 (defun my/delete-blank-lines-in-region (&rest args)
   (let ((do-not-run-orig-fn (use-region-p)))
-    (when do-not-run-orig-fn
-      (flush-lines "^[[:blank:]]*$" (region-beginning) (region-end)))
-    do-not-run-orig-fn))
+	(when do-not-run-orig-fn
+	  (flush-lines "^[[:blank:]]*$" (region-beginning) (region-end)))
+	do-not-run-orig-fn))
 (advice-add 'delete-blank-lines :before-until #'my/delete-blank-lines-in-region)
 
 ;;; Anonymize
@@ -2605,21 +2605,21 @@ to help with some debug.
 If ONLY-NUMBERS is non-nil, randomize only the numbers."
   (interactive "P")
   (let ((beg (if (use-region-p) (region-beginning) (point-min)))
-        (end (if (use-region-p) (region-end) (point-max))))
-    (save-restriction
-      (narrow-to-region beg end)
-      (save-excursion
-        (let ((case-fold-search nil))
-          (unless only-numbers
-            (goto-char (point-min))
-            (while (re-search-forward "[a-z]" nil :noerror)
-              (replace-match (char-to-string (+ ?a (random (- ?z ?a))))))
-            (goto-char (point-min))
-            (while (re-search-forward "[A-Z]" nil :noerror)
-              (replace-match (char-to-string (+ ?A (random (- ?Z ?A)))))))
-          (goto-char (point-min))
-          (while (re-search-forward "[0-9]" nil :noerror)
-            (replace-match (char-to-string (+ ?0 (random (- ?9 ?0)))))))))))
+		(end (if (use-region-p) (region-end) (point-max))))
+	(save-restriction
+	  (narrow-to-region beg end)
+	  (save-excursion
+		(let ((case-fold-search nil))
+		  (unless only-numbers
+			(goto-char (point-min))
+			(while (re-search-forward "[a-z]" nil :noerror)
+			  (replace-match (char-to-string (+ ?a (random (- ?z ?a))))))
+			(goto-char (point-min))
+			(while (re-search-forward "[A-Z]" nil :noerror)
+			  (replace-match (char-to-string (+ ?A (random (- ?Z ?A)))))))
+		  (goto-char (point-min))
+		  (while (re-search-forward "[0-9]" nil :noerror)
+			(replace-match (char-to-string (+ ?0 (random (- ?9 ?0)))))))))))
 
 
 
@@ -2630,8 +2630,8 @@ If ONLY-NUMBERS is non-nil, randomize only the numbers."
   "Prompt the user for a yes or no response, but accept any non-y
 response as a no."
   (let ((query-replace-map (copy-keymap query-replace-map)))
-    (define-key query-replace-map [t] 'skip)
-    (y-or-n-p prompt)))
+	(define-key query-replace-map [t] 'skip)
+	(y-or-n-p prompt)))
 
 ;;; Show the evaluated value of an expression as a comment
 (defun my/show-me ()
@@ -2642,13 +2642,13 @@ response as a no."
   "
   (interactive)
   (-let [it
-         (thread-last (thing-at-point 'line)
-                      read-from-string
-                      car
-                      eval
-                      (format " ;; ⇒ %s"))]
-    (end-of-line)
-    (insert it)))
+		 (thread-last (thing-at-point 'line)
+					  read-from-string
+					  car
+					  eval
+					  (format " ;; ⇒ %s"))]
+	(end-of-line)
+	(insert it)))
 
 ;;; Kill all buffers that are not associated with a file
 (defun my/clean-buffers ()
@@ -2663,25 +2663,25 @@ response as a no."
   "Call this method, then enter say “-fri” to see tasks timestamped for last Friday."
   (interactive)
   (let* ((date (org-read-date))
-         (org-agenda-buffer-tmp-name (format "*Org Agenda(a:%s)*" date))
-         (org-agenda-sticky nil)
-         (org-agenda-span 'day)
-         ;; Putting the agenda in log mode, allows to see the tasks marked as DONE
-         ;; at the corresponding time of closing. If, like me, you clock all your
-         ;; working time, the task will appear also every time it was worked on.
-         ;; This is great to get a sens of what was accomplished.
-         (org-agenda-start-with-log-mode t))
-    (org-agenda-list nil date nil)))
+		 (org-agenda-buffer-tmp-name (format "*Org Agenda(a:%s)*" date))
+		 (org-agenda-sticky nil)
+		 (org-agenda-span 'day)
+		 ;; Putting the agenda in log mode, allows to see the tasks marked as DONE
+		 ;; at the corresponding time of closing. If, like me, you clock all your
+		 ;; working time, the task will appear also every time it was worked on.
+		 ;; This is great to get a sens of what was accomplished.
+		 (org-agenda-start-with-log-mode t))
+	(org-agenda-list nil date nil)))
 
 ;;; Replace a word at point
 (defun my/symbol-replace (replacement)
   "Replace all standalone symbols in the buffer matching the one at point."
   (interactive  (list (read-from-minibuffer "Replacement for thing at point: " nil)))
   (save-excursion
-    (let ((symbol (or (thing-at-point 'symbol) (error "No symbol at point!"))))
-      (beginning-of-buffer)
-      ;; (query-replace-regexp symbol replacement)
-      (replace-regexp (format "\\b%s\\b" (regexp-quote symbol)) replacement))))
+	(let ((symbol (or (thing-at-point 'symbol) (error "No symbol at point!"))))
+	  (beginning-of-buffer)
+	  ;; (query-replace-regexp symbol replacement)
+	  (replace-regexp (format "\\b%s\\b" (regexp-quote symbol)) replacement))))
 
 
 
@@ -2690,8 +2690,8 @@ response as a no."
   (interactive "P")
   (set-selective-display
    (or column
-       (unless selective-display
-         (1+ (current-column))))))
+	   (unless selective-display
+		 (1+ (current-column))))))
 
 
 ;;; Delete entries into the kill ring related to specific current buffer
@@ -2708,11 +2708,11 @@ clipboard for other applications as well."
   ;; empty string matches anything.
   (kill-new "")
   (setq kill-ring
-        (cl-loop
-         with bufstring = (with-current-buffer (or buffer (current-buffer)) (buffer-string))
-         for kill in kill-ring
-         unless (string-match-p (regexp-quote kill) bufstring)
-         collect kill))
+		(cl-loop
+		 with bufstring = (with-current-buffer (or buffer (current-buffer)) (buffer-string))
+		 for kill in kill-ring
+		 unless (string-match-p (regexp-quote kill) bufstring)
+		 collect kill))
   (gui-set-selection 'CLIPBOARD (or (car kill-ring) ""))
   (gui-set-selection 'PRIMARY "")
   ;; (gui-set-selection 'SECONDARY "")
@@ -2727,10 +2727,10 @@ clipboard for other applications as well."
   "Create an untitled file."
   (interactive)
   (let ((buf (generate-new-buffer "untitled")))
-    (switch-to-buffer buf)
-    (funcall initial-major-mode)
-    (setq buffer-offer-save t)
-    buf))
+	(switch-to-buffer buf)
+	(funcall initial-major-mode)
+	(setq buffer-offer-save t)
+	buf))
 
 ;;; Reopen Recently Closed Buffer
 (defvar killed-buffer-list nil
@@ -2740,7 +2740,7 @@ clipboard for other applications as well."
   "If buffer is associated with a file name, add that file
 to the `killed-buffer-list' when killing the buffer."
   (when buffer-file-name
-    (push buffer-file-name killed-buffer-list)))
+	(push buffer-file-name killed-buffer-list)))
 (add-hook 'kill-buffer-hook #'add-buffer-to-killed-list)
 
 
@@ -2748,24 +2748,24 @@ to the `killed-buffer-list' when killing the buffer."
   "Reopen the most recently killed file buffer, if one exists."
   (interactive)
   (when killed-buffer-list
-    (find-file (pop killed-buffer-list))))
+	(find-file (pop killed-buffer-list))))
 
 ;;; Make current file executable
 (defun set-file-executable ()
   "Add executable permissions on current file."
   (interactive)
   (when (buffer-file-name)
-    (set-file-modes buffer-file-name
-                    (logior (file-modes buffer-file-name) #o100))
-    (message (concat "Made " buffer-file-name " executable"))))
+	(set-file-modes buffer-file-name
+					(logior (file-modes buffer-file-name) #o100))
+	(message (concat "Made " buffer-file-name " executable"))))
 
 ;;; Create a lisp buffer for testing
 (defun my/lisp-interaction-buffer ()
   (interactive)
   (let ((buf (get-buffer-create "*lisp-interaction*")))
-    (with-current-buffer buf
-      (lisp-interaction-mode))
-    (switch-to-buffer buf)))
+	(with-current-buffer buf
+	  (lisp-interaction-mode))
+	(switch-to-buffer buf)))
 
 
 ;;; Dired Related
@@ -2774,9 +2774,9 @@ to the `killed-buffer-list' when killing the buffer."
   "Kill all open dired buffers."
   (interactive)
   (mapc (lambda (buffer)
-          (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
-            (kill-buffer buffer)))
-        (buffer-list)))
+		  (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
+			(kill-buffer buffer)))
+		(buffer-list)))
 
 ;;; Delete Blank Lines
 (defun my/delete-blank-lines (start end)
@@ -2795,33 +2795,33 @@ Optionally RESET the type when called with `universal-argument'."
   (interactive "P")
 
   (if reset
-      (setq-local cursor-type t)
-    (let* ((type-string (completing-read "Select cursor type: " my-cursor-types))
-           (type (intern type-string)))
+	  (setq-local cursor-type t)
+	(let* ((type-string (completing-read "Select cursor type: " my-cursor-types))
+		   (type (intern type-string)))
 
-      (setq-local cursor-type type))))
+	  (setq-local cursor-type type))))
 
 
 ;; Cursor customization based on buffer state.
 (defun my/update-cursor-appearance ()
   "Update cursor color and shape based on buffer state (read-only, overwrite, or insert)."
   (let* ((is-light-theme (eq (frame-parameter nil 'background-mode) 'light))
-         (cursor-colors `((read-only . "purple1")
-                          (overwrite . "#7F7F7F")
-                          (default . ,(if is-light-theme "black" "white"))))
-         current-color
-         current-type)
-    (setq current-color
-          (cond (buffer-read-only
-                 (cdr (assoc 'read-only cursor-colors)))
-                (overwrite-mode
-                 (cdr (assoc 'overwrite cursor-colors)))
-                (t
-                 (cdr (assoc 'default cursor-colors)))))
-    (setq current-type (if overwrite-mode 'box 'bar))
-    (when (color-defined-p current-color)
-      (set-cursor-color current-color))
-    (setq cursor-type current-type)))
+		 (cursor-colors `((read-only . "purple1")
+						  (overwrite . "#7F7F7F")
+						  (default . ,(if is-light-theme "black" "white"))))
+		 current-color
+		 current-type)
+	(setq current-color
+		  (cond (buffer-read-only
+				 (cdr (assoc 'read-only cursor-colors)))
+				(overwrite-mode
+				 (cdr (assoc 'overwrite cursor-colors)))
+				(t
+				 (cdr (assoc 'default cursor-colors)))))
+	(setq current-type (if overwrite-mode 'box 'bar))
+	(when (color-defined-p current-color)
+	  (set-cursor-color current-color))
+	(setq cursor-type current-type)))
 
 ;; Update cursor on every command.
 (add-hook 'post-command-hook #'my/update-cursor-appearance)
@@ -2842,22 +2842,22 @@ ARG is passed to `kill-line' and function `kill-whole-line'."
   (interactive "P")
 
   (if (region-active-p)
-      (kill-region nil nil t)
-    (let ((p-before (point))
-          (p-end nil)
-          (p-beg nil))
+	  (kill-region nil nil t)
+	(let ((p-before (point))
+		  (p-end nil)
+		  (p-beg nil))
 
-      (save-excursion
-        (end-of-line)
-        (setq p-end (point))
+	  (save-excursion
+		(end-of-line)
+		(setq p-end (point))
 
-        (beginning-of-line)
-        (setq p-beg (point)))
+		(beginning-of-line)
+		(setq p-beg (point)))
 
-      (if (and (/= p-before p-beg) (/= p-before p-end))
-          (kill-line arg)
-        (kill-whole-line arg)
-        (beginning-of-line-text)))))
+	  (if (and (/= p-before p-beg) (/= p-before p-end))
+		  (kill-line arg)
+		(kill-whole-line arg)
+		(beginning-of-line-text)))))
 
 (global-set-key [remap kill-line] #'my/kill-dwim)
 
@@ -2869,8 +2869,8 @@ Interactively, reverse the characters in the current region."
   (interactive "*r")
   (insert
    (reverse
-    (delete-and-extract-region
-     beg end))))
+	(delete-and-extract-region
+	 beg end))))
 
 ;;; Describe Keymap
 (defun my/describe-keymap (keymap)
@@ -2879,19 +2879,19 @@ Interactively, select a keymap from the list of all defined
 keymaps."
   (interactive
    (list
-    (intern
-     (completing-read
-      "Keymap: " obarray
-      (lambda (m)
-        (and (boundp m)
-             (keymapp (symbol-value m))))
-      'require-match
-      nil nil (thing-at-point 'symbol)))))
+	(intern
+	 (completing-read
+	  "Keymap: " obarray
+	  (lambda (m)
+		(and (boundp m)
+			 (keymapp (symbol-value m))))
+	  'require-match
+	  nil nil (thing-at-point 'symbol)))))
   (with-help-window (help-buffer)
-    (with-current-buffer (help-buffer)
-      (insert (format "Keymap `%S' defines the following bindings:" keymap)
-              "\n\n"
-              (substitute-command-keys (format "\\{%S}" keymap))))))
+	(with-current-buffer (help-buffer)
+	  (insert (format "Keymap `%S' defines the following bindings:" keymap)
+			  "\n\n"
+			  (substitute-command-keys (format "\\{%S}" keymap))))))
 
 ;;; Describe Symbol
 (defun my/find-symbol (&optional symbol)
@@ -2899,25 +2899,25 @@ keymaps."
 SYMBOL is as in `xref-find-definitions'."
   (interactive)
   (let ((xref-backend-functions '(elisp--xref-backend))
-        ;; Make this command behave the same as `find-function' and
-        ;; `find-variable', i.e. always prompt for an identifier,
-        ;; defaulting to the one at point.
-        (xref-prompt-for-identifier t))
-    (if symbol
-        (xref-find-definitions symbol)
-      (call-interactively 'xref-find-definitions))))
+		;; Make this command behave the same as `find-function' and
+		;; `find-variable', i.e. always prompt for an identifier,
+		;; defaulting to the one at point.
+		(xref-prompt-for-identifier t))
+	(if symbol
+		(xref-find-definitions symbol)
+	  (call-interactively 'xref-find-definitions))))
 
 ;;; Describe Symbol Without Changing Focus
 (defun my/describe-peek (sym)
   "Show help for SYM without changing focus."
   (interactive
    (list (or (symbol-at-point)
-             (with-demoted-errors "describe-peek error: %S"
-               (save-excursion (backward-up-list)
-                               (forward-char)
-                               (symbol-at-point))))))
+			 (with-demoted-errors "describe-peek error: %S"
+			   (save-excursion (backward-up-list)
+							   (forward-char)
+							   (symbol-at-point))))))
   (when sym
-    (describe-symbol sym)))
+	(describe-symbol sym)))
 
 
 
@@ -2928,9 +2928,9 @@ SYMBOL is as in `xref-find-definitions'."
   "Select and insert an image into org file."
   (interactive)
   (let ((selected-file (read-file-name "Select image: " "~/Pictures/" nil t)))
-    (when selected-file
-      (insert (format "[[file:%s]]\n" selected-file))
-      (org-display-inline-images))))
+	(when selected-file
+	  (insert (format "[[file:%s]]\n" selected-file))
+	  (org-display-inline-images))))
 
 
 ;;; Avoid the description of all minor modes.
@@ -2944,13 +2944,13 @@ SYMBOL is as in `xref-find-definitions'."
   "Get help for the symbol at point."
   (interactive)
   (let ((sym (intern-soft (current-word))))
-    (unless
-        (cond ((null sym))
-              ((not (eq t (help-function-arglist sym)))
-               (describe-function sym))
-              ((boundp sym)
-               (describe-variable sym)))
-      (message "[nothing]"))))
+	(unless
+		(cond ((null sym))
+			  ((not (eq t (help-function-arglist sym)))
+			   (describe-function sym))
+			  ((boundp sym)
+			   (describe-variable sym)))
+	  (message "[nothing]"))))
 
 (global-set-key (kbd "<f1>") #'my/describe-elisp-symbol-at-point)
 
@@ -2961,13 +2961,13 @@ SYMBOL is as in `xref-find-definitions'."
   "Display a list of available fonts in a new buffer."
   (interactive)
   (let ((font-list (sort (font-family-list) 'string<))
-        (buffer-name "*Available Fonts*"))
-    (with-output-to-temp-buffer buffer-name
-      (with-current-buffer buffer-name
-        (dolist (font font-list)
-          (insert font "\n"))
-        (special-mode)))
-    (pop-to-buffer buffer-name)))
+		(buffer-name "*Available Fonts*"))
+	(with-output-to-temp-buffer buffer-name
+	  (with-current-buffer buffer-name
+		(dolist (font font-list)
+		  (insert font "\n"))
+		(special-mode)))
+	(pop-to-buffer buffer-name)))
 
 
 ;;; KILL DWIM
@@ -2986,22 +2986,22 @@ ARG is passed to `kill-line' and function `kill-whole-line'."
   (interactive "P")
 
   (if (region-active-p)
-      (kill-region nil nil t)
-    (let ((p-before (point))
-          (p-end nil)
-          (p-beg nil))
+	  (kill-region nil nil t)
+	(let ((p-before (point))
+		  (p-end nil)
+		  (p-beg nil))
 
-      (save-excursion
-        (end-of-line)
-        (setq p-end (point))
+	  (save-excursion
+		(end-of-line)
+		(setq p-end (point))
 
-        (beginning-of-line)
-        (setq p-beg (point)))
+		(beginning-of-line)
+		(setq p-beg (point)))
 
-      (if (and (/= p-before p-beg) (/= p-before p-end))
-          (kill-line arg)
-        (kill-whole-line arg)
-        (beginning-of-line-text)))))
+	  (if (and (/= p-before p-beg) (/= p-before p-end))
+		  (kill-line arg)
+		(kill-whole-line arg)
+		(beginning-of-line-text)))))
 
 
 
@@ -3023,10 +3023,10 @@ ARG is passed to `kill-line' and function `kill-whole-line'."
   (interactive)
   (browse-url
    (concat
-    "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
-    (if mark-active
-        (buffer-substring (region-beginning) (region-end))
-      (read-string "Google: ")))))
+	"http://www.google.com/search?ie=utf-8&oe=utf-8&q="
+	(if mark-active
+		(buffer-substring (region-beginning) (region-end))
+	  (read-string "Google: ")))))
 
 
 ;;; Minor mode to hide the modeline
@@ -3037,20 +3037,20 @@ ARG is passed to `kill-line' and function `kill-whole-line'."
   :variable hidden-mode-line-mode
   :group 'editing-basics
   (if hidden-mode-line-mode
-      (setq hide-mode-line mode-line-format
-            mode-line-format nil)
-    (setq mode-line-format hide-mode-line
-          hide-mode-line nil))
+	  (setq hide-mode-line mode-line-format
+			mode-line-format nil)
+	(setq mode-line-format hide-mode-line
+		  hide-mode-line nil))
   (force-mode-line-update)
   ;; Apparently force-mode-line-update is not always enough to
   ;; redisplay the mode-line
   (redraw-display)
   (when (and (called-interactively-p 'interactive)
-             hidden-mode-line-mode)
-    (run-with-idle-timer
-     0 nil 'message
-     (concat "Hidden Mode Line Mode enabled.  "
-             "Use M-x hidden-mode-line-mode to make the mode-line appear."))))
+			 hidden-mode-line-mode)
+	(run-with-idle-timer
+	 0 nil 'message
+	 (concat "Hidden Mode Line Mode enabled.  "
+			 "Use M-x hidden-mode-line-mode to make the mode-line appear."))))
 
 ;; (add-hook 'after-change-major-mode-hook 'my/hidden-mode-line-mode)
 
@@ -3066,17 +3066,17 @@ With three or more universal PREFIX `save-buffers-kill-emacs'."
   (interactive "p")
   (cond
    ((eq prefix nil)
-    (if buffer-read-only (kill-current-buffer) (bury-buffer)))
+	(if buffer-read-only (kill-current-buffer) (bury-buffer)))
    ((>= prefix 64)
-    (progn
-      (let ((save-silently t)) (recentf-save-list))
-      (save-buffers-kill-emacs t)))
+	(progn
+	  (let ((save-silently t)) (recentf-save-list))
+	  (save-buffers-kill-emacs t)))
    ((>= prefix 16)
-    (delete-frame))
+	(delete-frame))
    ((>= prefix 4)
-    (unbury-buffer))
+	(unbury-buffer))
    (t
-    (if buffer-read-only (kill-current-buffer) (bury-buffer)))))
+	(if buffer-read-only (kill-current-buffer) (bury-buffer)))))
 
 
 ;;; Transpose Windows
@@ -3084,23 +3084,23 @@ With three or more universal PREFIX `save-buffers-kill-emacs'."
   "Swap the buffers shown in current and next window."
   (interactive)
   (let ((this-buffer (window-buffer))
-        (next-window (next-window nil :no-minibuf nil)))
-    (set-window-buffer nil (window-buffer next-window))
-    (set-window-buffer next-window this-buffer)
-    (select-window next-window)))
+		(next-window (next-window nil :no-minibuf nil)))
+	(set-window-buffer nil (window-buffer next-window))
+	(set-window-buffer next-window this-buffer)
+	(select-window next-window)))
 
 ;;; Create buffer
 (defun my/new-buffer (name)
   "Create a new buffer, prompting for NAME."
   (interactive
    (list (read-string
-          "Create buffer (default \"untitled\"): "
-          nil nil "untitled")))
+		  "Create buffer (default \"untitled\"): "
+		  nil nil "untitled")))
   (let ((buffer (generate-new-buffer name)))
-    (switch-to-buffer buffer)
-    (text-mode)
-    (setq-local buffer-offer-save t)
-    (setq-local buffer-confirm-kill t)))
+	(switch-to-buffer buffer)
+	(text-mode)
+	(setq-local buffer-offer-save t)
+	(setq-local buffer-confirm-kill t)))
 
 
 ;;; Edit Rectangle
@@ -3111,28 +3111,28 @@ With three or more universal PREFIX `save-buffers-kill-emacs'."
 (defun edit-rectangle (&optional start end)
   (interactive "r")
   (let ((strs (delete-extract-rectangle start end))
-        (mode major-mode)
-        (here (copy-marker (min (mark) (point)) t))
-        (config (current-window-configuration)))
-    (with-current-buffer (generate-new-buffer "*Rectangle*")
-      (funcall mode)
-      (set (make-local-variable 'edit-rectangle-origin) here)
-      (set (make-local-variable 'edit-rectangle-saved-window-config) config)
-      (local-set-key (kbd "C-c C-c") #'restore-rectangle)
-      (mapc #'(lambda (x) (insert x ?\n)) strs)
-      (goto-char (point-min))
-      (pop-to-buffer (current-buffer)))))
+		(mode major-mode)
+		(here (copy-marker (min (mark) (point)) t))
+		(config (current-window-configuration)))
+	(with-current-buffer (generate-new-buffer "*Rectangle*")
+	  (funcall mode)
+	  (set (make-local-variable 'edit-rectangle-origin) here)
+	  (set (make-local-variable 'edit-rectangle-saved-window-config) config)
+	  (local-set-key (kbd "C-c C-c") #'restore-rectangle)
+	  (mapc #'(lambda (x) (insert x ?\n)) strs)
+	  (goto-char (point-min))
+	  (pop-to-buffer (current-buffer)))))
 
 (defun restore-rectangle ()
   (interactive)
   (let ((content (split-string (buffer-string) "\n"))
-        (origin edit-rectangle-origin)
-        (config edit-rectangle-saved-window-config))
-    (with-current-buffer (marker-buffer origin)
-      (goto-char origin)
-      (insert-rectangle content))
-    (kill-buffer (current-buffer))
-    (set-window-configuration config)))
+		(origin edit-rectangle-origin)
+		(config edit-rectangle-saved-window-config))
+	(with-current-buffer (marker-buffer origin)
+	  (goto-char origin)
+	  (insert-rectangle content))
+	(kill-buffer (current-buffer))
+	(set-window-configuration config)))
 
 
 
@@ -3141,8 +3141,8 @@ With three or more universal PREFIX `save-buffers-kill-emacs'."
 (defun my/default-hide-app ()
   (interactive)
   (if (one-window-p)
-      (bury-buffer)
-    (delete-window)))
+	  (bury-buffer)
+	(delete-window)))
 (global-set-key (kbd "C-c q") #'my/default-hide-app)
 
 ;;; Kill current buffer
@@ -3160,7 +3160,7 @@ With three or more universal PREFIX `save-buffers-kill-emacs'."
   (ignore-errors (recenter))
   (iqbal-highlight-line)
   (when (equal major-mode 'org-mode)
-    (org-show-subtree)))
+	(org-show-subtree)))
 
 (add-hook 'imenu-after-jump-hook #'my/reorient t)
 ;; After jumping to occurrence from occur mode
@@ -3190,32 +3190,32 @@ with prefix it prompts you for the name of the buffer.
 if called interactively, the new buffer is switched to."
   (interactive "Pp")
   (let* ((def-buf-name scratch-buffer-name+)
-         (buffer-name
-          (cond
-           ((stringp buffer-name) buffer-name)
-           (buffer-name (read-buffer "buffer name: " def-buf-name))
-           (t def-buf-name)))
-         (buffer-name (generate-new-buffer-name buffer-name))
-         (buffer (get-buffer-create buffer-name)))
-    (with-current-buffer buffer
-      ;; Setup copied from `get-scratch-buffer-create'.
-      ;; (when initial-scratch-message
-      ;;   (insert (substitute-command-keys initial-scratch-message))
-      ;;   (set-buffer-modified-p nil))
-      (funcall initial-major-mode))
-    (when (called-interactively-p 'interactive)
-      (switch-to-buffer buffer))
+		 (buffer-name
+		  (cond
+		   ((stringp buffer-name) buffer-name)
+		   (buffer-name (read-buffer "buffer name: " def-buf-name))
+		   (t def-buf-name)))
+		 (buffer-name (generate-new-buffer-name buffer-name))
+		 (buffer (get-buffer-create buffer-name)))
+	(with-current-buffer buffer
+	  ;; Setup copied from `get-scratch-buffer-create'.
+	  ;; (when initial-scratch-message
+	  ;;   (insert (substitute-command-keys initial-scratch-message))
+	  ;;   (set-buffer-modified-p nil))
+	  (funcall initial-major-mode))
+	(when (called-interactively-p 'interactive)
+	  (switch-to-buffer buffer))
 
-    buffer))
+	buffer))
 
 ;;; Kill Buffer
 (defun +kill-this-buffer-and-window-maybe ()
   "Kills the currently open buffer and the window if another is open"
   (interactive)
   (let ((window-count (length (window-list))))
-    (if (> window-count 1)
-        (kill-buffer-and-window)
-      (kill-current-buffer))))
+	(if (> window-count 1)
+		(kill-buffer-and-window)
+	  (kill-current-buffer))))
 
 ;;; Run shell commands in the buffer
 (defun +shell-command-on-buffer (&optional prefix)
@@ -3224,20 +3224,20 @@ as input. if prefix is given, output of command is inserted in current buffer
 at point."
   (interactive "P")
   (let ((command (read-shell-command "Shell command on buffer: "))
-        (input-buffer (current-buffer)) output-buffer process-output)
-    (with-temp-buffer ;; needed for process output
-      (setq output-buffer (current-buffer))
+		(input-buffer (current-buffer)) output-buffer process-output)
+	(with-temp-buffer ;; needed for process output
+	  (setq output-buffer (current-buffer))
 
-      (with-current-buffer input-buffer
-        (shell-command-on-region
-         (point-min) (point-max)
-         command output-buffer nil output-buffer))
+	  (with-current-buffer input-buffer
+		(shell-command-on-region
+		 (point-min) (point-max)
+		 command output-buffer nil output-buffer))
 
-      (setq process-output (buffer-string)))
+	  (setq process-output (buffer-string)))
 
-    (if prefix
-        (insert process-output)
-      (message process-output))))
+	(if prefix
+		(insert process-output)
+	  (message process-output))))
 
 ;;; Better Help Functions
 ;;; Describe keymap at point
@@ -3245,33 +3245,33 @@ at point."
   "List entire keymaps present at point."
   (interactive)
   (let ((map-list
-         (list
-          (mapcar (lambda (overlay)
-                    (overlay-get overlay 'keymap))
-                  (overlays-at (point)))
-          (mapcar (lambda (overlay)
-                    (overlay-get overlay 'local-map))
-                  (overlays-at (point)))
-          (get-text-property (point) 'keymap)
-          (get-text-property (point) 'local-map))))
-    (apply #'message
-           (concat
-            "Overlay keymap: %s\n"
-            "Overlay local-map: %s\n"
-            "Text-property keymap: %s\n"
-            "Text-property local-map: %s")
-           map-list)))
+		 (list
+		  (mapcar (lambda (overlay)
+					(overlay-get overlay 'keymap))
+				  (overlays-at (point)))
+		  (mapcar (lambda (overlay)
+					(overlay-get overlay 'local-map))
+				  (overlays-at (point)))
+		  (get-text-property (point) 'keymap)
+		  (get-text-property (point) 'local-map))))
+	(apply #'message
+		   (concat
+			"Overlay keymap: %s\n"
+			"Overlay local-map: %s\n"
+			"Text-property keymap: %s\n"
+			"Text-property local-map: %s")
+		   map-list)))
 
 ;;; Describe font at point
 (defun +list-faces (&optional point)
   (interactive "d")
   (or point (setq point (point)))
   (let ((faces (remq nil
-                     `(,(get-char-property point 'read-face-name)
-                       ,(get-char-property point 'face)
-                       ,(plist-get (text-properties-at point) 'face)))))
-    (and (called-interactively-p 'any) (message (format "%s" faces)))
-    faces))
+					 `(,(get-char-property point 'read-face-name)
+					   ,(get-char-property point 'face)
+					   ,(plist-get (text-properties-at point) 'face)))))
+	(and (called-interactively-p 'any) (message (format "%s" faces)))
+	faces))
 
 ;;; Toggle Relative Line Number
 
@@ -3283,15 +3283,34 @@ otherwise if ARG is greater than 0 then they're enabled and if ARG is
 nil then relative line-numbers are toggled."
   (interactive "P")
   (setq display-line-numbers
-        (cond
-         ((and arg (zerop (prefix-numeric-value arg)))
-          t)
-         (arg 'relative)
-         (t
-          (if (eq display-line-numbers 'relative) t 'relative)))))
+		(cond
+		 ((and arg (zerop (prefix-numeric-value arg)))
+		  t)
+		 (arg 'relative)
+		 (t
+		  (if (eq display-line-numbers 'relative) t 'relative)))))
 
 ;;; Inhibit Message Wrapper
 
+
+;;; Emacs File Startup Setup
+(defun my/startup-elisp ()
+  "Add minimal header and footer to an elisp buffer in order to placate flycheck."
+  (interactive)
+  (let ((fname (if (buffer-file-name)
+				   (file-name-nondirectory (buffer-file-name))
+				 (error "This buffer is not visiting a file"))))
+	(save-excursion
+	  (goto-char (point-min))
+	  (insert ";;; " fname " --- Insert description here -*- lexical-binding: t -*-\n"
+			  ";;; Commentary:\n"
+			  ";;; Code:\n\n")
+	  (goto-char (- (point-max) 1))
+	  (insert "\n\n\n;;; Code ends here")
+	  (goto-char (point-max))
+	  (insert ";;; " fname " ends here\n")
+
+	  )))
 
 ;;; ef-functions ends here
 (provide 'ef-functions)
