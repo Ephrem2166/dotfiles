@@ -8,13 +8,13 @@
   "Get help for the symbol at point."
   (interactive)
   (let ((sym (intern-soft (current-word))))
-    (unless
-        (cond ((null sym))
-              ((not (eq t (help-function-arglist sym)))
-               (describe-function sym))
-              ((boundp sym)
-               (describe-variable sym)))
-      (message "[nothing]"))))
+	(unless
+		(cond ((null sym))
+			  ((not (eq t (help-function-arglist sym)))
+			   (describe-function sym))
+			  ((boundp sym)
+			   (describe-variable sym)))
+	  (message "[nothing]"))))
 
 (global-set-key (kbd "<f1>") #'my/describe-elisp-symbol-at-point)
 
@@ -27,13 +27,13 @@
 ;; command `C-y' with `C-u').
 (dolist (command '(yank yank-pop))
   (advice-add command :after
-              (lambda (&rest _)
-                "Indent yanked text in programming mode (unless prefix arg or in Makefile mode)."
-                (when (and (not current-prefix-arg)
-                           (derived-mode-p 'prog-mode)
-                           (not (derived-mode-p 'makefile-mode)))
-                  (let ((mark-even-if-inactive t))
-                    (indent-region (region-beginning) (region-end) nil))))))
+			  (lambda (&rest _)
+				"Indent yanked text in programming mode (unless prefix arg or in Makefile mode)."
+				(when (and (not current-prefix-arg)
+						   (derived-mode-p 'prog-mode)
+						   (not (derived-mode-p 'makefile-mode)))
+				  (let ((mark-even-if-inactive t))
+					(indent-region (region-beginning) (region-end) nil))))))
 
 
 ;;; Cursor customization based on buffer state.
@@ -66,30 +66,30 @@
 (defun my-visible-buffers (&optional buffer-list all-frames)
   "Return a list of visible buffers (i.e. not buried)."
   (let ((buffers
-         (delete-dups
-          (cl-loop for frame in (if all-frames (visible-frame-list) (list (selected-frame)))
-                   if (window-list frame)
-                   nconc (mapcar #'window-buffer it)))))
-    (if buffer-list
-        (cl-loop for buf in buffers
-                 unless (memq buf buffer-list)
-                 collect buffers)
-      buffers)))
+		 (delete-dups
+		  (cl-loop for frame in (if all-frames (visible-frame-list) (list (selected-frame)))
+				   if (window-list frame)
+				   nconc (mapcar #'window-buffer it)))))
+	(if buffer-list
+		(cl-loop for buf in buffers
+				 unless (memq buf buffer-list)
+				 collect buffers)
+	  buffers)))
 (defun my/auto-revert-buffer-h ()
   "Auto revert current buffer, if necessary."
   (unless (or auto-revert-mode
-              (active-minibuffer-window)
-              (and buffer-file-name
-                   auto-revert-remote-files
-                   (file-remote-p buffer-file-name nil t)))
-    (let ((auto-revert-mode t))
-      (auto-revert-handler))))
+			  (active-minibuffer-window)
+			  (and buffer-file-name
+				   auto-revert-remote-files
+				   (file-remote-p buffer-file-name nil t)))
+	(let ((auto-revert-mode t))
+	  (auto-revert-handler))))
 
 (defun my/auto-revert-buffers-h ()
   "Auto revert stale buffers in visible windows, if necessary."
   (dolist (buf (my-visible-buffers))
-    (with-current-buffer buf
-      (my/auto-revert-buffer-h))))
+	(with-current-buffer buf
+	  (my/auto-revert-buffer-h))))
 (add-hook 'after-save-hook #'my/auto-revert-buffers-h)
 
 ;;; TEST
@@ -137,26 +137,26 @@
   (interactive)
   (custom-set-faces
    '(org-block-begin-line
-     ((t (:underline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF"))))
+	 ((t (:underline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF"))))
    '(org-block-background
-     ((t (:background "#FFFFEA"))))
+	 ((t (:background "#FFFFEA"))))
    '(org-block
-     ((t (:background "#FFFFEA"))))
+	 ((t (:background "#FFFFEA"))))
    '(org-block-end-line
-     ((t (:overline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF"))))))
+	 ((t (:overline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF"))))))
 
 (defun org-src-color-blocks-dark ()
   "Colors the block headers and footers to make them stand out more for dark themes"
   (interactive)
   (custom-set-faces
    '(org-block-begin-line
-     ((t (:foreground "#008ED1" :background "#002E41"))))
+	 ((t (:foreground "#008ED1" :background "#002E41"))))
    '(org-block-background
-     ((t (:background "#000000"))))
+	 ((t (:background "#000000"))))
    '(org-block
-     ((t (:background "#000000"))))
+	 ((t (:background "#000000"))))
    '(org-block-end-line
-     ((t (:foreground "#008ED1" :background "#002E41"))))))
+	 ((t (:foreground "#008ED1" :background "#002E41"))))))
 
 
 ;;; Interactive Buffer Switcher
@@ -165,14 +165,14 @@
 If BUFFER is displayed in some window, select that window instead."
   (interactive
    (list (get-buffer (read-buffer
-                      "Switch to buffer: "
-                      (other-buffer (current-buffer))))))
+					  "Switch to buffer: "
+					  (other-buffer (current-buffer))))))
   (cond
    ((eq buffer (window-buffer)))
    (t (let ((win (get-buffer-window buffer)))
-        (if win
-            (select-window win)
-          (switch-to-buffer buffer))))))
+		(if win
+			(select-window win)
+		  (switch-to-buffer buffer))))))
 
 ;;*---------------------------------------------------------------------------*/
 ;;*                                                                          */
@@ -181,28 +181,28 @@ If BUFFER is displayed in some window, select that window instead."
 (defun my/comment-section (start end)
   (interactive "*r")
   (cond ((memq major-mode '(emacs-lisp-mode lisp-interaction-mode
-                                            racket-mode))
-         (let* ((c
-                 (substring comment-start 0 1))
-                (template
-                 (concat
-                  c c "*" (make-string (- fill-column 5) ?-) "*/" "\n"
-                  c c "*" "%s" "*/" "\n"
-                  c c "*" (make-string (- fill-column 5) ?-)  "*/" "\n"))
-                (comment
-                 (buffer-substring start end))
-                (comment-with-padding
-                 (format (concat "%-" (number-to-string (- fill-column 5)) "s")
-                         (concat "    " comment))))
-           (delete-region start end)
-           (insert (format template comment-with-padding))))
-        ((memq major-mode '(c-mode))
-         (let ((comment
-                (buffer-substring start end))
-               (template
-                "/*** %s ***/"))
-           (delete-region start end)
-           (insert (format template comment))))))
+											racket-mode))
+		 (let* ((c
+				 (substring comment-start 0 1))
+				(template
+				 (concat
+				  c c "*" (make-string (- fill-column 5) ?-) "*/" "\n"
+				  c c "*" "%s" "*/" "\n"
+				  c c "*" (make-string (- fill-column 5) ?-)  "*/" "\n"))
+				(comment
+				 (buffer-substring start end))
+				(comment-with-padding
+				 (format (concat "%-" (number-to-string (- fill-column 5)) "s")
+						 (concat "    " comment))))
+		   (delete-region start end)
+		   (insert (format template comment-with-padding))))
+		((memq major-mode '(c-mode))
+		 (let ((comment
+				(buffer-substring start end))
+			   (template
+				"/*** %s ***/"))
+		   (delete-region start end)
+		   (insert (format template comment))))))
 
 ;;; TEST: Org Table Align
 (defun my/align-all-tables ()
@@ -214,8 +214,8 @@ If BUFFER is displayed in some window, select that window instead."
   "Kill from point back to the first non-whitespace character on the line."
   (interactive)
   (let ((prev-pos (point)))
-    (back-to-indentation)
-    (kill-region (point) prev-pos)))
+	(back-to-indentation)
+	(kill-region (point) prev-pos)))
 
 ;;; TEST: Better Comment
 (defun my/comment-dwim-line (&optional arg)
@@ -225,11 +225,11 @@ then comment current line.
 Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line."
 (interactive "*P")
 (if (bound-and-true-p paredit-mode)
-    (paredit-comment-dwim arg)
+	(paredit-comment-dwim arg)
   (comment-normalize-vars)
   (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
-      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
-    (comment-dwim arg))))
+	  (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+	(comment-dwim arg))))
 
 ;;; TEST: Auto insert
 ;; (use-package auto-insert
@@ -274,16 +274,16 @@ The FILE-NAME defaults to the one used in the URL."
    ;; We're forced to let-bind url here since we access it before
    ;; interactive binds the function parameters.
    (let ((url (read-from-minibuffer "URL: ")))
-     (list
-      url
-      (read-directory-name "Destination dir: ")
-      ;; deliberately not using read-file-name since that inludes the directory
-      (read-from-minibuffer
-       "File name: "
-       (car (last (s-split "/" url)))))))
+	 (list
+	  url
+	  (read-directory-name "Destination dir: ")
+	  ;; deliberately not using read-file-name since that inludes the directory
+	  (read-from-minibuffer
+	   "File name: "
+	   (car (last (s-split "/" url)))))))
   (let ((destination (f-join directory file-name)))
-    (url-copy-file url destination 't)
-    (find-file destination)))
+	(url-copy-file url destination 't)
+	(find-file destination)))
 
 ;;; TEST: Create a Duplicate Buffer
 (defun my/duplicate-buffer (new-name)
@@ -292,71 +292,71 @@ The original buffer and file are untouched."
   (interactive (list (read-from-minibuffer "New name: " (buffer-file-name))))
 
   (let ((filename (buffer-file-name))
-        (new-directory (file-name-directory new-name))
-        (contents (buffer-substring (point-min) (point-max))))
-    (unless filename (error "Buffer '%s' is not visiting a file!" (buffer-name)))
+		(new-directory (file-name-directory new-name))
+		(contents (buffer-substring (point-min) (point-max))))
+	(unless filename (error "Buffer '%s' is not visiting a file!" (buffer-name)))
 
-    (make-directory new-directory t)
-    (find-file new-name)
-    (insert contents)
-    (basic-save-buffer)))
+	(make-directory new-directory t)
+	(find-file new-name)
+	(insert contents)
+	(basic-save-buffer)))
 
 ;;; TEST: Mark Text Using M-SPC
 (defun my/mark-symbol-at-point ()
   (interactive)
   (let ((bounds (bounds-of-thing-at-point 'symbol)))
-    (cl-assert bounds nil "No symbol at point")
-    (goto-char (car bounds))
-    (push-mark (cdr bounds) nil t)))
+	(cl-assert bounds nil "No symbol at point")
+	(goto-char (car bounds))
+	(push-mark (cdr bounds) nil t)))
 (global-set-key (kbd "M-SPC") #'my/mark-symbol-at-point )
 
 
 ;;; Goto matching parens using `%`
 (defun my/goto-match-paren (arg)
   "Go to the matching paren/bracket, otherwise (or if ARG is not
-    nil) insert %.  vi style of % jumping to matching brace."
+	nil) insert %.  vi style of % jumping to matching brace."
   (interactive "p")
   (if (not (memq last-command '(set-mark
-                                cua-set-mark
-                                zz/goto-match-paren
-                                down-list
-                                up-list
-                                end-of-defun
-                                beginning-of-defun
-                                backward-sexp
-                                forward-sexp
-                                backward-up-list
-                                forward-paragraph
-                                backward-paragraph
-                                end-of-buffer
-                                beginning-of-buffer
-                                backward-word
-                                forward-word
-                                mwheel-scroll
-                                backward-word
-                                forward-word
-                                mouse-start-secondary
-                                mouse-yank-secondary
-                                mouse-secondary-save-then-kill
-                                move-end-of-line
-                                move-beginning-of-line
-                                backward-char
-                                forward-char
-                                scroll-up
-                                scroll-down
-                                scroll-left
-                                scroll-right
-                                mouse-set-point
-                                next-buffer
-                                previous-buffer
-                                previous-line
-                                next-line
-                                back-to-indentation
-                                )))
-      (self-insert-command (or arg 1))
-    (cond ((looking-at "\\s\(") (sp-forward-sexp) (backward-char 1))
-          ((looking-at "\\s\)") (forward-char 1) (sp-backward-sexp))
-          (t (self-insert-command (or arg 1))))))
+								cua-set-mark
+								zz/goto-match-paren
+								down-list
+								up-list
+								end-of-defun
+								beginning-of-defun
+								backward-sexp
+								forward-sexp
+								backward-up-list
+								forward-paragraph
+								backward-paragraph
+								end-of-buffer
+								beginning-of-buffer
+								backward-word
+								forward-word
+								mwheel-scroll
+								backward-word
+								forward-word
+								mouse-start-secondary
+								mouse-yank-secondary
+								mouse-secondary-save-then-kill
+								move-end-of-line
+								move-beginning-of-line
+								backward-char
+								forward-char
+								scroll-up
+								scroll-down
+								scroll-left
+								scroll-right
+								mouse-set-point
+								next-buffer
+								previous-buffer
+								previous-line
+								next-line
+								back-to-indentation
+								)))
+	  (self-insert-command (or arg 1))
+	(cond ((looking-at "\\s\(") (sp-forward-sexp) (backward-char 1))
+		  ((looking-at "\\s\)") (forward-char 1) (sp-backward-sexp))
+		  (t (self-insert-command (or arg 1))))))
 
 
 (bind-key "%" 'my/goto-match-paren)
@@ -366,12 +366,12 @@ The original buffer and file are untouched."
   "When saving a file in a directory that doesn't exist, offer
 to (recursively) create the file's parent directories."
   (add-hook 'before-save-hook
-            (lambda ()
-              (when buffer-file-name
-                (let ((dir (file-name-directory buffer-file-name)))
-                  (when (and (not (file-exists-p dir))
-                             (y-or-n-p (format "Directory %s does not exist. Create it?" dir)))
-                    (make-directory dir t)))))))
+			(lambda ()
+			  (when buffer-file-name
+				(let ((dir (file-name-directory buffer-file-name)))
+				  (when (and (not (file-exists-p dir))
+							 (y-or-n-p (format "Directory %s does not exist. Create it?" dir)))
+					(make-directory dir t)))))))
 
 ;;; Quiet Macro
 ;; Example application (quiet! (recentf-mode 1))
@@ -383,12 +383,12 @@ writes to `standard-output'. In interactive sessions this inhibits output to the
 echo-area, but not to *Messages*."
   (declare (indent 0))
   `(if init-file-debug
-       (progn ,@forms)
-     ,(if noninteractive
-          `(quiet!! ,@forms)
-        `(let ((inhibit-message t)
-               (save-silently t))
-           (prog1 ,@forms (message ""))))))
+	   (progn ,@forms)
+	 ,(if noninteractive
+		  `(quiet!! ,@forms)
+		`(let ((inhibit-message t)
+			   (save-silently t))
+		   (prog1 ,@forms (message ""))))))
 
 
 (defun doom-shut-up-a (fn &rest args)
@@ -409,36 +409,36 @@ In tty Emacs, messages are suppressed completely."
   :ensure nil
   :bind
   (:prefix-map my/files-map
-               :prefix "C-z f")
+			   :prefix "C-z f")
   :bind
   (:prefix-map my/toggles-map
-               :prefix "C-z x"))
+			   :prefix "C-z x"))
 
 ;;; TEST: Shortcut to insert global-set-key
 (defun my/insert-global-set-key (key command)
   (interactive (list (read-key-sequence "Key sequence: ")
-                     (read-command "Command: ")))
+					 (read-command "Command: ")))
   (prin1 `(global-set-key (kbd ,(key-description key)) ',command)
-         (current-buffer)))
+		 (current-buffer)))
 
 ;;; TEST: Open Directory in System Viewer
 (defmacro when-system (type &rest body)
   "Evaluate BODY if `system-type' equals TYPE."
   (declare (indent defun))
   `(when (eq system-type ',type)
-     ,@body))
+	 ,@body))
 
 (defun my/open-directory-in-system-viewer ()
   (interactive)
   (when-system gnu/linux
-    (if default-directory
-        (browse-url-of-file (expand-file-name default-directory))
-      (error "No `default-directory' to open")))
+	(if default-directory
+		(browse-url-of-file (expand-file-name default-directory))
+	  (error "No `default-directory' to open")))
   (when-system windows-nt
-    (require 'w32-browser)
-    (if default-directory
-        (w32explore (expand-file-name default-directory))
-      (error "No `default-directory' to open"))))
+	(require 'w32-browser)
+	(if default-directory
+		(w32explore (expand-file-name default-directory))
+	  (error "No `default-directory' to open"))))
 
 
 
@@ -446,18 +446,18 @@ In tty Emacs, messages are suppressed completely."
 (defun my/kill-with-linenum (beg end)
   (interactive "r")
   (save-excursion
-    (goto-char end)
-    (skip-chars-backward "\n \t")
-    (setq end (point))
-    (let* ((chunk (buffer-substring beg end))
-           (chunk (concat
-                   (format "╭──────── #%-d ─ %s ──\n│ "
-                           (line-number-at-pos beg)
-                           (or (buffer-file-name) (buffer-name)))
-                   (replace-regexp-in-string "\n" "\n│ " chunk)
-                   (format "\n╰──────── #%-d ─"
-                           (line-number-at-pos end)))))
-      (kill-new chunk)))
+	(goto-char end)
+	(skip-chars-backward "\n \t")
+	(setq end (point))
+	(let* ((chunk (buffer-substring beg end))
+		   (chunk (concat
+				   (format "╭──────── #%-d ─ %s ──\n│ "
+						   (line-number-at-pos beg)
+						   (or (buffer-file-name) (buffer-name)))
+				   (replace-regexp-in-string "\n" "\n│ " chunk)
+				   (format "\n╰──────── #%-d ─"
+						   (line-number-at-pos end)))))
+	  (kill-new chunk)))
   (deactivate-mark))
 
 
@@ -467,9 +467,9 @@ In tty Emacs, messages are suppressed completely."
   (interactive)
   (goto-char (point-min))
   (forward-line (1- (string-to-number
-                     (read-from-minibuffer
-                      "Goto line: "
-                      (char-to-string last-command-event))))))
+					 (read-from-minibuffer
+					  "Goto line: "
+					  (char-to-string last-command-event))))))
 
 ;; (cl-loop for n from 1 to 9 do
 ;;          (global-set-key (format "\M-g%d" n) 'my/goto-line-number))
@@ -510,42 +510,42 @@ In tty Emacs, messages are suppressed completely."
   "Return the cycle state of current heading.
 Return either 'hide-all, 'headings-only, or 'show-all."
   (save-excursion
-    (let (start end ov-list heading-end)
-      (outline-back-to-heading)
-      (setq start (point))
-      (outline-end-of-heading)
-      (setq heading-end (point))
-      (outline-end-of-subtree)
-      (setq end (point))
-      (setq ov-list (cl-remove-if-not
-                     (lambda (o) (eq (overlay-get o 'invisible) 'outline))
-                     (overlays-in start end)))
-      (cond ((eq ov-list nil) 'show-all)
-            ;; (eq (length ov-list) 1) wouldn’t work: what if there is
-            ;; one folded subheading?
-            ((and (eq (overlay-end (car ov-list)) end)
-                  (eq (overlay-start (car ov-list)) heading-end))
-             'hide-all)
-            (t 'headings-only)))))
+	(let (start end ov-list heading-end)
+	  (outline-back-to-heading)
+	  (setq start (point))
+	  (outline-end-of-heading)
+	  (setq heading-end (point))
+	  (outline-end-of-subtree)
+	  (setq end (point))
+	  (setq ov-list (cl-remove-if-not
+					 (lambda (o) (eq (overlay-get o 'invisible) 'outline))
+					 (overlays-in start end)))
+	  (cond ((eq ov-list nil) 'show-all)
+			;; (eq (length ov-list) 1) wouldn’t work: what if there is
+			;; one folded subheading?
+			((and (eq (overlay-end (car ov-list)) end)
+				  (eq (overlay-start (car ov-list)) heading-end))
+			 'hide-all)
+			(t 'headings-only)))))
 (defun my/outline-cycle-buffer ()
   "Cycle the whole buffer like in ‘outline-cycle’."
   (interactive)
   (pcase outline--cycle-buffer-state
-    ('show-all (save-excursion
-                 (outline-hide-sublevels
-                  (or (ignore-errors
-                        (outline-back-to-heading)
-                        (outline-level))
-                      1)))
-               (setq outline--cycle-buffer-state 'top-level)
-               (message "Top level headings"))
-    ('top-level (outline-show-all)
-                (outline-hide-region-body (point-min) (point-max))
-                (setq outline--cycle-buffer-state 'all-heading)
-                (message "All headings"))
-    ('all-heading (outline-show-all)
-                  (setq outline--cycle-buffer-state 'show-all)
-                  (message "Show all"))))
+	('show-all (save-excursion
+				 (outline-hide-sublevels
+				  (or (ignore-errors
+						(outline-back-to-heading)
+						(outline-level))
+					  1)))
+			   (setq outline--cycle-buffer-state 'top-level)
+			   (message "Top level headings"))
+	('top-level (outline-show-all)
+				(outline-hide-region-body (point-min) (point-max))
+				(setq outline--cycle-buffer-state 'all-heading)
+				(message "All headings"))
+	('all-heading (outline-show-all)
+				  (setq outline--cycle-buffer-state 'show-all)
+				  (message "Show all"))))
 
 
 
@@ -553,9 +553,9 @@ Return either 'hide-all, 'headings-only, or 'show-all."
 (defun outline-has-subheading-p ()
   "Return t if this heading has subheadings, nil otherwise."
   (save-excursion
-    (outline-back-to-heading)
-    (< (save-excursion (outline-next-heading) (point))
-       (save-excursion (outline-end-of-subtree) (point)))))
+	(outline-back-to-heading)
+	(< (save-excursion (outline-next-heading) (point))
+	   (save-excursion (outline-end-of-subtree) (point)))))
 
 (defun outline-cycle ()
   "Cycle between “hide all”, “headings only” and “show all”.
@@ -565,18 +565,18 @@ Return either 'hide-all, 'headings-only, or 'show-all."
 “Show all” means show all subheadings and their bodies."
   (interactive)
   (condition-case nil
-      (pcase (outline--cycle-state)
-        ('hide-all (if (outline-has-subheading-p)
-                       (progn (outline-show-children)
-                              (message "Only headings"))
-                     (outline-show-subtree)
-                     (message "Show all")))
-        ('headings-only (outline-show-subtree)
-                        (message "Show all"))
-        ('show-all (outline-hide-subtree)
-                   (message "Hide all")))
-    ;; If error: "Before first heading" occurs, ignore it.
-    (error nil)))
+	  (pcase (outline--cycle-state)
+		('hide-all (if (outline-has-subheading-p)
+					   (progn (outline-show-children)
+							  (message "Only headings"))
+					 (outline-show-subtree)
+					 (message "Show all")))
+		('headings-only (outline-show-subtree)
+						(message "Show all"))
+		('show-all (outline-hide-subtree)
+				   (message "Hide all")))
+	;; If error: "Before first heading" occurs, ignore it.
+	(error nil)))
 
 
 ;;; List Loaded Packages
@@ -587,19 +587,19 @@ Return either 'hide-all, 'headings-only, or 'show-all."
   "List all currently loaded features."
   (interactive)
   (with-current-buffer (get-buffer-create my-loaded-features-buffer)
-    (erase-buffer)
-    (pop-to-buffer (current-buffer))
+	(erase-buffer)
+	(pop-to-buffer (current-buffer))
 
-    (insert (format "\n** %d features currently loaded\n"
-                    (length features)))
+	(insert (format "\n** %d features currently loaded\n"
+					(length features)))
 
-    (let ((features-vec (apply 'vector features)))
-      (cl-sort features-vec 'string-lessp)
-      (cl-loop for x across features-vec
-               do (insert (format "  - %-25s: %s\n" x
-                                  (locate-library (symbol-name x))))))
+	(let ((features-vec (apply 'vector features)))
+	  (cl-sort features-vec 'string-lessp)
+	  (cl-loop for x across features-vec
+			   do (insert (format "  - %-25s: %s\n" x
+								  (locate-library (symbol-name x))))))
 
-    (goto-char (point-min))))
+	(goto-char (point-min))))
 
 
 
@@ -634,18 +634,18 @@ If there is an active region, wrap it directly. If there is no active region,
 apply to the current line, ignoring leading whitespace."
   (interactive "sPrefix: \nsSuffix: ")
   (let* ((use-region (region-active-p))
-         (beg (if use-region
-                  (region-beginning)
-                (save-excursion
-                  (beginning-of-line)
-                  (skip-chars-forward " \t") ; ignore leading whitespace
-                  (point))))
-         (end (if use-region
-                  (region-end)
-                (line-end-position)))
-         (text (buffer-substring-no-properties beg end)))
-    (delete-region beg end)
-    (insert (concat prefix text suffix))))
+		 (beg (if use-region
+				  (region-beginning)
+				(save-excursion
+				  (beginning-of-line)
+				  (skip-chars-forward " \t") ; ignore leading whitespace
+				  (point))))
+		 (end (if use-region
+				  (region-end)
+				(line-end-position)))
+		 (text (buffer-substring-no-properties beg end)))
+	(delete-region beg end)
+	(insert (concat prefix text suffix))))
 
 (defun my/org-apply-bold ()
   "Wrap region or line in Org *bold* markers."
@@ -682,23 +682,23 @@ on. This may cause a jump if the file has changed significantly. Finally, the
 buffer will be recentered to the line at point."
   (interactive)
   (let ((initial-line (line-beginning-position))
-        (initial-point (point))
-        (initial-total-lines (count-lines (point-min) (point-max))))
-    (find-alternate-file (buffer-file-name))
-    (if (= initial-total-lines (count-lines (point-min) (point-max)))
-        ;; If total lines have not changed, we can reasonably guess that the
-        ;; content has not changed significantly (if at all), so we can jump
-        ;; right back to the initial point.
-        (goto-char initial-point)
-      ;; If total lines /have/ changed, we can reasonably guess that the initial
-      ;; point is contextually not where we were before. The best thing we can
-      ;; do now is return to the same line number, and hope it's close. Getting
-      ;; closer than this would require text parsing, which is more complex than
-      ;; we need for a simple file replacement.
-      (goto-char initial-line))
-    ;; Finally, recenter the line. We may not have been centered before, but this is more often than
-    ;; not what we want.
-    (recenter))
+		(initial-point (point))
+		(initial-total-lines (count-lines (point-min) (point-max))))
+	(find-alternate-file (buffer-file-name))
+	(if (= initial-total-lines (count-lines (point-min) (point-max)))
+		;; If total lines have not changed, we can reasonably guess that the
+		;; content has not changed significantly (if at all), so we can jump
+		;; right back to the initial point.
+		(goto-char initial-point)
+	  ;; If total lines /have/ changed, we can reasonably guess that the initial
+	  ;; point is contextually not where we were before. The best thing we can
+	  ;; do now is return to the same line number, and hope it's close. Getting
+	  ;; closer than this would require text parsing, which is more complex than
+	  ;; we need for a simple file replacement.
+	  (goto-char initial-line))
+	;; Finally, recenter the line. We may not have been centered before, but this is more often than
+	;; not what we want.
+	(recenter))
   (setq buffer-name buffer-file-name)
   (message "%s Restarted!" buffer-name)
   )
@@ -710,53 +710,53 @@ buffer will be recentered to the line at point."
   "Replace goofy MS and other garbage characters with Latin1 equivalents."
   (interactive)
   (let ((beg (point-min))
-        (end (point-max)))
-    (when (region-active-p)
-      (setq beg (region-beginning))
-      (setq end (region-end)))
-    (save-excursion ;save the current point
-      (replace-string "΄" "'" nil beg end)
-      (replace-string "‘" "'" nil beg end)
-      (replace-string "’" "'" nil beg end)
-      (replace-string "“" "\"" nil beg end)
-      (replace-string "”" "\"" nil beg end)
-      (replace-string "" "'" nil beg end)
-      (replace-string "" "'" nil beg end)
-      (replace-string "" "\"" nil beg end)
-      (replace-string "" "\"" nil beg end)
-      (replace-string "" "\"" nil beg end)
-      (replace-string "" "\"" nil beg end)
-      (replace-string "‘" "\"" nil beg end)
-      (replace-string "’" "'" nil beg end)
-      (replace-string "¡\"" "\"" nil beg end)
-      (replace-string "¡­" "..." nil beg end)
-      (replace-string "" "..." nil beg end)
-      (replace-string "" " " nil beg end) ; M-SPC
-      (replace-string "" "`" nil beg end)  ; \221
-      (replace-string "" "'" nil beg end)  ; \222
-      (replace-string "" "``" nil beg end)
-      (replace-string "" "''" nil beg end)
-      (replace-string "" "*" nil beg end)
-      (replace-string "" "--" nil beg end)
-      (replace-string "" "--" nil beg end)
-      (replace-string " " " " nil beg end) ; M-SPC
-      (replace-string "¡" "\"" nil beg end)
-      (replace-string "´" "\"" nil beg end)
-      (replace-string "»" "<<" nil beg end)
-      (replace-string "Ç" "'" nil beg end)
-      (replace-string "È" "\"" nil beg end)
-      (replace-string "é" "e" nil beg end) ;; &eacute;
-      (replace-string "ó" "-" nil beg end)
+		(end (point-max)))
+	(when (region-active-p)
+	  (setq beg (region-beginning))
+	  (setq end (region-end)))
+	(save-excursion ;save the current point
+	  (replace-string "΄" "'" nil beg end)
+	  (replace-string "‘" "'" nil beg end)
+	  (replace-string "’" "'" nil beg end)
+	  (replace-string "“" "\"" nil beg end)
+	  (replace-string "”" "\"" nil beg end)
+	  (replace-string "" "'" nil beg end)
+	  (replace-string "" "'" nil beg end)
+	  (replace-string "" "\"" nil beg end)
+	  (replace-string "" "\"" nil beg end)
+	  (replace-string "" "\"" nil beg end)
+	  (replace-string "" "\"" nil beg end)
+	  (replace-string "‘" "\"" nil beg end)
+	  (replace-string "’" "'" nil beg end)
+	  (replace-string "¡\"" "\"" nil beg end)
+	  (replace-string "¡­" "..." nil beg end)
+	  (replace-string "" "..." nil beg end)
+	  (replace-string "" " " nil beg end) ; M-SPC
+	  (replace-string "" "`" nil beg end)  ; \221
+	  (replace-string "" "'" nil beg end)  ; \222
+	  (replace-string "" "``" nil beg end)
+	  (replace-string "" "''" nil beg end)
+	  (replace-string "" "*" nil beg end)
+	  (replace-string "" "--" nil beg end)
+	  (replace-string "" "--" nil beg end)
+	  (replace-string " " " " nil beg end) ; M-SPC
+	  (replace-string "¡" "\"" nil beg end)
+	  (replace-string "´" "\"" nil beg end)
+	  (replace-string "»" "<<" nil beg end)
+	  (replace-string "Ç" "'" nil beg end)
+	  (replace-string "È" "\"" nil beg end)
+	  (replace-string "é" "e" nil beg end) ;; &eacute;
+	  (replace-string "ó" "-" nil beg end)
 
-      ;; mine
-      (replace-string "•" "-" nil beg end)
-      (replace-string "–" "--" nil beg end)
-      (replace-string "—" "---" nil beg end) ; multi-byte
-      (replace-string "…" "..." nil beg end)
-      (replace-string "&#38;" "&" nil beg end)
-      (replace-string "&#39;" "'" nil beg end)
+	  ;; mine
+	  (replace-string "•" "-" nil beg end)
+	  (replace-string "–" "--" nil beg end)
+	  (replace-string "—" "---" nil beg end) ; multi-byte
+	  (replace-string "…" "..." nil beg end)
+	  (replace-string "&#38;" "&" nil beg end)
+	  (replace-string "&#39;" "'" nil beg end)
 
-      (message "Garbage in, garbage out.") )))
+	  (message "Garbage in, garbage out.") )))
 
 
 
@@ -768,26 +768,26 @@ buffer will be recentered to the line at point."
   "Test if emacs starts correctly."
   (interactive)
   (if (eq last-command this-command)
-      (save-buffers-kill-terminal)
-    (require 'async)
-    (async-start
-     (lambda () (shell-command-to-string
-            "emacs --batch --eval \"
+	  (save-buffers-kill-terminal)
+	(require 'async)
+	(async-start
+	 (lambda () (shell-command-to-string
+			"emacs --batch --eval \"
 (condition-case e
-    (progn
-      (load \\\"~/.emacs.d/init.el\\\")
-      (message \\\"-OK-\\\"))
+	(progn
+	  (load \\\"~/.emacs.d/init.el\\\")
+	  (message \\\"-OK-\\\"))
   (error
    (message \\\"ERROR!\\\")
    (signal (car e) (cdr e))))\""))
-     `(lambda (output)
-        (if (string-match "-OK-" output)
-            (when ,(called-interactively-p 'any)
-              (message "All is well"))
-          (switch-to-buffer-other-window "*startup error*")
-          (delete-region (point-min) (point-max))
-          (insert output)
-          (search-backward "ERROR!")))))    )
+	 `(lambda (output)
+		(if (string-match "-OK-" output)
+			(when ,(called-interactively-p 'any)
+			  (message "All is well"))
+		  (switch-to-buffer-other-window "*startup error*")
+		  (delete-region (point-min) (point-max))
+		  (insert output)
+		  (search-backward "ERROR!")))))    )
 
 ;;; TEST: Org
 
@@ -1027,13 +1027,13 @@ buffer will be recentered to the line at point."
   (interactive)
   (switch-to-buffer
    (completing-read
-    "Buffer: "
-    (mapcar #'buffer-name
-            (cl-remove-if-not (lambda (buf)
-                                (provided-mode-derived-p
-                                 (buffer-local-value 'major-mode buf)
-                                 major-mode))
-                              (buffer-list))))))
+	"Buffer: "
+	(mapcar #'buffer-name
+			(cl-remove-if-not (lambda (buf)
+								(provided-mode-derived-p
+								 (buffer-local-value 'major-mode buf)
+								 major-mode))
+							  (buffer-list))))))
 
 
 ;;; Insert Content to a file
@@ -1043,6 +1043,80 @@ buffer will be recentered to the line at point."
   (insert-file-contents
    (locate-user-emacs-file "/home/ephrem/html-empty-template.html")))
 
+
+
+
+
+;;; TEST: On-demand installation of packages
+(defun require-package (package &optional min-version no-refresh)
+  "Install given PACKAGE, optionally requiring MIN-VERSION.
+If NO-REFRESH is non-nil, the available package lists will not be
+re-downloaded in order to locate PACKAGE."
+  (when (stringp min-version)
+	(setq min-version (version-to-list min-version)))
+  (or (package-installed-p package min-version)
+	  (let* ((known (cdr (assoc package package-archive-contents)))
+			 (best (car (sort known (lambda (a b)
+									  (version-list-<= (package-desc-version b)
+													   (package-desc-version a)))))))
+		(if (and best (version-list-<= min-version (package-desc-version best)))
+			(package-install best)
+		  (if no-refresh
+			  (error "No version of %s >= %S is available" package min-version)
+			(package-refresh-contents)
+			(require-package package min-version t)))
+		(package-installed-p package min-version))))
+
+(defun maybe-require-package (package &optional min-version no-refresh)
+  "Try to install PACKAGE, and return non-nil if successful.
+In the event of failure, return nil and print a warning message.
+Optionally require MIN-VERSION.  If NO-REFRESH is non-nil, the
+available package lists will not be re-downloaded in order to
+locate PACKAGE."
+  (condition-case err
+	  (require-package package min-version no-refresh)
+	(error
+	 (message "Couldn't install optional package `%s': %S" package err)
+	 nil)))
+
+
+;;; Org Prose Mode
+(define-minor-mode prose-mode
+  "Set up a buffer for prose editing.
+This enables or modifies a number of settings so that the
+experience of editing prose is a little more like that of a
+typical word processor."
+  :init-value nil :lighter " Prose" :keymap nil
+  (if prose-mode
+	  (progn
+		(when (fboundp 'writeroom-mode)
+		  (writeroom-mode 1))
+		(setq truncate-lines nil)
+		(setq word-wrap t)
+		(setq cursor-type 'bar)
+		(when (eq major-mode 'org)
+		  (kill-local-variable 'buffer-face-mode-face))
+		(buffer-face-mode 1)
+		;;(delete-selection-mode 1)
+		(setq-local blink-cursor-interval 0.6)
+		(setq-local show-trailing-whitespace nil)
+		(setq-local line-spacing 0.2)
+		(setq-local electric-pair-mode nil)
+		(ignore-errors (flyspell-mode 1))
+		(visual-line-mode 1))
+	(kill-local-variable 'truncate-lines)
+	(kill-local-variable 'word-wrap)
+	(kill-local-variable 'cursor-type)
+	(kill-local-variable 'blink-cursor-interval)
+	(kill-local-variable 'show-trailing-whitespace)
+	(kill-local-variable 'line-spacing)
+	(kill-local-variable 'electric-pair-mode)
+	(buffer-face-mode -1)
+	;; (delete-selection-mode -1)
+	(flyspell-mode -1)
+	(visual-line-mode -1)
+	(when (fboundp 'writeroom-mode)
+	  (writeroom-mode 0))))
 
 
 (provide 'ef-experiment)

@@ -923,6 +923,7 @@
 	(face-remap-set-base 'default `(:height 1.0))
 
 	)
+  (add-hook 'Info-selection-hook 'info-colors-fontify-node)
   )
 
 ;;; Info Look
