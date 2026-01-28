@@ -53,6 +53,8 @@
 ;; (global-set-key (kbd "C-x k") #'kill-buffer-and-window)
 
 
+
+
 (define-key global-map (kbd "RET") 'newline-and-indent)
 ;;; Alternative
 ;; (use-package emacs
@@ -122,27 +124,27 @@
 ;; It can be used to add mapping to already existing mappings.
 ;; such as help-map. Example:
 (bind-keys :prefix-map applications-map
-          :prefix "C-z a"
-          :prefix-docstring "Mapping for various applications"
-          ("m" . man))
+		  :prefix "C-z a"
+		  :prefix-docstring "Mapping for various applications"
+		  ("m" . man))
 
 (bind-keys :prefix-map toggle-map
-           :prefix "C-z t"
-           :prefix-docstring "Toggling"
-           ("o" . outline-minor-mode)
-           )
+		   :prefix "C-z t"
+		   :prefix-docstring "Toggling"
+		   ("o" . outline-minor-mode)
+		   )
 
 (bind-keys :map help-map
-           ("u" . apropos-user-option))
+		   ("u" . apropos-user-option))
 
 
 ;; Custom Function Keybindings
 (bind-keys :map ef-applications-keymap
-           ("p" . proced))
+		   ("p" . proced))
 
 ;; Or to create user defined keymaps
 (bind-keys :map ef-window-keymap
-           ("q" . quit-window))
+		   ("q" . quit-window))
 
 
 
