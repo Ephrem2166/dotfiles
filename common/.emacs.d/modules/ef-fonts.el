@@ -9,7 +9,7 @@
 (defun my/font-available-p (font-name)
   " Check for available fonts"
   (when (stringp font-name)
-    (member font-name (font-family-list))))
+	(member font-name (font-family-list))))
 
 (defun my/available-font (&rest fonts)
   "Return available fonts"
@@ -21,9 +21,9 @@
 
 (defvar my/available-variable-font
   (my/available-font
+   "Iosevka Aile"
    "DejaVu Sans"
    "Atkinson Hyperlegible Next"
-   "Iosevka Aile"
    "Triplicate A"
    "SN Pro"
    "Atkinson Hyperlegible"
@@ -166,7 +166,7 @@
 ;;       (force-window-update))))
 
 ;;; Better Way to Change Fonts Dynamically
-(defun my-system-fonts ()
+(defun my/setup-fonts ()
   "List of system fonts."
   (x-list-fonts "*"))
 ;; Set Default Face
@@ -174,14 +174,14 @@
   "Set the default font and height interactively."
   (interactive)
   (let* ((selected-font
-          (completing-read "Select default font: "
-                           (my-system-fonts)))
+		  (completing-read "Select default font: "
+						   (my-system-fonts)))
 
-         (selected-size
-          (read-number "Select default font size: " 12)))
+		 (selected-size
+		  (read-number "Select default font size: " 12)))
 
-    (set-face-attribute 'default nil :font selected-font )
-    (set-face-attribute 'default nil :height (* 10 selected-size))))
+	(set-face-attribute 'default nil :font selected-font )
+	(set-face-attribute 'default nil :height (* 10 selected-size))))
 
 
 
@@ -196,10 +196,10 @@
 (defun my/font-changer ()
   (interactive)
   (let ((font-name (completing-read "Select font:"
-                                    (font-family-list))))
-    (if (member font-name (font-family-list))
-        (set-face-attribute 'default nil :font font-name)
-      (error "'%s' font not found" font-name))))
+									(font-family-list))))
+	(if (member font-name (font-family-list))
+		(set-face-attribute 'default nil :font font-name)
+	  (error "'%s' font not found" font-name))))
 
 
 (provide 'ef-fonts)
