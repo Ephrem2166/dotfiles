@@ -1,5 +1,5 @@
 # UI
-include nord
+include catppuccin-mocha
 # Open document in fit-width mode by default
 set adjust-open "best-fit"
 # set font 'monospace normal 10'
