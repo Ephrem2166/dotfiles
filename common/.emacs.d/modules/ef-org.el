@@ -47,7 +47,9 @@
   (dolist (face '(org-block
 				  org-document-title
 				  org-table
+				  org-special-keyword
 				  org-verbatim
+				  org-checkbox
 				  org-drawer
 				  org-date
 				  org-code
@@ -905,6 +907,17 @@ A `font-lock-keywords' function that searches up to LIMIT."
 
 (add-hook 'org-mode-hook #'unpackaged/org-table-face-mode)
 
+;;; Center Org Buffers
+
+
+(defun my/org-mode-visual-fill ()
+  (setq visual-fill-column-width 100
+		visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(add-hook 'org-mode-hook #'my/org-mode-visual-fill)
+
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; ;;; Org Export ;;
 ;;;;;;;;;;;;;;;;;;;;
@@ -1025,15 +1038,6 @@ structure changes."
   :ensure t
   :after org
   )
-
-
-
-
-
-
-
-
-
 
 (define-key org-mode-map (kbd "C-<tab>") 'yas-expand)
 
