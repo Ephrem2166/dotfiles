@@ -306,7 +306,8 @@
   (setq org-use-fast-todo-selection t)
   )
 
-;;; Org Structure Template List
+;;; Org Tempo
+;; Org Structure Template List
 ;; A list of keys and block types
 ;; <s[TAB]
 (use-package org-tempo
@@ -327,6 +328,11 @@
 		  ("x" . "example")
 		  ("X" . "export")
 		  ("q" . "quote")))
+  ;; To fix electric-mode inhibiting tempo
+  (add-hook 'org-mode-hook (lambda ()
+							 (setq-local electric-pair-inhibit-predicate
+										 `(lambda (c)
+											(if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
   )
 
 ;;; Pretty Symbol List
