@@ -118,8 +118,13 @@
   :defer-incrementally (calendar find-func format-spec org-macs org-compat org-faces org-entities
 								 org-list org-pcomplete org-src org-footnote org-macro ob org org-agenda
 								 org-capture)
+  :preface
+  (setq org-directory (expand-file-name "~/Notes/"))
   :init
-  (setq-default org-directory "~/Org/")
+  (unless (file-exists-p org-directory)
+	(mkdir org-directory t)
+	)
+  ;; (setq-default org-directory "~/Org/")
   :config
   ;; General Settings
   (setq org-imenu-depth 7)
@@ -304,8 +309,9 @@
 ;;; Org Structure Template List
 ;; A list of keys and block types
 ;; <s[TAB]
-(use-package org
+(use-package org-tempo
   :ensure nil
+  :after org
   :config
   (setq org-structure-template-alist
 		'(("s" . "src")
