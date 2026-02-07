@@ -335,6 +335,21 @@
 		  ("x" . "example")
 		  ("X" . "export")
 		  ("q" . "quote")))
+  ;;Add my own alist
+  (tempo-define-template "org-title-block"
+						 '("#+title: " (p) n
+						   "#+author: Ephrem G." n
+						   (concat "#+date: " (format-time-string "%B %e, %Y")) n %))
+  (add-to-list 'org-tempo-tags '("<n" . tempo-template-org-title-block))
+  (tempo-define-template "org-title-options-block"
+						 '("#+title: " (p) n
+						   "#+author: Ephrem G." n
+						   (concat "#+date: " (format-time-string "%B %e, %Y")) n
+						   n
+						   "#+jekyll_tags:" n
+						   "#+options: toc:nil date:nil" n %))
+  (add-to-list 'org-tempo-tags '("<no" . tempo-template-org-title-options-block))
+  (add-to-list 'org-tempo-tags '("<N" . tempo-template-org-title-options-block))
   ;; To fix electric-mode inhibiting tempo
   (add-hook 'org-mode-hook (lambda ()
 							 (setq-local electric-pair-inhibit-predicate
