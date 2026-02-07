@@ -45,18 +45,23 @@
 					  :height 120)
   ;; keep code related stuff clean
   (dolist (face '(org-block
+				  org-block-begin-line
+				  org-block-end-line
+				  org-checkbox
+				  org-code
+				  org-date
 				  org-document-title
+				  org-document-info-keyword
+				  org-drawer
+				  org-formula
+				  org-meta-line
 				  org-table
 				  org-special-keyword
 				  org-verbatim
-				  org-checkbox
-				  org-drawer
-				  org-date
-				  org-code
-				  org-block-begin-line
-				  org-block-end-line
-				  org-meta-line
-				  org-document-info-keyword))
+				  ;; Others
+				  line-number
+				  line-number-current-line
+				  ))
 	(set-face-attribute face nil :inherit 'fixed-pitch)))
 
 (add-hook 'org-mode-hook #'my/enable-variable-pitch-mode)
