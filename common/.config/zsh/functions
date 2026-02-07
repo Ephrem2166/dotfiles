@@ -1,49 +1,49 @@
 # Compress
 compress() {
   if [[ $# -lt 2 ]]; then
-    echo "Please provide archive name or list of files!"
-    return 1
+	echo "Please provide archive name or list of files!"
+	return 1
   fi
   local archive_name="$1"
   shift
   local check_files=true
   for file in "$@"; do
-    if [[ ! -e "$file" ]]; then
-      echo "No file or directory found: '$file'"
-      check_files=false
-    fi
+	if [[ ! -e "$file" ]]; then
+	  echo "No file or directory found: '$file'"
+	  check_files=false
+	fi
   done
 
   if $check_files; then
-    tar -czvf "$archive_name".tar.gz "$@"
-    if [[ $? -eq 0 ]]; then
-      echo "Success: '$archive_name'.tar.gz created"
-    else
-      echo "Error: '$archive_name'.tar.gz was not created!"
-    fi
+	tar -czvf "$archive_name".tar.gz "$@"
+	if [[ $? -eq 0 ]]; then
+	  echo "Success: '$archive_name'.tar.gz created"
+	else
+	  echo "Error: '$archive_name'.tar.gz was not created!"
+	fi
   fi
 
 }
 # Decompress
 decompress() {
   if [[ -f $1 ]]; then
-    case $1 in
-      *.tar.bz2) tar xvjf "$1" ;;
-      *.tar.gz) tar xvzf "$1" ;;
-      *.bz2) bunzip2 "$1" ;;
-      *.rar) unrar x "$1" ;;
-      *.gz) gunzip "$1" ;;
-      *.tar) tar xvf "$1" ;;
-      *.tbz2) tar xvjf "$1" ;;
-      *.tgz) tar xvzf "$1" ;;
-      *.zip) unzip "$1" ;;
-      *.Z) uncompress "$1" ;;
-      *.7z) 7z x "$1" ;;
-      *.xz) unxz "$1" ;;
-      *) echo "'$1' unknown compression" ;;
-    esac
+	case $1 in
+	  *.tar.bz2) tar xvjf "$1" ;;
+	  *.tar.gz) tar xvzf "$1" ;;
+	  *.bz2) bunzip2 "$1" ;;
+	  *.rar) unrar x "$1" ;;
+	  *.gz) gunzip "$1" ;;
+	  *.tar) tar xvf "$1" ;;
+	  *.tbz2) tar xvjf "$1" ;;
+	  *.tgz) tar xvzf "$1" ;;
+	  *.zip) unzip "$1" ;;
+	  *.Z) uncompress "$1" ;;
+	  *.7z) 7z x "$1" ;;
+	  *.xz) unxz "$1" ;;
+	  *) echo "'$1' unknown compression" ;;
+	esac
   else
-    echo "'$1' not a valid file"
+	echo "'$1' not a valid file"
   fi
 }
 
@@ -69,11 +69,11 @@ function y() {
 # Open file with mupdf
 function o() {
   if [ -z "$1" ]; then
-    printf "Please specify file to read\n" >/dev/stderr
-    false
+	printf "Please specify file to read\n" >/dev/stderr
+	false
   else
-    mupdf -I "$1"
-    true
+	mupdf -I "$1"
+	true
   fi
 }
 
@@ -89,14 +89,14 @@ frm() {
 
   # Check if any selection was made
   if [[ -n "$selected" ]]; then
-    # Echo the files or directories that will be deleted
-    echo "Deleting the following files or directories:"
-    echo "$selected"
+	# Echo the files or directories that will be deleted
+	echo "Deleting the following files or directories:"
+	echo "$selected"
 
-    # Use `xargs` to safely pass selected files/directories to `rm -rf`
-    echo "$selected" | xargs -d '\n' rm -rf
+	# Use `xargs` to safely pass selected files/directories to `rm -rf`
+	echo "$selected" | xargs -d '\n' rm -rf
   else
-    echo "No files or directories selected."
+	echo "No files or directories selected."
   fi
 }
 
@@ -115,10 +115,10 @@ open_pdf() {
 # pf name
 pf() {
   if [ -z "$1" ]; then
-    printf "pf needs a process name to search for\n" >/dev/stderr
-    false
+	printf "pf needs a process name to search for\n" >/dev/stderr
+	false
   else
-    ps -aux | rg "$1"
+	ps -aux | rg "$1"
   fi
 }
 
@@ -126,9 +126,9 @@ pf() {
 # based on distro
 update_system() {
   if command -v zypper &>/dev/null; then
-    sudo zypper dup && flatpak update
+	sudo zypper dup && flatpak update
   elif command -v pacman &>/dev/null; then
-    sudo pacman -Syu && flatpak update
+	sudo pacman -Syu && flatpak update
   fi
 }
 
@@ -153,13 +153,13 @@ myip() {
 # Colored man pages function
 man() {
   LESS_TERMCAP_mb=$'\e[1;32m' \
-    LESS_TERMCAP_md=$'\e[1;32m' \
-    LESS_TERMCAP_me=$'\e[0m' \
-    LESS_TERMCAP_se=$'\e[0m' \
-    LESS_TERMCAP_so=$'\e[01;33m' \
-    LESS_TERMCAP_ue=$'\e[0m' \
-    LESS_TERMCAP_us=$'\e[1;4;31m' \
-    command man "$@"
+	LESS_TERMCAP_md=$'\e[1;32m' \
+	LESS_TERMCAP_me=$'\e[0m' \
+	LESS_TERMCAP_se=$'\e[0m' \
+	LESS_TERMCAP_so=$'\e[01;33m' \
+	LESS_TERMCAP_ue=$'\e[0m' \
+	LESS_TERMCAP_us=$'\e[1;4;31m' \
+	command man "$@"
 }
 
 # FIXME: Safe Delete
@@ -177,14 +177,14 @@ man() {
 # Cheat.sh Lookup
 ch() {
   if [[ -z "$1" ]]; then
-    printf "No command to look up\n" >/dev/stderr
-    false
+	printf "No command to look up\n" >/dev/stderr
+	false
   elif [[ -z "$2" ]]; then
-    curl "https://cht.sh/$1"
-    true
+	curl "https://cht.sh/$1"
+	true
   else
-    curl "https://cht.sh/$1/$2"
-    true
+	curl "https://cht.sh/$1/$2"
+	true
   fi
 }
 
@@ -192,8 +192,8 @@ ch() {
 is_installed() {
   prog=$1
   if [[ $(command -v ${prog}) == "" ]]; then
-    echo -e "${prog} is not installed!"
-    return 1
+	echo -e "${prog} is not installed!"
+	return 1
   fi
   echo -e "${prog} is installed!"
   return 0
@@ -201,7 +201,7 @@ is_installed() {
 # Show colored text
 color_text() {
   for code in {000..255}; do
-    printf "%s: \033[38;5;%smThis is how your text would look like\033[0m\n" "$code" "$code"
+	printf "%s: \033[38;5;%smThis is how your text would look like\033[0m\n" "$code" "$code"
   done
 }
 
@@ -215,29 +215,29 @@ color_escape() {
 
   # foreground colors
   for fgc in {30..37}; do
-    # background colors
-    for bgc in {40..47}; do
-      fgc=${fgc#37} # white
-      bgc=${bgc#40} # black
+	# background colors
+	for bgc in {40..47}; do
+	  fgc=${fgc#37} # white
+	  bgc=${bgc#40} # black
 
-      vals="${fgc:+$fgc;}${bgc}"
-      vals=${vals%%;}
+	  vals="${fgc:+$fgc;}${bgc}"
+	  vals=${vals%%;}
 
-      seq0="${vals:+\e[${vals}m}"
-      printf "  %-9s" "${seq0:-(default)}"
-      printf " ${seq0}TEXT\e[m"
-      printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
-    done
-    echo
-    echo
+	  seq0="${vals:+\e[${vals}m}"
+	  printf "  %-9s" "${seq0:-(default)}"
+	  printf " ${seq0}TEXT\e[m"
+	  printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
+	done
+	echo
+	echo
   done
 }
 
 # SSH CREATE
 ssh-create() {
   if [ ! -z "$1" ]; then
-    ssh-keygen -f $HOME/.ssh/$1 -t rsa -N '' -C "$1"
-    chmod 700 $HOME/.ssh/$1*
+	ssh-keygen -f $HOME/.ssh/$1 -t rsa -N '' -C "$1"
+	chmod 700 $HOME/.ssh/$1*
   fi
 }
 
@@ -250,16 +250,16 @@ historystat() {
 mnt() {
   local FILE="/mnt/external"
   if [ ! -z $2 ]; then
-    FILE=$2
+	FILE=$2
   fi
 
   if [ ! -z $1 ]; then
-    sudo mount "$1" "$FILE" -o rw
-    echo "Device in read/write mounted in $FILE"
+	sudo mount "$1" "$FILE" -o rw
+	echo "Device in read/write mounted in $FILE"
   fi
 
   if [ $# = 0 ]; then
-    echo "You need to provide the device (/dev/sd*) - use lsblk"
+	echo "You need to provide the device (/dev/sd*) - use lsblk"
   fi
 }
 
@@ -267,7 +267,7 @@ mnt() {
 umnt() {
   local DIRECTORY="/mnt"
   if [ ! -z $1 ]; then
-    DIRECTORY=$1
+	DIRECTORY=$1
   fi
   MOUNTED=$(grep $DIRECTORY /proc/mounts | cut -f2 -d" " | sort -r)
   cd "/mnt"
@@ -301,7 +301,6 @@ du2() {
 #     done
 # )
 
-
 # List installed fonts using fzf
 fontlist() {
   fc-list | sed 's/[^:]*: //' | fzf
@@ -309,75 +308,94 @@ fontlist() {
 
 # Colorized Functions
 function which { # colorized & showing all
-    builtin which -a "$@" | bat --language=sh --wrap=character
+  builtin which -a "$@" | bat --language=sh --wrap=character
 }
 
-
 # Better Man
-_man ()
-{
-    env \
-        LESS_TERMCAP_mb=$(tput bold; tput setaf 6) \
-        LESS_TERMCAP_md=$(tput bold; tput setaf 6) \
-        LESS_TERMCAP_me=$(tput sgr0) \
-        LESS_TERMCAP_se=$(tput rmso; tput sgr0) \
-        LESS_TERMCAP_ue=$(tput rmul; tput sgr0) \
-        LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 4) \
-        LESS_TERMCAP_mr=$(tput rev) \
-        LESS_TERMCAP_mh=$(tput dim) \
-        LESS_TERMCAP_ZN=$(tput ssubm) \
-        LESS_TERMCAP_ZV=$(tput rsubm) \
-        LESS_TERMCAP_ZO=$(tput ssupm) \
-        LESS_TERMCAP_ZW=$(tput rsupm) \
-        man "$@"
+_man() {
+  env \
+	LESS_TERMCAP_mb=$(
+	  tput bold
+	  tput setaf 6
+	) \
+	LESS_TERMCAP_md=$(
+	  tput bold
+	  tput setaf 6
+	) \
+	LESS_TERMCAP_me=$(tput sgr0) \
+	LESS_TERMCAP_se=$(
+	  tput rmso
+	  tput sgr0
+	) \
+	LESS_TERMCAP_ue=$(
+	  tput rmul
+	  tput sgr0
+	) \
+	LESS_TERMCAP_us=$(
+	  tput smul
+	  tput bold
+	  tput setaf 4
+	) \
+	LESS_TERMCAP_mr=$(tput rev) \
+	LESS_TERMCAP_mh=$(tput dim) \
+	LESS_TERMCAP_ZN=$(tput ssubm) \
+	LESS_TERMCAP_ZV=$(tput rsubm) \
+	LESS_TERMCAP_ZO=$(tput ssupm) \
+	LESS_TERMCAP_ZW=$(tput rsupm) \
+	man "$@"
 }
 
 # Base 64 Encode and Decode
 function b64e() {
-    echo -n "$1" | base64 | wl-copy
-    wl-paste
-    echo >&2 'Copied to clipboard.'
+  echo -n "$1" | base64 | wl-copy
+  wl-paste
+  echo >&2 'Copied to clipboard.'
 }
 
 function b64d() {
-    echo -n "$1" | base64 --decode | wl-copy
-    wl-paste
+  echo -n "$1" | base64 --decode | wl-copy
+  wl-paste
 }
 
 # Function to add a directory to PATH if it's not already included.
 add_to_path() {
-    local dir="$1"
-    if [ -d "$dir" ] && [[ ":$PATH:" != *":$dir:"* ]]; then
-        export PATH="$dir:$PATH"
-    fi
+  local dir="$1"
+  if [ -d "$dir" ] && [[ ":$PATH:" != *":$dir:"* ]]; then
+	export PATH="$dir:$PATH"
+  fi
 }
 
 # Command History Search with Grep and FZF
 hgrep() {
-    history | grep -i --color=auto "$@" | fzf
+  history | grep -i --color=auto "$@" | fzf
 }
-
 
 # Install useful tools (fzf and ripgrep)
 install_tools() {
-    echo "Installing fzf and ripgrep..."
+  echo "Installing fzf and ripgrep..."
 
-    # Install fzf
-    if ! command -v fzf >/dev/null 2>&1; then
-        echo "Installing fzf..."
-        sudo apt update && sudo apt install -y fzf
-    else
-        echo "fzf already installed"
-    fi
+  # Install fzf
+  if ! command -v fzf >/dev/null 2>&1; then
+	echo "Installing fzf..."
+	sudo apt update && sudo apt install -y fzf
+  else
+	echo "fzf already installed"
+  fi
 
-    # Install ripgrep
-    if ! command -v rg >/dev/null 2>&1; then
-        echo "Installing ripgrep..."
-        sudo apt update && sudo apt install -y ripgrep
-    else
-        echo "ripgrep already installed"
-    fi
+  # Install ripgrep
+  if ! command -v rg >/dev/null 2>&1; then
+	echo "Installing ripgrep..."
+	sudo apt update && sudo apt install -y ripgrep
+  else
+	echo "ripgrep already installed"
+  fi
 
-    echo "Tools installation complete!"
-    echo "Reload your shell with: source ~/.zshrc"
+  echo "Tools installation complete!"
+  echo "Reload your shell with: source ~/.zshrc"
+}
+
+# Delete files based on extension
+cleanup() {
+  local arg="$1"
+  find . -type f -name "*.$1" -exec rm {} \;
 }
