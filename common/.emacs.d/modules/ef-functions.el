@@ -3312,6 +3312,14 @@ nil then relative line-numbers are toggled."
 
 	  )))
 
+;; Show file name function
+(defun my/show-file-name ()
+  "Show the full path filename of the current buffer in the minibuffer."
+  (interactive)
+  (message (buffer-file-name))
+  (kill-new (file-truename buffer-file-name)))
+
+
 ;;; ef-functions ends here
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
