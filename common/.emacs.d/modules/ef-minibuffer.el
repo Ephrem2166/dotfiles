@@ -35,10 +35,10 @@
 (use-package minibuffer
   :ensure nil
   :bind (
-         :map minibuffer-local-map
-         ("C-p" . minibuffer-previous-completion)
-         ("C-n" . minibuffer-next-completion)
-         )
+		 :map minibuffer-local-map
+		 ("C-p" . minibuffer-previous-completion)
+		 ("C-n" . minibuffer-next-completion)
+		 )
   :config
   (setopt enable-recursive-minibuffers t)
   (setopt tab-always-indent 'complete)
@@ -57,9 +57,10 @@
   (setopt completion-styles '(partial-completion flex substring basic initials))
 ;;;; Keep the cursor out of the read-only portions of the minibuffer
   (setopt minibuffer-prompt-properties
-          '( read-only t
-             cursor-intangible t
-             face minibuffer-prompt))
+		  '(read-only t
+					  cursor-intangible t
+					  face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   )
 
 ;;; Don't allow the cursor in the minibuffer
@@ -73,18 +74,18 @@
 (use-package minibuffer
   :ensure nil
   :hook ((minibuffer-setup . defer-garbage-collection)
-         (minibuffer-setup . restore-garbage-collection))
+		 (minibuffer-setup . restore-garbage-collection))
 
   :preface
   (defun defer-garbage-collection ()
-    (setq gc-cons-threshold most-positive-fixnum))
+	(setq gc-cons-threshold most-positive-fixnum))
 
   (defvar default-gc-cons-threshold 16777216)
   (defun restore-garbage-collection ()
-    ;; Deferred so that commands launched immediately after will enjoy the
-    ;; benefits.
-    (run-at-time
-     1 nil (lambda () (setq gc-cons-threshold default-gc-cons-threshold))))
+	;; Deferred so that commands launched immediately after will enjoy the
+	;; benefits.
+	(run-at-time
+	 1 nil (lambda () (setq gc-cons-threshold default-gc-cons-threshold))))
 
   )
 
