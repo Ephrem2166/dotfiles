@@ -3320,6 +3320,18 @@ nil then relative line-numbers are toggled."
   (kill-new (file-truename buffer-file-name)))
 
 
+;;;
+(defun my/backward-up-sexp (arg)
+  "Jump up to the start of the ARG'th enclosing sexp."
+  (interactive "p")
+  (let ((ppss (syntax-ppss)))
+	(cond ((elt ppss 3)
+		   (goto-char (elt ppss 8))
+		   (my/backward-up-sexp (1- arg)))
+		  ((backward-up-list arg)))))
+
+(global-set-key [remap backward-up-list] 'my/backward-up-sexp)
+
 ;;; ef-functions ends here
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
