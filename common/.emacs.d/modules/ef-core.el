@@ -419,14 +419,18 @@
 
 ;;; Emacs: Essential Configuration
 (use-package emacs
-  :ensure nil
-  :demand t
-  :config
-  (setq delete-pair-blink-delay 0.1)
-  (setq help-window-select t)
-  (setq find-library-include-other-files nil)
-  (setq-default truncate-partial-width-windows nil)
+:ensure nil
+:demand t
+:config
+(setq delete-pair-blink-delay 0.1)
+(setq help-window-select t)
+(setq find-library-include-other-files nil)
+(setq-default truncate-partial-width-windows nil)
+;; Check paren when current emacs buffer is saved
+(when (boundp 'emacs-lisp-mode)
+  (add-hook 'after-save-hook #'check-parens)
   )
+)
 
 
 ;;; Emacs: SAVE SETTINGS
@@ -773,9 +777,9 @@
   (setq ibuffer-filter-group-name-face '(:inherit (success bold)))
   (setq ibuffer-default-display-maybe-show-predicates t)
   ;; Kill ibuffer after quit
-  (defadvice ibuffer-quit (after kill-ibuffer activate)
-	"Kill the ibuffer buffer on exit."
-	(kill-buffer "*Ibuffer*"))
+  (advice-add ibuffer-quit (after kill-ibuffer activate)
+			  "Kill the ibuffer buffer on exit."
+			  (kill-buffer "*Ibuffer*"))
 
   (setq ibuffer-saved-filter-groups
 		'(("default"

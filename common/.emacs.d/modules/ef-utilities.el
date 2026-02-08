@@ -33,19 +33,19 @@
 (use-package avy
   :ensure t
   :bind (
-         ("C-x a ." . avy-resume)
-         ("C-x a c" . avy-goto-char)
-         ("C-x a w" . avy-goto-word-1)
-         ("C-x a l" . avy-goto-line)
-         ("C-x a k" . avy-goto-line-above)
-         ("C-x a j" . avy-goto-line-below)
-         ("C-x a d" . avy-kill-region)
-         ("C-x a r" . avy-copy-region)
-         ("C-x a y" . avy-copy-line)
-         ("C-x a L" . avy-move-line)
-         ("C-x a R" . avy-move-region)
-         ("C-x a e" . avy-goto-end-of-line)
-         )
+		 ("C-x a ." . avy-resume)
+		 ("C-x a c" . avy-goto-char)
+		 ("C-x a w" . avy-goto-word-1)
+		 ("C-x a l" . avy-goto-line)
+		 ("C-x a k" . avy-goto-line-above)
+		 ("C-x a j" . avy-goto-line-below)
+		 ("C-x a d" . avy-kill-region)
+		 ("C-x a r" . avy-copy-region)
+		 ("C-x a y" . avy-copy-line)
+		 ("C-x a L" . avy-move-line)
+		 ("C-x a R" . avy-move-region)
+		 ("C-x a e" . avy-goto-end-of-line)
+		 )
   :config
   (setq avy-timeout-seconds 0.27)
   (setq avy-all-windows nil)
@@ -62,27 +62,27 @@
   :after (vertico minibuffer)
   :hook (completion-list-mode . consult-preview-at-point-mode)
   :bind (
-         ("C-c c ." . consult-mode-command)
-         ("C-c c b" . consult-buffer)
-         ("C-c c B" . consult-bookmark)
-         ("C-c c e" . consult-compile-error)
-         ("C-c c f" . consult-find)
-         ("C-c c F" . consult-fd)
-         ("C-c c g" . consult-grep)
-         ("C-c c h" . consult-history)
-         ("C-c c i" . consult-info)
-         ("C-c c j" . consult-org-heading)
-         ("C-c c L" . consult-line)
-         ("C-c c l" . consult-goto-line)
-         ("C-c c m" . consult-man)
-         ("C-c c o" . consult-outline)
-         ("C-c c p" . consult-project-buffer)
-         ("C-c c r" . consult-recent-file)
-         ("C-c c R" . consult-register)
-         ("C-c c s" . consult-isearch-history)
-         ("C-c c t" . consult-theme)
-         ("C-c c y" . consult-yank-pop)
-         )
+		 ("C-c c ." . consult-mode-command)
+		 ("C-c c b" . consult-buffer)
+		 ("C-c c B" . consult-bookmark)
+		 ("C-c c e" . consult-compile-error)
+		 ("C-c c f" . consult-find)
+		 ("C-c c F" . consult-fd)
+		 ("C-c c g" . consult-grep)
+		 ("C-c c h" . consult-history)
+		 ("C-c c i" . consult-info)
+		 ("C-c c j" . consult-org-heading)
+		 ("C-c c L" . consult-line)
+		 ("C-c c l" . consult-goto-line)
+		 ("C-c c m" . consult-man)
+		 ("C-c c o" . consult-outline)
+		 ("C-c c p" . consult-project-buffer)
+		 ("C-c c r" . consult-recent-file)
+		 ("C-c c R" . consult-register)
+		 ("C-c c s" . consult-isearch-history)
+		 ("C-c c t" . consult-theme)
+		 ("C-c c y" . consult-yank-pop)
+		 )
   :init
   (global-set-key (kbd "M-i") 'consult-imenu)
   ;; Register
@@ -114,9 +114,9 @@
   :after consult
   :hook (consult)
   :bind (("C-x C-d" . consult-dir)
-         :map minibuffer-local-filename-completion-map
-         ("C-x C-d" . consult-dir)
-         ("C-x C-j" . consult-dir-jump-file))
+		 :map minibuffer-local-filename-completion-map
+		 ("C-x C-d" . consult-dir)
+		 ("C-x C-j" . consult-dir-jump-file))
   )
 
 ;;; Consult flycheck
@@ -128,7 +128,7 @@
   :after (:all consult flyspell)
   :bind
   (:map flyspell-mode-map
-        ("C-c j $" . consult-flyspell))
+		("C-c j $" . consult-flyspell))
   :config
   (progn))
 
@@ -162,12 +162,12 @@
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   :bind (
 
-         ("C-c . g" . dumb-jump-go)
-         ("C-c . e" . dumb-jump-go-prefer-external)
-         ("C-c . p" . dumb-jump-go-prompt)
-         ("C-c . q" . dumb-jump-quick-look)
-         ("C-c . <backspace>" . dumb-jump-back)
-         )
+		 ("C-c . g" . dumb-jump-go)
+		 ("C-c . e" . dumb-jump-go-prefer-external)
+		 ("C-c . p" . dumb-jump-go-prompt)
+		 ("C-c . q" . dumb-jump-quick-look)
+		 ("C-c . <backspace>" . dumb-jump-back)
+		 )
   )
 
 ;;; Emacs Everywhere
@@ -177,11 +177,11 @@
   (setq emacs-everywhere-major-mode-function #'org-mode)
   (setq emacs-everywhere-frame-name-format "Editing: %s %s")
   (setq emacs-everywhere-init-hooks
-        (delq 'emacs-everywhere-set-frame-position emacs-everywhere-init-hooks))
+		(delq 'emacs-everywhere-set-frame-position emacs-everywhere-init-hooks))
   (setq emacs-everywhere-frame-parameters
-        '((name . "floating emacs-everywhere")
-          (width . 80)
-          (height . 30)))
+		'((name . "floating emacs-everywhere")
+		  (width . 80)
+		  (height . 30)))
 
   )
 
@@ -214,7 +214,7 @@
   (setq prefix-help-command #'embark-prefix-help-command)
   (setq embark-quit-after-action '((kill-buffer . t) (t . nil)))
   (setq embark-verbose-indicator-excluded-actions
-        '(embark-cycle embark-act-all embark-collect embark-export embark-insert))
+		'(embark-cycle embark-act-all embark-collect embark-export embark-insert))
 
   )
 
@@ -240,10 +240,10 @@
   :ensure t
   :defer t
   :bind (("C-=" . er/expand-region)
-         ("C--" . er/contract-region)
-         ("C-(" . er/mark-outside-pairs)
-         ("C-)" . er/mark-inside-pairs)
-         )
+		 ("C--" . er/contract-region)
+		 ("C-(" . er/mark-outside-pairs)
+		 ("C-)" . er/mark-inside-pairs)
+		 )
   )
 
 ;;; GCMH
@@ -301,17 +301,17 @@
   (hl-todo-highlight-punctuation ":")
   (hl-todo-keyword-faces
    '(("TODO"   . "#BF616A")
-     ("FIXME"  . "#FF0000")
-     ("TEST" . "#EBCB9B")
-     ("NOTE"  error bold)
-     ("DEBUG"  . "#EBCB9B")
-     ("BUG" error italic)
-     ("REVIEW" font-lock-keyword-face bold)
-     ("GOTCHA" . "#FF4500")
-     ;; Documentation and closure.
-     ("NOTE"       . "#1E90FF")    ; Dodger blue - Informational notes.
-     ("DEPRECATED" . "#B22222")    ; Fire brick - Deprecated code.
-     ("STUB"   . "#1E90FF"))))
+	 ("FIXME"  . "#FF0000")
+	 ("TEST" . "#EBCB9B")
+	 ("NOTE"  error bold)
+	 ("DEBUG"  . "#EBCB9B")
+	 ("BUG" error italic)
+	 ("REVIEW" font-lock-keyword-face bold)
+	 ("GOTCHA" . "#FF4500")
+	 ;; Documentation and closure.
+	 ("NOTE"       . "#1E90FF")    ; Dodger blue - Informational notes.
+	 ("DEPRECATED" . "#B22222")    ; Fire brick - Deprecated code.
+	 ("STUB"   . "#1E90FF"))))
 
 ;;; Info-colors
 ;; Extra colors for info mode
@@ -352,11 +352,11 @@
   :ensure t
   :defer t
   :bind (
-         ("C-M-a" . mc/edit-lines)
-         ("C-M-/" . mc/mark-all-dwim)
-         ("C-M-." . mc/mark-next-like-this)
-         ("C-M-," . mc/mark-previous-like-this)
-         )  )
+		 ("C-M-a" . mc/edit-lines)
+		 ("C-M-/" . mc/mark-all-dwim)
+		 ("C-M-." . mc/mark-next-like-this)
+		 ("C-M-," . mc/mark-previous-like-this)
+		 )  )
 
 
 ;;; No Littering
@@ -366,15 +366,15 @@
   :demand t
   :init
   (eval-and-compile
-    (setq no-littering-etc-directory (expand-file-name "etc/" user-emacs-directory)
-          no-littering-var-directory (expand-file-name "var/" user-emacs-directory)))
+	(setq no-littering-etc-directory (expand-file-name "etc/" user-emacs-directory)
+		  no-littering-var-directory (expand-file-name "var/" user-emacs-directory)))
   :config
   ;; Ensure the directories exist
   (mkdir no-littering-etc-directory t)
   (mkdir no-littering-var-directory t)
   (with-eval-after-load 'recentf
-    (add-to-list 'recentf-exclude no-littering-var-directory)
-    (add-to-list 'recentf-exclude no-littering-etc-directory)))
+	(add-to-list 'recentf-exclude no-littering-var-directory)
+	(add-to-list 'recentf-exclude no-littering-etc-directory)))
 
 
 ;;; Outline Indent
@@ -402,47 +402,47 @@
 (use-package popper
   :ensure t
   :bind (("C-c b p"   . popper-toggle)
-         ("C-<tab>"   . popper-cycle)
-         ("C-M-," . popper-toggle-type))
+		 ("C-<tab>"   . popper-cycle)
+		 ("C-M-," . popper-toggle-type))
   :init
   (setq popper-reference-buffers
-        '("\\*Messages\\*"
-          "Output\\*$"
-          "\\*Warnings\\*"
-          "\\*xref\\*"
-          "\\*Apropos\\*$"
-          "\\*Backtrace\\*"
-          "*Flymake diagnostics.*"
-          "\\*eldoc\\*"
-          "\\*Async Shell Command\\*"
-          "\\*Compile-Log\\*$"
-          "\\*Completions\\*$"
-          "\\*Calendar\\*$"
-          "\\*Fd\\*$" "\\*Find\\*$" "\\*Finder\\*$"
-          "\\*Kill Ring\\*$"
-          "\\*Embark \\(Collect\\|Live\\):.*\\*$"
-          "\\*[Wo]*Man.*\\*$"
-          "\\*lsp-help\\*$" "\\*lsp session\\*$"
-          "\\*quickrun\\*$"
-          "\\*tldr\\*$"
-          "\\*vc-.*\\**"
-          "\\*diff-hl\\**"
-          "^\\*macro expansion\\**"
-          "^\\*.*eat.*\\*.*$"
-          "^\\*.*eshell.*\\*.*$"
-          "^\\*.*shell.*\\*.*$"
-          "^\\*.*terminal.*\\*.*$"
-          "^\\*.*vterm[inal]*.*\\*.*$"
-          help-mode
-          compilation-mode
-          vterm-mode
-          helpful-mode
-          flymake-diagnostics-buffer-mode
-          flycheck-error-list-mode
-          flycheck-verify-mode
-          grep-mode
-          occur-mode
-          ))
+		'("\\*Messages\\*"
+		  "Output\\*$"
+		  "\\*Warnings\\*"
+		  "\\*xref\\*"
+		  "\\*Apropos\\*$"
+		  "\\*Backtrace\\*"
+		  "*Flymake diagnostics.*"
+		  "\\*eldoc\\*"
+		  "\\*Async Shell Command\\*"
+		  "\\*Compile-Log\\*$"
+		  "\\*Completions\\*$"
+		  "\\*Calendar\\*$"
+		  "\\*Fd\\*$" "\\*Find\\*$" "\\*Finder\\*$"
+		  "\\*Kill Ring\\*$"
+		  "\\*Embark \\(Collect\\|Live\\):.*\\*$"
+		  "\\*[Wo]*Man.*\\*$"
+		  "\\*lsp-help\\*$" "\\*lsp session\\*$"
+		  "\\*quickrun\\*$"
+		  "\\*tldr\\*$"
+		  "\\*vc-.*\\**"
+		  "\\*diff-hl\\**"
+		  "^\\*macro expansion\\**"
+		  "^\\*.*eat.*\\*.*$"
+		  "^\\*.*eshell.*\\*.*$"
+		  "^\\*.*shell.*\\*.*$"
+		  "^\\*.*terminal.*\\*.*$"
+		  "^\\*.*vterm[inal]*.*\\*.*$"
+		  help-mode
+		  compilation-mode
+		  vterm-mode
+		  helpful-mode
+		  flymake-diagnostics-buffer-mode
+		  flycheck-error-list-mode
+		  flycheck-verify-mode
+		  grep-mode
+		  occur-mode
+		  ))
   :config
   (setq popper-group-by-directory t)
   (setq popper-echo-dispatch-actions t)
@@ -558,10 +558,10 @@
   :hook ((markdown-mode org-mode) . my/activate-visual-fill-column)
   :init
   (defun my/activate-visual-fill-column ()
-    (interactive)
-    (setq-local fill-column 111)
-    (visual-line-mode t)
-    (visual-fill-column-mode t))
+	(interactive)
+	(setq-local fill-column 111)
+	(visual-line-mode t)
+	(visual-fill-column-mode t))
   :config
   (setq-default visual-fill-column-center-text t)
   (setq-default visual-fill-column-fringes-outside-margins nil)
@@ -574,14 +574,14 @@
   :config
   ;; Increase undo history limits to reduce likelihood of data loss
   (setq undo-limit 400000           ; 400kb (default is 160kb)
-        undo-strong-limit 3000000   ; 3mb   (default is 240kb)
-        undo-outer-limit 48000000)  ; 48mb  (default is 24mb)
+		undo-strong-limit 3000000   ; 3mb   (default is 240kb)
+		undo-outer-limit 48000000)  ; 48mb  (default is 24mb)
 
   :bind (([remap undo] . undo-fu-only-undo)
-         ([remap redo] . undo-fu-only-redo)
-         ("C-_" . undo-fu-only-undo)
-         ("M-_" . undo-fu-only-redo)
-         ("C-M-_" . undo-fu-only-redo-all)))
+		 ([remap redo] . undo-fu-only-redo)
+		 ("C-_" . undo-fu-only-undo)
+		 ("M-_" . undo-fu-only-redo)
+		 ("C-M-_" . undo-fu-only-redo-all)))
 
 ;;; Vundo
 ;; Visualize Undo Tree
