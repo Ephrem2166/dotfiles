@@ -4,13 +4,13 @@
 ;;; Garbage Collection Settings
 (setq read-process-output-max (* 1024 1024 3))
 (setq gc-cons-threshold most-positive-fixnum
-      gc-cons-percentage 0.6)
+	  gc-cons-percentage 0.6)
 ;; From Doom Emacs
 (add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold (* 100 1024 1024))
-            (setq gc-cons-percentage 0.1)
-            ))
+		  (lambda ()
+			(setq gc-cons-threshold (* 100 1024 1024))
+			(setq gc-cons-percentage 0.1)
+			))
 ;; Suppress GC messages for a cleaner startup log.
 (setq garbage-collection-messages nil)
 
@@ -21,8 +21,8 @@
 (defvar file-name-handler-alist-old file-name-handler-alist)
 (setq file-name-handler-alist nil)
 (add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq file-name-handler-alist file-name-handler-alist-old)))
+		  (lambda ()
+			(setq file-name-handler-alist file-name-handler-alist-old)))
 
 ;;; Native Compilation
 ;; Ensure JIT compilation is enabled for improved performance by
@@ -45,7 +45,7 @@
 (defun my/emacs-no-minibuffer-scroll-bar (frame)
   "Remove the minibuffer scroll bars from FRAME."
   (when scroll-bar-mode
-    (set-window-scroll-bars (minibuffer-window frame) nil nil nil nil :persistent)))
+	(set-window-scroll-bars (minibuffer-window frame) nil nil nil nil :persistent)))
 
 (add-hook 'after-make-frame-functions #'my/emacs-no-minibuffer-scroll-bar)
 
@@ -55,22 +55,22 @@
  not retain the generic background set by the function
  `prot-emacs-avoid-initial-flash-of-light'."
   (when-let* ((theme (car custom-enabled-themes)))
-    (enable-theme theme)))
+	(enable-theme theme)))
 
 (defun ef/avoid-initial-flash-of-light ()
   "Avoid flash of light when starting Emacs."
   (setq mode-line-format nil)
   (setq default-frame-alist '(
-                              (tool-bar-lines . 0)
-                              (menu-bar-lines . 0)
-                              (horizontal-scroll-bars)
-                              (vertical-scroll-bars)
-                              (undecorated-round . t)
-                              (background-color . "#282C34")
-                              (ns-appearance . dark)
-                              (ns-transparent-titlebar . t)
-                              )
-        )
+							  (tool-bar-lines . 0)
+							  (menu-bar-lines . 0)
+							  (horizontal-scroll-bars)
+							  (vertical-scroll-bars)
+							  (undecorated-round . t)
+							  (background-color . "#282C34")
+							  (ns-appearance . dark)
+							  (ns-transparent-titlebar . t)
+							  )
+		)
   ;; These colors should match your selected theme for maximum effect
   ;; Note that for catppuccin whenever we create a new frame or open it on terminal
   ;; it is necessary to reload the theme.
@@ -165,7 +165,7 @@
 
 ;; Disable bidirectional text scanning for a modest performance boost.
 (setq-default bidi-display-reordering 'left-to-right
-              bidi-paragraph-direction 'left-to-right)
+			  bidi-paragraph-direction 'left-to-right)
 
 ;; Disabling the BPA makes redisplay faster
 (setq bidi-inhibit-bpa t)
@@ -194,12 +194,12 @@
 ;;; Profile emacs startup
 (defun my/display-startup-time ()
   (add-hook 'after-init-hook
-            (lambda ()
-              (message "🚀 Emacs loaded in %s with %d garbage collections."
-                       (format "%.3f seconds"
-                               (float-time
-                                (time-subtract after-init-time before-init-time)))
-                       gcs-done))))
+			(lambda ()
+			  (message "🚀 Emacs loaded in %s with %d garbage collections."
+					   (format "%.3f seconds"
+							   (float-time
+								(time-subtract after-init-time before-init-time)))
+					   gcs-done))))
 (my/display-startup-time)
 ;; (eval-and-compile
 ;;   (defconst emacs-start-time (current-time))
