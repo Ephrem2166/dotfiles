@@ -52,9 +52,6 @@
 ;;; Kill buffer and window
 ;; (global-set-key (kbd "C-x k") #'kill-buffer-and-window)
 
-
-
-
 (define-key global-map (kbd "RET") 'newline-and-indent)
 ;;; Alternative
 ;; (use-package emacs
@@ -135,7 +132,10 @@
 		   )
 
 (bind-keys :map help-map
-		   ("u" . apropos-user-option))
+		   ("p" . describe-package)
+		   ("u" . apropos-user-option)
+
+		   )
 
 
 ;; Custom Function Keybindings
