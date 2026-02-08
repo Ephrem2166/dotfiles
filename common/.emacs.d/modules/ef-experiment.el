@@ -1146,6 +1146,18 @@ Version 2017-03-12"
 		  'face (list :background (match-string-no-properties 0)))))))
   (font-lock-flush))
 
+;;; Disable expensive features when running a macro
+(defun my/disable-features-during-macro-call (orig &rest args)
+  "When running a macro, disable features that might be expensive.
+ORIG is the advised function, which is called with its ARGS."
+  (let (post-command-hook
+		font-lock-mode
+		(tab-always-indent (or (eq 'complete tab-always-indent) tab-always-indent)))
+	(apply orig args)))
+
+(advice-add 'kmacro-call-macro :around 'my/disable-features-during-macro-call)
+
+;;; Code Ends Here
 (provide 'ef-experiment)
 
 ;;; ef-experiment.el ends here
