@@ -76,8 +76,8 @@ bindkey "^[i" expand-word
 up-directory() {
   local count=${1:-1}
   while ((count > 0)); do
-    cd ..
-    ((count--))
+	cd ..
+	((count--))
   done
   zle reset-prompt
 }
