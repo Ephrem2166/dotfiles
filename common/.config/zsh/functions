@@ -399,3 +399,20 @@ cleanup() {
   local arg="$1"
   find . -type f -name "*.$1" -exec rm {} \;
 }
+
+# Top 10 Commands
+top10() { history | awk '{a[$2]++ } END{for(i in a){print a[i] " " i}}' | sort -rn | head; }
+
+# Go up specified number of directories
+up() {
+  local d=""
+  limit=$1
+  for ((i = 1; i <= limit; i++)); do
+	d=$d/..
+  done
+  d=$(echo $d | sed 's/^\///')
+  if [[ -z "$d" ]]; then
+	d=..
+  fi
+  cd $d
+}

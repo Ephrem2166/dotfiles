@@ -21,7 +21,10 @@ zstyle ':completion:*' accept-ezact '*(N)'
 # Detailed file listing
 zstyle ':completion:*' file-list all
 
+zstyle ':completion:*:manuals' separate-sections true
 
+zstyle ':completion:*' force-list always
+zstyle ':completion:*:killall:*' force-list always
 
 # Grouping
 # For all completions: grouping the output
@@ -133,6 +136,11 @@ zstyle ':completion:*:corrections'  format "- %d - (errors %e)"
 zstyle ':completion:*:default'      select-prompt "Match %m  Line %l  %p"
 zstyle ':completion:*:default'      list-prompt "Line %l  Continue?"
 zstyle ':completion:*:warnings'     format "- no match - %d"
+
+zstyle ':completion:*:history-words' stop yes
+zstyle ':completion:*:history-words' remove-all-dups yes
+zstyle ':completion:*:history-words' list false
+zstyle ':completion:*:history-words' menu yes
 
 # Fzf-tab
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
