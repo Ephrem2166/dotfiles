@@ -3370,6 +3370,18 @@ nil then relative line-numbers are toggled."
 	  result)))
 
 (advice-add 'save-buffer :around #'my/report-saving-time)
+
+;;; Advice for recentf
+(defun my/recentf-cleanup ()
+  "Clean up recentf list by removing non-existent files."
+  (interactive)
+  (setq recentf-list (cl-remove-if-not 'file-exists-p recentf-list))
+  (recentf-cleanup))
+
+;; Advice recentf-load-list to perform cleanup after loading the recentf
+;; list.
+(advice-add 'recentf-load-list :after #'my/recentf-cleanup)
+
 ;;; ef-functions ends here
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
