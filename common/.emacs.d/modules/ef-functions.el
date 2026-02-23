@@ -3345,6 +3345,31 @@ nil then relative line-numbers are toggled."
 
 (advice-add 'message :around #'my-add-timestamp-to-message)
 
+;;; Advice for find file
+(defun my/find-file-time-advice (orig-fun &rest args)
+  "Advice function for `find-file' that reports the time spent on file loading."
+  (let* ((filename (car args))
+		 (find-file-time-start (float-time)))
+	(message "[Finding file %s...]" filename)
+	(let ((result (apply orig-fun args)))
+	  (message "[Found file %s in %.2f seconds]" filename
+			   (- (float-time) find-file-time-start))
+	  result)))
+
+(advice-add 'find-file :around #'my/find-file-time-advice)
+
+;;; Advice for saving file
+(defun my/report-saving-time (orig-fun &rest args)
+  "Save the file and report time spent."
+  (let* ((filename (buffer-file-name))
+		 (start-time (float-time)))
+	(message "[Saving file %s...]" filename)
+	(let ((result (apply orig-fun args)))
+	  (message "[Saved file %s in %.2f seconds]" filename
+			   (- (float-time) start-time))
+	  result)))
+
+(advice-add 'save-buffer :around #'my/report-saving-time)
 ;;; ef-functions ends here
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
