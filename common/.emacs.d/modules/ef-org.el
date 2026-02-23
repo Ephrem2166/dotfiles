@@ -873,6 +873,18 @@ context.  When called with an argument, unconditionally call
    'append)
   )
 
+;;; Flyspell
+;; Enable on-the-fly spell checking.
+(add-hook 'org-mode-hook
+		  (lambda ()
+			(let ((buffer-name (buffer-name)))
+			  (if (or (eq (aref buffer-name 0) ?\s) ; Buffer starting with " *".
+					  (and (boundp 'org-babel-exp-reference-buffer)
+						   org-babel-exp-reference-buffer)) ; Export buffer.
+				  (message "[DON'T TURN ON Flyspell mode in `%s']" buffer-name)
+				(message "[Turning on Flyspell mode in `%s']" buffer-name)
+				(flyspell-mode)))))
+
 ;;; Force org-code use monospace fonts for better visualization
 (define-minor-mode unpackaged/org-table-face-mode
   "Apply `org-table' face family to all text in Org tables.
