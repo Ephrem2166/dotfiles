@@ -3332,6 +3332,19 @@ nil then relative line-numbers are toggled."
 
 (global-set-key [remap backward-up-list] 'my/backward-up-sexp)
 
+;;; Add timestamp to message outputs
+(defun my-add-timestamp-to-message (old-fun &rest args)
+  "Add timestamps to `message' output."
+  (when (car args)
+	(apply old-fun
+		   (cons (format "[%s.%03d] %s"
+						 (format-time-string "%Y-%m-%d %r")
+						 (string-to-number (substring (format-time-string "%N") 0 3))
+						 (car args))
+				 (cdr args)))))
+
+(advice-add 'message :around #'my-add-timestamp-to-message)
+
 ;;; ef-functions ends here
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
