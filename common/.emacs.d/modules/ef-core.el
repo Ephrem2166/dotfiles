@@ -1628,8 +1628,10 @@ to the IFF buffer or  the files listed."
   (setq which-key-side-window-location 'bottom)
   (setq which-key-side-window-slot -10)
   (setq which-key-side-window-max-height 0.25)
-  (setq which-key-sort-order #'which-key-key-order-alpha)
+  ;; (setq which-key-sort-order #'which-key-key-order-alpha)
   ;; (setq which-key-sort-order #'which-key-description-order)
+  ;; Sort keybindings by local bindings first, then by key order.
+  (setq which-key-sort-order 'which-key-local-then-key-order)
   (setq which-key-allow-imprecise-window-fit nil)
   ;; Allow a key binding to be modified by multiple elements
   (setq which-key-allow-multiple-replacements nil)

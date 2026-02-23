@@ -30,6 +30,7 @@
 ;;; Org Auto Tangle
 ;; Automatically and Asynchronously tangles org files on save
 (use-package org-auto-tangle
+  :ensure t
   :after org
   :defer t
   :hook (org-mode . org-auto-tangle-mode)
@@ -252,7 +253,7 @@
 ;; A synchronized org-mode document annotator
 ;; Just press i
 (use-package org-noter
-  ;;  :ensure nil
+  :ensure nil
   :defer
   :after org
   :custom
@@ -318,6 +319,7 @@
 ;; Org-remark lets you highlight and annotate text files, websites,
 ;; EPUB books and Info documentation with using Org mode.
 (use-package org-remark
+  :ensure t
   :hook (on-first-file . org-remark-global-tracking-mode)
   :after org
   :bind (;; :bind keyword also implicitly defers org-remark itself.
@@ -359,7 +361,7 @@
 ;;; Org Superstar
 ;; Prettify headings and plain lists in org mode
 (use-package org-superstar
-  :disabled t
+  :disabled
   :hook (org-mode . org-superstar-mode)
   :init
   (setq org-superstar-headline-bullets-list '("✖" "✚" "◉" "○" "▶")

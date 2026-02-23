@@ -14,14 +14,14 @@
   (setopt org-agenda-inhibit-startup t)
   ;; (setopt org-agenda-files (list org-directory))
   (setq org-agenda-files
-        (list
-         "~/Org/Capture/appt.org"
-         "~/Org/Capture/links.org"
-         "~/Org/Capture/today.org"
-         "~/Org/Capture/links.org"
-         "~/Org/Capture/tasks.org"
-         "~/Org/Capture/notes.org"
-         "~/Org/Capture/journal.org"))
+		(list
+		 "~/Org/Capture/appt.org"
+		 "~/Org/Capture/links.org"
+		 "~/Org/Capture/today.org"
+		 "~/Org/Capture/links.org"
+		 "~/Org/Capture/tasks.org"
+		 "~/Org/Capture/notes.org"
+		 "~/Org/Capture/journal.org"))
   ;; (setopt org-agenda-files (list my-org-todos))
   ;; (setopt org-agenda-files '(
   ;; "~/Documents/Notes/Org Notes/Agenda/tasks.org"
@@ -37,10 +37,10 @@
   (setopt org-agenda-skip-scheduled-if-done t)
   (setopt org-agenda-skip-timestamp-if-done t)
   (setopt org-agenda-sorting-strategy
-          '((agenda time-up deadline-up scheduled-up todo-state-up priority-down)
-            (todo todo-state-up priority-down deadline-up)
-            (tags todo-state-up priority-down deadline-up)
-            (search todo-state-up priority-down deadline-up)))
+		  '((agenda time-up deadline-up scheduled-up todo-state-up priority-down)
+			(todo todo-state-up priority-down deadline-up)
+			(tags todo-state-up priority-down deadline-up)
+			(search todo-state-up priority-down deadline-up)))
   (setopt org-agenda-tags-todo-honor-ignore-options t)
   (setopt org-agenda-use-tag-inheritance nil)
   (setopt org-agenda-window-frame-fractions '(0.0 . 0.5))
@@ -61,10 +61,10 @@
   (setopt org-agenda-max-tags nil)
   (setopt org-agenda-max-effort nil)
   (setopt org-agenda-prefix-format
-          '((agenda . " %i %-12:c%?-12t% s")
-            (todo . " %i %-12:c")
-            (tags . " %i %-12:c")
-            (search . " %i %-12:c")))
+		  '((agenda . " %i %-12:c%?-12t% s")
+			(todo . " %i %-12:c")
+			(tags . " %i %-12:c")
+			(search . " %i %-12:c")))
   (setopt org-agenda-breadcrumbs-separator "->")
   (setopt org-agenda-todo-keyword-format "%-1s")
   (setopt org-agenda-fontify-priorities 'cookies)
@@ -99,12 +99,12 @@
   (setopt org-agenda-show-future-repeats t)
   (setopt org-agenda-prefer-last-repeat nil)
   (setopt org-agenda-timerange-leaders
-          '("" "(%d/%d): "))
+		  '("" "(%d/%d): "))
   (setopt org-agenda-scheduled-leaders
-          '("Scheduled: " "Sched.%2dx: "))
+		  '("Scheduled: " "Sched.%2dx: "))
   (setopt org-agenda-inactive-leader "[")
   (setopt org-agenda-deadline-leaders
-          '("Deadline:  " "In %3d d.: " "%2d d. ago: "))
+		  '("Deadline:  " "In %3d d.: " "%2d d. ago: "))
 
   ;; Time Grid
   (setopt org-agenda-time-leading-zero t)
@@ -113,11 +113,11 @@
   (setopt org-agenda-show-current-time-in-grid t)
   (setopt org-agenda-current-time-string (concat "Now " (make-string 70 ?.)))
   (setopt org-agenda-time-grid
-          '((daily today require-timed)
-            ( 0500 0600 0700 0800 0900 1000
-              1100 1200 1300 1400 1500 1600
-              1700 1800 1900 2000 2100 2200)
-            "" ""))
+		  '((daily today require-timed)
+			( 0500 0600 0700 0800 0900 1000
+			  1100 1200 1300 1400 1500 1600
+			  1700 1800 1900 2000 2100 2200)
+			"" ""))
   (setopt org-agenda-default-appointment-duration nil)
 
   ;; Agenda global to-do list
@@ -131,7 +131,7 @@
   ;; Agenda Tagged Items
   (setopt org-agenda-show-inherited-tags t)
   (setopt org-agenda-use-tag-inheritance
-          '(todo search agenda))
+		  '(todo search agenda))
   (setopt org-agenda-hide-tags-regexp nil)
   (setopt org-agenda-remove-tags nil)
   (setopt org-agenda-tags-column 0)
@@ -146,7 +146,7 @@
   (setq org-agenda-inhibit-startup t)
   (setq org-agenda-use-tag-inheritance nil)
   (add-hook 'after-init-hook                ;;   then revert after-init
-            #'(lambda () (setq org-agenda-show-inherited-tags 'always)))
+			#'(lambda () (setq org-agenda-show-inherited-tags 'always)))
   (setq-default org-agenda-skip-scheduled-if-deadline-is-shown 'not-today)
   )
 
@@ -168,22 +168,22 @@
   :ensure nil
   :config
   (setq org-agenda-custom-commands
-        '(
-          ;; Remove
-          ("#" " To remove"
-           ((todo "DONE|SKIP"))
-           ((org-agenda-overriding-header "Items to remove (use C-k)")
-            (org-agenda-include-diary nil)))
-          ;; Next Week Scheduled
-          ("H" " Next week scheduled/deadline"
-           agenda ""
-           ((org-agenda-overriding-header "Next week scheduled/deadline items")
-            (org-agenda-entry-types '(:deadline :scheduled))
-            (org-agenda-span 'week)
-            (org-deadline-warning-days 1)
-            (org-agenda-include-diary nil)))
+		'(
+		  ;; Remove
+		  ("#" " To remove"
+		   ((todo "DONE|SKIP"))
+		   ((org-agenda-overriding-header "Items to remove (use C-k)")
+			(org-agenda-include-diary nil)))
+		  ;; Next Week Scheduled
+		  ("H" " Next week scheduled/deadline"
+		   agenda ""
+		   ((org-agenda-overriding-header "Next week scheduled/deadline items")
+			(org-agenda-entry-types '(:deadline :scheduled))
+			(org-agenda-span 'week)
+			(org-deadline-warning-days 1)
+			(org-agenda-include-diary nil)))
 
-          ) ))
+		  ) ))
 
 ;;; Org Clock
 (use-package org
