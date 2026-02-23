@@ -12,6 +12,7 @@
 ;; Document viewer for Emacs (Builtin)
 (use-package doc-view
   :ensure nil
+  :config
   (setq doc-view-continuous t)
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   )
@@ -31,12 +32,12 @@
   :config
   (setq logos-outlines-are-pages t)
   (setq logos-outline-regexp-alist
-        `((emacs-lisp-mode . ,(format "\\(^;;;+ \\|%s\\)" logos-page-delimiter))
-          (org-mode . ,(format "\\(^\\*+ +\\|^-\\{5\\}$\\|%s\\)" logos-page-delimiter))
-          (markdown-mode . ,(format "\\(^\\#+ +\\|^[*-]\\{5\\}$\\|^\\* \\* \\*$\\|%s\\)" logos-page-delimiter))
-          ;; (conf-toml-mode . "^\\["))
-          )
-        )
+		`((emacs-lisp-mode . ,(format "\\(^;;;+ \\|%s\\)" logos-page-delimiter))
+		  (org-mode . ,(format "\\(^\\*+ +\\|^-\\{5\\}$\\|%s\\)" logos-page-delimiter))
+		  (markdown-mode . ,(format "\\(^\\#+ +\\|^[*-]\\{5\\}$\\|^\\* \\* \\*$\\|%s\\)" logos-page-delimiter))
+		  ;; (conf-toml-mode . "^\\["))
+		  )
+		)
   (setq-default logos-hide-mode-line t)
   (setq-default logos-hide-header-line t)
   (setq-default logos-hide-buffer-boundaries t)
@@ -58,30 +59,30 @@
   (setq nov-variable-pitch nil)
   (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
   (add-hook 'nov-mode-hook (lambda ()
-                             (visual-line-mode 1)
-                             (setq-local line-spacing 0.2)))
+							 (visual-line-mode 1)
+							 (setq-local line-spacing 0.2)))
   :bind (:map nov-mode-map
 
-              ("p" . nov-previous-document)
-              ("<up>" . nov-scroll-up)
-              ("k" . nov-scroll-up)
-              ("<down>" . nov-scroll-down)
-              ("j" . nov-scroll-down)
-              ("n" . nov-next-document)
-              ("L" . nov-next-document)
-              ("t" . nov-goto-toc)
-              ("<end>" . nov-goto-end)))
+			  ("p" . nov-previous-document)
+			  ("<up>" . nov-scroll-up)
+			  ("k" . nov-scroll-up)
+			  ("<down>" . nov-scroll-down)
+			  ("j" . nov-scroll-down)
+			  ("n" . nov-next-document)
+			  ("L" . nov-next-document)
+			  ("t" . nov-goto-toc)
+			  ("<end>" . nov-goto-end)))
 
 ;;; Olivetti
 ;; Minor mode to automatically balance window margins
 (use-package olivetti
   :ensure t
   :hook (
-         ;; (olivetti-mode-on . my/olivetti-mode-on)
-         ;; (olivetti-mode-off . my/olivetti-mode-off)
+		 ;; (olivetti-mode-on . my/olivetti-mode-on)
+		 ;; (olivetti-mode-off . my/olivetti-mode-off)
 
-         ((org-mode Info-mode  markdown-mode) . olivetti-mode)
-         )
+		 ((org-mode Info-mode  markdown-mode) . olivetti-mode)
+		 )
   :config
   (setq olivetti-lighter nil)
   ;; (setq olivetti-hide-mode-line nil)
@@ -175,13 +176,13 @@
   ;;        (pdf-view-mode . (lambda () (display-line-numbers-mode -1)))
   ;;        )
   :bind (:map pdf-view-mode-map
-              ("J" . pdf-view-next-line-or-next-page)
-              ("K" . pdf-view-previous-line-or-previous-page)
-              ("h" . pdf-view-previous-page)
-              ("l" . pdf-view-next-page)
-              ("<home>" . pdf-view-first-page)
-              ("<end>" . pdf-view-last-page)
-              ("r" . pdf-view-reset-slice)))
+			  ("J" . pdf-view-next-line-or-next-page)
+			  ("K" . pdf-view-previous-line-or-previous-page)
+			  ("h" . pdf-view-previous-page)
+			  ("l" . pdf-view-next-page)
+			  ("<home>" . pdf-view-first-page)
+			  ("<end>" . pdf-view-last-page)
+			  ("r" . pdf-view-reset-slice)))
 
 
 
