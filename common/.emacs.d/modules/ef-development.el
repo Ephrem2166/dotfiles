@@ -301,6 +301,9 @@
   ;; :hook (bash-ts-mode json-ts-mode toml-ts-mode js-ts-mode python-ts-mode elisp-ts-mode markdown-ts-mode yaml-ts-mode css-ts-mode)
   :init
   (setq treesit-font-lock-level 4)
+  ;; (setq treesit-auto-install-grammar t)
+  ;; To check if grammar is working:
+  ;; (treesit-language-available-p 'python)
   (setq treesit-language-source-alist
 		'(
 		  (bash "https://github.com/tree-sitter/tree-sitter-bash")
@@ -320,11 +323,11 @@
 		  (lua             . ("https://github.com/tree-sitter-grammars/tree-sitter-lua"))
 		  (json "https://github.com/tree-sitter/tree-sitter-json")
 		  (make . ("https://github.com/alemuller/tree-sitter-make"))
-		  (markdown . https://github.com/tree-sitter-grammars/tree-sitter-markdown )
+		  (markdown . (https://github.com/tree-sitter-grammars/tree-sitter-markdown ))
 		  (markdown-inline . "https://github.com/tree-sitter-grammars/tree-sitter-markdown")
 		  ;; (php . ("https://github.com/tree-sitter/tree-sitter-php"))
-		  (python . "https://github.com/tree-sitter/tree-sitter-python")
-;; (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
+		  (python . ("https://github.com/tree-sitter/tree-sitter-python"))
+		  ;; (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
 		  ;; (sql . ("https://github.com/m-novikov/tree-sitter-sql"))
 		  (typescript . "https://github.com/tree-sitter/tree-sitter-typescript")
 		  (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
