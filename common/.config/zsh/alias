@@ -109,17 +109,17 @@ alias vim="nvim"
 # #### Emacs #
 ##############
 if (( $+commands[emacs] )); then
-    alias e='emacs -nw'
-    alias eq='emacs -nw -Q'
-    alias ew='emacs'
-    alias eqw='emacs -Q'
-    alias ue='e --init-directory=$PWD'
-    alias uew='ew --init-directory=$PWD'
+	alias e='emacs -nw'
+	alias eq='emacs -nw -Q'
+	alias ew='emacs'
+	alias eqw='emacs -Q'
+	alias ue='e --init-directory=$PWD'
+	alias uew='ew --init-directory=$PWD'
 fi
 
 if (( $+commands[emacsclient] )); then
-    alias ec='emacsclient --alternate-editor= -nw'
-    alias ecw='emacsclient --alternate-editor='
+	alias ec='emacsclient --alternate-editor= -nw'
+	alias ecw='emacsclient --alternate-editor='
 fi
 
 
@@ -222,13 +222,13 @@ if hash zoxide 2>/dev/null; then
   eval "$(zoxide init zsh)"
   alias cd='zd'
   zd() {
-    if [ $# -eq 0 ]; then
-      builtin cd ~ && return
-    elif [ -d "$1" ]; then
-      builtin cd "$1"
-    else
-      z "$@" && printf "\U000F17A9 " && pwd || echo "Error: Directory not found"
-    fi
+	if [ $# -eq 0 ]; then
+	  builtin cd ~ && return
+	elif [ -d "$1" ]; then
+	  builtin cd "$1"
+	else
+	  z "$@" && printf "\U000F17A9 " && pwd || echo "Error: Directory not found"
+	fi
   }
 
 fi
@@ -243,8 +243,8 @@ alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
 # yt-dlp  #
 ###########
 alias mp3-dl='yt-dlp --ignore-config --extract-audio \
-    --audio-format "mp3" --audio-quality 0 --embed-thumbnail --embed-metadata \
-    --output "$HOME/Downloads/%(title)s.%(ext)s"'
+	--audio-format "mp3" --audio-quality 0 --embed-thumbnail --embed-metadata \
+	--output "$HOME/Downloads/%(title)s.%(ext)s"'
 
 ###############
 # # Utilities #
