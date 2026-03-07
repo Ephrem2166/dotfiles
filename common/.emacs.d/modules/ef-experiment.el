@@ -1175,6 +1175,32 @@ ORIG is the advised function, which is called with its ARGS."
 			  (setf (frame-parameter nil 'alpha) new-alpha))
 			t))))
 
+;;; List loaded packages
+(defvar my/loaded-file-paths nil
+  "All file paths that are loaded.")
+(defvar my/loaded-packages-buffer "*loaded-packages*"
+  "Buffer name for data about loaded packages.")
+(defun my/list-loaded-packages()
+  "List all currently loaded file paths."
+  (interactive)
+  (with-current-buffer (get-buffer-create my/loaded-packages-buffer)
+	(erase-buffer)
+	(pop-to-buffer (current-buffer))
+
+	(insert "* Live Packages Exploration\n\n")
+	(insert (format "%s total packages currently loaded\n"
+					(length my/loaded-file-paths)))
+
+	;; Extract data from builtin variable `load-history'.
+	(setq my/loaded-file-paths
+		  (seq-filter #'stringp
+					  (mapcar #'car load-history)))
+	(cl-sort my/loaded-file-paths 'string-lessp)
+	(cl-loop for file in my/loaded-file-paths
+			 do (insert "\n" file))
+
+	(goto-char (point-min))))
+
 ;;; Code Ends Here
 (provide 'ef-experiment)
 
