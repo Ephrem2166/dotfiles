@@ -17,8 +17,8 @@
   :disabled
   :ensure t
   :bind (
-         ("C-c t f" . flycheck-mode)
-         )
+		 ("C-c t f" . flycheck-mode)
+		 )
   :defer t
   :init (global-flycheck-mode)
   (setq flycheck-idle-change-delay 1.0)
@@ -30,11 +30,11 @@
   (setq flycheck-highlighting-mode 'columns)
   (setq flycheck-help-echo-function nil)
   (setq-default left-fringe-width 1 right-fringe-width 8
-                left-margin-width 1 right-margin-width 0)
+				left-margin-width 1 right-margin-width 0)
   ;; Show indicators in the left margin
   (setq flycheck-indication-mode 'left-margin)
   (setq flycheck-display-errors-function
-        #'flycheck-display-error-messages-unless-error-list)
+		#'flycheck-display-error-messages-unless-error-list)
   (setq flycheck-check-syntax-automatically '(save mode-enabled idle-change))
   ;; Elisp related
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
@@ -65,16 +65,16 @@
   :diminish rainbow-mode
   :hook
   ((prog-mode
-    org-mode
-    conf-mode
-    help-mode
-    emacs-lisp-mode
-    web-mode
-    css-mode
-    yaml-ts-mode
-    js-json-mode
-    typescript-mode
-    js2-mode) . rainbow-mode )
+	org-mode
+	conf-mode
+	help-mode
+	emacs-lisp-mode
+	web-mode
+	css-mode
+	yaml-ts-mode
+	js-json-mode
+	typescript-mode
+	js2-mode) . rainbow-mode )
   )
 
 (provide 'ef-programming)
