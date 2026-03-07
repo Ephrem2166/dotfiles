@@ -324,7 +324,7 @@
 		  (markdown-inline . "https://github.com/tree-sitter-grammars/tree-sitter-markdown")
 		  ;; (php . ("https://github.com/tree-sitter/tree-sitter-php"))
 		  (python . "https://github.com/tree-sitter/tree-sitter-python")
-		  ;; (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
+;; (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
 		  ;; (sql . ("https://github.com/m-novikov/tree-sitter-sql"))
 		  (typescript . "https://github.com/tree-sitter/tree-sitter-typescript")
 		  (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
