@@ -104,25 +104,22 @@ alias fontfind='fc-list : family style'
 alias vim="nvim"
 # alias rem="killall emacs || echo 'Emacs server not running'; /usr/bin/emacs --daemon" # Kill Emacs and restart daemon..
 
-
 ##############
 # #### Emacs #
 ##############
-if (( $+commands[emacs] )); then
-	alias e='emacs -nw'
-	alias eq='emacs -nw -Q'
-	alias ew='emacs'
-	alias eqw='emacs -Q'
-	alias ue='e --init-directory=$PWD'
-	alias uew='ew --init-directory=$PWD'
+if (( $+commands[emacs])); then
+  alias e='emacs -nw'
+  alias eq='emacs -nw -Q'
+  alias ew='emacs'
+  alias eqw='emacs -Q'
+  alias ue='e --init-directory=$PWD'
+  alias uew='ew --init-directory=$PWD'
 fi
 
-if (( $+commands[emacsclient] )); then
-	alias ec='emacsclient --alternate-editor= -nw'
-	alias ecw='emacsclient --alternate-editor='
+if (( $+commands[emacsclient])); then
+  alias ec='emacsclient --alternate-editor= -nw'
+  alias ecw='emacsclient --alternate-editor='
 fi
-
-
 
 #############
 # # Storage #
@@ -165,15 +162,12 @@ alias ports='netstat -tulanp'
 alias listening='lsof -P -i -n'
 alias curl='curl --progress-bar'
 
-
 ##########
 # Others #
 ##########
 # Display the contents of $PATH with each directory separated by a newline
 # character.
 alias path='echo "$PATH" | tr ":" "\n"'
-
-
 
 #######################
 # # External Programs #
