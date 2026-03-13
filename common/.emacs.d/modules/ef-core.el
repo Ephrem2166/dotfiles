@@ -1820,12 +1820,12 @@ to the IFF buffer or  the files listed."
 									   display-buffer-same-window))
 
   ;; FIXME: Reuse Help Windows
-  (setq display-buffer-alist
-		`((,(rx bos (or "*Apropos*" "*Help*" "*helpful" "*info*" "*Summary*")
-				(0+ not-newline))
-		   (display-buffer-reuse-mode-window display-buffer-below-selected)
-		   (window-height . 0.33)
-		   (mode apropos-mode help-mode helpful-mode Info-mode Man-mode))))
+  ;; (setq display-buffer-alist
+  ;; 		`((,(rx bos (or "*Apropos*" "*Help*" "*helpful" "*info*" "*Summary*")
+  ;; 				(0+ not-newline))
+  ;; 		   (display-buffer-reuse-mode-window display-buffer-below-selected)
+  ;; 		   (window-height . 0.33)
+  ;; 		   (mode apropos-mode help-mode helpful-mode Info-mode Man-mode))))
 
   ;; Only one window on startup
   (add-hook 'emacs-startup-hook 'delete-other-windows t)
