@@ -41,3 +41,9 @@ arch/.config/qtile/.mypy_cache/
 
 
 common/.config/ranger/plugins/
+
+
+common/.config/fish/fish_variables
+common/.config/fish/conf.d/*
+common/.config/fish/completions/*
+common/.config/fish/functions/*
