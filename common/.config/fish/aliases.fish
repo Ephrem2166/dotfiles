@@ -9,6 +9,9 @@ alias restart='sudo reboot'
 alias c='clear'
 alias q='exit'
 
+# Reload
+
+
 # Productive defaults for grep and tree
 alias grep='grep --color=auto --exclude-dir=.git'
 alias tree='tree -F --dirsfirst -a -I ".git|.hg|.svn|__pycache__|.mypy_cache|.pytest_cache|*.egg-info|.sass-cache|.DS_Store"'
