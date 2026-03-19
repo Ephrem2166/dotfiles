@@ -1,7 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR FZF_ALT_C_COMMAND:fd\x20\x2d\x2dtype\x20d
-SETUVAR FZF_CTRL_T_COMMAND:rg\x20\x2d\x2dfiles\x20\x2d\x2dhidden\x20\x2d\x2dfollow\x20\x2d\x2dglob\x20\x22\x21\x2egit/\x2a\x22
+SETUVAR FZF_CTRL_T_COMMAND:rg\x20\x2d\x2dfiles\x20\x2d\x2dhidden\x20\x2d\x2dglob\x20\x22\x21\x2egit\x22
 SETUVAR FZF_DEFAULT_COMMAND:rg\x20\x2d\x2dfiles\x20\x2d\x2dhidden\x20\x2d\x2dfollow\x20\x2d\x2dglob\x20\x22\x21\x2egit/\x2a\x22
 SETUVAR --export PYENV_ROOT:/home/ephrem/\x2epyenv
 SETUVAR __fish_initialized:4300
