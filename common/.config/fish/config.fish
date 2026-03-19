@@ -40,7 +40,6 @@ function mkcd
 end
 
 source ~/.config/fish/aliases.fish
-# source $HOME/.config/zsh/alias
 
 # Pyenv
 pyenv init - fish | source
