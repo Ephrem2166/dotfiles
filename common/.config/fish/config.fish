@@ -42,7 +42,7 @@ end
 source ~/.config/fish/aliases.fish
 
 # Pyenv
-pyenv init - fish | source
+# pyenv init - fish | source
 
 # Yazi
 function y
