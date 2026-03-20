@@ -23,6 +23,7 @@ alias ..='cd ..'
 alias ...='cd ../../'
 alias ....='cd ../../../'
 alias .....='cd ../../../../'
+
 # Jump to previous directory with --
 #alias -- -="cd -"
 alias mkdir="mkdir -pv" # Create parent directories if needed
@@ -31,6 +32,7 @@ alias reload="source ~/.config/fish/config.fish" # Reload shell configuration
 alias now="date '+%Y-%m-%d %H:%M:%S'" # Show current date and time
 alias mv="mv -iv" # Interactive and verbose move
 alias cp="cp -iv" # Interactive and verbose copy
+
 # System Information
 alias osinfo="cat /etc/os-release" # Display OS information
 alias uptime="uptime" # Display system uptime in human-readable format
