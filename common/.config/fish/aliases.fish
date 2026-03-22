@@ -84,19 +84,19 @@ else if command -v lsd &>/dev/null
 else
     alias ls='ls -lF'
     alias lsl='ls -laF'
-     alias lsa='ls -A'
+    alias lsa='ls -A'
     alias lst='tree -L 2'
     alias lsh='ls -lath'
 end
 
 # Replace cat with bat
 if command -v bat &>/dev/null
-alias cat='bat'
+    alias cat='bat'
 end
 
 # Replace grep with ripgrep
 if command -v rg &>/dev/null
-alias grep='rg'
+    alias grep='rg'
 end
 
 # Archive management
