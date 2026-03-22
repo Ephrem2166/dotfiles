@@ -9,9 +9,6 @@ alias restart='sudo reboot'
 alias c='clear'
 alias q='exit'
 
-# Reload
-
-
 # Productive defaults for grep and tree
 alias grep='grep --color=auto --exclude-dir=.git'
 alias tree='tree -F --dirsfirst -a -I ".git|.hg|.svn|__pycache__|.mypy_cache|.pytest_cache|*.egg-info|.sass-cache|.DS_Store"'
@@ -66,6 +63,7 @@ alias psa="ps auxf"
 alias psgrep="ps aux | grep -v grep | grep -i -e VSZ -e"
 alias psmem='ps auxf | sort -nr -k 4'
 alias pscpu='ps auxf | sort -nr -k 3'
+alias top='btop || htop || top'
 
 # Changing "ls" to "eza"
 alias ls='eza --all --icons=always --color=always --group-directories-first'
@@ -92,3 +90,10 @@ alias logr='sudo journalctl --rotate'
 alias logs='journalctl --disk-usage'
 alias logv='journalctl --verify'
 alias logw='sudo journalctl --vacuum-time=1s'
+
+
+
+# sudo not required for some system commands
+for command in mount umount su shutdown poweroff reboot zypper pacman dnf apt
+  alias $command="sudo $command"
+end
