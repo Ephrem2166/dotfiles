@@ -212,7 +212,7 @@ fi
 ###########
 # # Zoxide #
 ###########
-if hash zoxide 2>/dev/null; then
+if command zoxide 2>/dev/null; then
   eval "$(zoxide init zsh)"
   alias cd='zd'
   zd() {
