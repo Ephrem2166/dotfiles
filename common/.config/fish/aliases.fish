@@ -66,16 +66,38 @@ alias pscpu='ps auxf | sort -nr -k 3'
 alias top='btop || htop || top'
 
 # Changing "ls" to "eza"
-alias ls='eza --all --icons=always --color=always --group-directories-first'
-alias lt='eza --all --tree --color-scale --level=2 --icons=always --color=always --group-directories-first'
-alias ll='eza -al --no-time --no-user --no-permissions --no-filesize --icons=always --color=always --group-directories-first'
-alias la='eza -alh --git --icons=always --color=always --group-directories-first'
+if command -v eza &>/dev/null
+    alias ls='eza --all --icons=always --color=always --group-directories-first'
+    alias lt='eza --all --tree --color-scale --level=2 --icons=always --color=always --group-directories-first'
+    alias ll='eza -al --no-time --no-user --no-permissions --no-filesize --icons=always --color=always --group-directories-first'
+    alias la='eza -alh --git --icons=always --color=always --group-directories-first'
+
+  alias lsl='eza -la --icons --group-directories-first'
+  alias lsa='eza -la --icons --group-directories-first'
+  alias lst='eza --tree --level=2 --icons'
+  alias lsh='eza -la --sort=modified --reverse'
+  alias lst='eza -T --level=2 --color=always --icons=always'
+  alias lsf='eza -f -a --color=always --icons=always'
+  alias lstd='eza -D -T --level=2 --color=always --icons=always'
+else if command -v lsd &>/dev/null
+    alias ls="lsd"
+else
+    alias ls='ls -lF'
+    alias lsl='ls -laF'
+     alias lsa='ls -A'
+    alias lst='tree -L 2'
+    alias lsh='ls -lath'
+end
 
 # Replace cat with bat
+if command -v bat &>/dev/null
 alias cat='bat'
+end
 
 # Replace grep with ripgrep
+if command -v rg &>/dev/null
 alias grep='rg'
+end
 
 # Archive management
 alias untar="tar -xvf" # Extract tarballs
@@ -97,3 +119,5 @@ alias logw='sudo journalctl --vacuum-time=1s'
 for command in mount umount su shutdown poweroff reboot zypper pacman dnf apt
   alias $command="sudo $command"
 end
+
+alias calc='python3 -ic "from math import *; import cmath"'

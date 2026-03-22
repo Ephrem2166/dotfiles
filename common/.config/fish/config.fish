@@ -17,7 +17,8 @@ set -x VISUAL nvim
 # Set custom Starship config file
 set -x STARSHIP_CONFIG ~/.config/starship/starship.toml
 ### "nvim" as manpager
-set -x MANPAGER "nvim +Man!"
+# set -x MANPAGER "nvim +Man!"
+set -x MANPAGER "sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
 # Use fzf for command history search (if installed)
 if command -v fzf >/dev/null
 	set -U FZF_DEFAULT_COMMAND 'rg --files --hidden --follow --glob "!.git/*"'
