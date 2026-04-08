@@ -190,5 +190,8 @@ fi
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
+# Beet Completion
+fpath=($XDG_CONFIG_HOME/beets/_beet $fpath)
+
 # FIXME: move it to alias
 alias ls="eza"
