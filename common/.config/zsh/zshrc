@@ -118,7 +118,6 @@ prompt fade
 # Zprofile
 [ -f "$XDG_CONFIG_HOME/zsh/zprofile" ] && source "$XDG_CONFIG_HOME/zsh/zprofile"
 
-
 # LS COLORS
 [ -f "$XDG_CONFIG_HOME/zsh/lscolors.sh" ] && source "$XDG_CONFIG_HOME/zsh/lscolors.sh"
 
