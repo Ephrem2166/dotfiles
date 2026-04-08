@@ -107,7 +107,7 @@ prompt fade
 [ -f "$XDG_CONFIG_HOME/zsh/functions" ] && source "$XDG_CONFIG_HOME/zsh/functions"
 
 # Key Bindings
-[ -f "$XDG_CONFIG_HOME/zsh/keybinds" ] && source "$XDG_CONFIG_HOME/zsh/keybinds"
+[ -f "$XDG_CONFIG_HOME/zsh/bindings.zsh" ] && source "$XDG_CONFIG_HOME/zsh/bindings.zsh"
 
 # Completions
 [ -f "$XDG_CONFIG_HOME/zsh/completion.zsh" ] && source "$XDG_CONFIG_HOME/zsh/completion.zsh"
