@@ -16,6 +16,9 @@ bindkey '^[[F' end-of-line
 # Delete key
 bindkey '^[[3~' delete-char
 
+# Backward Delete Character
+bindkey '^x' backward-delete-char
+
 # Ctrl+Arrow keys for word navigation
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
@@ -30,12 +33,8 @@ bindkey '^H' backward-kill-word
 # Ctrl+Delete to delete next word
 bindkey '^[[3;5~' kill-word
 
-# vi like movement commands on hjkl
-bindkey "^b" backward-bashword
-bindkey "^f" forward-bashword
-
-bindkey "^h" backward-char
-bindkey "^l" forward-char
+# bindkey "^h" backward-char
+# bindkey "^l" forward-char
 bindkey "^j" down-line-or-history
 bindkey "^k" up-line-or-history
 
@@ -57,7 +56,6 @@ bindkey "^[r" redo
 bindkey "^[d" kill-line
 bindkey "^d" backward-kill-line
 
-bindkey '^w' backward-kill-bashword
 bindkey '^[w' backward-kill-dir
 
 bindkey "^[^?" kill-whole-line # <M-backspace>
