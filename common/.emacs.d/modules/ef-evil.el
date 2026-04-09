@@ -171,6 +171,23 @@
 
 
 
+;;; Evil Escape
+;; Customizable key sequence to escape from insert state and everything else in Emacs.
+(use-package evil-escape
+  :ensure t
+  :config
+  (setq-default evil-escape-key-sequence "jk")
+  (setq evil-escape-delay 0.2)
+  (setq-default evil-escape-excluded-major-modes
+				'(magit-status-mode
+				  magit-diff-mode
+				  magit-revision-mode
+				  magit-log-mode
+				  org-agenda-mode))
+  (setq-default evil-escape-excluded-states '(visual))
+  :init
+  (evil-escape-mode 1))
+
 ;;; Code Ends Here
 (provide 'ef-evil)
 ;;; ef-evil.el ends here
