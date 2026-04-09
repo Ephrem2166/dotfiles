@@ -5,18 +5,18 @@
 (use-package auctex
   :ensure nil
   :hook ((LaTeX-mode . LaTeX-preview-setup)
-         (LaTeX-mode . LaTeX-math-mode)
-         (LaTeX-mode . flyspell-mode)
-         (LaTeX-mode . turn-on-reftex))
+		 (LaTeX-mode . LaTeX-math-mode)
+		 (LaTeX-mode . flyspell-mode)
+		 (LaTeX-mode . turn-on-reftex))
   :mode ("\\.tex\\'" . latex-mode)
   :config
   (setq TeX-auto-save t
-        TeX-parse-self t
-        TeX-save-query nil
-        TeX-PDF-mode t
-        TeX-source-correlate-mode t
-        TeX-source-correlate-method 'auto
-        TeX-source-correlate-start-server t))
+		TeX-parse-self t
+		TeX-save-query nil
+		TeX-PDF-mode t
+		TeX-source-correlate-mode t
+		TeX-source-correlate-method 'auto
+		TeX-source-correlate-start-server t))
 
 ;;; TODO C
 ;; (use-package cc-mode
@@ -37,9 +37,9 @@
   :hook (conf-mode . conf-mode-setup)
   :preface
   (defun conf-mode-setup()
-    (run-hooks 'prog-mode-hook)
-    (setq-local tab-width 4)
-    )
+	(run-hooks 'prog-mode-hook)
+	(setq-local tab-width 4)
+	)
   )
 
 ;;; CSS
@@ -67,8 +67,8 @@
   :ensure t
   :defer t
   :commands(elisp-autofmt-mode
-            elisp-autofmt-buffer
-            elisp-autofmt-region))
+			elisp-autofmt-buffer
+			elisp-autofmt-region))
 
 ;;; Elisp Refs
 ;; Provides functions to find references to functions, macros, variables,
@@ -77,10 +77,10 @@
   :ensure t
   :defer t
   :commands (elisp-refs-function
-             elisp-refs-macro
-             elisp-refs-variable
-             elisp-refs-special
-             elisp-refs-symbol))
+			 elisp-refs-macro
+			 elisp-refs-variable
+			 elisp-refs-special
+			 elisp-refs-symbol))
 
 ;;; Elpy
 ;; Elpy is an Emacs package to bring powerful
@@ -105,16 +105,16 @@
   :hook (fundamental-mode . fundamental-mode-setup)
   :preface
   (defun fundamental-mode-setup ()
-    (hl-line-mode t)
-    (display-line-numbers-mode t)
-    )
+	(hl-line-mode t)
+	(display-line-numbers-mode t)
+	)
   )
 
 ;;; Git Mode
 (use-package git-modes
   :ensure t
   :mode (("/.gitignore\\'" . gitignore-mode)
-         ("/.dockerignore\\'" . gitignore-mode))
+		 ("/.dockerignore\\'" . gitignore-mode))
   )
 
 ;;; TODO HTML
@@ -141,9 +141,9 @@
   :ensure nil
   :defer t
   :hook (
-         (js-json-mode . rainbow-mode)
-         (js-json-mode . display-line-numbers-mode)
-         )
+		 (js-json-mode . rainbow-mode)
+		 (js-json-mode . display-line-numbers-mode)
+		 )
   :mode ("\\.json\\’" "\\.jsonc\\’")
   )
 
@@ -156,23 +156,23 @@
 ;;; LUA
 (when (fboundp 'lua-ts-mode)
   (use-package lua-ts-mode
-    :ensure nil
-    :mode ("\\.lua\\'")
-    :custom
-    (lua-ts-indent-offset 2)
-    )
+	:ensure nil
+	:mode ("\\.lua\\'")
+	:custom
+	(lua-ts-indent-offset 2)
+	)
   ;; Otherwise use lua-mode
   (use-package lua-mode
-    :ensure t
-    :mode ("\\.lua$\\'" . lua-mode)
-    :interpreter "lua"
-    ;; :custom
-    ;; (lua-indent-level 2)
-    ;; (lua-indent-string-contents t)
-    ;; :config
-    ;; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-    ;; (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
-    )
+	:ensure t
+	:mode ("\\.lua$\\'" . lua-mode)
+	:interpreter "lua"
+	;; :custom
+	;; (lua-indent-level 2)
+	;; (lua-indent-string-contents t)
+	;; :config
+	;; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+	;; (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+	)
 
 
 
@@ -205,22 +205,23 @@
   :ensure t
   :preface
   (defun my/markdown-hook ()
-    (setq fill-column 100)
-    (flyspell-mode)
-    (visual-line-mode)
-    )
+	(setq fill-column 100)
+	(flyspell-mode)
+	(visual-line-mode)
+	)
   :hook (
-         (markdown-mode . my/markdown-hook)
-         (markdown-mode . my/markdown-headers)
-         )
+		 (markdown-mode . my/markdown-hook)
+		 (markdown-mode . my/markdown-headers)
+		 )
 
   :mode (("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
+		 ("\\.markdown\\'" . markdown-mode))
   :config
   ;; (require 'lsp-marksman)
   (setopt markdown-indent-on-enter 'indent-and-new-item)
   (setopt markdown-hide-markup t)
   (setopt markdown-enable-math t)
+  (setopt markdown-enable-highlighting-syntax t)
   (setopt markdown-list-item-bullets '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
   (setopt markdown-fontify-code-blocks-natively t))
 
@@ -230,7 +231,7 @@
   :disabled
   :ensure t
   :hook ((markdown-mode . markdown-preview-mode)
-         (gfm-mode . markdown-preview-mode))
+		 (gfm-mode . markdown-preview-mode))
   :custom (browse-url-browser-function 'browse-url-firefox))
 
 ;;; Paredit
@@ -316,9 +317,9 @@
   :ensure nil
   :defer t
   :hook (
-         (toml-ts-mode . rainbow-mode)
-         ( toml-ts-mode . display-line-numbers-mode)
-         )
+		 (toml-ts-mode . rainbow-mode)
+		 ( toml-ts-mode . display-line-numbers-mode)
+		 )
   :mode "\\.toml\\'"
   :mode "/\\(Cargo.lock\\|\\.cargo/config\\)\\'"
   )
@@ -377,9 +378,9 @@
   :hook (yaml-ts-mode . yaml-mode-setup)
   :preface
   (defun yaml-mode-setup ()
-    (rainbow-mode 1)
-    (display-line-numbers-mode)
-    (run-hooks 'prog-mode-hook))
+	(rainbow-mode 1)
+	(display-line-numbers-mode)
+	(run-hooks 'prog-mode-hook))
   )
 ;;; end
 (provide 'ef-languages)
