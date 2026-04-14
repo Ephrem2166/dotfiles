@@ -362,7 +362,36 @@
   ;; Alternative
   (push '(css-mode . css-ts-mode) major-mode-remap-alist)
   (push '(typescript-mode . tsx-ts-mode) major-mode-remap-alist)
-  )
+  ;; Functions
+  (defun treesitter-config-reinstall-grammars ()
+	"Force reinstallation of all grammars in `treesit-language-source-alist'.
+Use this to update grammars to their latest versions."
+	(interactive)
+	(dolist (lang-source treesit-language-source-alist)
+	  (let ((lang (car lang-source)))
+		(message "Treesitter: Reinstalling grammar for %s..." lang)
+		(cl-letf (((symbol-function 'y-or-n-p) (lambda (&rest _) t)))
+		  (treesit-install-language-grammar lang)))))
+
+  ;; Bootstrap missing grammars
+  (dolist (lang-source treesit-language-source-alist)
+	(let ((lang (car lang-source)))
+	  (unless (treesit-language-available-p lang)
+		(message "Treesitter: Installing grammar for %s..." lang)
+		(condition-case err
+			(cl-letf (((symbol-function 'y-or-n-p) (lambda (&rest _) t)))
+			  (treesit-install-language-grammar lang))
+		  (error
+		   (display-warning 'treesitter
+							(format "Failed to install tree-sitter grammar for %s: %s"
+									lang (error-message-string err))
+							:error)))))))
+
+;; Warn if tree-sitter is unavailable
+(unless (and (fboundp 'treesit-available-p)
+			 (treesit-available-p))
+  (display-warning 'treesitter "Tree-sitter is not available (not compiled in or library missing); skipping grammar bootstrap." :warning))
+
 
 (provide 'ef-development)
 ;;; ef-development.el ends here
