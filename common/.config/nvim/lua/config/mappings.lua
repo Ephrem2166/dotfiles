@@ -3,7 +3,7 @@ vim.g.maplocalleader = " "
 local map = vim.keymap.set
 -- Basic Setting
 map("n", "<leader>:", vim.cmd.Ex)
-map("i", "jj", "<ESC>")
+map("i", "jk", "<ESC>")
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 map("n", "<leader>q", ":q<cr>", { desc = "Quit File", noremap = true, silent = true })
 map("n", "<leader>qq", ":qa<cr>", { desc = "Quit All Files", noremap = true, silent = true })
