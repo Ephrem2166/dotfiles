@@ -11,7 +11,7 @@ vim.opt.ignorecase = true
 
 vim.opt.number = true
 vim.opt.numberwidth = 4
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
@@ -60,3 +60,5 @@ vim.opt.fillchars = {
 	foldclose = "▶",
 	foldopen = "▼",
 }
+
+vim.opt.filetype = on

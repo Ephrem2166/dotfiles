@@ -83,7 +83,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- make it easier to close man-files when opened inline
+-- -- make it easier to close man-files when opened inline
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup("man_unlisted"),
 	pattern = { "man" },
@@ -146,16 +146,16 @@ vim.api.nvim_create_autocmd("CursorMovedI", {
 	end,
 })
 
--- Open help|man window in a vertical split to the right.
+-- -- Open help|man window in a vertical split to the right.
 vim.api.nvim_create_autocmd("BufWinEnter", {
 	group = vim.api.nvim_create_augroup("help_window_right", {}),
 	pattern = { "*" },
 	callback = function()
 		if vim.bo.filetype == "help" or vim.bo.filetype == "man" then
 			vim.cmd([[
-        wincmd L
-        vertical resize 90
-      ]])
+		wincmd L
+		vertical resize 90
+	  ]])
 		end
 	end,
 })
