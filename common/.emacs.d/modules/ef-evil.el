@@ -35,7 +35,7 @@
   (setq evil-normal-state-cursor '(box "#DFDFDF"))
   (setq evil-motion-state-cursor '(box "#98BE65"))
   (setq evil-insert-state-cursor '(bar "#51AFEf"))
-  (setq evil-emacs-state-cursor '(bar "#FF6C68"))
+  (setq evil-emacs-state-cursor '(hollow "#FF6C68"))
   (setq evil-visual-state-cursor '(box "#DA854B"))
   :config
   ;;; How to make some modes to start with Emacs mode
