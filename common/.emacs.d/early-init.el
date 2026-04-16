@@ -231,14 +231,14 @@
 
 
 ;;; Increase CPU Processing Restrictions
-
-;; (when (boundp 'read-process-output-max)
-;;   (setq-default process-adaptive-read-buffering nil
-;;                 read-process-output-max
-;;                 (or (ignore-errors (with-temp-buffer
-;;                                      (insert-file-contents "/proc/sys/fs/pipe-max-size")
-;;                                      (string-to-number (buffer-string))))
-;;                     (* 1024 1024))))
+;; Increase process output buffer for LSP
+(when (boundp 'read-process-output-max)
+  (setq-default process-adaptive-read-buffering nil
+				read-process-output-max
+				(or (ignore-errors (with-temp-buffer
+									 (insert-file-contents "/proc/sys/fs/pipe-max-size")
+									 (string-to-number (buffer-string))))
+					(* 4 1024 1024))))
 
 
 

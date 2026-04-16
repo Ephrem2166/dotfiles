@@ -1049,7 +1049,7 @@ Intended to be added to `isearch-mode-hook'."
   (setq isearch-allow-scroll t)
   (setq isearch-lax-whitespace t)
   (setq search-whitespace-regexp ".*?")
-  ;; Match counter
+  ;; Match counter (replaces anzu package)
   (setq isearch-lazy-count t)
   (setq lazy-count-prefix-format "(%s/%s) ")
   (setq lazy-count-suffix-format nil)
@@ -1256,7 +1256,7 @@ unless already there."
   :ensure nil
   :commands (re-builder regexp-builder)
   :config
-  (setq reb-re-syntax 'read))
+  (setq reb-re-syntax 'string))
 
 
 ;;; Recentf
@@ -1395,7 +1395,13 @@ unless already there."
 										search-ring
 										regexp-search-ring
 										extended-command-history))
+  ;; Stop text properties from being saved in the kill ring
+  (add-hook 'savehist-save-hook
+			(lambda ()
 
+			  (setq kill-ring
+					(mapcar #'substring-no-properties
+							(cl-remove-if-not #'stringp kill-ring)))))
 
   )
 
@@ -1413,7 +1419,12 @@ unless already there."
   (setq save-place-ignore-files-regexp
 		"\\(?:COMMIT_EDITMSG\\|hg-editor-[[:alnum:]]+\\.txt\\|elpa\\|svn-commit\\.tmp\\|bzr_log\\.[[:alnum:]]+\\)$")
   ;; activate it for all buffers
-  (setq-default save-place t))
+  (setq-default save-place t)
+  ;; Recenter view after jump
+  (advice-add 'save-place-find-file-hook :after
+			  (lambda (&rest _)
+				(when buffer-file-name (ignore-errors (recenter)))))
+  )
 
 
 
@@ -1878,7 +1889,20 @@ to the IFF buffer or  the files listed."
 									  "*cvs*"
 									  "*Buffer List*"
 									  "*Ibuffer*"
-									  "*esh command on file*")))
+									  "*esh command on file*"))
+  ;; Make C-x 1 toggle between single window and previous layout
+  (defun toggle-delete-other-windows ()
+	"Delete other windows in frame if any, or restore previous window config."
+	(interactive)
+	(if (and winner-mode
+			 (equal (selected-window) (next-window)))
+		(winner-undo)
+	  (delete-other-windows)))
+
+  (global-set-key (kbd "C-x 1") #'toggle-delete-other-windows)
+  )
+
+
 
 
 ;;; Windmove

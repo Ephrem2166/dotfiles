@@ -286,6 +286,7 @@
   ("\\.tmuxsh\\'" . sh-mode)
   ("\\.tmuxtheme\\'" . sh-mode)
 
+  ;; Auto-chmod scripts on save
   :hook (after-save . executable-make-buffer-file-executable-if-script-p)
   :bind (:map sh-mode-map
 			  ([remap display-local-help] . man))
