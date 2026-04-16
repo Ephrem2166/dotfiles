@@ -2785,46 +2785,46 @@ to the `killed-buffer-list' when killing the buffer."
   (flush-lines "^\\s-*$" start end nil))
 
 ;;; Interactive cusror changer
-(defconst my-cursor-types '(box hollow bar hbar)
-  "Cursor types that can be set using `completing-read'.")
-
-(defun my/set-cursor-type (&optional reset)
-  "Set the `cursor-type'.
-
-Optionally RESET the type when called with `universal-argument'."
-  (interactive "P")
-
-  (if reset
-	  (setq-local cursor-type t)
-	(let* ((type-string (completing-read "Select cursor type: " my-cursor-types))
-		   (type (intern type-string)))
-
-	  (setq-local cursor-type type))))
-
-
-;; Cursor customization based on buffer state.
-(defun my/update-cursor-appearance ()
-  "Update cursor color and shape based on buffer state (read-only, overwrite, or insert)."
-  (let* ((is-light-theme (eq (frame-parameter nil 'background-mode) 'light))
-		 (cursor-colors `((read-only . "purple1")
-						  (overwrite . "#7F7F7F")
-						  (default . ,(if is-light-theme "black" "white"))))
-		 current-color
-		 current-type)
-	(setq current-color
-		  (cond (buffer-read-only
-				 (cdr (assoc 'read-only cursor-colors)))
-				(overwrite-mode
-				 (cdr (assoc 'overwrite cursor-colors)))
-				(t
-				 (cdr (assoc 'default cursor-colors)))))
-	(setq current-type (if overwrite-mode 'box 'bar))
-	(when (color-defined-p current-color)
-	  (set-cursor-color current-color))
-	(setq cursor-type current-type)))
-
-;; Update cursor on every command.
-(add-hook 'post-command-hook #'my/update-cursor-appearance)
+;; (defconst my-cursor-types '(box hollow bar hbar)
+;;   "Cursor types that can be set using `completing-read'.")
+;;
+;; (defun my/set-cursor-type (&optional reset)
+;;   "Set the `cursor-type'.
+;;
+;; Optionally RESET the type when called with `universal-argument'."
+;;   (interactive "P")
+;;
+;;   (if reset
+;; 	  (setq-local cursor-type t)
+;; 	(let* ((type-string (completing-read "Select cursor type: " my-cursor-types))
+;; 		   (type (intern type-string)))
+;;
+;; 	  (setq-local cursor-type type))))
+;;
+;;
+;; ;; Cursor customization based on buffer state.
+;; (defun my/update-cursor-appearance ()
+;;   "Update cursor color and shape based on buffer state (read-only, overwrite, or insert)."
+;;   (let* ((is-light-theme (eq (frame-parameter nil 'background-mode) 'light))
+;; 		 (cursor-colors `((read-only . "purple1")
+;; 						  (overwrite . "#7F7F7F")
+;; 						  (default . ,(if is-light-theme "black" "white"))))
+;; 		 current-color
+;; 		 current-type)
+;; 	(setq current-color
+;; 		  (cond (buffer-read-only
+;; 				 (cdr (assoc 'read-only cursor-colors)))
+;; 				(overwrite-mode
+;; 				 (cdr (assoc 'overwrite cursor-colors)))
+;; 				(t
+;; 				 (cdr (assoc 'default cursor-colors)))))
+;; 	(setq current-type (if overwrite-mode 'box 'bar))
+;; 	(when (color-defined-p current-color)
+;; 	  (set-cursor-color current-color))
+;; 	(setq cursor-type current-type)))
+;;
+;; ;; Update cursor on every command.
+;; (add-hook 'post-command-hook #'my/update-cursor-appearance)
 
 ;;; Better Kill DWIM
 (defun my/kill-dwim (&optional arg)

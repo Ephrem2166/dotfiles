@@ -344,7 +344,7 @@
 
 
   ;; Cursor Style Bar
-  (setopt cursor-type 'bar)
+  (setopt cursor-type 'box)
   (setopt blink-cursor-mode nil)
   (setopt x-stretch-cursor t)
   (setopt cursor-intangible-mode t)
