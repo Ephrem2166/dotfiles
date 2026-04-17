@@ -26,6 +26,7 @@ export PATH="$XDG_CONFIG_HOME/scripts:$PATH"
 EDITOR=vim
 if hash nvim 2>/dev/null; then
   # export MANPAGER="nvim +'set cmdheight=1' +Man!"
+  # export MANPAGER='nvim --cmd ":lua vim.g.noplugins=1" +Man!'
   # export MANWIDTH=999
   EDITOR=nvim
 fi
@@ -36,6 +37,7 @@ export VISUAL="$EDITOR"
 # export VISUAL=nvim
 export LANG=en_US.UTF-8
 export SUDO_EDITOR=nvim
+
 # Manpage
 # export MANPAGER="less -R --use-color -Dd+r -Du+b"
 # Use bat as man pager
@@ -80,7 +82,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-
 # Bare Dotfiles
 #alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
@@ -94,7 +95,6 @@ fpath=($XDG_CONFIG_HOME/beets/_beet $fpath)
 # Use `vimrc` from config directory
 # export VIMINIT="$XDG_CONFIG_HOME/vim/vimrc"
 #export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
-
 
 # FZF Shell integrations
 eval "$(fzf --zsh)"
@@ -112,7 +112,6 @@ export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors"
 if [[ -x "$(command -v dircolors)" && -f "$DIRCOLOR" ]]; then
   eval "$(dircolors -b "$DIRCOLOR")"
 fi
-
 
 # Rust Cargo configuration
 # if hash cargo 2>/dev/null; then
