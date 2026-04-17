@@ -109,8 +109,9 @@ alias vim="nvim"
 ##############
 # #### Emacs #
 ##############
-if (( $+commands[emacs])); then
-  alias e='emacsclient -nw'
+if (($ + commands[emacs])); then
+  alias e='emacsclient  -a "" --no-wait'
+  alias et='emacsclient -nw'
   alias eq='emacs -nw -Q'
   alias ew='emacs'
   alias eqw='emacs -Q'
@@ -118,7 +119,7 @@ if (( $+commands[emacs])); then
   alias uew='ew --init-directory=$PWD'
 fi
 
-if (( $+commands[emacsclient])); then
+if (($ + commands[emacsclient])); then
   alias ec='emacsclient --alternate-editor= -nw'
   alias ecw='emacsclient --alternate-editor='
 fi
