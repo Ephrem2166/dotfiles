@@ -40,7 +40,7 @@ export SUDO_EDITOR=nvim
 # export MANPAGER="less -R --use-color -Dd+r -Du+b"
 # Use bat as man pager
 # Alternatively use `batman`
-# export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
+export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
 
 # export MANPAGER="nvim +Man!"
 # export MANPAGER='less -s -M +Gg'
