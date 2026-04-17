@@ -107,6 +107,12 @@ if [[ $(command -v "fzf") ]]; then
   source $XDG_CONFIG_HOME/zsh/fzf.zsh
 fi
 
+# Dircolors
+export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors"
+if [[ -x "$(command -v dircolors)" && -f "$DIRCOLOR" ]]; then
+  eval "$(dircolors -b "$DIRCOLOR")"
+fi
+
 
 # Rust Cargo configuration
 # if hash cargo 2>/dev/null; then
