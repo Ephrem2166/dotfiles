@@ -2,7 +2,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 local map = vim.keymap.set
 
--- Basic Setting
+-- General Setting
 map("n", "<leader>:", vim.cmd.Ex)
 map({ "i", "n", "v" }, "jk", "<Esc>")
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "Clear Highlights" })
@@ -25,6 +25,14 @@ map("n", "<leader>br", function()
 	vim.cmd("edit!")
 	print("Buffer reloaded")
 end, { desc = "Reload current buffer" })
+
+-- Open NVIM config
+map("n", "<leader>s.", ":e $MYVIMRC<CR>", { desc = "Open NVIM Config" })
+
+-- CD to open file directory
+map("n", "<leader>cd", ":cd %:p:h<CR>", {
+	desc = "Change working directory to current File",
+})
 
 -- Buffers
 map("n", "<leader>bl", "<cmd>bnext<cr>")
@@ -95,3 +103,16 @@ map("n", "<leader>tt", function()
 
 	job_id = vim.bo.channel
 end, { desc = "Open Terminal Vertically" })
+
+-- Quickfix
+map("n", "<leader>qo", ":copen<CR>", {
+	desc = "Open quickfix list",
+})
+
+map("n", "<leader>qn", ":cnext<CR>", {
+	desc = "Next item on quickfix list",
+})
+
+map("n", "<leader>qp", ":cprev<CR>", {
+	desc = "Previous item on quickfix list",
+})
