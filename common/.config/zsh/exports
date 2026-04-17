@@ -27,6 +27,7 @@ EDITOR=vim
 if hash nvim 2>/dev/null; then
   # export MANPAGER="nvim +'set cmdheight=1' +Man!"
   # export MANPAGER='nvim --cmd ":lua vim.g.noplugins=1" +Man!'
+  # export MANPAGER="nvim +Man!"
   # export MANWIDTH=999
   EDITOR=nvim
 fi
@@ -44,7 +45,6 @@ export SUDO_EDITOR=nvim
 # Alternatively use `batman`
 export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
 
-# export MANPAGER="nvim +Man!"
 # export MANPAGER='less -s -M +Gg'
 
 # Configure the time format for `ls` to display dates as "YYYY-MM-DD Day HH:MM".
