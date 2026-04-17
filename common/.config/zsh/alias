@@ -100,7 +100,7 @@ alias fontfind='fc-list : family style'
 ###################
 # # Vim and emacs #
 ###################
-#alias vi="vim -u NONE -N"
+alias vi="vim -u NONE -N"
 alias vim="nvim"
 # alias rem="killall emacs || echo 'Emacs server not running'; /usr/bin/emacs --daemon" # Kill Emacs and restart daemon..
 
