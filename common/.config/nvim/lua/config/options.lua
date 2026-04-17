@@ -76,3 +76,5 @@ vim.opt.fillchars = {
 vim.opt.filetype = on
 
 vim.opt.pumheight = 10
+
+vim.opt.winbar = "%=%m %f"
