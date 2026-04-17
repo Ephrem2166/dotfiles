@@ -1,11 +1,101 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 # Inserts a blank line between shell prompts
-add_newline = false
+add_newline = true
+
+# custom format
+format = """
+$shlvl\
+$singularity\
+$kubernetes\
+$directory\
+$vcsh\
+$fossil_branch\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$git_metrics\
+$hg_branch\
+$pijul_channel\
+$docker_context\
+$package\
+$c\
+$cmake\
+$cobol\
+$daml\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$fennel\
+$golang\
+$guix_shell\
+$haskell\
+$haxe\
+$helm\
+$java\
+$julia\
+$kotlin\
+$gradle\
+$lua\
+$nim\
+$nodejs\
+$ocaml\
+$opa\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$raku\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$swift\
+$terraform\
+$vlang\
+$vagrant\
+$zig\
+$buf\
+$nix_shell\
+$conda\
+$spack\
+$memory_usage\
+$env_var\
+$crystal\
+$custom\
+$sudo\
+$cmd_duration\
+$line_break\
+$jobs\
+$status\
+$character"""
+
+
+# prompt chars
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold bright-red)"
+vimcmd_symbol = "[❮](bold green)"
+vimcmd_replace_one_symbol = "[❮](bold yellow)"
+vimcmd_replace_symbol = "[❮](bold yellow)"
+vimcmd_visual_symbol = "[❮](bold cyan)"
 
 # Duration entry
 [cmd_duration]
 min_time = 10000
 format = "[󰔟 $duration](bold cyan)"
+
+# Git Commit
+[git_commit]
+only_detached = true
+tag_symbol = "/"
+tag_disabled = false
+format = "[「󰊢 $hash$tag ](bold bright-blue)"
 
 # Git entry
 [git_metrics]
@@ -47,7 +137,10 @@ format = '[[  $time ](fg:#D8DEE9 bg:#2E3440)]($style)'
 [directory]
 read_only = " 󰌾 "
 home_symbol = " "
-truncation_length = 3
+truncation_length = 5
+# style = "#87FF5F bold"
+truncate_to_repo = true
+# format = '[$path]($style) [$read_only]($read_only_style)'
 
 [directory.substitutions]
 "Documents" = "󰈙 "
@@ -72,6 +165,9 @@ symbol = " "
 [c]
 symbol = " "
 
+[cmake]
+symbol = ''
+
 [conda]
 symbol = " "
 
@@ -83,6 +179,9 @@ symbol = " "
 
 [docker_context]
 symbol = " "
+
+[dotnet]
+symbol = ''
 
 [elixir]
 symbol = " "
@@ -133,7 +232,8 @@ symbol = "󰆥 "
 symbol = " "
 
 [nodejs]
-symbol = " "
+# symbol = " "
+symbol = '󰎙 '
 # style = "bg:#4C566A"
 # format = '[[ $symbol ($version) ](fg:#81A1C1 bg:#4C566A)]($style)'
 
@@ -187,6 +287,7 @@ Windows = "󰍲 "
 
 [package]
 symbol = "󰏗 "
+format = '[ $symbol $version ](bright-black)'
 
 [perl]
 symbol = " "
