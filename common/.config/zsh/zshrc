@@ -82,13 +82,18 @@ plugins=(
 # Oh My Zsh
 source $ZSH/oh-my-zsh.sh
 
-# Others Configuration
-
 # Dircolors
 export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors"
 if [[ -x "$(command -v dircolors)" && -f "$DIRCOLOR" ]]; then
   eval "$(dircolors -b "$DIRCOLOR")"
 fi
+
+# STARSHIP
+if hash starship 2>/dev/null; then
+  eval "$(starship init zsh)"
+fi
+# Starship
+export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
 
 # FIXME: move it to alias
 alias ls="eza"

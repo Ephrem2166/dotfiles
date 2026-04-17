@@ -51,9 +51,6 @@ export TIME_STYLE=+"%Y-%m-%d %a %H:%M"
 # Flatpak
 export PATH="/var/lib/flatpak/exports/bin:$PATH"
 
-# Starship
-export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
-
 # OTHER PROGRAM PATHS
 export PATH="/usr/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
@@ -83,10 +80,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-# STARSHIP
-if hash starship 2>/dev/null; then
-  eval "$(starship init zsh)"
-fi
 
 # Bare Dotfiles
 #alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
@@ -116,8 +109,8 @@ fi
 
 
 # Rust Cargo configuration
-if hash cargo 2>/dev/null; then
-	export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
-	export CARGO_HOME="$XDG_DATA_HOME"/cargo
-	PATH="$XDG_DATA_HOME/cargo/bin:$PATH"
-fi
+# if hash cargo 2>/dev/null; then
+# 	export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
+# 	export CARGO_HOME="$XDG_DATA_HOME"/cargo
+# 	PATH="$XDG_DATA_HOME/cargo/bin:$PATH"
+# fi
