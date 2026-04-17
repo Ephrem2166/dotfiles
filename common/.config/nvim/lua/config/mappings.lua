@@ -34,6 +34,10 @@ map("n", "<leader>cd", ":cd %:p:h<CR>", {
 	desc = "Change working directory to current File",
 })
 
+-- Go to start or end of line easier
+map({ "n", "x" }, "H", "^")
+map({ "n", "x" }, "L", "g_")
+
 -- Buffers
 map("n", "<leader>bl", "<cmd>bnext<cr>")
 map("n", "<leader>bp", "<cmd>bprev<cr>")
