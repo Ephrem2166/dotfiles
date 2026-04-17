@@ -2,16 +2,28 @@ vim.g.gui_font_default_size = 16
 vim.g.gui_font_size = vim.g.gui_font_default_size
 vim.g.gui_font_face = "Berkeley Nerd Font"
 
+-- Fix markdown indentation settings
+vim.g.markdown_recommend_style = 0
+
 vim.opt.guicursor = ""
 
 vim.opt.autoindent = true
 vim.opt.copyindent = true
+vim.opt.confirm = true
+
+vim.opt.foldlevel = 99
+vim.opt.foldmethod = "indent"
+vim.opt.foldtext = ""
 
 vim.opt.ignorecase = true
 
+vim.opt.mouse = "a"
+
 vim.opt.number = true
 vim.opt.numberwidth = 4
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = false
+
+vim.opt.ruler = false
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
@@ -62,3 +74,5 @@ vim.opt.fillchars = {
 }
 
 vim.opt.filetype = on
+
+vim.opt.pumheight = 10

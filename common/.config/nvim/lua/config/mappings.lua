@@ -38,11 +38,22 @@ map("n", "<leader>cd", ":cd %:p:h<CR>", {
 map({ "n", "x" }, "H", "^")
 map({ "n", "x" }, "L", "g_")
 
+-- highlights under cursor
+map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
+map("n", "<leader>uI", function()
+	vim.treesitter.inspect_tree()
+	vim.api.nvim_input("I")
+end, { desc = "Inspect Tree" })
+
+-- better indenting
+map("x", "<", "<gv")
+map("x", ">", ">gv")
+
 -- Buffers
-map("n", "<leader>bl", "<cmd>bnext<cr>")
-map("n", "<leader>bp", "<cmd>bprev<cr>")
-map("n", "<leader>bb", "<cmd>e #<cr>")
-map("n", "<leader>bd", "<cmd>bdelete<cr>")
+map("n", "<leader>bl", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+map("n", "<leader>bp", "<cmd>bprev<cr>", { desc = "Previous Buffer" })
+map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
 map("n", "<leader>bn", "<cmd>enew<cr>")
 -- Source buffer
 map("n", "<leader><leader>S", ":source %<cr>", { desc = "Source Buffer", noremap = true, silent = true })
@@ -97,6 +108,9 @@ map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = t
 
 -- Comment
 map("n", "<leader>c/", "gcc", { desc = "󰆈 Comment line", remap = true })
+-- commenting
+map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
+map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
 -- Open terminal in a new vertical split
 map("n", "<leader>tt", function()
