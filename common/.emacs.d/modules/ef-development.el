@@ -12,7 +12,9 @@
   (setq apheleia-formatters-respect-indent-level t)
   (setq apheleia-formatters
 		(append
-		 '((prettier . ("prettier" "--stdin-filepath" filepath))
+		 '(
+
+		   ;; (prettier . ("prettier" "--stdin-filepath" filepath))
 		   (black . ("black" "-"))
 		   (biome . ("biome"))
 		   (stylua . ("stylua" "-"))
