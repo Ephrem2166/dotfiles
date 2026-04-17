@@ -5,6 +5,8 @@ if ! [[ -e ~/.oh-my-zsh ]]; then
   git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 fi
 export ZSH="$HOME/.oh-my-zsh"
+# Oh My Zsh
+source $ZSH/oh-my-zsh.sh
 
 # Install Zsh Syntax Highlighting
 # if ! [[ -e ~/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting ]]; then
@@ -79,21 +81,18 @@ plugins=(
   fzf-tab
 )
 
-# Oh My Zsh
-source $ZSH/oh-my-zsh.sh
-
-# Dircolors
-export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors"
-if [[ -x "$(command -v dircolors)" && -f "$DIRCOLOR" ]]; then
-  eval "$(dircolors -b "$DIRCOLOR")"
-fi
-
 # STARSHIP
 if hash starship 2>/dev/null; then
   eval "$(starship init zsh)"
 fi
 # Starship
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
+
+# Dircolors
+export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors"
+if [[ -x "$(command -v dircolors)" && -f "$DIRCOLOR" ]]; then
+  eval "$(dircolors -b "$DIRCOLOR")"
+fi
 
 # FIXME: move it to alias
 alias ls="eza"
