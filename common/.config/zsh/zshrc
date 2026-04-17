@@ -23,10 +23,27 @@ export TERMINAL=alacritty
 export PATH="$XDG_CONFIG_HOME/scripts:$PATH"
 
 # Editor
-export EDITOR=nvim
-export VISUAL=nvim
+EDITOR=vim
+if hash nvim 2>/dev/null; then
+  # export MANPAGER="nvim +'set cmdheight=1' +Man!"
+  # export MANWIDTH=999
+  EDITOR=nvim
+fi
+export EDITOR
+export VISUAL="$EDITOR"
+
+# export EDITOR=nvim
+# export VISUAL=nvim
 export LANG=en_US.UTF-8
 export SUDO_EDITOR=nvim
+# Manpage
+# export MANPAGER="less -R --use-color -Dd+r -Du+b"
+# Use bat as man pager
+# Alternatively use `batman`
+# export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
+
+# export MANPAGER="nvim +Man!"
+# export MANPAGER='less -s -M +Gg'
 
 # Configure the time format for `ls` to display dates as "YYYY-MM-DD Day HH:MM".
 export TIME_STYLE=+"%Y-%m-%d %a %H:%M"
@@ -61,15 +78,6 @@ export PATH="$HOME/.npm/bin:$PATH"
 export PATH=/usr/local/bin:/usr/bin:/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.config/nvm/versions/node/v24.12.0/bin:
 # Ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
-
-# Manpage
-# export MANPAGER="less -R --use-color -Dd+r -Du+b"
-# Use bat as man pager
-# Alternatively use `batman`
-export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
-
-# export MANPAGER="nvim +Man!"
-# export MANPAGER='less -s -M +Gg'
 
 # less Colors
 # export PAGER=less
@@ -120,6 +128,9 @@ prompt fade
 
 # LS COLORS
 [ -f "$XDG_CONFIG_HOME/zsh/lscolors.sh" ] && source "$XDG_CONFIG_HOME/zsh/lscolors.sh"
+
+# Export
+[ -f "$XDG_CONFIG_HOME/zsh/exports" ] && source "$XDG_CONFIG_HOME/zsh/exports"
 
 #export KEYTIMEOUT=1
 #
