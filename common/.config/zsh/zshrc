@@ -24,28 +24,28 @@ promptinit
 prompt fade
 
 # Alias
-[ -f "$XDG_CONFIG_HOME/zsh/alias" ] && source "$XDG_CONFIG_HOME/zsh/alias"
+[ -f "$ZDOTDIR/alias" ] && source "$ZDOTDIR/alias"
 
 # Functions
-[ -f "$XDG_CONFIG_HOME/zsh/functions" ] && source "$XDG_CONFIG_HOME/zsh/functions"
+[ -f "$ZDOTDIR/functions" ] && source "$ZDOTDIR/functions"
 
 # Key Bindings
-[ -f "$XDG_CONFIG_HOME/zsh/bindings.zsh" ] && source "$XDG_CONFIG_HOME/zsh/bindings.zsh"
+[ -f "$ZDOTDIR/bindings.zsh" ] && source "$ZDOTDIR/bindings.zsh"
 
 # Completions
-[ -f "$XDG_CONFIG_HOME/zsh/completion.zsh" ] && source "$XDG_CONFIG_HOME/zsh/completion.zsh"
+[ -f "$ZDOTDIR/completion.zsh" ] && source "$ZDOTDIR/completion.zsh"
 
 # Options
-[ -f "$XDG_CONFIG_HOME/zsh/options.zsh" ] && source "$XDG_CONFIG_HOME/zsh/options.zsh"
+[ -f "$ZDOTDIR/options.zsh" ] && source "$ZDOTDIR/options.zsh"
 
 # Zprofile
-[ -f "$XDG_CONFIG_HOME/zsh/zprofile" ] && source "$XDG_CONFIG_HOME/zsh/zprofile"
+[ -f "$ZDOTDIR/zprofile" ] && source "$ZDOTDIR/zprofile"
 
 # LS COLORS
-[ -f "$XDG_CONFIG_HOME/zsh/lscolors.sh" ] && source "$XDG_CONFIG_HOME/zsh/lscolors.sh"
+[ -f "$ZDOTDIR/lscolors.sh" ] && source "$ZDOTDIR/lscolors.sh"
 
 # Export
-[ -f "$XDG_CONFIG_HOME/zsh/exports" ] && source "$XDG_CONFIG_HOME/zsh/exports"
+[ -f "$ZDOTDIR/exports" ] && source "$ZDOTDIR/exports"
 
 #export KEYTIMEOUT=1
 #
