@@ -16,7 +16,6 @@
 		 )
   :bind ("C-c C-;" . flyspell-auto-correct-word)
   :config
-
   ;; Don't consider that a word repeated twice is an error.
   (setq flyspell-mark-duplication-flag nil)
 

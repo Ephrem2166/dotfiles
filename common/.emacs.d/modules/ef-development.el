@@ -111,6 +111,8 @@
   ;;   ;; '(web-mode . ("vscode-css-language-server" "--stdio")))
   ;;   ;; (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("taplo" "--stdio")))
   ;;   ;; (add-to-list 'eglot-server-programs '((lua-mode) . ("stylua")))
+  ;; (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
+  ;; (add-to-list 'eglot-server-programs '(python-ts-mode . ("pylsp")))
   ;;   )
   (setq eglot-send-changes-idle-time 0.1)
   (setq eglot-events-buffer 0)
@@ -208,7 +210,7 @@
   (flymake-mode t)
   )
 
-;;; Flymake Colletction
+;;; Flymake Collection
 ;; Collection of checkers for flymake, bringing flymake to the level of flycheck
 (use-package flymake-collection
   :disabled
