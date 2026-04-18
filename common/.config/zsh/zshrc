@@ -23,6 +23,7 @@ promptinit
 # To preview them: `prompt -p`
 prompt fade
 
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 # Alias
 [ -f "$ZDOTDIR/alias" ] && source "$ZDOTDIR/alias"
 
