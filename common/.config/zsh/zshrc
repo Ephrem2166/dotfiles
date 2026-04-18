@@ -1,3 +1,12 @@
+source "$HOME/.config/zsh/exports"
+source "$HOME/.config/zsh/alias"
+source "$HOME/.config/zsh/functions"
+source "$HOME/.config/zsh/bindings.zsh"
+source "$HOME/.config/zsh/completion.zsh"
+source "$HOME/.config/zsh/options.zsh"
+source "$HOME/.config/zsh/zprofile"
+# source "$HOME/.config/zsh/lscolors.sh"
+
 # Oh My Zsh
 # Install Oh My Zsh!
 if ! [[ -e ~/.oh-my-zsh ]]; then
@@ -24,31 +33,33 @@ promptinit
 prompt fade
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-# Alias
-[ -f "$ZDOTDIR/alias" ] && source "$ZDOTDIR/alias"
 
-# Functions
-[ -f "$ZDOTDIR/functions" ] && source "$ZDOTDIR/functions"
-
-# Key Bindings
-[ -f "$ZDOTDIR/bindings.zsh" ] && source "$ZDOTDIR/bindings.zsh"
-
-# Completions
-[ -f "$ZDOTDIR/completion.zsh" ] && source "$ZDOTDIR/completion.zsh"
-
-# Options
-[ -f "$ZDOTDIR/options.zsh" ] && source "$ZDOTDIR/options.zsh"
-
-# Zprofile
-[ -f "$ZDOTDIR/zprofile" ] && source "$ZDOTDIR/zprofile"
-
-# LS COLORS
-[ -f "$ZDOTDIR/lscolors.sh" ] && source "$ZDOTDIR/lscolors.sh"
-
-# Export
-[ -f "$ZDOTDIR/exports" ] && source "$ZDOTDIR/exports"
+# Sourcing
+# [ -f "$ZDOTDIR/alias" ] && source "$ZDOTDIR/alias"
+#
+# # Functions
+# [ -f "$ZDOTDIR/functions" ] && source "$ZDOTDIR/functions"
+#
+# # Key Bindings
+# [ -f "$ZDOTDIR/bindings.zsh" ] && source "$ZDOTDIR/bindings.zsh"
+#
+# # Completions
+# [ -f "$ZDOTDIR/completion.zsh" ] && source "$ZDOTDIR/completion.zsh"
+#
+# # Options
+# [ -f "$ZDOTDIR/options.zsh" ] && source "$ZDOTDIR/options.zsh"
+#
+# # Zprofile
+# [ -f "$ZDOTDIR/zprofile" ] && source "$ZDOTDIR/zprofile"
+#
+# # LS COLORS
+# [ -f "$ZDOTDIR/lscolors.sh" ] && source "$ZDOTDIR/lscolors.sh"
+#
+# # Export
+# [ -f "$ZDOTDIR/exports" ] && source "$ZDOTDIR/exports"
 
 #export KEYTIMEOUT=1
+
 #
 # Theme
 ZSH_THEME="robbyrussell"
@@ -87,6 +98,5 @@ if hash starship 2>/dev/null; then
 fi
 # Starship
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
-
 # FIXME: move it to alias
 alias ls="eza"
