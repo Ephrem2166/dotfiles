@@ -90,6 +90,7 @@
   (setq olivetti-style 'fancy)
   (setq olivetti-minimum-body-width 70)
   (setq olivetti-recall-visual-line-mode-entry-state t)
+  (setq olivertti-margin-width 3)
   ;; Olivetti Mode Hook On
   ;; (defun my/olivetti-mode-on ()
   ;;   (text-scale-adjust 2)

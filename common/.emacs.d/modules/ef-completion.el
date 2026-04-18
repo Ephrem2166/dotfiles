@@ -144,8 +144,17 @@ Also adds `cape-file' as a fallback."
 			  (lambda ()
 				(kill-local-variable 'completion-at-point-functions)
 				(add-hook 'completion-at-point-functions elisp-capf nil t))))
+  ;; "Complete using LSP if available, with feedback."
+  (defun +cape-complete-lsp ()
+	"Complete using LSP if available, with feedback."
+	(interactive)
+	(if (bound-and-true-p lsp-mode)
+		(let ((completion-at-point-functions '(lsp-completion-at-point)))
+		  (completion-at-point))
+	  (message "LSP not active in this buffer")))
   :custom
   (text-mode-ispell-word-completion nil)
+
   )
 
 ;;; Corfu
