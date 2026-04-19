@@ -39,6 +39,12 @@
   ;; Elisp related
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   (setq flycheck-emacs-lisp-load-path 'inherit)
+  ;; Disable flycheck in some modes
+  (add-hook 'emacs-lisp-mode-hook (lambda () (flycheck-mode -1)))
+  (add-hook 'org-mode-hook
+			(lambda ()
+			  (setq-local flycheck-disabled-checkers
+						  (cons 'org-lint flycheck-disabled-checkers))))
   )
 
 ;;; Format All
