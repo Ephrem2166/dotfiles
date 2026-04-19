@@ -3382,6 +3382,19 @@ nil then relative line-numbers are toggled."
 ;; list.
 (advice-add 'recentf-load-list :after #'my/recentf-cleanup)
 
+
+;;; Occur DWIM
+;; takes the current region or the symbol at point as the default value for occur.
+(defun +occur-dwim ()
+  "Call `occur' with a sane default."
+  (interactive)
+  (push (if (region-active-p)
+			(buffer-substring-no-properties
+			 (region-beginning)
+			 (region-end))
+		  (thing-at-point 'symbol))
+		regexp-history)
+  (call-interactively 'occur))
 ;;; ef-functions ends here
 (provide 'ef-functions)
 ;;; ef-functions.el ends here
