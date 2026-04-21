@@ -74,7 +74,7 @@ alias rm="rm -Iv"       # Prompt before removing files
 alias mv="mv -iv"       # Interactive and verbose move
 alias cp="cp -iv"       # Interactive and verbose copy
 # alias rsync="rsync -vrPlu"
-
+alias rsync="rsync -avhP --no-inc-recursive --inplace"
 ########################
 # # System Information #
 ########################
