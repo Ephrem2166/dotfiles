@@ -223,7 +223,17 @@
   (setopt markdown-enable-math t)
   (setopt markdown-enable-highlighting-syntax t)
   (setopt markdown-list-item-bullets '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
-  (setopt markdown-fontify-code-blocks-natively t))
+  (setopt markdown-fontify-code-blocks-natively t)
+
+  (defun my/markdown-strike-completed-tasks ()
+	"Highlight completed markdown tasks with a strike-through."
+	(font-lock-add-keywords nil
+							'(("^\\s-*\\([-+*]\\|\\s-*[0-9]+\\.\\)\\s-+\\(\\[x\\].*\\)$" 2 '(:strike-through t) t))))
+
+  (add-hook 'markdown-mode-hook 'my/markdown-strike-completed-tasks)
+
+
+  )
 
 ;;; Markdown Preview Mode
 ;; To view markdown files in a browser (firefox)
