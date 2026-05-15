@@ -14,7 +14,9 @@ zstyle ':completion:*' completer _complete _correct _approximate _extensions
 zstyle ':completion:*' use-cache on
 
 # Menu Select
-zstyle ':completion:*' menu select auto
+# zstyle ':completion:*' menu select auto
+zstyle ':completion:*' menu no
+
 
 zstyle ':completion:*' accept-ezact '*(N)'
 
@@ -130,7 +132,10 @@ zstyle ':autocomplete:*complete*:*' INSERT-UNAMBIGUOUS YESS
 # zstyle ':completion:*:warnings' format ' %F{red}no matches found %f'
 # zstyle ':completion:*:default' list-prompt '%S%M matches%s'
 
-zstyle ':completion:*:descriptions' format "- %d -"
+# zstyle ':completion:*:descriptions' format "- %d -"
+zstyle ':completion:*:descriptions' format "[%d]"
+
+
 zstyle ':completion:*:messages'     format "- %d -"
 zstyle ':completion:*:corrections'  format "- %d - (errors %e)"
 zstyle ':completion:*:default'      select-prompt "Match %m  Line %l  %p"
@@ -143,8 +148,8 @@ zstyle ':completion:*:history-words' list false
 zstyle ':completion:*:history-words' menu yes
 
 # Fzf-tab
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --color=always $realpath'
 # preview directory's content with eza when completing cd and ls
 # zstyle ':fzf-tab:complete:*:*' fzf-preview 'file $realpath | sed -E "s/^.+: //"; hr -fg 137 -c _ -s 30;echo;eza -1 --color=always $realpath ;'
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
@@ -167,6 +172,13 @@ zstyle ':fzf-tab:*' fzf-bindings 'space:accept'
 #zstyle ':fzf-tab:*' fzf-bindings 'ctrl-j:accept' 'ctrl-a:toggle-all'
 zstyle ':fzf-tab:*' fzf-bindings 'ctrl-a:toggle-all'
 zstyle ':fzf-tab:*' fzf-min-height 100
+
+# custom fzf flags
+# NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
+zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
+
+# switch group using `<` and `>`
+zstyle ':fzf-tab:*' switch-group '<' '>'
 
 
 # FIXME: On empty buffer, `tab` opens `cd` completion menu, otherwise, select completion.
