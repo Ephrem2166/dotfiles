@@ -14,8 +14,8 @@ zstyle ':completion:*' completer _complete _correct _approximate _extensions
 zstyle ':completion:*' use-cache on
 
 # Menu Select
-# zstyle ':completion:*' menu select auto
-zstyle ':completion:*' menu no
+zstyle ':completion:*' menu select auto
+# zstyle ':completion:*' menu no
 
 
 zstyle ':completion:*' accept-ezact '*(N)'
@@ -169,13 +169,13 @@ zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=do
 
 # accept with one key
 zstyle ':fzf-tab:*' fzf-bindings 'space:accept'
-#zstyle ':fzf-tab:*' fzf-bindings 'ctrl-j:accept' 'ctrl-a:toggle-all'
+zstyle ':fzf-tab:*' fzf-bindings 'ctrl-j:accept' 'ctrl-a:toggle-all'
 zstyle ':fzf-tab:*' fzf-bindings 'ctrl-a:toggle-all'
 zstyle ':fzf-tab:*' fzf-min-height 100
 
 # custom fzf flags
 # NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
-zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
+# zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
 
 # switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
