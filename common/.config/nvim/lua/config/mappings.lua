@@ -148,5 +148,5 @@ map("n", "<leader>qp", ":cprev<CR>", {
 })
 
 -- Package manager.
-map("n", "<leader>pu", "<cmd>lua vim.pack.update()<cr>", { desc = "Update packages" })
-map("n", "<leader>ps", "<cmd>lua vim.pack.del()<cr>", { desc = "Delete Packages" })
+map("n", "<leader>xu", "<cmd>lua vim.pack.update()<cr>", { desc = "Update packages" })
+-- map("n", "<leader>ps", "<cmd>lua vim.pack.del()<cr>", { desc = "Delete Packages" })
