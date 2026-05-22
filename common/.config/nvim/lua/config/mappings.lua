@@ -5,9 +5,21 @@ local map = vim.keymap.set
 -- General Setting
 map("n", "<leader>:", vim.cmd.Ex)
 map({ "i", "n", "v" }, "jk", "<Esc>")
-map("n", "<Esc>", "<cmd>noh<CR>", { desc = "Clear Highlights" })
+-- map("n", "<Esc>", "<cmd>noh<CR>", { desc = "Clear Highlights" })
+-- Poweful <esc>.
+map({ "i", "s", "n" }, "<esc>", function()
+	---@diagnostic disable: undefined-field
+	if require("luasnip").expand_or_jumpable() then
+		require("luasnip").unlink_current()
+	end
+	---@diagnostic enable: undefined-field
+	vim.cmd("noh")
+	return "<esc>"
+end, { desc = "Escape, clear hlsearch, and stop snippet session", expr = true })
 -- save file
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+
+map("n", "<leader>xr", "<cmd>restart<cr>", { desc = "Restart" })
 
 -- Alternative way to exit
 map({ "n", "v", "i" }, "<M-q>", "<cmd>q!<cr>", { desc = "Quit All" })
@@ -134,3 +146,7 @@ map("n", "<leader>qn", ":cnext<CR>", {
 map("n", "<leader>qp", ":cprev<CR>", {
 	desc = "Previous item on quickfix list",
 })
+
+-- Package manager.
+map("n", "<leader>pu", "<cmd>lua vim.pack.update()<cr>", { desc = "Update packages" })
+map("n", "<leader>ps", "<cmd>lua vim.pack.del()<cr>", { desc = "Delete Packages" })
