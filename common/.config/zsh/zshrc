@@ -98,5 +98,11 @@ if hash starship 2>/dev/null; then
 fi
 # Starship
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
+
+# Execute fish if it's not the parent process.
+# if ! ps -p $PPID | grep -q fish; then
+#   fish
+# fi
+
 # FIXME: move it to alias
 alias ls="eza"
