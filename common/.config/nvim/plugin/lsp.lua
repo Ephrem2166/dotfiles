@@ -109,3 +109,8 @@ vim.lsp.config("*", {
 	capabilities = require("blink.cmp").get_lsp_capabilities(nil, true),
 	root_markers = { ".git" },
 })
+
+vim.keymap.set("n", "<leader>td", function()
+	local is_enabled = vim.diagnostic.is_enabled()
+	vim.diagnostic.enable(not is_enabled)
+end, { desc = "Toggle Diagnostics" })

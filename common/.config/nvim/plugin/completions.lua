@@ -4,8 +4,8 @@ vim.pack.add({
 		src = "https://github.com/Saghen/blink.cmp",
 		version = vim.version.range("^1"),
 	},
-	{ src = "https://github.com/rafamadriz/friendly-snippets" },
 	{ src = "https://github.com/folke/lazydev.nvim" },
+	{ src = "https://github.com/rafamadriz/friendly-snippets" },
 	{ src = "https://github.com/L3MON4D3/LuaSnip" },
 })
 
@@ -54,15 +54,31 @@ require("blink.cmp").setup({
 		documentation = {
 			auto_show = true,
 			auto_show_delay_ms = 500,
+			treesitter_highlighting = false,
+			window = {
+				border = vim.g.border_style,
+				min_width = 40,
+				direction_priority = {
+					menu_north = { "e", "w" },
+					menu_south = { "e", "w" },
+				},
+			},
 		},
 		menu = {
 			auto_show = true,
-			-- border = "bold",
+			border = vim.g.border_style,
+			min_width = 40,
+			max_height = 30,
+			scrolloff = 0,
+			scrollbar = false,
 			-- direction_priority = { "n", "s" },
 			-- draw = { treesitter = { "lsp" } },
 
-			draw = { columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } } },
-			scrollbar = false,
+			draw = {
+				align_to = "kind_icon",
+				padding = { 0, 1 },
+				columns = { { "kind_icon", "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
+			},
 		},
 		keyword = {
 			range = "prefix",
@@ -141,17 +157,19 @@ require("blink.cmp").setup({
 				name = "LazyDev",
 				module = "lazydev.integrations.blink",
 				score_offset = 100,
+				fallbacks = { "lsp" },
 			},
 
 			lsp = {
+				max_items = 100,
 				name = "lsp",
 				enabled = true,
-				module = "blink.cmp.sources.lsp",
-				score_offset = 95,
+				-- module = "blink.cmp.sources.lsp",
+				-- score_offset = 95,
 			},
 			path = {
 				name = "Path",
-				module = "blink.cmp.sources.path",
+				-- module = "blink.cmp.sources.path",
 				score_offset = 70,
 				min_keyword_length = 2,
 				fallbacks = { "snippets", "buffer" },
@@ -168,7 +186,7 @@ require("blink.cmp").setup({
 				name = "Snippets",
 				module = "blink.cmp.sources.snippets",
 				min_keyword_length = 2,
-				score_offset = 85,
+				score_offset = 0,
 			},
 			-- datword = {
 			-- 	name = "Word",
