@@ -242,3 +242,25 @@ vim.keymap.set("n", "<leader>dy", function()
 	vim.fn.setreg("+", diagnostic_text) -- Copy to system clipboard
 	print("Diagnostics for '" .. current_word .. "' copied to clipboard")
 end, { remap = false, desc = "Copy diagnostics to clipboard" })
+
+-- Autocmd to track the end of macro recording
+vim.api.nvim_create_autocmd("RecordingLeave", {
+	pattern = "*",
+	callback = function()
+		vim.g.macro_recording = ""
+		vim.cmd("redrawstatus")
+	end,
+})
+
+-- Package Update
+vim.api.nvim_create_autocmd("PackChanged", {
+	callback = function(ev)
+		local name, kind = ev.data.spec.name, ev.data.kind
+		if name == "nvim-treesitter" and kind == "update" then
+			if not ev.data.active then
+				vim.cmd.packadd("nvim-treesitter")
+			end
+			vim.cmd("TSUpdate")
+		end
+	end,
+})
