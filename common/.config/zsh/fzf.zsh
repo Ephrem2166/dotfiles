@@ -1,6 +1,6 @@
 # Use the CLI find to get all files, excluding any filepath
 # containing the string "git".
-export FZF_DEFAULT_COMMAND='find . -type f ! -path "*git*"'
+# export FZF_DEFAULT_COMMAND='find . -type f ! -path "*git*"'
 
 # Use the CLI fd to respect ignore files (like '.gitignore'),
 # display hidden files, and exclude the '.git' directory.
