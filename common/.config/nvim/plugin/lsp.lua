@@ -86,6 +86,7 @@ local servers = {
 	-- "tailwindcss", -- Tailwind
 	-- "ts_ls", -- Typescript/javascript
 	-- "eslint", -- Typescript/javascript
+	"marksman",
 	"taplo", -- Toml
 	"yamlls",
 }

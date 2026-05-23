@@ -224,9 +224,9 @@ require("luasnip").config.set_config({
 	enable_autosnippets = true,
 	history = true,
 	updateevents = "TextChanged,TextChangedI",
-
 })
 
 require("luasnip.loaders.from_vscode").lazy_load()
+require("luasnip").filetype_extend("all", { "loremipsum" })
 -- lua format
 require("luasnip.loaders.from_lua").load()
