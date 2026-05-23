@@ -25,8 +25,8 @@ require("conform").setup({
 		-- typescript = { "prettierd", "prettier" },
 		-- typescriptreact = { "prettierd", "prettier" },
 
-		yaml = { "prettierd", "prettier" },
-		yml = { "prettierd", "prettier" },
+		yaml = { "yamlfmt ", "prettierd", "prettier" },
+		yml = { "yamlfmt", "prettierd", "prettier" },
 
 		-- Apply on all filetype
 
@@ -45,6 +45,16 @@ require("conform").setup({
 	formatters = {
 		shfmt = {
 			prepend_args = { "-i", "2" },
+		},
+		yamlfmt = {
+			prepend_args = {
+				"-formatter",
+				"indent=2",
+				"-formatter",
+				"include_document_start=true",
+				"-formatter",
+				"retain_line_breaks_single=true",
+			},
 		},
 	},
 	notify_on_error = true,
