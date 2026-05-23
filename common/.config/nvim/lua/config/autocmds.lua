@@ -97,7 +97,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- wrap and check for spell in text filetypes
+-- Wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup("wrap_spell"),
 	pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
@@ -119,7 +119,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	end,
 })
 
--- disable automatic comment on newline
+-- Disable automatic comment on newline
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "*",
 	callback = function()

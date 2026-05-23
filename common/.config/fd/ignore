@@ -6,7 +6,8 @@ Juegos/**
 
 # git
 .gitignore
-.git
+.git/
+
 
 # INFO files
 *INFO*
