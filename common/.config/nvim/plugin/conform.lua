@@ -9,7 +9,7 @@ require("conform").setup({
 		c = { "clang-format" },
 		cpp = { "clang-format" },
 		css = { "prettierd", "prettier" },
-		--	html = {  "prettierd", "prettier" },
+		html = { "prettierd", "prettier" },
 		lua = { "stylua" },
 		-- json = { "biome" },
 		-- jsoc = { "biome" },
