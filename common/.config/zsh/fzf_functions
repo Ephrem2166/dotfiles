@@ -236,3 +236,12 @@ fzf_man() {
         man "$man_page"
     fi
 }
+
+
+cdd() {
+    local selected_dir
+    selected_dir=$(fd -t d . | fzf +m --height 50% --preview 'tree -C {}')
+    if [[ -n "$selected_dir" ]]; then
+        cd "$selected_dir" || return 1
+    fi
+}
