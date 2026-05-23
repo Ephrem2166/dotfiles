@@ -416,3 +416,13 @@ up() {
   fi
   cd $d
 }
+
+# Show commands and the number of times they are used
+freq_commands() {
+  history | awk '{print $2};' | sort | uniq -c | sort -rn | head -10
+}
+
+# Make backup file
+make-bak() {
+        cp -a "$1" "${1}_$(date '+%Y-%m-%d').bak"
+}
