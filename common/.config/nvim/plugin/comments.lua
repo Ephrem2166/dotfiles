@@ -5,7 +5,6 @@ vim.pack.add({
 
 	{ src = "https://github.com/folke/ts-comments.nvim" },
 })
-
 require("todo-comments").setup({
 	signs = false,
 	keywords = {
