@@ -75,6 +75,8 @@ alias mv="mv -iv"       # Interactive and verbose move
 alias cp="cp -iv"       # Interactive and verbose copy
 # alias rsync="rsync -vrPlu"
 alias rsync="rsync -avhP --no-inc-recursive --inplace"
+alias less="less -R"
+
 ########################
 # # System Information #
 ########################
@@ -173,24 +175,30 @@ alias path='echo "$PATH" | tr ":" "\n"'
 ################################
 # External alternatives for ls #
 ################################
-if command -v eza &>/dev/null; then
-  alias ls='eza -l --level=1 --color=always --icons=always'
-  alias lsl='eza -la --icons --group-directories-first'
-  alias lsa='eza -la --icons --group-directories-first'
-  alias lst='eza --tree --level=2 --icons'
-  alias lsh='eza -la --sort=modified --reverse'
-  alias lst='eza -T --level=2 --color=always --icons=always'
-  alias lsf='eza -f -a --color=always --icons=always'
-  alias lstd='eza -D -T --level=2 --color=always --icons=always'
-elif command -v lsd &>/dev/null; then
-  alias ls="lsd"
-else
-  alias ls='ls -lF'
-  alias lsl='ls -laF'
-  alias lsa='ls -A'
-  alias lst='tree -L 2'
-  alias lsh='ls -lath'
-fi
+# if command -v eza &>/dev/null; then
+#   alias ls='eza -l --level=1 --color=always --icons=always'
+#   alias lsl='eza -la --icons --group-directories-first'
+#   alias lsa='eza -la --icons --group-directories-first'
+#   alias lst='eza --tree --level=2 --icons'
+#   alias lsh='eza -la --sort=modified --reverse'
+#   alias lst='eza -T --level=2 --color=always --icons=always'
+#   alias lsf='eza -f -a --color=always --icons=always'
+#   alias lstd='eza -D -T --level=2 --color=always --icons=always'
+# elif command -v lsd &>/dev/null; then
+#   alias ls="lsd"
+# else
+#   alias ls='ls -lF'
+#   alias lsl='ls -laF'
+#   alias lsa='ls -A'
+#   alias lst='tree -L 2'
+#   alias lsh='ls -lath'
+# fi
+which eza >/dev/null && alias ls='eza -la --group-directories-first --icons'
+which eza >/dev/null && alias lsa='eza --group-directories-first --all --icons=always'
+which eza >/dev/null && alias ll='eza --group-directories-first --octal-permissions --group --long --git --icons=always'
+which eza >/dev/null && alias lla='eza --group-directories-first --long --all --git --icons=always'
+which eza >/dev/null && alias lst='eza --long --changed --time-style relative --sort time'
+which eza >/dev/null && alias lsl='eza -la --icons --group-directories-first'
 
 ##########################
 # # Replace cat with bat #
@@ -223,6 +231,9 @@ if command zoxide 2>/dev/null; then
   }
 fi
 
+# Replace df with duf
+which duf >/dev/null && alias df='duf'
+
 #########
 # # FZF #
 #########
@@ -246,43 +257,39 @@ alias calc='python3 -ic "from math import *; import cmath"'
 #####################
 alias pacman="pacman --color=auto"
 
-
 # Package Management
 
-if [[ ! "$OSTYPE" =~ "darwin" ]]
-then
+if [[ ! "$OSTYPE" =~ "darwin" ]]; then
   # Package Management
   version=$(cat /etc/os-release)
-  if [[ $version =~ "Manjaro" || $version =~ "Arch Linux" ]]
-  then
-      alias \
-        pacup='sudo pacman -Syu' \
-        pacin='sudo pacman -S' \
-        pacls='pacman -Q' \
-        pacse='pacman -Ss' \
-        pacrm='sudo pacman -Rss' \
-        paccl='sudo pacman -Rsn $(${AUR_MANAGER:-pacman} -Qdtq)'
-  elif [[ $version =~ "SUSE" ]]
-  then
-      alias \
-        pacup='sudo zypper up' \
-        pacin='sudo zypper in' \
-        pacls='rpm -qa' \
-        pacshow='sudo rpm -qi' \
-        pacfiles='sudo rpm -ql' \
-        pacse='zypper se' \
-        pacrm='sudo zypper rm -u' \
-        pacdisup='sudo zypper dup' \
-        pacrepos='sudo zypper lr'
+  if [[ $version =~ "Manjaro" || $version =~ "Arch Linux" ]]; then
+	alias \
+	  pacup='sudo pacman -Syu' \
+	  pacin='sudo pacman -S' \
+	  pacls='pacman -Q' \
+	  pacse='pacman -Ss' \
+	  pacrm='sudo pacman -Rss' \
+	  paccl='sudo pacman -Rsn $(${AUR_MANAGER:-pacman} -Qdtq)'
+  elif [[ $version =~ "SUSE" ]]; then
+	alias \
+	  pacup='sudo zypper up' \
+	  pacin='sudo zypper in' \
+	  pacls='rpm -qa' \
+	  pacshow='sudo rpm -qi' \
+	  pacfiles='sudo rpm -ql' \
+	  pacse='zypper se' \
+	  pacrm='sudo zypper rm -u' \
+	  pacdisup='sudo zypper dup' \
+	  pacrepos='sudo zypper lr'
   else
-      alias \
-        pacup='sudo apt-get update && sudo apt-get upgrade' \
-        pacin='sudo apt-get install' \
-        pacls='dpkg --get-selections' \
-        pacse='sudo apt-cache search' \
-        pacrm='sudo apt-get remove' \
-        pacautorm='sudo apt-get autoremove' \
-        pacdisup='sudo apt-get update && sudo apt-get dist-upgrade' \
-        pacpurge='sudo apt-get purge'
+	alias \
+	  pacup='sudo apt-get update && sudo apt-get upgrade' \
+	  pacin='sudo apt-get install' \
+	  pacls='dpkg --get-selections' \
+	  pacse='sudo apt-cache search' \
+	  pacrm='sudo apt-get remove' \
+	  pacautorm='sudo apt-get autoremove' \
+	  pacdisup='sudo apt-get update && sudo apt-get dist-upgrade' \
+	  pacpurge='sudo apt-get purge'
   fi
 fi
