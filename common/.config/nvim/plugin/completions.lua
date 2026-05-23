@@ -37,6 +37,17 @@ require("blink.cmp").setup({
 		nerd_font_variant = "mono",
 	},
 	cmdline = {
+		enabled = true,
+		sources = function()
+			local type = vim.fn.getcmdtype()
+			if type == "/" or type == "?" then
+				return { "buffer" }
+			end
+			if type == ":" then
+				return { "cmdline" }
+			end
+			return {}
+		end,
 		completion = {
 			list = { selection = { auto_insert = false, preselect = false } },
 			menu = { auto_show = true },
@@ -210,3 +221,5 @@ require("blink.cmp").setup({
 })
 
 require("luasnip.loaders.from_vscode").lazy_load()
+-- lua format
+require("luasnip.loaders.from_lua").load()

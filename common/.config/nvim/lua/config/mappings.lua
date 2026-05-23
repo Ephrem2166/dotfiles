@@ -19,7 +19,11 @@ end, { desc = "Escape, clear hlsearch, and stop snippet session", expr = true })
 -- save file
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
+-- Restart
 map("n", "<leader>xr", "<cmd>restart<cr>", { desc = "Restart" })
+
+-- Source buffer
+map("n", "<leader>x.", ":source %<cr>", { desc = "Source Buffer", noremap = true, silent = true })
 
 -- Alternative way to exit
 map({ "n", "v", "i" }, "<M-q>", "<cmd>q!<cr>", { desc = "Quit All" })
@@ -66,7 +70,7 @@ map("n", "<leader>bl", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 map("n", "<leader>bp", "<cmd>bprev<cr>", { desc = "Previous Buffer" })
 map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
-map("n", "<leader>bn", "<cmd>enew<cr>")
+map("n", "<leader>bn", "<cmd>enew<cr>", { desc = "New Buffer" })
 -- Source buffer
 map("n", "<leader><leader>S", ":source %<cr>", { desc = "Source Buffer", noremap = true, silent = true })
 
@@ -150,3 +154,27 @@ map("n", "<leader>qp", ":cprev<CR>", {
 -- Package manager.
 map("n", "<leader>xu", "<cmd>lua vim.pack.update()<cr>", { desc = "Update packages" })
 -- map("n", "<leader>ps", "<cmd>lua vim.pack.del()<cr>", { desc = "Delete Packages" })
+
+-- LSP keymaps
+map("n", "<leader>lk", ":lua vim.lsp.buf.hover()<cr>", { desc = "LSP Hover", noremap = true, silent = true })
+map("n", "<leader>ld", ":lua vim.lsp.buf.definition()<cr>", { desc = "LSP Definition", noremap = true, silent = true })
+map(
+	"n",
+	"<leader>lt",
+	":lua vim.lsp.buf.type_definition()<cr>",
+	{ desc = "Type Definition", noremap = true, silent = true }
+)
+map(
+	"n",
+	"<leader>ln",
+	":lua vim.diagnostic.goto_next()<cr>",
+	{ desc = "LSP Next Diagnostic", noremap = true, silent = true }
+)
+map(
+	"n",
+	"<leader>lN",
+	":lua vim.diagnostic.goto_prev()<cr>",
+	{ desc = "LSP Previous Diagnostic", noremap = true, silent = true }
+)
+map("n", "<leader>lr", ":lua vim.lsp.buf.references()<cr>", { desc = "LSP References", noremap = true, silent = true })
+map("n", "<leader>lR", ":lua vim.lsp.buf.rename()<cr>", { desc = "LSP Rename", noremap = true, silent = true })

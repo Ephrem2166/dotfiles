@@ -4,6 +4,7 @@ vim.pack.add({
 
 require("snacks").setup({
 	bigfile = { enabled = false },
+	dashboard = { enabled = false },
 	explorer = { enabled = true },
 	image = { enabled = false },
 	picker = { enabled = true },

@@ -5,9 +5,9 @@ vim.pack.add({
 	"https://github.com/mason-org/mason.nvim",
 })
 
-vim.lsp.config("*", {
-	capabilities = vim.lsp.protocol.make_client_capabilities(),
-})
+-- vim.lsp.config("*", {
+-- 	capabilities = vim.lsp.protocol.make_client_capabilities(),
+-- })
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
@@ -42,9 +42,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			})
 
 			vim.api.nvim_create_autocmd("LspDetach", {
-				group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
 				callback = function(event2)
-					vim.lsp.buf.clear_references()
+					group =
+						vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
+						vim.lsp.buf.clear_references()
 					vim.api.nvim_clear_autocmds({ group = "kickstart-lsp-highlight", buffer = event2.buf })
 				end,
 			})
@@ -76,37 +77,29 @@ local servers = {
 	-- "gopls", -- Golang
 	"lua_ls", -- Lua
 	"pyright", -- Python
+	"ruff",
 	-- Web Dev LSPs
 	"html", -- HTML
 	"emmet_ls", -- HTML
 	"cssls", -- CSS
+	"jsonls",
 	-- "tailwindcss", -- Tailwind
 	-- "ts_ls", -- Typescript/javascript
 	-- "eslint", -- Typescript/javascript
-
-	-- Extras(linters/formatters/debuggers)
-	--
-	-- FORMATTERS
-	-- "clang-format",
-	-- "gofumpt",
-	-- "goimports",
-	-- "prettier",
-	-- "prettierd",
-	"shfmt",
-	-- "stylua",
-	--
-	-- LINTERS
-	-- "cpplint",
-	-- "eslint_d",
-	-- "golangci-lint",
-	-- "pylint",
-	-- "shellcheck",
+	"taplo", -- Toml
+	"yamlls",
 }
 
 vim.lsp.enable(servers)
 
+-- vim.lsp.config("*", {
+-- 	capabilities = require("blink.cmp").get_lsp_capabilities(nil, true),
+-- 	root_markers = { ".git" },
+-- })
+
 vim.lsp.config("*", {
-	capabilities = require("blink.cmp").get_lsp_capabilities(nil, true),
+	-- Fetches blink's capabilities
+	capabilities = require("blink.cmp").get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities()),
 	root_markers = { ".git" },
 })
 
