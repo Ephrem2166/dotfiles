@@ -19,15 +19,14 @@
 -- 	},
 -- })
 
--- vim.pack
 vim.pack.add({
 	{ src = "https://github.com/catgoose/nvim-colorizer.lua" },
 })
 
 require("colorizer").setup({
-	filetypes = { "*" },
+	"*",
 	user_default_options = {
-		names = true,
+		names = false,
 		RGB = true,
 		RRGGBB = true,
 		RRGGBBAA = true,
