@@ -75,6 +75,7 @@ local servers = {
 	"bashls", -- Bash
 	"clangd", -- C/C++
 	-- "gopls", -- Golang
+	"html-lsp",
 	"lua_ls", -- Lua
 	"pyright", -- Python
 	"ruff",
@@ -88,6 +89,7 @@ local servers = {
 	-- "eslint", -- Typescript/javascript
 	"marksman",
 	"taplo", -- Toml
+	"tombi",
 	"yamlls",
 }
 

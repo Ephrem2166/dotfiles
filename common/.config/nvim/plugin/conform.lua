@@ -25,8 +25,8 @@ require("conform").setup({
 		-- typescript = { "prettierd", "prettier" },
 		-- typescriptreact = { "prettierd", "prettier" },
 
-		yaml = { "yamlfmt ", "prettierd", "prettier" },
-		yml = { "yamlfmt", "prettierd", "prettier" },
+		yaml = { "prettierd", "prettier" },
+		yml = { "prettierd", "prettier" },
 
 		-- Apply on all filetype
 
