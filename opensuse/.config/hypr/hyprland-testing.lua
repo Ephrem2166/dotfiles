@@ -1,117 +1,4 @@
-# _   _                  _                 _
-#| | | |                | |               | |
-#| |_| |_   _ _ __  _ __| | __ _ _ __   __| |
-#|  _  | | | | '_ \| '__| |/ _` | '_ \ / _` |
-#| | | | |_| | |_) | |  | | (_| | | | | (_| |
-#\_| |_/\__, | .__/|_|  |_|\__,_|_| |_|\__,_|
-#        __/ | |
-#       |___/|_|
-
-
-################
-### MONITORS ###
-################
-#monitor=,preferred,auto,1
-monitor=eDP-1,1920x1200@60, auto, 1
-
-###################
-### MY PROGRAMS ###
-###################
-# See https://wiki.hyprland.org/Configuring/Keywords/
-# Set programs that you use
-
-#################
-### AUTOSTART ###
-#################
-# Autostart necessary processes (like notifications daemons, status bars, etc.)
-# Or execute your favorite apps at launch like this:
-exec-once = /usr/libexec/polkit-kde-authentication-agent-1
-#exec-once = ~/.config/hypr/scripts/wallpaper.sh
-# exec-once = $terminal
-#exec-once = ~/.config/hypr/scripts/launch.sh
-#exec-once=wl-clipboard
-#exec-once=swayidle
-exec-once=hypridle
-exec-once=gammastep
-exec-once=gammastep-indicator
-# exec-once = waybar & hyprpaper & firefox
-#exec-once=wlsunset -l 9.0 -L 38.8
-# Night Shift
-#exec-once = wlsunset
-exec-once = nm-applet --indicator
-exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP
-#exec-once = dunst
-exec-once = udiskie --no-automount --smart-tray # front-end that allows to manage removable media
-# Clipboard History
-exec-once = wl-paste --type text --watch cliphist store #Stores only text data
-exec-once = wl-paste --type image --watch cliphist store #Stores only image data
-# TOFIX: Wallpaper
-exec-once = hyprpaper
-
-# Waybac config
-exec-once = waybar -c /home/ephrem/.config/waybar/hyprconfig.jsonc -s /home/ephrem/.config/waybar/style.css -l off
-# Mpd
-exec-once = mpd
-#EWW config
-#exec-once = eww daemon
-#exec-once = eww open bar
-#exec-once = eww open sidestuff
-#exec-once = eww open workspaces
-#exec-once = eww open music
-#exec-once = wee open ssd
-# Start emacs server
-exec-once = pgrep emacs | xargs kill 1> /dev/null
-exec-once = emacs --daemon
-
-# KDE Connect
-exec-once=/usr/lib/kdeconnectd
-#exec-once=/usr/bin/kdeconnect-indicator
-# Enable mako
-#exec-once = mako -c /home/ephrem/.config/mako/config
-# Notifications
-# Load Notification Daemon
-exec-once = swaync
-# Font
-# exec = gsettings set org.gnome.desktop.interface font-name 'Ubuntu Nerd Font 12'
-# exec = gsettings set org.gnome.desktop.interface document-font-name 'Ubuntu Nerd Font 12'
-# exec = gsettings set org.gnome.desktop.interface monospace-font-name 'UbuntuMono Nerd Font 12'
-# exec = gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
-# exec = gsettings set org.gnome.desktop.interface font-hinting 'full'
-# TOFIX: WOB
-# exec = pgrep wob | xargs kill 2> /dev/null
-# exec = rm -f /home/ephrem/.wob.sock && mkfifo /home/ephrem/.wob.sock && tail -f /home/ephrem/.wob.sock | wob &
-
-
-#############################
-### ENVIRONMENT VARIABLES ###
-#############################
-
-# See https://wiki.hyprland.org/Configuring/Environment-variables/
-env = XCURSOR_SIZE,24
-env = XCURSOR_THEME, Adwaita
-#env = HYPRCURSOR_THEME,rose
-#env = HYPRCURSOR_SIZE,24
-
-env = QT_QPA_PLATFORM, wayland
-##env = QT_QPA_PLATFORMTHEME, qt6ct
-env = QT_QPA_PLATFORMTHEME,kde
-env = XDG_MENU_PREFIX,plasma-
-#env = GTK_THEME,Sunset
-env = XDG_CURRENT_DESKTOP,Hyprland
-env = XDG_SESSION_TYPE,wayland
-env = XDG_SESSION_DESKTOP,Hyprland
-#env = QT_QPA_PLATFORMTHEME,qt6ct
-#env = QT_QPA_PLATFORMTHEME,qt5ct
-#env = QT_WAYLAND_DISABLE_WINDOWDECORATION,1
-#env = QT_AUTO_SCREEN_SCALE_FACTOR,1
-
-
-#####################
-### LOOK AND FEEL ###
-#####################
-# Refer to https://wiki.hyprland.org/Configuring/Variables/
-# https://wiki.hyprland.org/Configuring/Variables/#general
+hl.config({
 general {
 	gaps_in = 3
 	gaps_out = 3
@@ -139,7 +26,6 @@ general {
 	}
 }
 
-# https://wiki.hyprland.org/Configuring/Variables/#decoration
 decoration {
 	rounding = 0
 	# 2.0 is a circle and 4.0 is a squircircle [2.0, 10.0]
@@ -175,7 +61,6 @@ decoration {
 		popups = false
 	}
 }
-
 # https://wiki.hyprland.org/Configuring/Variables/#animations
 animations {
 	enabled = false
@@ -215,7 +100,6 @@ misc {
 	mouse_move_focuses_monitor = true
 	middle_click_paste = true
 }
-
 
 #############
 ### INPUT ###
@@ -265,29 +149,21 @@ device {
 	name = epic-mouse-v1
 	sensitivity = -0.5
 }
-
-binds {
-	workspace_back_and_forth = false
-	allow_workspace_cycles = false
-	workspace_center_on = 0
 }
+})
 
-cursor {
-	inactive_timeout = 1.0
-	enable_hyprcursor = true
-}
 
 ####################
 ### KEYBINDINGSS ###
 ####################
 # See https://wiki.hyprland.org/Configuring/Keywords/
-$mainMod = SUPER # Sets "Windows" key as main modifier
-$terminal = alacritty
-$fileManager = dolphin
-$menu = wofi -show drun
+local mainMod = "SUPER" # Sets "Windows" key as main modifier
+local terminal = alacritty
+local fileManager = dolphin
+local menu = wofi -show drun
 # Lockscreen
-$lockscreen = ~/.config/hypr/scripts/lockscreen
-#$wlogout = ~/.config/hypr/scripts/wlogout
+local lockscreen = ~/.config/hypr/scripts/lockscreen
+# local wlogout = ~/.config/hypr/scripts/wlogout
 # Fuzzel
 #bind = $mainMod, SPACE, exec, fuzzel
 # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
@@ -406,6 +282,7 @@ bind =  $mainMod SHIFT,n, exec, swaync-client -t -sw
 # Special
 #bind = SUPER SHIFT, Y, exec, togglespecialworkspace
 #bind = SUPER, C, movetoworkspace, special
+
 ##############################
 ### WINDOWS AND WORKSPACES ###
 ##############################
