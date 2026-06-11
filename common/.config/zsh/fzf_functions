@@ -1,65 +1,63 @@
 # Search through all man pages
 function fman() {
-    man -k . | fzf -q "$1" --prompt='man> '  --preview $'echo {} | tr -d \'()\' | awk \'{printf "%s ", $2} {print $1}\' | xargs -r man' | tr -d '()' | awk '{printf "%s ", $2} {print $1}' | xargs -r man
+  man -k . | fzf -q "$1" --prompt='man> ' --preview $'echo {} | tr -d \'()\' | awk \'{printf "%s ", $2} {print $1}\' | xargs -r man' | tr -d '()' | awk '{printf "%s ", $2} {print $1}' | xargs -r man
 }
-
 
 # Find in File using ripgrep
 fif() {
   if [ ! "$#" -gt 0 ]; then return 1; fi
-  rg --files-with-matches --no-messages "$1" \
-      | fzf --preview "highlight -O ansi -l {} 2> /dev/null \
-      | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' \
-      || rg --ignore-case --pretty --context 10 '$1' {}"
+  rg --files-with-matches --no-messages "$1" |
+	fzf --preview "highlight -O ansi -l {} 2> /dev/null \
+	  | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' \
+	  || rg --ignore-case --pretty --context 10 '$1' {}"
 }
 
 # Find in file using ripgrep-all
 fifa() {
-    if [ ! "$#" -gt 0 ]; then return 1; fi
-    local file
-    file="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$*" \
-        | fzf-tmux -p +m --preview="rga --ignore-case --pretty --context 10 '"$*"' {}")" \
-        && print -z "./$file" || return 1;
+  if [ ! "$#" -gt 0 ]; then return 1; fi
+  local file
+  file="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$*" |
+	fzf-tmux -p +m --preview="rga --ignore-case --pretty --context 10 '"$*"' {}")" &&
+	print -z "./$file" || return 1
 }
 
 # Open epubs with Zathura
 fepub() {
-    result=$(find -type f -name '*.epub' | fzf --bind "ctrl-r:reload(find -type f -name '*.epub')")
-    [ -n "$result" ] && nohup zathura "$result" &> /dev/null & disown
+  result=$(find -type f -name '*.epub' | fzf --bind "ctrl-r:reload(find -type f -name '*.epub')")
+  [ -n "$result" ] && nohup zathura "$result" &>/dev/null &
+  disown
 }
 
 # Open pdf with Zathura
 fpdf() {
-    result=$(find -type f -name '*.pdf' | fzf --bind "ctrl-r:reload(find -type f -name '*.pdf')" --preview "pdftotext {} - | less")
-    [ -n "$result" ] && nohup zathura "$result" &> /dev/null & disown
+  result=$(find -type f -name '*.pdf' | fzf --bind "ctrl-r:reload(find -type f -name '*.pdf')" --preview "pdftotext {} - | less")
+  [ -n "$result" ] && nohup zathura "$result" &>/dev/null &
+  disown
 }
 
 # Open files with vim
-function vf()
-{
-    fzf -i --walker=file,dir,follow,hidden --walker-skip=.git,node_modules --header="Select a file to edit" --input-label="Filename" --preview-label="Edit this file:" --preview="bat --color=always --style=plain,changes,numbers {}" --preview-window="border:rounded" --border=double --scroll-off=3 --prompt="$ " --pointer="->" --layout=reverse --multi=3 > /tmp/fzf.txt
-    xargs -r -o -a /tmp/fzf.txt vim -n -T alacritty -o
+function vf() {
+  fzf -i --walker=file,dir,follow,hidden --walker-skip=.git,node_modules --header="Select a file to edit" --input-label="Filename" --preview-label="Edit this file:" --preview="bat --color=always --style=plain,changes,numbers {}" --preview-window="border:rounded" --border=double --scroll-off=3 --prompt="$ " --pointer="->" --layout=reverse --multi=3 >/tmp/fzf.txt
+  xargs -r -o -a /tmp/fzf.txt vim -n -T alacritty -o
 }
-
 
 # List packages
 
 list_packages() {
   if command -v pacman &>/dev/null; then
-    pacman -Qq | fzf -m --preview 'pacman -Qil {}' \
-        --border=rounded \
-        --margin=1% \
-        --layout=reverse \
-        --bind 'enter:execute(echo "Selected: "{+}; sudo pacman -Rns {+})+abort'
+	pacman -Qq | fzf -m --preview 'pacman -Qil {}' \
+	  --border=rounded \
+	  --margin=1% \
+	  --layout=reverse \
+	  --bind 'enter:execute(echo "Selected: "{+}; sudo pacman -Rns {+})+abort'
   elif command -v zypper &>/dev/null; then
-    zypper --no-refresh se -i | awk '/^i/{print $3}' | fzf -m --preview 'zypper --no-refresh info {1} 2> /dev/null' \
-        --border=rounded \
-        --margin=1% \
-        --layout=reverse \
-        --bind 'enter:execute(echo "Selected: "{1}; sudo zypper rm {1})+abort'
+	zypper --no-refresh se -i | awk '/^i/{print $3}' | fzf -m --preview 'zypper --no-refresh info {1} 2> /dev/null' \
+	  --border=rounded \
+	  --margin=1% \
+	  --layout=reverse \
+	  --bind 'enter:execute(echo "Selected: "{1}; sudo zypper rm {1})+abort'
   fi
 }
-
 
 # Better Open
 function zopen() {
@@ -71,32 +69,31 @@ function zopen() {
   cd "$current_dir"
 }
 
-
 # Open Files with Default Editor
-fopen () {
-    # [f]uzzy [e]dit  [s]earch [f]ile [c]ontent
-    local selected_file
-    local fzf_options=()
-    local preview_cmd
-    if command -v "bat" &>/dev/null; then
-        preview_cmd=('bat --color always --style=plain --paging=never {}')
-    else
-        preview_cmd=('cat {}')
-    fi
-    fzf_options+=(--height "80%" --layout=reverse --cycle --preview-window right:60% --preview ${preview_cmd[@]})
-    selected_file=$(grep -irl "${1:-}" ./ | fzf "${fzf_options[@]}")
+fopen() {
+  # [f]uzzy [e]dit  [s]earch [f]ile [c]ontent
+  local selected_file
+  local fzf_options=()
+  local preview_cmd
+  if command -v "bat" &>/dev/null; then
+	preview_cmd=('bat --color always --style=plain --paging=never {}')
+  else
+	preview_cmd=('cat {}')
+  fi
+  fzf_options+=(--height "80%" --layout=reverse --cycle --preview-window right:60% --preview ${preview_cmd[@]})
+  selected_file=$(grep -irl "${1:-}" ./ | fzf "${fzf_options[@]}")
 
-    if [[ -n "$selected_file" ]]; then
-        if command -v "$EDITOR" &>/dev/null; then
-            "$EDITOR" "$selected_file"
-        else
-            echo "EDITOR is not specified. using vim.  (you can export EDITOR in ~/.zshrc)"
-            vim "$selected_file"
-        fi
+  if [[ -n "$selected_file" ]]; then
+	if command -v "$EDITOR" &>/dev/null; then
+	  "$EDITOR" "$selected_file"
+	else
+	  echo "EDITOR is not specified. using vim.  (you can export EDITOR in ~/.zshrc)"
+	  vim "$selected_file"
+	fi
 
-    else
-        echo "No file selected or search returned no results."
-    fi
+  else
+	echo "No file selected or search returned no results."
+  fi
 }
 
 # Find and Remove Files with FZF
@@ -106,142 +103,142 @@ frm() {
 
   # Check if any selection was made
   if [[ -n "$selected" ]]; then
-    # Echo the files or directories that will be deleted
-    echo "Deleting the following files or directories:"
-    echo "$selected"
+	# Echo the files or directories that will be deleted
+	echo "Deleting the following files or directories:"
+	echo "$selected"
 
-    # Use `xargs` to safely pass selected files/directories to `rm -rf`
-    echo "$selected" | xargs -d '\n' rm -rf
+	# Use `xargs` to safely pass selected files/directories to `rm -rf`
+	echo "$selected" | xargs -d '\n' rm -rf
   else
-    echo "No files or directories selected."
+	echo "No files or directories selected."
   fi
 }
 
-
 # Kill processes using fzf
-fkill(){
-selected=$(ps aux 2>/dev/null | fzf -m | awk '{print $2}')
-   echo "$selected" | xargs kill -9 2>/dev/null
+fkill() {
+  selected=$(ps aux 2>/dev/null | fzf -m | awk '{print $2}')
+  echo "$selected" | xargs kill -9 2>/dev/null
 }
-
 
 # Man with fzf
-_fman(){
-compgen -c | fzf | xargs man
+_fman() {
+  compgen -c | fzf | xargs man
 }
-
 
 # Fuzzy CD into a directory
 fzfcd() {
-    local dir
-    dir=$(find "${1:-.}" -type d 2>/dev/null | fzf +m --prompt="cd> ")
-    [[ -n "$dir" ]] && cd "$dir"
+  local dir
+  dir=$(find "${1:-.}" -type d 2>/dev/null | fzf +m --prompt="cd> ")
+  [[ -n "$dir" ]] && cd "$dir"
 }
 
 # Fuzzy search command history
 fzfhist() {
-    local cmd
-    cmd=$(history | fzf --tac --prompt="Hist> " | sed 's/ *[0-9]* *//')
-    [[ -n "$cmd" ]] && eval "$cmd"
+  local cmd
+  cmd=$(history | fzf --tac --prompt="Hist> " | sed 's/ *[0-9]* *//')
+  [[ -n "$cmd" ]] && eval "$cmd"
 }
-
 
 # Fuzzy systemd unit browser
 fsc() {
-    local unit
-    unit=$(systemctl list-units --all --no-pager | sed 1d | \
-        fzf --prompt="Systemd> " | awk '{print $1}') || return
+  local unit
+  unit=$(systemctl list-units --all --no-pager | sed 1d |
+	fzf --prompt="Systemd> " | awk '{print $1}') || return
 
-    if [[ -n "${unit}" ]]; then
-        systemctl status "${unit}"
-    fi
+  if [[ -n "${unit}" ]]; then
+	systemctl status "${unit}"
+  fi
 }
-
 
 # Fuzzy git log browser
 fgl() {
-    git log --oneline --graph --color=always | \
-        fzf --ansi --no-sort --reverse --prompt="Git Log> " \
-            --preview 'git show --color=always $(echo {} | grep -o "[a-f0-9]\{7,\}" | head -1)' \
-            --preview-window=right:60%:wrap \
-            --bind 'enter:execute(git show --color=always $(echo {} | grep -o "[a-f0-9]\{7,\}" | head -1) | less -R)'
+  git log --oneline --graph --color=always |
+	fzf --ansi --no-sort --reverse --prompt="Git Log> " \
+	  --preview 'git show --color=always $(echo {} | grep -o "[a-f0-9]\{7,\}" | head -1)' \
+	  --preview-window=right:60%:wrap \
+	  --bind 'enter:execute(git show --color=always $(echo {} | grep -o "[a-f0-9]\{7,\}" | head -1) | less -R)'
 }
-
 
 # Fuzzy grep with ripgrep
 fzf_grep() {
-    local pattern="${1:-}"
-    local file
+  local pattern="${1:-}"
+  local file
 
-    if [[ -z "$pattern" ]]; then
-        echo "Usage: fzf_grep <pattern>"
-        return 1
-    fi
+  if [[ -z "$pattern" ]]; then
+	echo "Usage: fzf_grep <pattern>"
+	return 1
+  fi
 
-    if command -v rg >/dev/null 2>&1; then
-        file=$(rg --line-number --color=never --no-heading --smart-case "$pattern" 2>/dev/null |
-               fzf --delimiter=: --nth=1..2 \
-                   --preview 'bat --style=numbers --color=always {1} 2>/dev/null | grep -C 3 --color=always {2}' \
-                   --preview-window=right:50%:wrap \
-                   --prompt="Grep> " \
-                   --bind="ctrl-o:execute($EDITOR +{2} {1})+abort")
-        if [[ -n "$file" ]]; then
-            local line=$(echo "$file" | cut -d: -f2)
-            file=$(echo "$file" | cut -d: -f1)
-            ${EDITOR:-vim} +"$line" "$file"
-        fi
-    else
-        echo "ripgrep (rg) is required for fzf_grep"
-        return 1
-    fi
+  if command -v rg >/dev/null 2>&1; then
+	file=$(rg --line-number --color=never --no-heading --smart-case "$pattern" 2>/dev/null |
+	  fzf --delimiter=: --nth=1..2 \
+		--preview 'bat --style=numbers --color=always {1} 2>/dev/null | grep -C 3 --color=always {2}' \
+		--preview-window=right:50%:wrap \
+		--prompt="Grep> " \
+		--bind="ctrl-o:execute($EDITOR +{2} {1})+abort")
+	if [[ -n "$file" ]]; then
+	  local line=$(echo "$file" | cut -d: -f2)
+	  file=$(echo "$file" | cut -d: -f1)
+	  ${EDITOR:-vim} +"$line" "$file"
+	fi
+  else
+	echo "ripgrep (rg) is required for fzf_grep"
+	return 1
+  fi
 }
-
 
 # Fuzzy environment variable search
 fenv() {
-    local var
-    var=$(env | fzf --height 40% --prompt="Env> " --preview 'echo {} | cut -d= -f2')
+  local var
+  var=$(env | fzf --height 40% --prompt="Env> " --preview 'echo {} | cut -d= -f2')
 
-    if [[ -n "$var" ]]; then
-        echo "$var" | cut -d= -f1 | tr -d '\n' | xclip -selection clipboard 2>/dev/null
-        echo "Copied to clipboard: $(echo "$var" | cut -d= -f1)"
-    fi
+  if [[ -n "$var" ]]; then
+	echo "$var" | cut -d= -f1 | tr -d '\n' | xclip -selection clipboard 2>/dev/null
+	echo "Copied to clipboard: $(echo "$var" | cut -d= -f1)"
+  fi
 }
-
 
 # Fuzzy file editor
 fedit() {
-    local files
-    local editor="${EDITOR:-vim}"
+  local files
+  local editor="${EDITOR:-vim}"
 
-    # Select one or more files
-    files=$(fzf -m --preview 'bat --style=numbers --color=always {} 2>/dev/null || cat {}' --preview-window=right:50%:wrap --prompt="Edit> ")
+  # Select one or more files
+  files=$(fzf -m --preview 'bat --style=numbers --color=always {} 2>/dev/null || cat {}' --preview-window=right:50%:wrap --prompt="Edit> ")
 
-    if [[ -n "$files" ]]; then
-        # Handle multiple files (one per line)
-        echo "$files" | while read -r file; do
-            if [[ -n "$file" ]]; then
-                $editor "$file"
-            fi
-        done
-    fi
+  if [[ -n "$files" ]]; then
+	# Handle multiple files (one per line)
+	echo "$files" | while read -r file; do
+	  if [[ -n "$file" ]]; then
+		$editor "$file"
+	  fi
+	done
+  fi
 }
 
 # Fuzzy man page search
 fzf_man() {
-    local man_page
-    man_page=$(man -k . | fzf --prompt='Man> ' | awk '{print $1}')
+  local man_page
+  man_page=$(man -k . | fzf --prompt='Man> ' | awk '{print $1}')
 
-    if [[ -n "$man_page" ]]; then
-        man "$man_page"
-    fi
+  if [[ -n "$man_page" ]]; then
+	man "$man_page"
+  fi
 }
 
-
 cdd() {
-    local selected_dir
-    selected_dir=$(fd -t d . | fzf +m --height 50% --preview 'tree -C {}')
-    if [[ -n "$selected_dir" ]]; then
-        cd "$selected_dir" || return 1
-    fi
+  local selected_dir
+  selected_dir=$(fd -t d . | fzf +m --height 50% --preview 'tree -C {}')
+  if [[ -n "$selected_dir" ]]; then
+	cd "$selected_dir" || return 1
+  fi
+}
+
+# Do not display path in the completion
+_fzf_compgen_path() {
+  fd --hidden -exclude .git . "$1"
+}
+
+_fzf_compgen_dir() {
+  fd --type d --hidden --exclude .git . "$1"
 }
