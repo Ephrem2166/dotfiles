@@ -85,6 +85,10 @@ hl.config({
 		repeat_delay = 600,
 
 		sensitivity = 0.0, -- -1.0 - 1.0, 0 means no modification.,
+		touchpad = {
+			natural_scroll = true,
+			disable_while_typing = true,
+		},
 	},
 })
 
@@ -161,7 +165,7 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 hl.on("hyprland.start", function()
 	hl.exec_cmd("nm-applet")
 	hl.exec_cmd("mpd")
-	hl.exec_cmd("hypridle & hyprpaper")
+	hl.exec_cmd("hypridle & hyprpaper & hyprlock")
 	hl.exec_cmd("/usr/lib/kdeconnectd")
 	hl.exec_cmd("swaync")
 	hl.exec_cmd("nm-applet --indicator")
@@ -181,3 +185,10 @@ hl.on("hyprland.start", function()
 end)
 
 hl.env("XCURSOR_SIZE", "24")
+
+hl.window_rule({
+	match = {
+		class = "foot*",
+	},
+	workspace = "1",
+})
