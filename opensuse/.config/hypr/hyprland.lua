@@ -5,6 +5,7 @@ hl.monitor({
 	scale = 1,
 })
 
+-- General
 hl.config({
 	general = {
 		gaps_in = 3,
@@ -15,7 +16,7 @@ hl.config({
 			active_border = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
 			inactive_border = "rgba(595959aa)",
 		},
-		resize_on_border = false,
+		resize_on_border = true,
 		--extend_border_grab_area = 15,
 		allow_tearing = false,
 
@@ -64,6 +65,7 @@ hl.config({
 	misc = {
 		force_default_wallpaper = 0,
 		disable_hyprland_logo = true,
+		disable_splash_rendering = true,
 	},
 })
 
@@ -96,7 +98,8 @@ local mainMod = "SUPER"
 local terminal = "kitty"
 local fileManager = "dolphin"
 local power = "$HOME/.config/hypr/scripts/powermenu"
-local lockscreen = "$HOME/.config/hypr/scripts/lockscreen"
+-- local lockscreen = "$HOME/.config/hypr/hyprlock.conf"
+local lockscreen = "hyprlock"
 local launch = "$HOME/.config/hypr/scripts/launch.sh"
 
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
@@ -184,11 +187,12 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP")
 end)
 
-hl.env("XCURSOR_SIZE", "24")
-
 hl.window_rule({
 	match = {
 		class = "foot*",
 	},
 	workspace = "1",
 })
+
+hl.env("HYPRCURSOR_THEME", "MyCursor")
+hl.env("HYPRCURSOR_SIZE", "24")
