@@ -97,7 +97,7 @@ hl.config({
 local mainMod = "SUPER"
 local terminal = "kitty"
 local fileManager = "dolphin"
-local power = "$HOME/.config/hypr/scripts/powermenu"
+-- local power = "~/.config/hypr/scripts/powermenu"
 -- local lockscreen = "$HOME/.config/hypr/hyprlock.conf"
 local lockscreen = "hyprlock"
 local launch = "$HOME/.config/hypr/scripts/launch.sh"
@@ -109,8 +109,8 @@ hl.bind(
 	hl.dsp.exec_cmd("command -v pkill rofi || true && rofi -show drun -modi drun,filebrowser,run,window")
 )
 
-hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd(power))
-hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd(power))
+hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd("~/.config/hypr/scripts/powermenu"))
+hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("~/.config/hypr/scripts/powermenu"))
 hl.bind(mainMod .. " + SHIFT + l", hl.dsp.exec_cmd(lockscreen))
 hl.bind(mainMod .. " + SHIFT + r", hl.dsp.exec_cmd(launch))
 
