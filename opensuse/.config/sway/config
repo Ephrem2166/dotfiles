@@ -1,24 +1,24 @@
-#  ____                     
-# / ___|_      ____ _ _   _ 
+#  ____
+# / ___|_      ____ _ _   _
 # \___ \ \ /\ / / _` | | | |
 #  ___) \ V  V / (_| | |_| |
 # |____/ \_/\_/ \__,_|\__, |
-#                     |___/ 
+#                     |___/
 # For Lenovo
 output "eDP-1" {
     mode 1920x1200@60.003Hz
-    pos 0 0 
-    transform normal 
-    scale 1.0 
-   # adaptive_sync on 
-    bg ~/Documents/Others/berserk.png fill 
+    pos 0 0
+    transform normal
+    scale 1.0
+   # adaptive_sync on
+    bg ~/Documents/Others/berserk.png fill
   }
 
 ### Input configuration
 # Disable touchscreen
 input "type:touch" {
-  events disabled 
-  
+  events disabled
+
 }
 
 # Remap Capslock to Escape
