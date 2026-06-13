@@ -168,7 +168,7 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 hl.on("hyprland.start", function()
 	hl.exec_cmd("nm-applet")
 	hl.exec_cmd("mpd")
-	hl.exec_cmd("hypridle & hyprpaper & hyprlock")
+	hl.exec_cmd("hypridle & hyprpaper")
 	hl.exec_cmd("/usr/lib/kdeconnectd")
 	hl.exec_cmd("swaync")
 	hl.exec_cmd("nm-applet --indicator")
