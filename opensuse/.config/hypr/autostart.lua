@@ -1,0 +1,22 @@
+-- Autostart
+hl.on("hyprland.start", function()
+	hl.exec_cmd("nm-applet")
+	hl.exec_cmd("mpd")
+	hl.exec_cmd("hypridle & hyprpaper")
+	hl.exec_cmd("/usr/lib/kdeconnectd")
+	hl.exec_cmd("swaync")
+	hl.exec_cmd("nm-applet --indicator")
+	hl.exec_cmd("gammastep")
+	hl.exec_cmd("gammastep-indicator")
+	hl.exec_cmd("udiskie --no-automount --smart-tray")
+	hl.exec_cmd("wl-paste --type text --watch cliphist store ")
+	hl.exec_cmd("wl-paste --type image --watch cliphist store #")
+	hl.exec_cmd(
+		"waybar -c /home/ephrem/.config/waybar/hyprconfig.jsonc -s /home/ephrem/.config/waybar/style.css -l off"
+	)
+	hl.exec_cmd("pgrep emacs | xargs kill 1> /dev/null")
+	hl.exec_cmd("emacs --daemon")
+	hl.exec_cmd("/usr/libexec/polkit-kde-authentication-agent-1")
+	hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP")
+end)
