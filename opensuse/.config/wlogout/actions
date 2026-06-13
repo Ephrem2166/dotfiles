@@ -1,50 +1,30 @@
-#!/usr/bin/env bash
-
-## wlogout actions
-
-# Ask for confirmation
-cdialog () {
-	yad --title='Confirm?' --borders=15 --center --fixed --undecorated --button=Yes:0 --button=No:1 --text="Are you sure?" --text-align=center
+{
+    "label" : "lock",
+    "action" : "$HOME/.config/hypr/scripts/power.sh lock",
+    "text" : "Lock",
+    "keybind" : "l"
 }
-
-if [[ "$1" == '--shutdown' ]]; then
-	cdialog
-	if [[ "$?" == 0 ]]; then
-		systemctl poweroff
-    else
-		exit
-    fi
-elif [[ "$1" == '--reboot' ]]; then
-	cdialog
-	if [[ "$?" == 0 ]]; then
-		systemctl reboot
-    else
-		exit
-    fi
-elif [[ "$1" == '--hibernate' ]]; then
-	cdialog
-	if [[ "$?" == 0 ]]; then
-		systemctl hibernate
-    else
-		exit
-    fi
-elif [[ "$1" == '--lock' ]]; then
-	~/.config/hypr/scripts/lockscreen
-elif [[ "$1" == '--suspend' ]]; then
-	cdialog
-	if [[ "$?" == 0 ]]; then
-		mpc -q pause
-		amixer set Master mute
-		~/.config/hypr/scripts/lockscreen
-		systemctl suspend
-    else
-		exit
-    fi
-elif [[ "$1" == '--logout' ]]; then
-	cdialog
-	if [[ "$?" == 0 ]]; then
-		kill -9 -1
-    else
-		exit
-    fi
-fi
+{
+    "label" : "logout",
+    "action" : "$HOME/.config/hypr/scripts/power.sh exit",
+    "text" : "Log Out",
+    "keybind" : "e"
+}
+{
+    "label" : "suspend",
+    "action" : "$HOME/.config/hypr/scripts/power.sh suspend",
+    "text" : "Suspend",
+    "keybind" : "u"
+}
+{
+    "label" : "reboot",
+    "action" : "$HOME/.config/hypr/scripts/power.sh reboot",
+    "text" : "Restart",
+    "keybind" : "r"
+}
+{
+    "label" : "shutdown",
+    "action" : "$HOME/.config/hypr/scripts/power.sh shutdown",
+    "text" : "Power Off",
+    "keybind" : "s"
+}

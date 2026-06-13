@@ -55,8 +55,8 @@ set $calc "$HOME/.config/rofi/rofi-calc.sh"
 # Swaylock
 # set $lock "$HOME/.config/swaylock/lock.sh"
 # Hyprlock
-set $lockscreen hyprlock
-
+# set $lockscreen hyprlock
+set $lockscreen wlogout
 
 # Use the left click to move windows
 floating_modifier $mod normal
@@ -78,7 +78,6 @@ bindsym $mod+Control+w exec $bluetooth
 bindsym $mod+Shift+o exec $emoji
 bindsym $mod+Control+k exec $keys
 bindsym $mod+Control+0 exec $calc
-
 
 # Kill focused window
 bindsym $mod+q kill
@@ -103,7 +102,7 @@ bindsym $mod+x exit
 # bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
 # Reload or update waybar
-bindsym $mod+Shift+u exec $waybar-reload
+# bindsym $mod+Shift+u exec $waybar-reload
 
 #################
 ### Movement ####
