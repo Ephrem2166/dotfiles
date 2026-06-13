@@ -21,6 +21,11 @@ hl.bind(mainMod .. " + SHIFT + l", hl.dsp.exec_cmd(lockscreen))
 hl.bind(mainMod .. " + SHIFT + r", hl.dsp.exec_cmd(launch))
 
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
+hl.bind(mainMod .. "+ CTRL + Q", hl.dsp.exit())
+hl.bind(mainMod .. "+ F", hl.dsp.window.fullscreen())
+hl.bind(mainMod .. "+ V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. "+ P", hl.dsp.window.pseudo())
+hl.bind(mainMod .. "+ SHIFT + W", hl.dsp.layout("togglesplit"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
@@ -39,6 +44,15 @@ end
 -- Scroll through existing workspaces with mainMod + scroll
 hl.bind(mainMod .. " + tab", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + SHIFT + tab", hl.dsp.focus({ workspace = "e-1" }))
+
+-- Mouse
+hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), {
+	mouse = true,
+})
+
+hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), {
+	mouse = true,
+})
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind(
@@ -69,3 +83,8 @@ hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
+
+-- Install hyprshot
+hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m region"))
+hl.bind(mainMod .. "+ Print", hl.dsp.exec_cmd("hyprshot -m output"))
+hl.bind(mainMod .. "+ CTRL + Print", hl.dsp.exec_cmd("hyprshot -m window"))

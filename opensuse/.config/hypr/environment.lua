@@ -1,2 +1,5 @@
 hl.env("HYPRCURSOR_THEME", "MyCursor")
 hl.env("HYPRCURSOR_SIZE", "24")
+hl.env("GDK_BACKEND", "wayland,x11,*")
+hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
