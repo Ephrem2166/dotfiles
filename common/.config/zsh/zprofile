@@ -18,26 +18,6 @@ if [[ -n "$DESKTOP_SESSION" && "$DESKTOP_SESSION" == "sway" ]]; then
     #gsettings set org.gnome.desktop.interface cursor-theme Adwaita
     #gsettings set org.gnome.desktop.interface cursor-size 18
 fi
-if [[ -n "$DESKTOP_SESSION" && "$DESKTOP_SESSION" == "hyprland" ]]; then
-    export QT_QPA_PLATFORM=wayland
-    export QT_QPA_PLATFORMTHEME=kde
-    export XCURSOR_SIZE=24
-    # export XCURSOR_THEME="Adwaita"
-    export XDG_CURRENT_DESKTOP="hyprland"
-    export XDG_SESSION_TYPE="wayland"
-    export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
-    export QT_AUTO_SCREEN_SCALE_FACTOR=1
-    export SDL_VIDEODRIVER="wayland"
-    export GTK_USE_PORTAL=0
-    export _JAVA_AWT_WM_NONREPARENTING=1
-    export MOZ_ENABLE_WAYLAND=1
-    # Added
-    export GDK_BACKEND="wayland"
-    #gsettings set org.gnome.desktop.interface color-scheme prefer-dark
-    #gsettings set org.gnome.desktop.interface gtk-theme Adwaita
-    #gsettings set org.gnome.desktop.interface cursor-theme Adwaita
-    #gsettings set org.gnome.desktop.interface cursor-size 18
-fi
 
 if [[ -n "$DESKTOP_SESSION" && "$DESKTOP_SESSION" == "river" ]]; then
     export QT_QPA_PLATFORM=wayland
