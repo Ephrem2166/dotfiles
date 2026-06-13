@@ -229,16 +229,6 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 
-# Brightness Control
-bindsym XF86MonBrightnessDown exec brightnessctl set 5%- && brightnessctl get > ~/.wob.sock
-bindsym XF86MonBrightnessUp exec brightnessctl set +5% && brightnessctl get > ~/.wob.sock
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && pamixer --get-volume > ~/.wob.sock
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && pamixer --get-volume > ~/.wob.sock
-
-# Brightness control
-#bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set -5%
-#bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
-
 # Volume control
 #bindsym --locked XF86AudioRaiseVolume exec  pactl set-sink-volume @DEFAULT_SINK@ +10%
 #bindsym --locked XF86AudioLowerVolume exec  pactl set-sink-volume @DEFAULT_SINK@ -10%
@@ -261,6 +251,12 @@ bindsym $mod+Shift+s exec grim -o $(swaymsg -t get_outputs | jq -r '.[] | select
 bindsym $mod+Shift+p exec grim -t jpeg -g "$(slurp)" ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%m-%s).jpg
 # Take a screenshot and save it to the clipboard
 bindsym $mod+Control+s exec grim -g "$(slurp -d)" - | wl-copy
+
+# Brightness Control
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%- && brightnessctl get > ~/.wob.sock
+bindsym XF86MonBrightnessUp exec brightnessctl set +5% && brightnessctl get > ~/.wob.sock
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && pamixer --get-volume > ~/.wob.sock
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && pamixer --get-volume > ~/.wob.sock
 
 
 # Keyboard light
