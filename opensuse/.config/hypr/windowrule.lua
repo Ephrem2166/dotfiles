@@ -1,8 +1,54 @@
 hl.window_rule({
+
 	match = {
 		class = "foot*",
 	},
+	tag = "+terminal",
+})
+hl.window_rule({
+	match = {
+		class = "Alacritty*",
+	},
+	tag = "+terminal",
+})
+hl.window_rule({
+	match = {
+		class = "firefox*",
+	},
+	tag = "+browsers",
+})
+hl.window_rule({
+	match = {
+		class = "librewolf*",
+	},
+	tag = "+browsers",
+})
+hl.window_rule({
+	match = {
+		class = "[b|Brave]*",
+	},
+	tag = "+browsers",
+})
+
+hl.window_rule({
+	match = {
+		class = "org.kde.dolphin",
+	},
+	workspace = "2",
+})
+
+hl.window_rule({
+	match = {
+		tag = "terminal",
+	},
 	workspace = "1",
+})
+
+hl.window_rule({
+	match = {
+		tag = "browsers",
+	},
+	workspace = "3",
 })
 
 -- Ignore maximize requests from all apps. You'll probably like this.
