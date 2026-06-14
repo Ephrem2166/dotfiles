@@ -56,7 +56,7 @@ set $calc "$HOME/.config/rofi/rofi-calc.sh"
 # set $lock "$HOME/.config/swaylock/lock.sh"
 # Hyprlock
 # set $lockscreen hyprlock
-set $lockscreen wlogout
+set $lockscreen "$HOME/.config/wlogout/launch"
 
 # Use the left click to move windows
 floating_modifier $mod normal
