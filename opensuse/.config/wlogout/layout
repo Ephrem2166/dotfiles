@@ -13,6 +13,7 @@
 {
     "label" : "logout",
     "action" : "~/.config/hypr/scripts/power.sh exit",
+
     "text" : "Exit",
     "keybind" : "e"
 }

@@ -5,7 +5,6 @@ exec /usr/libexec/polkit-kde-authentication-agent-1
 # exec mako -c "$HOME/.config/mako/swayconfig" &
 # exec dunst
 exec swaync
-
 # Audio
 # Pipewire
 # exec pipewire
@@ -62,18 +61,20 @@ exec sway-audio-idle-inhibit
 # Swayidle
 # exec_always swayidle -w timeout 300 "$HOME/.config/swaylock/lock.sh" timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' before-sleep "$HOME/.config/swaylock/lock.sh"
 # Swayidle with hyprlock
-exec_always swayidle -w \
-                timeout 300 'hyprlock' \
-                timeout 600 'swaymsg "output eDP-1 dpms off"' \
-                     resume 'swaymsg "output eDP-1 dpms on"' \
-                before-sleep 'hyprlock'
+# exec_always swayidle -w \
+#                 timeout 300 'hyprlock' \
+#                 timeout 600 'swaymsg "output eDP-1 dpms off"' \
+#                      resume 'swaymsg "output eDP-1 dpms on"' \
+#                 before-sleep 'hyprlock'
 
 ### Idle configuration
-#exec swayidle -w\
-#    timeout 1070 'swaylock -f -C ~/.config/swaylock/config'\
-#    timeout 770 'swaymsg "output * dpms off"' \
-#    resume 'swaymsg "output * dpms on"' \
-#-sleep 'swaylock -C ~/.config/swaylock/config'
+# set $lock 'swaylock -f -i ~/Downloads/cloud-wallpaper.jpg -s fill --font "Berkeley Nerd Font" --indicator-idle-visible'
+set $lock 'swaylock -C $XDG_CONFIG_HOME/swaylock/config'
+exec_always swayidle -w \
+    timeout 60 $lock  \
+    timeout 120 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+before-sleep $lock
 
 # MPD
 exec pkill -x mpdas
