@@ -71,8 +71,8 @@ exec sway-audio-idle-inhibit
 # set $lock 'swaylock -f -i ~/Downloads/cloud-wallpaper.jpg -s fill --font "Berkeley Nerd Font" --indicator-idle-visible'
 set $lock 'swaylock -C $XDG_CONFIG_HOME/swaylock/config'
 exec_always swayidle -w \
-    timeout 60 $lock  \
-    timeout 120 'swaymsg "output * dpms off"' \
+    timeout 300 $lock  \
+    timeout 600 'swaymsg "output * dpms off"' \
     resume 'swaymsg "output * dpms on"' \
 before-sleep $lock
 
