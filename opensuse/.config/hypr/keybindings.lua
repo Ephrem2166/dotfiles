@@ -18,7 +18,12 @@ hl.bind(
 hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd("~/.config/hypr/scripts/powermenu"))
 hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("~/.config/hypr/scripts/powermenu"))
 hl.bind(mainMod .. " + SHIFT + l", hl.dsp.exec_cmd(lockscreen))
-hl.bind(mainMod .. " + SHIFT + r", hl.dsp.exec_cmd(launch))
+hl.bind(mainMod .. " + SHIFT + r", hl.dsp.exec_cmd(launch), { description = "Reload Waybar" })
+hl.bind(
+	mainMod .. " + CTRL + r",
+	hl.dsp.exec_cmd("~/.config/hypr/scripts/reload.sh"),
+	{ description = "Reload Hyprland" }
+)
 
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(mainMod .. "+ CTRL + Q", hl.dsp.exit())
@@ -53,6 +58,17 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), {
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), {
 	mouse = true,
 })
+
+-- SWAP
+hl.bind(mainMod .. " + K", hl.dsp.layout("swapsplit"), { description = "Swapsplit" })
+hl.bind(mainMod .. " + ALT + left", hl.dsp.window.swap({ direction = "l" }), { description = "Swap tiled window left" })
+hl.bind(
+	mainMod .. " + ALT + right",
+	hl.dsp.window.swap({ direction = "r" }),
+	{ description = "Swap tiled window right" }
+)
+hl.bind(mainMod .. " + ALT + up", hl.dsp.window.swap({ direction = "u" }), { description = "Swap tiled window up" })
+hl.bind(mainMod .. " + ALT + down", hl.dsp.window.swap({ direction = "d" }), { description = "Swap tiled window down" })
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind(
