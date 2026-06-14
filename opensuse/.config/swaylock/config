@@ -1,4 +1,4 @@
-image=/home/ephrem/Documents/Others/berserk.png
+image=/home/ephrem/Documents/Others/my-wallpaper-nord.png
 daemonize
 ignore-empty-password
 show-failed-attempts
@@ -13,8 +13,6 @@ font-size=14
 indicator-idle-visible
 indicator-radius=100
 indicator-thickness=12
-
-
 inside-color=#2E3440
 inside-clear-color=#ECEFF4
 inside-caps-lock-color=#EBCB8B
