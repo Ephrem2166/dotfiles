@@ -39,6 +39,30 @@ hl.window_rule({
 
 hl.window_rule({
 	match = {
+		class = "emacs",
+	},
+	workspace = "7",
+})
+hl.window_rule({
+	match = {
+		class = "mpv",
+	},
+	workspace = "4",
+})
+hl.window_rule({
+	match = {
+		class = "*telegram*",
+	},
+	workspace = "5",
+})
+hl.window_rule({
+	match = {
+		class = "org.kde.okular",
+	},
+	workspace = "8",
+})
+hl.window_rule({
+	match = {
 		tag = "terminal",
 	},
 	workspace = "1",

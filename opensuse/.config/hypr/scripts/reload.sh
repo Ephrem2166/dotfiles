@@ -1,9 +1,10 @@
 #!/bin/bash
 
-killall waybar
-pulseaudio -k
-pulseaudio --start
+#killall waybar
+#pulseaudio -k
+#pulseaudio --start
 
-waybar &
+#waybar &
 
 hyprctl reload
+notify-send "Hyprland Reloaded"
