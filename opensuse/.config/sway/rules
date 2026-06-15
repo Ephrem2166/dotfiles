@@ -35,6 +35,7 @@ for_window [title="Save File"] floating enable
 for_window [class="(?i)(?:lxappearance)"] floating enable
 for_window [title = "Picture in picture"] floating enable, sticky enable
 for_window [app_id="org.kde.okular"] floating enable
+for_window [app_id="kdesystemsettings"] floating enable
 
 # Applications
 #for_window [app_id="mpv"] floating enable
