@@ -10,10 +10,10 @@ local launch = "$HOME/.config/hypr/scripts/launch.sh"
 
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
-hl.bind(
-	mainMod .. "+ D",
-	hl.dsp.exec_cmd("command -v pkill rofi || true && rofi -show drun -modi drun,filebrowser,run,window")
-)
+-- hl.bind(
+-- 	mainMod .. "+ D",
+-- 	hl.dsp.exec_cmd("command -v pkill rofi || true && rofi -show drun -modi drun,filebrowser,run,window")
+-- )
 
 hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd("~/.config/hypr/scripts/powermenu"))
 hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("~/.config/hypr/scripts/powermenu"))

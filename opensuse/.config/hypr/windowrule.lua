@@ -13,6 +13,13 @@ hl.window_rule({
 })
 hl.window_rule({
 	match = {
+		class = "kitty*",
+	},
+	tag = "+terminal",
+})
+
+hl.window_rule({
+	match = {
 		class = "firefox*",
 	},
 	tag = "+browsers",
