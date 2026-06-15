@@ -11,9 +11,10 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("udiskie --no-automount --smart-tray")
 	hl.exec_cmd("wl-paste --type text --watch cliphist store ")
 	hl.exec_cmd("wl-paste --type image --watch cliphist store #")
-	hl.exec_cmd(
-		"waybar -c /home/ephrem/.config/waybar/hyprconfig.jsonc -s /home/ephrem/.config/waybar/style.css -l off"
-	)
+	-- hl.exec_cmd(
+	-- 	"waybar -c /home/ephrem/.config/waybar/hyprconfig.jsonc -s /home/ephrem/.config/waybar/style.css -l off"
+	-- )
+	hl.exec_cmd("qs -c noctalia-shell")
 	hl.exec_cmd("pgrep emacs | xargs kill 1> /dev/null")
 	hl.exec_cmd("emacs --daemon")
 	hl.exec_cmd("/usr/libexec/polkit-kde-authentication-agent-1")
