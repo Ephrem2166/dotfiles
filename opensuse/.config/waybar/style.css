@@ -73,7 +73,7 @@ tooltip label {
 #workspaces button.active {
   color: @foreground;
   opacity: 0.9;
-  background: @background;
+  background: @highlight;
   border-radius: 11px;
   min-width: 10px;
   /*transition: all 0.3s ease-in-out;*/
