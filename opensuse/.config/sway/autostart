@@ -16,7 +16,7 @@ exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
 
 # Waybar
-exec waybar -c "$HOME/.config/waybar/swayconfig.jsonc" -l off &
+exec waybar -c "$HOME/.config/waybar/swayconfig.jsonc" -s "$HOME/.config/waybar/style-2.css" -l off &
 
 # Autotiling
 exec autotiling
@@ -74,7 +74,7 @@ exec_always swayidle -w \
     timeout 300 $lock  \
     timeout 600 'swaymsg "output * dpms off"' \
     resume 'swaymsg "output * dpms on"' \
-before-sleep $lock
+    before-sleep $lock
 
 # MPD
 exec pkill -x mpdas

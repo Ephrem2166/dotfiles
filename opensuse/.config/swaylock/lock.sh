@@ -3,7 +3,8 @@ swaylock --daemonize \
     --ignore-empty-password \
     --show-failed-attempts \
     --image $HOME/Pictures/wallpapers/my-wallpaper-nord.png \
-    --scaling stretch \
+    --clock
+--scaling stretch \
     --show-keyboard-layout \
     --indicator-caps-lock \
     --caps-lock-bs-hl-color BF616A \
