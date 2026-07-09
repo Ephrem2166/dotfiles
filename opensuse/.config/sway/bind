@@ -21,6 +21,7 @@ set $menu rofi -show drun -modi drun,filebrowser,run,window
 # set $menu fuzzel
 # set $menu wofi -show drun -f -i --width 350
 # set $menu wofi --show drun --style ~/.config/wofi/style.css
+# set $menu wofi -G -I -i -n --show drun | xargs swaymsg exec --
 # File
 set $file rofi -show filebrowser | swaymsg
 #set $file dolphin
