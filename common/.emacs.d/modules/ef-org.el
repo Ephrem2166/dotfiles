@@ -37,34 +37,34 @@
 
 
 ;;; Variable Pitch Mode
-(defun my/enable-variable-pitch-mode ()
-  "Enable variable-pitch-mode for relevant org-mode text."
-  (variable-pitch-mode 1)
-  (set-face-attribute 'variable-pitch nil
-					  :family "Iosevka Aile"
-					  :height 120)
-  ;; keep code related stuff clean
-  (dolist (face '(org-block
-				  org-block-begin-line
-				  org-block-end-line
-				  org-checkbox
-				  org-code
-				  org-date
-				  org-document-title
-				  org-document-info-keyword
-				  org-drawer
-				  org-formula
-				  org-meta-line
-				  org-table
-				  org-special-keyword
-				  org-verbatim
-				  ;; Others
-				  line-number
-				  line-number-current-line
-				  ))
-	(set-face-attribute face nil :inherit 'fixed-pitch)))
-
-(add-hook 'org-mode-hook #'my/enable-variable-pitch-mode)
+;; (defun my/enable-variable-pitch-mode ()
+;;   "Enable variable-pitch-mode for relevant org-mode text."
+;;   (variable-pitch-mode 1)
+;;   (set-face-attribute 'variable-pitch nil
+;; 					  :family "Iosevka Aile"
+;; 					  :height 120)
+;;   ;; keep code related stuff clean
+;;   (dolist (face '(org-block
+;; 				  org-block-begin-line
+;; 				  org-block-end-line
+;; 				  org-checkbox
+;; 				  org-code
+;; 				  org-date
+;; 				  org-document-title
+;; 				  org-document-info-keyword
+;; 				  org-drawer
+;; 				  org-formula
+;; 				  org-meta-line
+;; 				  org-table
+;; 				  org-special-keyword
+;; 				  org-verbatim
+;; 				  ;; Others
+;; 				  line-number
+;; 				  line-number-current-line
+;; 				  ))
+;; 	(set-face-attribute face nil :inherit 'fixed-pitch)))
+;;
+;; (add-hook 'org-mode-hook #'my/enable-variable-pitch-mode)
 
 ;; ;;; Variable Pitch Mode 2
 ;; (use-package org
