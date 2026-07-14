@@ -1,0 +1,5 @@
+timeout 60 "brightnessctl -s set 10%" resume "brightnessctl -r"
+timeout 120 "swaylock -f"
+timeout 180 "niri msg action power-off-monitors" resume "niri msg action power-on-monitors"
+timeout 240 "systemctl suspend"
+before-sleep "swaylock -f"
