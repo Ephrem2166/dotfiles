@@ -698,6 +698,44 @@ match app-id="obsidian"
 open-on-workspace "office"
 }
 
+// Fullscreen rule
+window-rule{
+   match app-id="mpv"
+
+	open-focused true
+	open-fullscreen true
+}
+
+// Float rule
+window-rule {
+	match app-id="org.kde.kcalc"
+	match app-id="blueman-manager"
+	match title="Bluetooth"
+	match app-id="org.kde.kdeconnect.app"
+	match app-id="nm-connection-editor"
+	match app-id="org.kde.polkit-kde-authentication-agent-1"
+	match app-id="polkit-gnome-authentication-agent-1"
+	match title="gtk*"
+	match app-id="GParted"
+	match app-id="nwg-look"
+	match app-id="qt6ct"
+	match app-id="qt5ct"
+	match app-id="firefox" title="Picture-in-Picture"
+	match app-id="floorp" title="Picture-in-Picture"
+	match app-id="zen" title="Picture-in-Picture"
+	match app-id="xdg-desktop-portal-gtk"
+	match app-id="org.pulseaudio.pavucontrol"
+	match title="popup title with spaces"
+	match title="zoom"
+	match title="Picture-in-Picture"
+
+	open-floating true
+	open-focused true
+	default-column-width { }
+	default-window-height { }
+}
+
+
 ////////////////////////////////////////
 // Miscellaneous
 ////////////////////////////////////////
@@ -725,6 +763,8 @@ spawn-at-startup "/usr/bin/emacs" "--daemon"
 spawn-sh-at-startup "swaybg -o eDP-1 -i ~/Pictures/berserk.png"
 
 spawn-sh-at-startup "waybar -c ~/.config/waybar/niriconfig.jsonc"
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
+spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
@@ -738,7 +778,7 @@ prefer-no-csd
 // The path is formatted with strftime(3) to give you the screenshot date and time.
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
-
+/// Environment
 environment {
 QT_QPA_PLATFORM "wayland"
 }
