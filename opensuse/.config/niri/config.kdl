@@ -483,7 +483,7 @@ binds {
 	//
 	// To avoid scrolling through workspaces really fast, you can use
 	// the cooldown-ms property. The bind will be rate-limited to this value.
-	// You can set a cooldown on any bind, but it's most useful for the wheel.
+	// You can set a cooldown on any bind, but it is most useful for the wheel.
 	Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
 	Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
 	Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
@@ -504,7 +504,7 @@ binds {
 	// Similarly, you can bind touchpad scroll "ticks".
 	// Touchpad scrolling is continuous, so for these binds it is split into
 	// discrete intervals.
-	// These binds are also affected by touchpad's natural-scroll, so these
+	// These binds are also affected by touchpads natural-scroll, so these
 	// example binds are "inverted", since we have natural-scroll enabled for
 	// touchpads by default.
 	// Mod+TouchpadScrollDown { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02+"; }
