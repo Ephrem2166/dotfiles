@@ -641,9 +641,9 @@ gaps 2
 workspace "file"
 workspace "browser"
 workspace "video"
-workspace "chat"
-workspace "emacs"
-workspace "office"
+// workspace "chat"
+// workspace "emacs"
+// workspace "office"
 
 window-rule{
 open-focused true
@@ -762,7 +762,8 @@ spawn-at-startup "swaync"
 spawn-at-startup "/usr/bin/emacs" "--daemon"
 spawn-sh-at-startup "swaybg -o eDP-1 -i ~/Pictures/berserk.png"
 
-spawn-sh-at-startup "waybar -c ~/.config/waybar/niriconfig.jsonc"
+// spawn-sh-at-startup "waybar -c ~/.config/waybar/niriconfig.jsonc"
+spawn-sh-at-startup "waybar -c ~/.config/waybar/niriconfig-v2.jsonc -s ~/.config/waybar/style-2.css"
 spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
 spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
 

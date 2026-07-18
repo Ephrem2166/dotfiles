@@ -1,7 +1,7 @@
 @import "./colors/nord-dark.css";
 * {
   background-color: @background;
-  color: @foreground;
+  /* color: @foreground; */
   border: none;
   border-radius: 0;
   font-family:
@@ -12,10 +12,10 @@
 }
 
 window#waybar {
-  /* background-color: @background; */
+  background-color: @background;
   /* color: @foreground; */
   padding: 0px 0px;
-  margin: 0px 1px;
+  margin: 1px 5px;
   /* border-radius: 20px; */
 }
 
@@ -25,7 +25,7 @@ window#waybar {
   padding: 0px 1px;
 }
 .modules-center {
-  padding: 0px 0px;
+  padding: 0px 1px;
   /* box-shadow: inset 0 -3px; */
 }
 .modules-right {
@@ -52,57 +52,49 @@ tooltip label {
  * Workspaces
  * ----------------------------------------------------- */
 #workspaces {
-  margin: 8px 0px;
-  padding: 0px 0px;
-  border-radius: 1px;
-  border-style: solid;
-  border: 1px;
-  font-weight: bold;
-  /* font-style: normal; */
-  /* font-size: 12px; */
+  color: @bordercolor;
+  background-color: @background;
+  /* border: 0.1rem solid @bordercolor; */
+  border-radius: 0.5rem;
+  padding: 0.1rem 0.5rem;
+  margin: 0.1rem;
 }
 #workspaces button {
+  margin: 0px 0px;
+  /* outline: 0; */
+  border: 0px solid transparent;
   padding: 0px 8px;
-  margin: 0px 1px;
-  /* border-radius: 11px; */
-  border: 1px;
-  color: @foreground;
-  background: @background;
-  /*transition: all 0.3s ease-in-out;*/
+  border-radius: 16px;
+  /* text-shadow: 2px 2px rgba(0, 0, 0, 0); */
+  /* box-shadow: 2px 2px rgba(0, 0, 0, 0); */
+  /* transition: all 0.3s ease-in-out; */
 }
 
-#workspaces button.visible {
-  background: @background;
-}
-
+#workspaces button.visible,
+#workspaces button.active,
 #workspaces button.focused {
-  background: @background;
   /* border: solid 1px @cyan; */
+  /* background: @blue; */
+  /* margin: 0px 5px; */
+  /* border-radius: 14px; */
+}
+
+#workspaces button:hover,
+#workspaces button:hover label {
+  /* color: @foreground; */
+  background: rgba(94, 129, 172, 0.5);
+  /* border: 1px solid transparent; */
+}
+
+#workspaces button.visible label,
+#workspaces button.focused label,
+#workspaces button.active label {
+  /* background: @blue; */
 }
 
 #workspaces button.urgent {
-  background: @red;
-  border: none;
-}
-
-#workspaces button.persistent {
-  background: @background;
-}
-
-#workspaces button.empty {
-}
-
-#workspaces button.active {
-  background: @cyan;
-  opacity: 0.9;
-  border-radius: 11px;
-  min-width: 10px;
-  /*transition: all 0.3s ease-in-out;*/
-}
-
-#workspaces button:hover {
-  background: @background;
-  border-radius: 15px;
+  background: rgba(191, 97, 106, 0.5);
+  /* border: none; */
 }
 
 /* Modules */
@@ -137,6 +129,7 @@ tooltip label {
 #custom-separator,
 #custom-bluetooth,
 #custom-wifi,
+#system,
 #custom-group,
 #custom-notification,
 #custom-kdeconnect,
@@ -145,7 +138,7 @@ tooltip label {
 #power-profiles-daemon,
 #idle_inhibitor {
   background: @background;
-  padding: 1px 5px;
+  padding: 1px 4px;
   margin: 1px 1px;
   /* border-color: @border-color; */
   border: 1px;
@@ -161,6 +154,12 @@ tooltip label {
   color: @red;
 }
 
+/* #network.wifi, */
+#network.connected,
+#bluetooth.connected {
+  color: @green;
+}
+#bluetooth.off,
 #network.disconnected,
 #pulseaudio.muted,
 #wireplumber.muted {

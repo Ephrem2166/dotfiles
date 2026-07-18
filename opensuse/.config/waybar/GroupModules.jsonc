@@ -17,10 +17,11 @@
     "orientation": "horizontal",
     "modules": [
       "backlight#screen",
+      "bluetooth",
       // "backlight#keyboard",
       "battery",
       "cpu",
-      "disk",
+      // "disk",
       "memory",
       "temperature"
       //"power-profiles-daemon",
@@ -33,8 +34,8 @@
       "idle_inhibitor",
       "custom/kdeconnect",
       "cava",
-      "custom/wifi",
-      "custom/bluetooth"
+      "custom/wifi"
+      // "custom/bluetooth"
     ]
   }
 }
