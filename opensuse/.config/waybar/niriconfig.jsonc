@@ -1,9 +1,9 @@
 // Niri Configuration
 {
   "include": [
-    "$HOME/.config/waybar/Modules.jsonc",
-    "$HOME/.config/waybar/CustomModules.jsonc",
-    "$HOME/.config/waybar/GroupModules.jsonc"
+	"$HOME/.config/waybar/Modules.jsonc",
+	"$HOME/.config/waybar/CustomModules.jsonc",
+	"$HOME/.config/waybar/GroupModules.jsonc"
   ],
   /// GLOBAL CONFIG ///
   "layer": "bottom",
@@ -16,39 +16,40 @@
   "spacing": 0,
   "reload_style_on_change": true,
   "modules-left": [
-    "niri/workspaces"
+	"niri/workspaces"
   ],
   "modules-center": [
-    "mpd"
+	"mpd"
+	// "mpris"
   ],
   "modules-right": [
-    "custom/notification",
-    "wireplumber",
-    "group/system",
-    "group/connection",
-    "tray",
-    "clock",
-    "custom/power"
+	"custom/notification",
+	"wireplumber",
+	"group/system",
+	"group/connection",
+	"tray",
+	"clock",
+	"custom/power"
   ],
   "niri/workspaces": {
-    "all-outputs": true,
-    "format": "{icon}",
-    "format-icons": {
-      // Named workspaces
-      // (you need to configure them in niri)
-        "terminal" : " ",
-        "file": " ",
-        "browser": " ",
-        "chat": "<b></b>",
-        "video": " ",
-        // "music": " ",
-        "emacs": " ",
-      "office": " ",
-      // Icons by state
-      // "active": "",
-      "default": " "
-    },
-        "on-scroll-up": "niri msg action focus-workspace-up",
-        "on-scroll-down": "niri msg action focus-workspace-down",
+	"all-outputs": true,
+	"format": "{icon}",
+	"format-icons": {
+	  // Named workspaces
+	  // (you need to configure them in niri)
+		"terminal" : " ",
+		"file": " ",
+		"browser": " ",
+		"chat": "<b></b>",
+		"video": " ",
+		// "music": " ",
+		"emacs": " ",
+	  "office": " ",
+	  // Icons by state
+	  // "active": "",
+	  "default": " "
+	},
+		"on-scroll-up": "niri msg action focus-workspace-up",
+		"on-scroll-down": "niri msg action focus-workspace-down",
   }
 }
