@@ -86,7 +86,7 @@
   "bluetooth": {
 	"format": " {status}",
 	"format-disabled": "󰂳",
-	"format-on": " {controller_alias}",
+	"format-on":  "  ",
 	"format-connected": "󰂱 {num_connections}",
 	"tooltip-format": " {device_alias}",
 	"format-off": "󰂲",
@@ -180,7 +180,7 @@
 	}
   },
   "clock#1": {
-	"format": "  {:%a %d %b %I:%M}",
+	"format": "  {:%a %d %b %I:%M}",
 	"tooltip": false,
 	"interval": 1,
 	"align": 1
