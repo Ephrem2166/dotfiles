@@ -1,41 +1,50 @@
 {
   "include": [
-    "$HOME/.config/waybar/Modules.jsonc",
-    "$HOME/.config/waybar/CustomModules.jsonc"
+	"$HOME/.config/waybar/Modules.jsonc",
+	"$HOME/.config/waybar/CustomModules.jsonc"
   ],
   "group/connection": {
-    "orientation": "horizontal",
-    "modules": [
-      //"bluetooth",
-      "custom/kdeconnect",
-      "network"
-      // "network#speed"
-      //"custom/wifi"
-    ]
+	"orientation": "horizontal",
+	"drawer": {
+	  "click-to-reveal": false
+	},
+	"modules": [
+	  //"bluetooth",
+	  "network",
+	  "custom/kdeconnect",
+	  "bluetooth"
+	  // "network#speed"
+	  //"custom/wifi"
+	]
   },
   "group/system": {
-    "orientation": "horizontal",
-    "modules": [
-      "backlight#screen",
-      "bluetooth",
-      // "backlight#keyboard",
-      "battery",
-      "cpu",
-      // "disk",
-      "memory",
-      "temperature"
-      //"power-profiles-daemon",
-      //"tray"
-    ]
+	"orientation": "horizontal",
+	"drawer":{
+	  // Reveal on mouse over or using click
+	  "click-to-reveal": false
+
+	},
+	"modules": [
+	  "backlight#screen",
+	  // "backlight/slider",
+	  "battery",
+	  // "upower",
+	  "cpu",
+	  "disk",
+	  "memory",
+	  "temperature"
+	  // "power-profiles-daemon"
+	  //"tray"
+	]
   },
   "group/custom-group": {
-    "orientation": "horizontal",
-    "modules": [
-      "idle_inhibitor",
-      "custom/kdeconnect",
-      "cava",
-      "custom/wifi"
-      // "custom/bluetooth"
-    ]
+	"orientation": "horizontal",
+	"modules": [
+	  "idle_inhibitor",
+	  "custom/kdeconnect",
+	  "cava",
+	  "custom/wifi"
+	  // "custom/bluetooth"
+	]
   }
 }

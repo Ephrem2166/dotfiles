@@ -3,7 +3,7 @@
 	"device": "intel_backlight",
 	"tooltip": true,
 	"scroll-step": 1,
-	"format": "{icon}  {percent}%",
+	"format": "{icon} {percent}%",
 	"format-icons": [
 	  "󰹐",
 	  "󱩎",
@@ -43,13 +43,13 @@
 	],
 	"on-scroll-up": "brightnessctl -d tpacpi::kbd_backlight set 1%+",
 	"on-scroll-down": "brightnessctl -d tpacpi::kbd_backlight set 1%-",
-	"tooltip-format": "backlight {percent}%",
+	"tooltip-format": "backlight {percent}%"
   },
   "backlight/slider": {
 	"min": 0,
-	"max": 20,
-	"orientation": "horizontal",
-	"device": "intel_backlight"
+	"max": 200,
+	"orientation": "vertical",
+	"device": ""
   },
   "battery": {
 	//"interval": 5,
@@ -59,7 +59,12 @@
 	"states": {
 	  "warning": 30,
 	  "critical": 15,
-	  "good": 90
+	  "good": 80
+	},
+	"events": {
+		  "on-discharging-warning": "notify-send -u normal 'Low Battery'",
+					 "on-discharging-critical": "notify-send -u critical 'Very Low Battery'",
+					 "on-charging-100": "notify-send -u normal 'Battery Full!'"
 	},
 	"format": "{icon} {capacity}%",
 	"format-charging": " {capacity}%",
@@ -81,7 +86,8 @@
 	],
 	"format-time": "{H}h {M}min",
 	"tooltip": true,
-	"tooltip-format": "{timeTo} {power}w"
+	// "tooltip-format": "{timeTo} {power}w"
+	"tooltip-format": "{time}"
   },
   "bluetooth": {
 	"format": " {status}",
@@ -97,6 +103,7 @@
 	"tooltip-format-connected": "{device_enumerate}",
 	"tooltip-format-enumerate-connected": " {device_alias} 󰂄{device_battery_percentage}%",
 	"tooltip": true
+
   },
   "cava": {
 	"cava_config": "$HOME/.config/cava/config",
@@ -154,7 +161,8 @@
 	"interval": 1,
 	"align": 1,
 	//"format": "  {:%a %d %b %I:%M}",
-	"format": "  {:%I:%M %p}", // AM PM format
+	// "format": "  {:%I:%M %p}", // AM PM format
+	"format": "  {:%a %d %b %I:%M}",
 	//"format": " {:%H:%M:%S}", // 24H
 	"format-alt": " {:%I:%M   %Y, %d %B, %A}",
 	"tooltip-format": "<tt><small>{calendar}</small></tt>",
@@ -369,9 +377,9 @@
 	"tooltip": true,
 	"format-icons": {
 	  "default": "",
-	  "performance": "",
-	  "balanced": "",
-	  "power-saver": ""
+	  "performance": " ",
+	  "balanced": " ",
+	  "power-saver": " "
 	}
   },
   "privacy": {
@@ -466,6 +474,12 @@
 	"spacing": 5,
 	"show-passive-items": true,
 	"reverse-direction": true
+  },
+  "upower": {
+"native-path": "BAT0",
+"icon-size": 14,
+"format": "{percentage}",
+"format-alt": "{percentage} {time}"
   },
   "wireplumber": {
 	"format": "{icon}  {volume}%",

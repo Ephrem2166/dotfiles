@@ -385,7 +385,8 @@ binds {
 	Mod+D { spawn "rofi" "-show" "drun"; }
 	Super+SHIFT+L { spawn "hyprlock"; }
 	Mod+SHIFT+q { spawn "~/.config/rofi/rofi-power.sh"; }
-	Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR2" "waybar"; }
+	Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR1" "waybar"; }
+    // Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR2"   "waybar" "-c" "~/.config/waybar/niriconfig-v2.jsonc" "-s" "~/.config/waybar/style-2.css"; }
 	Mod+Space repeat=false { toggle-overview; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.
@@ -398,6 +399,10 @@ binds {
 	XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
 	XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
 	XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+
+
+XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
+XF86MonBrightnessUp allow-when-locked=true { spawn  "brightnessctl" "set" "+5%"; }
 
 	Mod+Q { close-window; }
 
