@@ -30,9 +30,11 @@
   "modules-right": [
 	"custom/notification",
 	"pulseaudio",
+	// "pulseaudio/slider",
 	// "wireplumber",
 	"group/system",
 	"group/connection",
+	// "group/custom-network",
 	"group/power",
 	"group/tray-drawer",
 	"clock"

@@ -66,7 +66,8 @@
 	"format-off": "󰂲",
 	//"format-connected": " {device_alias}",
 	"interval": 30,
-	"on-click": "bluedevil",
+	// "on-click": "bluedevil",
+	"on-click": "$HOME/.config/rofi/rofi-bluetooth.sh",
 	"format-no-controller": "",
 	"tooltip-format-connected": "{device_enumerate}",
 	"tooltip-format-enumerate-connected": " {device_alias} 󰂄{device_battery_percentage}%",
@@ -278,7 +279,9 @@
 	  "ethernet": [""],
 	  "disconnected": ["󰤭 "],
 	},
-	"on-click": "alacritty -e nmtui",
+	// "on-click": "alacritty -e nmtui",
+
+	"on-click": "$HOME/.config/rofi/rofi-wifi.sh",
 	"tooltip": true,
 	//   "tooltip-format-wifi": "{essid}||{signaldBm}dB||{frequency}MHz\n{ipaddr}/{cidr}\n{bandwidthUpBits}/{bandwidthDownBits}",
 	//  "tooltip-format-ethernet": "{ipaddr}/{cidr}\n{bandwidthUpBits}/{bandwidthDownBits}",
@@ -365,7 +368,8 @@
  "pulseaudio/slider": {
 	"min": 0,
 	"max": 100,
-	"orientation": "horizontal"
+   "orientation": "horizontal",
+   "expand": true
   },
   "temperature": {
 	"interval": 5,

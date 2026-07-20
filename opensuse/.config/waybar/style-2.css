@@ -1,13 +1,13 @@
 @import "./colors/nord-dark.css";
 * {
-  /* background-color: @background; */
-  /* color: @foreground; */
-  /* border: none; */
-  font-family:
-	"Berkeley Nerd Font", "JetBrainsMono Nerd Font", Roboto, sans-serif;
-  font-size: 14px;
-  font-weight: bold;
-  min-height: 0;
+	/* background-color: @background; */
+	/* color: @foreground; */
+	/* border: none; */
+	font-family:
+		"Berkeley Nerd Font", "JetBrainsMono Nerd Font", Roboto, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	min-height: 0;
 }
 
 /* window {
@@ -16,55 +16,55 @@
  * 	margin-top:0px;
  * } */
 window#waybar {
-  background-color: rgba(46, 52, 64, 1);
-  opacity: 1;
-  /* color: @foreground; */
-  padding: 0px 0px;
-  /* margin: 1px 1px; */
-  /* border-radius: 20px; */
+	background-color: rgba(46, 52, 64, 1);
+	opacity: 1;
+	/* color: @foreground; */
+	padding: 0px 0px;
+	/* margin: 1px 1px; */
+	/* border-radius: 20px; */
 }
 
 /* Tooltips */
 
 tooltip {
-  background-color: @background;
-  opacity: 0.8;
-  border: none;
-  outline: none;
-  border-radius: 0;
-  text-shadow: 2px 2px @background;
-  margin-bottom: 1px;
-  padding: 0px;
-  color: @foreground;
+	background-color: @background;
+	opacity: 0.8;
+	border: none;
+	outline: none;
+	border-radius: 0;
+	text-shadow: 2px 2px @background;
+	margin-bottom: 1px;
+	padding: 0px;
+	color: @foreground;
 }
 tooltip label {
-  font-size: 14px;
-  color: @foreground;
+	font-size: 14px;
+	color: @foreground;
 }
 
 /* Modules */
 
 .modules-left {
-  padding: 0px 5px;
-  /* margin: 1px 5px; */
-  background-color: rgba(46, 52, 64, 0.9);
-  border-radius: 12px;
-  border: 1px solid transparent;
+	padding: 0px 5px;
+	/* margin: 1px 5px; */
+	background-color: rgba(46, 52, 64, 0.9);
+	border-radius: 12px;
+	border: 1px solid transparent;
 }
 .modules-center {
-  padding: 0px 5px;
-  /* margin: 1px 10px; */
-  background-color: rgba(46, 52, 64, 0.9);
-  border-radius: 12px;
-  border: 1px solid transparent;
-  /* box-shadow: inset 0 -3px; */
+	padding: 0px 5px;
+	/* margin: 1px 10px; */
+	background-color: rgba(46, 52, 64, 0.9);
+	border-radius: 12px;
+	border: 1px solid transparent;
+	/* box-shadow: inset 0 -3px; */
 }
 .modules-right {
-  padding: 1px 1px;
-  /* margin: 1px 10px; */
-  background-color: rgba(46, 52, 64, 0.9);
-  border-radius: 12px;
-  border: 1px solid transparent;
+	padding: 1px 1px;
+	/* margin: 1px 10px; */
+	background-color: rgba(46, 52, 64, 0.9);
+	border-radius: 12px;
+	border: 1px solid transparent;
 }
 
 /* Tooltip */
@@ -72,64 +72,64 @@ tooltip label {
  * Workspaces
  * ----------------------------------------------------- */
 #workspaces {
-  /* color: @bordercolor; */
-  /* background-color: @background; */
-  /* border: 0.1rem solid @bordercolor; */
-  /* border-radius: 0.5rem; */
-  /* padding: 0.1rem 0.5rem; */
-  /* margin: 0.1rem; */
+	/* color: @bordercolor; */
+	/* background-color: @background; */
+	/* border: 0.1rem solid @bordercolor; */
+	/* border-radius: 0.5rem; */
+	/* padding: 0.1rem 0.5rem; */
+	/* margin: 0.1rem; */
 }
 #workspaces button {
-  margin: 0px 0px;
-  /* outline: 0; */
-  border: 0px solid transparent;
-  padding: 0px 0px;
-  border-radius: 50px;
-  /* text-shadow: 2px 2px rgba(0, 0, 0, 0); */
-  /* box-shadow: 2px 2px rgba(0, 0, 0, 0); */
-  /* transition: all 0.3s ease-in-out; */
+	margin: 0px 0px;
+	/* outline: 0; */
+	border: 0px solid transparent;
+	padding: 0px 0px;
+	border-radius: 50px;
+	/* text-shadow: 2px 2px rgba(0, 0, 0, 0); */
+	/* box-shadow: 2px 2px rgba(0, 0, 0, 0); */
+	/* transition: all 0.3s ease-in-out; */
 }
 
 #workspaces button label {
-  padding: 0px 8px;
-  border-radius: 12px;
+	padding: 0px 8px;
+	border-radius: 12px;
 }
 #workspaces button.focused {
-  /* border: solid 1px @cyan; */
+	/* border: solid 1px @cyan; */
 
-  background-color: rgba(143, 188, 187, 0.5);
-  /* margin: 0px 5px; */
-  /* border-radius: 14px; */
+	background-color: rgba(143, 188, 187, 0.5);
+	/* margin: 0px 5px; */
+	/* border-radius: 14px; */
 }
 #workspaces button.active {
-  background-color: rgba(143, 188, 187, 0.5);
-  opacity: 1;
+	background-color: rgba(143, 188, 187, 0.5);
+	opacity: 1;
 }
 
 #workspaces button.urgent {
-  background: rgba(191, 97, 106, 0.5);
-  /* border: none; */
+	background: rgba(191, 97, 106, 0.5);
+	/* border: none; */
 }
 #workspaces button.empty {
-  /* background-color: rgba(67,76,94,0.2); */
-  opacity: 0.8;
+	/* background-color: rgba(67,76,94,0.2); */
+	opacity: 0.8;
 }
 #workspaces button:hover,
 #workspaces button:hover label {
-  /* color: @foreground; */
-  background-color: rgba(94, 129, 172, 0.4);
-  /* border: 1px solid transparent; */
+	/* color: @foreground; */
+	background-color: rgba(94, 129, 172, 0.4);
+	/* border: 1px solid transparent; */
 }
 
 #workspaces button.visible label {
-  background-color: rgba(143, 188, 187, 0.4);
+	background-color: rgba(143, 188, 187, 0.4);
 }
 #workspaces button.focused label {
-  /* background-color: rgba(143, 188, 187, 0.6); */
+	/* background-color: rgba(143, 188, 187, 0.6); */
 }
 #workspaces button.active label {
-  background-color: rgba(143, 188, 187, 0.4);
-  /* background: @blue; */
+	background-color: rgba(143, 188, 187, 0.4);
+	/* background: @blue; */
 }
 
 /* Modules */
@@ -150,6 +150,7 @@ tooltip label {
 #network,
 #network#speed,
 #pulseaudio,
+#pulseaudio-slider,
 #temperature,
 #tray,
 /* #tray menu, */
@@ -174,77 +175,77 @@ tooltip label {
 #kdeconnect,
 #power-profiles-daemon,
 #idle_inhibitor {
-  background: @background;
-  padding: 1px 4px;
-  margin: 1px 1px;
-  /* border-color: @border-color; */
-  border: 1px;
-  /*border-right: 1px solid #D8DEE9;*/
+	background: @background;
+	padding: 1px 4px;
+	margin: 1px 1px;
+	/* border-color: @border-color; */
+	border: 1px;
+	/*border-right: 1px solid #D8DEE9;*/
 }
 
 #battery.charging,
 #battery.plugged {
-  color: @green;
+	color: @green;
 }
 
 #battery.critical #battery.warning {
-  color: @red;
+	color: @red;
 }
 #battery.good {
-  color: @green;
+	color: @green;
 }
 /* #network.wifi, */
 #network.connected,
 #bluetooth.on,
 #bluetooth.connected {
-  color: @green;
+	color: @green;
 }
 #bluetooth.off,
 #network.disconnected,
 #pulseaudio.muted,
 #wireplumber.muted {
-  color: @red;
+	color: @red;
 }
 
 #bluetooth.disabled {
-  color: @red;
+	color: @red;
 }
 #bluetooth.discoverable {
-  color: @magenta;
+	color: @magenta;
 }
 #bluetooth.discovering {
-  color: @orange;
+	color: @orange;
 }
 #tray {
-  padding: 0px 5px;
+	padding: 0px 5px;
 }
 
 #tray menu * {
-  min-height: 16px;
+	min-height: 16px;
 }
 
 #tray menu separator {
-  min-height: 10px;
+	min-height: 10px;
 }
 #backlight-slider slider {
-  min-height: 0px;
-  min-width: 0px;
-  opacity: 0;
-  background-image: none;
-  border: none;
-  box-shadow: none;
-  background-color: @red;
+	min-height: 0px;
+	min-width: 0px;
+	opacity: 0;
+	background-image: none;
+	border: none;
+	box-shadow: none;
+	background-color: @red;
 }
 #backlight-slider trough {
-  min-height: 20px;
-  min-width: 10px;
-  border-radius: 5px;
-  background-color: @cyan;
+	min-height: 20px;
+	min-width: 10px;
+	border-radius: 5px;
+	background-color: @cyan;
 }
 #backlight-slider highlight {
-  min-width: 10px;
-  border-radius: 5px;
-  background-color: @blue;
+	min-width: 10px;
+	border-radius: 5px;
+	background-color: @blue;
 }
 
 #power-profiles-daemon {
@@ -266,11 +267,32 @@ tooltip label {
 	color: #000000;
 }
 
+/* Pulseaudio */
+
+#pulseaudio-slider slider {
+	min-height: 0px;
+	min-width: 0px;
+	opacity: 0;
+	color: @red;
+}
+
+#pulseaudio-slider trough {
+	min-height: 80px;
+	min-width: 10px;
+	border-radius: 5px;
+	background: @black;
+}
+
+#pulseaudio-slider highlight {
+	min-width: 10px;
+	border-radius: 5px;
+	background: @green;
+}
 
 /* Custom  */
 
 #custom-kdeconnect {
-  padding: 0px 2px;
+	padding: 0px 2px;
 }
 /* upower */
 /* #upower */
