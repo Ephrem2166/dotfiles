@@ -128,7 +128,7 @@
 	"escape": true,
   },
   "custom/power": {
-	"format": " ⏻ ",
+	"format": "⏻ ",
 	//"on-click": "$HOME/.config/hypr/scripts/powermenu",
 	//"on-click": "bash ~/.config/rofi/powermenu.sh",
 	"on-click": "$HOME/.config/rofi/rofi-power.sh",
@@ -237,7 +237,7 @@
   "custom/wifi#2": {
 	"format": "{}",
 	"on-click": "nm-connection-editor",
-	"exec": "$HOME/.config/waybar/network",
+	"exec": "$HOME/.config/waybar/scripts/network",
 	"tooltip": true,
 	"tooltip-format": "Network Manager",
 	"interval": 5,

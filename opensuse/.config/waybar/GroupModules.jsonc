@@ -11,6 +11,7 @@
 	"modules": [
 	  //"bluetooth",
 	  "network",
+	  "custom/wifi#2",
 	  "custom/kdeconnect",
 	  "bluetooth"
 	  // "network#speed"
