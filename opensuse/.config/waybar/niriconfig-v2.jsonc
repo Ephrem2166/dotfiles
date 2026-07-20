@@ -26,14 +26,15 @@
 	// "group/system"
 	// "niri/window"
   ],
-  "modules-center": ["clock"],
+  "modules-center": ["mpd"],
   "modules-right": [
 	"custom/notification",
 	"wireplumber",
 	"group/system",
 	"group/connection",
 	"tray",
-	"custom/power"
+	"custom/power",
+	"clock"
   ],
   "niri/workspaces": {
 	"all-outputs": false,
