@@ -4,7 +4,7 @@
   /* color: @foreground; */
   /* border: none; */
   font-family:
-    "Berkeley Nerd Font", "JetBrainsMono Nerd Font", Roboto, sans-serif;
+	"Berkeley Nerd Font", "JetBrainsMono Nerd Font", Roboto, sans-serif;
   font-size: 14px;
   font-weight: bold;
   min-height: 0;
@@ -246,6 +246,28 @@ tooltip label {
   border-radius: 5px;
   background-color: @blue;
 }
+
+#power-profiles-daemon {
+	padding-right: 15px;
+}
+
+#power-profiles-daemon.performance {
+	background-color: @red;
+	color: @foreground;
+}
+
+#power-profiles-daemon.balanced {
+	background-color: @blue;
+	color: #ffffff;
+}
+
+#power-profiles-daemon.power-saver {
+	background-color: @green;
+	color: #000000;
+}
+
+
+/* Custom  */
 
 #custom-kdeconnect {
   padding: 0px 2px;

@@ -1,0 +1,26 @@
+@import "~/.config/rofi/config.rasi"
+
+/* ---- Mainbox ---- */
+mainbox {
+  children: [ "entry", "message" ];
+  height: inherit;
+}
+
+/* ---- Window ---- */
+window {
+  width: 30%;
+  height: inherit;
+}
+
+/* ---- Entry ---- */
+entry {
+  expand: true;
+  placeholder: " Select e for powersave | b for balanced | p for performance";
+}
+
+listview {
+    enable: true;
+columns: 1;
+lines: 5;
+cycle: true;
+    }

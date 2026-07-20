@@ -1,12 +1,12 @@
 {
   "include": [
 	"$HOME/.config/waybar/Modules.jsonc",
-	"$HOME/.config/waybar/CustomModules.jsonc"
+	"$HOME/.config/waybar/CustomModules.jsonc",
   ],
   "group/connection": {
 	"orientation": "horizontal",
 	"drawer": {
-	  "click-to-reveal": false
+	  "click-to-reveal": false,
 	},
 	"modules": [
 	  //"bluetooth",
@@ -15,14 +15,13 @@
 	  "bluetooth"
 	  // "network#speed"
 	  //"custom/wifi"
-	]
+	],
   },
   "group/system": {
 	"orientation": "horizontal",
-	"drawer":{
+	"drawer": {
 	  // Reveal on mouse over or using click
-	  "click-to-reveal": false
-
+	  "click-to-reveal": false,
 	},
 	"modules": [
 	  "backlight#screen",
@@ -37,6 +36,13 @@
 	  //"tray"
 	]
   },
+  "group/power": {
+	"orientation": "horizontal",
+	"drawer": {
+	  "click-to-reveal": false,
+	},
+	"modules": ["custom/power", "custom/powerprofile"],
+  },
   "group/custom-group": {
 	"orientation": "horizontal",
 	"modules": [
@@ -45,6 +51,23 @@
 	  "cava",
 	  "custom/wifi"
 	  // "custom/bluetooth"
-	]
-  }
+	],
+  },
+  "group/tray-drawer": {
+	"orientation": "horizontal",
+	"drawer": {
+	  "transition-duration": 300,
+	},
+	"modules": ["custom/tray-icon", "tray"],
+  },
+  "group/custom-network": {
+	"orientation": "horizontal",
+	"drawer": {
+	  "click-to-reveal": false,
+	},
+	"modules": [
+	  "custom/wifi#2",
+	  "custom/bluetooth#2"
+	],
+  },
 }

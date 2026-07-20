@@ -9,7 +9,7 @@
   "expand-center": true,
   "layer": "bottom",
   "position": "top",
-  "height": 22,
+  "height": 22, // Leave blank for dynamic height
   "margin-left": 0,
   "margin-right": 0,
   "margin-top": 0,
@@ -29,11 +29,12 @@
   "modules-center": ["mpd"],
   "modules-right": [
 	"custom/notification",
-	"wireplumber",
+	"pulseaudio",
+	// "wireplumber",
 	"group/system",
 	"group/connection",
-	"tray",
-	"custom/power",
+	"group/power",
+	"group/tray-drawer",
 	"clock"
   ],
   "niri/workspaces": {
