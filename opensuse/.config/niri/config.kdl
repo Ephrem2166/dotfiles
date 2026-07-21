@@ -385,8 +385,8 @@ binds {
 	Super+SHIFT+L { spawn "hyprlock"; }
 	Mod+SHIFT+q { spawn "~/.config/rofi/rofi-power.sh"; }
 	// Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR2" "waybar"; }
-	# Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "~/.config/waybar/scripts/reload-waybar"; }
-	Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR2"   "waybar" "-c" "~/.config/waybar/niriconfig-v2.jsonc" "-s" "~/.config/waybar/style-2.css"; }
+	Mod+Shift+r hotkey-overlay-title="Reload Waybar"   { spawn "~/.config/waybar/scripts/reload-waybar"; }
+	// Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR2"   "waybar" "-c" "~/.config/waybar/niriconfig-v2.jsonc" "-s" "~/.config/waybar/style-2.css"; }
 	Mod+Space repeat=false { toggle-overview; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.

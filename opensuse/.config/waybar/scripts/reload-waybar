@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-killall -SIGUSR2 waybar
-
-notify-send -t 5000 -u low -i "󰑓 "  "Waybar Reloaded"
+if [[ -n "$DESKTOP_SESSION" && "$DESKTOP_SESSION" == "niri" ]]; then
+    killall -SIGUSR2 waybar
+    notify-send -t 5000 -u low "󰑓 Waybar Reloaded"
+fi
