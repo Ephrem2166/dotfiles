@@ -7,7 +7,7 @@
   ],
   /// GLOBAL CONFIG ///
   "expand-center": true,
-  "layer": "bottom",
+  "layer": "top",
   "position": "top",
   "height": 22, // Leave blank for dynamic height
   "margin-left": 0,
@@ -91,7 +91,7 @@
 
 	  "firefox": " ",
 	  "org.kde.okular": " ",
-	  "com.github.johnfactotum.Foliate": " ",
+	  "com.github.johnfactotum.Foliate": "  $1",
 	  "obsidian": " " ,
 
 	  "mpv": " <span style=\"italic\">$1</span>",
