@@ -1,4 +1,3 @@
-// This config is in the KDL format: https://kdl.dev
 // "/-" comments out the following node.
 // Check the wiki for a full description of the configuration:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Overview
@@ -386,7 +385,7 @@ binds {
 	Super+SHIFT+L { spawn "hyprlock"; }
 	Mod+SHIFT+q { spawn "~/.config/rofi/rofi-power.sh"; }
 	Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR1" "waybar"; }
-    // Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR2"   "waybar" "-c" "~/.config/waybar/niriconfig-v2.jsonc" "-s" "~/.config/waybar/style-2.css"; }
+	// Mod+Shift+r hotkey-overlay-title="Reload Waybar" { spawn "pkill" "-SIGUSR2"   "waybar" "-c" "~/.config/waybar/niriconfig-v2.jsonc" "-s" "~/.config/waybar/style-2.css"; }
 	Mod+Space repeat=false { toggle-overview; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.

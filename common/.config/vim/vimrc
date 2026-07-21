@@ -94,7 +94,7 @@ noremap <silent> <leader>e :Lex<CR>
 " OTHERS
 " Remove trailing whitespace on write
 if has("autocmd")
-    autocmd BufWritePre * %s/\s\+$//e
+	autocmd BufWritePre * %s/\s\+$//e
 endif
 
 " Netrw
@@ -105,5 +105,5 @@ let g:netrw_altv = 1
 let g:netrw_winsize = 25
 " Use 'l' instead of <CR> to open files
 augroup netrw_setup | au!
-    au FileType netrw nmap <buffer> l <CR>
+	au FileType netrw nmap <buffer> l <CR>
 augroup END
