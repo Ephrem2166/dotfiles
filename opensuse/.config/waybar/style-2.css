@@ -1,4 +1,5 @@
 @import "./colors/nord-dark.css";
+/* General */
 * {
 	/* background-color: @background; */
 	/* color: @foreground; */
@@ -10,6 +11,7 @@
 	min-height: 0;
 }
 
+/* Window */
 /* window {
  * 	background:linear-gradient(0deg, rgba(46, 52, 64, 0.3), rgba(46, 52, 64, 0.0));
  * 	border-radius:0px 0px 0px 0px;
@@ -19,13 +21,13 @@ window#waybar {
 	background-color: rgba(46, 52, 64, 1);
 	opacity: 1;
 	/* color: @foreground; */
-	padding: 0px 0px;
-	/* margin: 1px 1px; */
-	/* border-radius: 20px; */
+	padding: 0px 10px;
+	margin: 0px 10px;
+	border: 100px solid @background;
+	border-radius: 10px;
 }
 
 /* Tooltips */
-
 tooltip {
 	background-color: @background;
 	opacity: 0.8;
@@ -67,7 +69,6 @@ tooltip label {
 	border: 1px solid transparent;
 }
 
-/* Tooltip */
 /* -----------------------------------------------------
  * Workspaces
  * ----------------------------------------------------- */
@@ -102,8 +103,8 @@ tooltip label {
 	/* border-radius: 14px; */
 }
 #workspaces button.active {
-	background-color: rgba(143, 188, 187, 0.5);
-	opacity: 1;
+	background-color: rgba(94,129,172, 0.5);
+	/* opacity: 1; */
 }
 
 #workspaces button.urgent {
@@ -112,7 +113,7 @@ tooltip label {
 }
 #workspaces button.empty {
 	/* background-color: rgba(67,76,94,0.2); */
-	opacity: 0.8;
+	opacity: 0.4;
 }
 #workspaces button:hover,
 #workspaces button:hover label {

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+killall -SIGUSR2 waybar
+
+notify-send -t 5000 -u low -i "󰑓 "  "Waybar Reloaded"
