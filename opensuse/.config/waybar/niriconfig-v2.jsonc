@@ -22,9 +22,9 @@
   "on-sigusr2": "reload",
   // "mode": "overlay",
   "modules-left": [
-	"niri/workspaces"
+	"niri/workspaces",
 	// "group/system"
-	// "niri/window"
+	"niri/window"
   ],
   "modules-center": ["mpd"],
   "modules-right": [
@@ -67,7 +67,7 @@
   },
   "niri/window": {
 	"format": "{app_id}",
-	"max-length": 87,
+	"expand": false,
 	"rewrite": {
 	  "(.*) - Mozilla Firefox": "🌎 $1",
 	  "(.*) - zsh": "> [$1]",
@@ -90,6 +90,13 @@
 	  "Mozilla Firefox": " ",
 
 	  "firefox": " ",
+	  "org.kde.okular": " ",
+	  "com.github.johnfactotum.Foliate": " ",
+	  "obsidian": " " ,
+
+	  "mpv": " <span style=\"italic\">$1</span>",
+
+
 	  "Mozilla Thunderbird": " ",
 	  "YouTube": " ",
 	  "GitHub": " ",
