@@ -5,7 +5,7 @@ configuration {
   disable-history:      true;
 }
 
-@import "colors.rasi"
+@import "./themes/nord.rasi"
 
 window {
   width: 15%;

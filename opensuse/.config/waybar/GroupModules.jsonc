@@ -26,6 +26,7 @@
 	},
 	"modules": [
 	  "backlight#screen",
+	  // "backlight#keyboard",
 	  // "backlight/slider",
 	  "battery",
 	  // "upower",

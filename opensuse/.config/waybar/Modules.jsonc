@@ -12,7 +12,7 @@
 	"on-click-right": "pkill -x wlsunset; wlsunset -O 4000K",
 	"on-click-left": "wlsunset -t 4000K",
 	"tooltip-format": "backlight {percent}%",
-	"min-length": 6
+	"min-length": 6,
 	// "on-scroll-up": "brightnessctl set +10% && brightnessctl get  > /home/ephrem/.wob.sock ; pkill -x sh",
 	// "on-scroll-down": "brightnessctl set 10%- && brightnessctl get  > /home/ephrem/.wob.sock ; pkill -x sh"
   },
@@ -66,8 +66,8 @@
 	"format-off": "󰂲",
 	//"format-connected": " {device_alias}",
 	"interval": 30,
-	// "on-click": "bluedevil",
-	"on-click": "$HOME/.config/rofi/rofi-bluetooth.sh",
+	"on-click": "bluedevil-wizard",
+	// "on-click": "$HOME/.config/rofi/rofi-bluetooth.sh",
 	"format-no-controller": "",
 	"tooltip-format-connected": "{device_enumerate}",
 	"tooltip-format-enumerate-connected": " {device_alias} 󰂄{device_battery_percentage}%",
@@ -111,7 +111,7 @@
 	"interval": 1,
 	"align": 1,
 	//"format": "  {:%a %d %b %I:%M}",
-	 "format": "  {:%I:%M %p}", // AM PM format
+	"format": "  {:%I:%M %p}", // AM PM format
 	// "format": " {:%H:%M:%S}", // 24H
 	"format-alt": " {:%a %d %b %I:%M}",
 	// "format-alt": " {:%I:%M   %Y, %d %B, %A}",
@@ -122,11 +122,11 @@
 	  "weeks-pos": "right",
 	  "on-scroll": 1,
 	  "format": {
-		"months": "<span color='#ffead3'><b>{}</b></span>",
-		"days": "<span color='#ecc6d9'><b>{}</b></span>",
-		"weeks": "<span color='#99ffdd'><b>W{}</b></span>",
-		"weekdays": "<span color='#ffcc66'><b>{}</b></span>",
-		"today": "<span color='#ff6699'><b><u>{}</u></b></span>",
+		"months": "<span color='#E5E9F0'><b>{}</b></span>",
+		"days": "<span color='#B48EAD'><b>{}</b></span>",
+		"weeks": "<span color='#8FBCBB'><b>W{}</b></span>",
+		"weekdays": "<span color='#EBCB8B'><b>{}</b></span>",
+		"today": "<span color='#BF616A'><b><u>{}</u></b></span>",
 	  },
 	},
 	"actions": {
@@ -288,14 +288,11 @@
 	"tooltip-format": "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}",
 	"format-linked": "󰈁 {ifname} (No IP)",
 	// "tooltip-format-wifi": "{icon} {essid} {icon}  {signalStrength}%",
-	"tooltip-format-wifi": "{icon} {essid}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+	"tooltip-format-wifi": "{icon} {essid} ⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
 	// "tooltip-format-ethernet": "{ifname} 󰌘",
 	"tooltip-format-ethernet": "󰀂  {ifname}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
 	"tooltip-format-disconnected": "󰌙 Disconnected",
 	// "tooltip-format-disconnected": "Disconnected",
-
-
-
 	"max-length": 30,
   },
   "network#speed": {
@@ -350,7 +347,7 @@
 	"format": "{icon} {volume}%",
 	"format-bluetooth": "{volume}%  {icon} {format_source}",
 	"format-bluetooth-muted": " {icon} {format_source}",
-	"format-muted": "󰖁 ",
+	"format-muted": "󰖁",
 	//"format-muted": " {format_source}",
 	"format-source": "{volume}% ",
 	"format-source-muted": "",
@@ -371,11 +368,11 @@
 	"on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -2% && pactl get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > /home/ephrem/.wob.sock",
 	"on-click-right": "pavucontrol",
   },
- "pulseaudio/slider": {
+  "pulseaudio/slider": {
 	"min": 0,
 	"max": 100,
-   "orientation": "horizontal",
-   "expand": true
+	"orientation": "horizontal",
+	"expand": true,
   },
   "temperature": {
 	"interval": 5,
@@ -425,7 +422,7 @@
   },
   "wireplumber": {
 	"format": "{icon} {volume}%",
-	"format-muted": "󰖁 {volume}%",
+	"format-muted": "󰖁",
 	"format-icons": ["", "", ""],
 	"on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle && pactl get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > /home/ephrem/.wob.sock",
 	"on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +2% && pactl get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > /home/ephrem/.wob.sock",

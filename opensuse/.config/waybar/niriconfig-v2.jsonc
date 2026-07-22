@@ -164,7 +164,7 @@
 	  "(.*) - Wikipedia": " <span style=\"italic\">$1</span>",
 	  "Wikipedia, the free encyclopedia": " ",
 	  "Wikipedia": " ",
-	  "Nicotine\\+": "󰒴 ",
+	  // "Nicotine\\+": "󰒴 ",
 	  "(.*) \\| MDN": " <span style=\"italic\">$1</span>",
 	  "(.*) \\| MDN — Mozilla Firefox": " <span style=\"italic\">$1</span>",
 	  "(.*) \\| MDN — Zen Browser": " <span style=\"italic\">$1</span>",
@@ -180,7 +180,14 @@
 	  "Mastodon": " ",
 	  "(.*) - Mastodon": " <span style=\"italic\">$1</span>",
 	  "(.*) - Mastodon — Mozilla Firefox": " <span style=\"italic\">$1</span>",
-	  "(.*) - Mastodon — Zen Browser": " <span style=\"italic\">$1</span>"
+	  "(.*) - Mastodon — Zen Browser": " <span style=\"italic\">$1</span>",
+
+	  "class<VSCode|code|code-url-handler|code-oss|codium|codium-url-handler|VSCodium>": "󰨞 ",
+	  "<class<*nicotine*>": " ",
+	  "class<Gparted>":"",
+		"class<libreoffice-writer>": " ",
+		"class<libreoffice-startcenter>": "󰏆 ",
+		"class<libreoffice-calc>": " ",
 	},
   },
 }
