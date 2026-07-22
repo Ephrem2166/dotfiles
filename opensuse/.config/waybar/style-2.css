@@ -29,14 +29,14 @@ window#waybar {
 
 /* Tooltips */
 tooltip {
-	background-color: @background;
+	background-color: @black;
 	opacity: 0.8;
 	border: none;
 	outline: none;
-	border-radius: 14px;
-	text-shadow: 2px 2px @background;
-	margin-bottom: 1px;
-	padding: 0px;
+	border-radius: 12px;
+	/* text-shadow: 2px 2px @background; */
+	margin: 2px 0px;
+	padding: 0px 0px;
 	color: @foreground;
 }
 tooltip label {

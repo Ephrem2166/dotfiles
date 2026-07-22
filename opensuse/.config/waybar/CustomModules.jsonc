@@ -124,7 +124,8 @@
 	"on-click-right": "killall wofi",
   },
   "custom/notification": {
-	"tooltip": false,
+	"tooltip": true,
+	"tooltip-format": "Left Click: Launch Notification Center\nRight Click: Do not Disturb",
 	"format": "{icon} ",
 	"format-icons": {
 	  "notification": "<span foreground='red'><sup></sup></span>",
