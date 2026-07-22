@@ -1,20 +1,21 @@
 // vim:ft=css:
 * {
   font:                   "Berkeley Nerd Font 13";
-  foreground:             #D8DEE9;
-  background:             #2E3440;
-  highlight:              #81A1C1;
+  foreground:             #D3C6AA;
+  background:             #2B3339;
+  highlight:              #A7C080;
 
-  black: #3B4252;
-  red: #BF616A;
-  green: #A3BE8C;
-  yellow: #EBCB8B;
-  blue: #81A1C1;
-  magenta: #B48EAD;
-  cyan: #88C0D0;
-  white: #E5E9F0;
-  orange: #C9826B;
-  pink: #BF88BC;
+  black: #4C5542;
+  red: #E67E80;
+  green: #A7C080;
+  yellow: #DBBC7F;
+  blue: #7FBBB3;
+  magenta: #D699B6;
+  cyan: #83C092;
+  white: #D3C6AA;
+  orange: #E69875;
+  pink: #D699B6;
+
 }
 
 element-icon {

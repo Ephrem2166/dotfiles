@@ -1,8 +1,9 @@
 // vim:ft=css
+// To validate the config file rofi -rasi-validate ~/.config/rofi/config.rasi
 configuration {
-modi:                 "drun,run,filebrowser,window";
+modi:                 "drun,run,filebrowser,window,calc";
 dpi:                  80;
-icon-theme:           "kora";
+icon-theme:           "nordzy-dark";
 show-icons:           true;
 terminal:             "alacritty";
 disable-history:      false;
@@ -16,7 +17,7 @@ display-ssh:          "󰣀 SSH";
 display-keys:         " Keys";
 
 filebrowser {
-directory: "/home/ephrem/";
+directory: "$HOME/";
 }
 }
 
@@ -25,7 +26,7 @@ directory: "/home/ephrem/";
 
 window {
   height: 50%;
-  width: 25%;
+  width: 20%;
   orientation: vertical;
   location: center;
   anchor: center;
@@ -53,7 +54,7 @@ inputbar {
 /*prompt {
   padding: 3px;
   border-radius: 0px;
-}*/ 
+}*/
 textbox-prompt-colon {
   expand: false;
   padding: 0px;
