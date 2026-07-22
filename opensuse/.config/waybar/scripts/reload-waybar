@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 if [[ -n "$DESKTOP_SESSION" && "$DESKTOP_SESSION" == "niri" ]]; then
-  killall -SIGUSR2 waybar -c "$HOME/.config/waybar/niriconfig-v2.jsonc" -s "$HOME/.config/waybar/style-2.css"
+  killall -SIGUSR2 waybar
   notify-send -t 5000 -u low "󰑓 Waybar Reloaded"
 fi

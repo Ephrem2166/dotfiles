@@ -1,5 +1,12 @@
 /* Waybar Modules - Custom Modules */
 {
+
+  "custom/battery": {
+	"exec": "~/.config/waybar/scripts/battery",
+	"return-type": "json",
+	"interval": 10,
+	// "on-click": "xfce4-power-manager-settings"
+  },
   "custom/bluetooth": {
 	"format": "{icon}",
 	"format-icons": "",
@@ -15,6 +22,15 @@
 	"tooltip-format": "Bluetooth",
 	"interval": 10,
   },
+  "custom/brightness": {
+	"exec": "~/.config/waybar/scripts/brightness",
+	"return-type": "json",
+	"interval": 2,
+	"on-click": "~/.config/waybar/scripts/brightness-toggle.sh",
+	"on-scroll-up": "brightnessctl set +5%",
+	"on-scroll-down": "brightnessctl set 5%-"
+  },
+
   "custom/browser": {
 	"format": " ",
 	"on-click": "xdg-open http:// &",
@@ -217,6 +233,14 @@
 	  "pending updates": " ",
 	  "updated": "",
 	},
+  },
+  "custom/volume": {
+	"exec": "$HOME/.config/waybar/scripts/volume",
+	"return-type": "json",
+	"interval": 1,
+	"on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+	"on-scroll-up": "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+",
+	"on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
   },
   "custom/weather": {
 	"format": "{}",
