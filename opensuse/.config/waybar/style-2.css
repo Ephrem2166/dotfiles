@@ -85,10 +85,10 @@ tooltip label {
 	/* outline: 0; */
 	border: 0px solid transparent;
 	padding: 0px 0px;
-	border-radius: 50px;
+	border-radius: 12px;
 	/* text-shadow: 2px 2px rgba(0, 0, 0, 0); */
 	/* box-shadow: 2px 2px rgba(0, 0, 0, 0); */
-	/* transition: all 0.3s ease-in-out; */
+	transition: all 0.3s ease-in-out;
 }
 
 #workspaces button label {
@@ -97,13 +97,14 @@ tooltip label {
 }
 #workspaces button.focused {
 	/* border: solid 1px @cyan; */
-
+	/* color: rgba(208,135,112,0.8); */
 	background-color: rgba(143, 188, 187, 0.5);
 	/* margin: 0px 5px; */
 	/* border-radius: 14px; */
 }
 #workspaces button.active {
 	background-color: rgba(94,129,172, 0.5);
+	color: @white;
 	/* opacity: 1; */
 }
 
