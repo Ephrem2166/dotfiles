@@ -30,6 +30,8 @@
   "modules-right": [
 	"custom/notification",
 	"pulseaudio",
+	// "custom/brightness",
+	// "custom/volume",
 	// "pulseaudio/slider",
 	// "wireplumber",
 	"group/system",
