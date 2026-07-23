@@ -1,6 +1,6 @@
 // vim:ft=css:
 * {
-  font:                   "Berkeley Nerd Font 13";
+  font:                   "Berkeley Nerd Font Bold 16";
   foreground:             #D8DEE9;
   background:             #2E3440;
   highlight:              #81A1C1;
@@ -17,17 +17,11 @@
   pink: #BF88BC;
 }
 
-element-icon {
-  /*Better to increase the whole element size with dpi*/
-  /*size: 22;*/
-}
-
-element-text {
-  highlight:        @highlight;
-}
 
 window {
-  border-color:     @foreground;
+  border-color:     @cyan;
+  color: @foreground;
+  background-color: @background;
 }
 
 inputbar {
@@ -73,6 +67,16 @@ element {
   text-color:       @foreground;
   background-color: @background;
 }
+
+element-icon {
+  /*Better to increase the whole element size with dpi*/
+  /*size: 22;*/
+}
+
+element-text {
+  highlight:        @highlight;
+}
+
 
 element normal.normal {
   background-color: @background;

@@ -235,6 +235,12 @@
 	  "updated": "",
 	},
   },
+  "custom/uptime": {
+	"format": "Uptime {} ",
+	"tooltip": true,
+	"interval": 180,
+	"exec": "$HOME/.config/waybar/scripts/uptime.sh"
+  },
   "custom/volume": {
 	"exec": "$HOME/.config/waybar/scripts/volume",
 	"return-type": "json",

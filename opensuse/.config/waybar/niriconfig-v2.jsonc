@@ -26,9 +26,10 @@
 	// "group/system"
 	"niri/window"
   ],
-  "modules-center": ["mpd", "cava"],
+  "modules-center": ["mpd"],
   "modules-right": [
 	"custom/notification",
+	// "custom/uptime",
 	"pulseaudio",
 	// "custom/brightness",
 	// "custom/volume",
@@ -69,6 +70,7 @@
   },
   "niri/window": {
 	"format": "{app_id}",
+	// "format": "|  {app_id}",
 	"expand": false,
 	"rewrite": {
 	  "(.*) - Mozilla Firefox": "🌎 $1",
@@ -189,6 +191,7 @@
 		"libreoffice-startcenter": "󰏆 ",
 		"libreoffice-calc": " ",
 	  "microsoft-edge": " ",
+	  "(?!)proton.*": "󰖂 "
 	},
   },
 }
