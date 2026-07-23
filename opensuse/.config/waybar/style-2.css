@@ -213,6 +213,7 @@ tooltip label {
 #bluetooth.disabled {
 	color: @red;
 }
+#bluetooth.pairable,
 #bluetooth.discoverable {
 	color: @magenta;
 }
