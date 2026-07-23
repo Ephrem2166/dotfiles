@@ -67,6 +67,7 @@
 	//"format-connected": " {device_alias}",
 	"interval": 30,
 	"on-click": "bluedevil-wizard",
+	"on-click-right": "footclient -e bluetoothctl",
 	// "on-click": "$HOME/.config/rofi/rofi-bluetooth.sh",
 	"format-no-controller": "",
 	"tooltip-format-connected": "{device_enumerate}",
@@ -207,8 +208,10 @@
   },
   "mpd": {
 	"server": "127.0.0.1",
+	"port": "", // Empty for the default port
 	"format": "{consumeIcon}{artist} - <span style=\"italic\">{title}</span>{singleIcon} {repeatIcon} {randomIcon} {stateIcon}",
 	"format-disconnected": " ",
+	"format-pause": "",
 	"format-stopped": "{consumeIcon}{singleIcon}{repeatIcon}{randomIcon} ",
 	"title-len": 42,
 	"unknown-tag": "",
@@ -220,7 +223,8 @@
 	  "on": " ",
 	},
 	"random-icons": {
-	  "off": " ",
+	  // "off": " ",
+	  "off": "<span color=\"#ECEFF4\"> </span> ",
 	  "on": " ",
 	},
 	"repeat-icons": {
