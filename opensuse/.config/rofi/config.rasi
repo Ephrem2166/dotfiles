@@ -5,7 +5,7 @@ modi:                 "drun,run,filebrowser,window,calc";
 dpi:                  80;
 icon-theme:           "nordzy-dark";
 show-icons:           true;
-terminal:             "alacritty";
+terminal:             "kitty";
 disable-history:      false;
 max-history-size:     10;
 display-drun:         " Apps"; // 󰀻
@@ -70,10 +70,10 @@ entry {
 
 listview {
   lines: 12;
-  spacing: 0px;
+  spacing: 5px;
   scrollbar: false;
   /*padding: top right bottom left*/
-  padding: 0px;
+  padding: 0px 10px;
   border: 0px;
   border-radius: 5px;
   margin: 0px;
