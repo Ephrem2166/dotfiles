@@ -1,6 +1,6 @@
 // vim:ft=css:
 * {
-  font:                   "Berkeley Nerd Font Bold 16";
+  font:                   "Berkeley Nerd Font 14";
   foreground:             #D8DEE9;
   background:             #2E3440;
   highlight:              #81A1C1;
@@ -19,7 +19,7 @@
 
 
 window {
-  border-color:     @cyan;
+  border-color:     @white;
   color: @foreground;
   background-color: @background;
 }

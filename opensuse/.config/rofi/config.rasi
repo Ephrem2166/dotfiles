@@ -26,7 +26,7 @@ directory: "$HOME/";
 
 window {
   height: 50%;
-  width: 20%;
+  width: 25%;
   orientation: vertical;
   location: center;
   anchor: center;
@@ -34,14 +34,15 @@ window {
   y-offset: 0px;
   padding: 5px;
   margin: 0px;
-  border: 1px;
-  border-radius: 5px;
+  border: 2px;
+  border-radius: 12px;
   spacing: 0;
   children: [ mainbox ];
 }
 
 mainbox {
   spacing: 0;
+  padding: 10px 20px;
   children: [ inputbar, listview ];
 }
 

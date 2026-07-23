@@ -1,12 +1,6 @@
-@import "~/.config/rofi/config.rasi"
+@import "~/.config/rofi/themes/nord.rasi"
 /* ---- Configuration ---- */
 configuration {
-	modi:                       "drun,run";
-	show-icons:                 true;
-	icon-theme:                 "kora";
-	display-drun:               "APPS";
-	display-run:                "RUN";
-	display-filebrowser:        "FILES";
 	display-window:             "WINDOW";
 	hover-select:               true;
 	me-select-entry:            "";
@@ -19,7 +13,7 @@ configuration {
 
 /* ---- Window ---- */
 window {
-	height: 35%;
+	height: 28%;
 	width:                        20%;
 	x-offset:                     0px;
 	y-offset:                     0px;
@@ -42,6 +36,7 @@ window {
 mainbox {
 	// enabled:                      true;
 	// orientation:                  horizontal;
+	padding: 0px 20px;
 	spacing:                      0px;
 	// margin:                       0px;
 	// background-color:             @background;
