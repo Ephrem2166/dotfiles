@@ -26,7 +26,7 @@
 	// "group/system"
 	"niri/window"
   ],
-  "modules-center": ["mpd"],
+  "modules-center": ["mpd", "cava"],
   "modules-right": [
 	"custom/notification",
 	"pulseaudio",
@@ -183,8 +183,8 @@
 	  "(.*) - Mastodon — Zen Browser": " <span style=\"italic\">$1</span>",
 
 	  "class<VSCode|code|code-url-handler|code-oss|codium|codium-url-handler|VSCodium>": "󰨞 ",
-	  "*nicotine*": " ",
-	  "Gparted":"",
+	  "(?i).*nicotine.*": " ",
+	  "Gparted":" ",
 		"libreoffice-writer": " ",
 		"libreoffice-startcenter": "󰏆 ",
 		"libreoffice-calc": " ",
