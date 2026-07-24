@@ -164,7 +164,11 @@
 	  "hibernate": "systemctl hibernate",
 	},
   },
-
+  "custom/powermenu": {
+	"format": "⏻",
+	"on-click": "~/.config/rofi/power-menu",
+	"tooltip": false
+  },
   "custom/powerprofile": {
 	"tooltip": "false",
 	"format": "{icon} ",

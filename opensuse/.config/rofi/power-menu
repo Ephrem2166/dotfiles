@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+uptime_str="$(uptime | sed -e 's/up //g')"
+lock="<span font_desc='Hack Nerd Font 44'></span>\n<span font_desc='Hack Nerd Font 12'>Lock</span>"
+exit="<span font_desc='Hack Nerd Font 44'></span>\n<span font_desc='Hack Nerd Font 12'>Exit</span>"
+suspend="<span font_desc='Hack Nerd Font 44'></span>\n<span font_desc='Hack Nerd Font 12'>Suspend</span>"
+hibernate="<span font_desc='Hack Nerd Font 44'></span>\n<span font_desc='Hack Nerd Font 12'>Hibernate</span>"
+reboot="<span font_desc='Hack Nerd Font 44'></span>\n<span font_desc='Hack Nerd Font 12'>Reboot</span>"
+shutdown="<span font_desc='Hack Nerd Font 44' rise='-2000'></span>\n<span font_desc='Hack Nerd Font 12'>Shutdown</span>"
+yes="  Yes"
+no="  No"
+confirm_cmd() {
+  echo -e "$yes\n$no" | rofi -dmenu -p 'Confirmation' -theme "$HOME/.config/rofi/power-confirm.rasi"
+}
+run_rofi() {
+  echo -e "${lock}|${exit}|${suspend}|${hibernate}|${reboot}|${shutdown}" | rofi -dmenu -no-config -p "Up: $uptime_str" -sep '|' -eh 2 -markup-rows -theme "$HOME/.config/rofi/power-menu.rasi"
+}
+
+run_cmd() {
+  if [[ "$(confirm_cmd)" == "$yes" ]]; then
+	case "$1" in
+	  --shutdown) systemctl poweroff ;;
+	  --reboot) systemctl reboot ;;
+	  --suspend) systemctl suspend ;;
+	  --hibernate) systemctl hibernate ;;
+	  --logout)
+
+		if [[ "$DESKTOP_SESSION" == "hyprland" ]]; then
+		  hyprctl dispatch exit
+		elif [[ "$DESKTOP_SESSION" == "sway" ]]; then
+		  swaymsg exit
+		elif [[ "$DESKTOP_SESSION" == "i3" ]]; then
+		  i3-msg exit
+		elif [[ "$DESKTOP_SESSION" == "river" ]]; then
+		  riverctl exit
+		elif [[ "$DESKTOP_SESSION" == "Openbox" ]]; then
+		  openbox --exit
+		elif [[ "$DESKTOP_SESSION" == "bspwm" ]]; then
+		  bspc quit
+		elif [[ "$DESKTOP_SESSION" == "xfce" ]]; then
+		  killall xfce4-session
+		elif [[ "$DESKTOP_SESSION" == "niri" ]]; then
+		  niri msg action quit
+		fi
+
+		;;
+	esac
+  fi
+}
+chosen="$(run_rofi)"
+
+case "$chosen" in
+  *Lock*) hyprlock ;;
+  *Exit*) run_cmd --logout ;;
+  *Suspend*) run_cmd --suspend ;;
+  *Hibernate*) run_cmd --hibernate ;;
+  *Reboot*) run_cmd --reboot ;;
+  *Shutdown*) run_cmd --shutdown ;;
+esac
