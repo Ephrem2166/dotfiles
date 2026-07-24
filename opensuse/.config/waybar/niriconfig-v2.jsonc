@@ -191,7 +191,8 @@
 		"libreoffice-startcenter": "󰏆 ",
 		"libreoffice-calc": " ",
 	  "microsoft-edge": " ",
-	  "(?!)proton.*": "󰖂 "
+	  "proton.*": "󰖂 ",
+	  "*.telegram.*": " "
 	},
   },
 }
