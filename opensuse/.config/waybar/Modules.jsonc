@@ -290,7 +290,9 @@
 	//   "tooltip-format-wifi": "{essid}||{signaldBm}dB||{frequency}MHz\n{ipaddr}/{cidr}\n{bandwidthUpBits}/{bandwidthDownBits}",
 	//  "tooltip-format-ethernet": "{ipaddr}/{cidr}\n{bandwidthUpBits}/{bandwidthDownBits}",
 	"tooltip-format": "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}",
-	"format-linked": "󰈁 {ifname} (No IP)",
+	// "format-linked": "󰈁 {ifname} (No IP)",
+	"format-linked": "󰤪 <span style=\"italic\">VPN</span>",
+
 	// "tooltip-format-wifi": "{icon} {essid} {icon}  {signalStrength}%",
 	"tooltip-format-wifi": "{icon} {essid} ⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
 	// "tooltip-format-ethernet": "{ifname} 󰌘",
