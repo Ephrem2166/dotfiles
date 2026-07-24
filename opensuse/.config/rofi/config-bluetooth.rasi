@@ -1,0 +1,100 @@
+@import "~/.config/rofi/themes/nord.rasi"
+/* ---- Configuration ---- */
+/********************************************************************************************/
+/* configuration {                                                                          */
+/* 																						    */
+/* 	display-window:             "WINDOW";												    */
+/* 	hover-select:               true;													    */
+/* 	me-select-entry:            "";														    */
+/* 	me-accept-entry:            "MousePrimary";											    */
+/* 	drun-display-format:        "{name}";												    */
+/* 	window-format:              "{w} · {c} · {t}";										    */
+/* 																						    */
+/* }																					    */
+/********************************************************************************************/
+
+* {
+
+	font:                        "Berkeley Nerd Font 12";
+
+}
+
+/* ---- Window ---- */
+window {
+	height: 30%;
+	width:                        15%;
+	x-offset:                     0px;
+	y-offset:                     0px;
+	spacing:                      0px;
+	padding:                      5px;
+	margin:                       0px;
+	border:                       0px;
+	cursor:                       "default";
+	location:                     center;
+	anchor:                       center;
+	fullscreen:                   false;
+	enabled:                      true;
+	border-radius:                12px;
+	orientation: vertical;
+	children: [ mainbox ];
+}
+
+/* ---- Mainbox ---- */
+mainbox {
+	// enabled:                      true;
+	// orientation:                  horizontal;
+	padding: 0px 0px;
+	spacing:                      2px;
+	// margin:                       0px;
+	// background-color:             @background;
+	  children:                     ["inputbar", "listbox"];
+}
+
+inputbar {
+	enabled:                      true;
+	spacing:                      0px;
+	padding:                      10px;
+	border-radius:                0px;
+	children:                     [ "textbox-prompt-colon", "entry" ];
+}
+
+textbox-prompt-colon {
+	expand:                       false;
+	padding:                      0px 0px;
+	str:                          " ";
+}
+
+entry {
+	// background-color:             transparent;
+	padding: 0px 5px;
+	border-radius: 12px;
+	placeholder:                  "Search ...";
+//	placeholder-color:            inherit;
+}
+
+/* ---- Listbox ---- */
+listbox {
+	spacing:                     0px;
+	// background-color:            transparent;
+	orientation:                 vertical;
+	children:                    [ "listview" ];
+}
+
+
+/* ---- Listview ---- */
+listview {
+	lines:                        12;
+	scrollbar:                    false;
+	reverse:                      false;
+	spacing:                      5px;
+	padding:                      0px 10px;
+	margin:                       0px;
+	border:0px;
+	border-radius: 0px;
+}
+
+element {
+	padding:                      10px;
+	border: 0;
+	border-radius:                12px;
+}
