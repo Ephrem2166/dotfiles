@@ -1,0 +1,79 @@
+configuration {
+	show-icons:                 false;
+	hover-select:               true;
+	me-select-entry:            "";
+	me-accept-entry:            "MousePrimary";
+}
+
+@import "~/.config/rofi/themes/tokyonight.rasi"
+
+* {
+	background-color:            transparent;
+	text-color:                  @foreground;
+}
+
+window {
+	transparency:                "real";
+	location:                    center;
+	anchor:                      center;
+	fullscreen:                  false;
+	width:                       1300px;
+	height:                      700px;
+	margin:                      0px;
+	padding:                     0px;
+	border:                      0px;
+	background-color:            transparent;
+	cursor:                      "default";
+}
+
+mainbox {
+	spacing:                     0px;
+	margin:                      0px;
+	padding:                     50px;
+	background-color:            transparent;
+	children:                    [ "listview" ];
+}
+
+listview {
+	columns:                     3;
+	lines:                       2;
+	cycle:                       true;
+	dynamic:                     false;
+	scrollbar:                   false;
+	layout:                      vertical;
+	flow:                        horizontal;
+	fixed-columns:               true;
+	fixed-height:                true;
+	spacing:                     40px;
+	background-color:            transparent;
+	cursor:                      "default";
+}
+
+element {
+	spacing:                     0px;
+	padding:                     40px 10px;
+	border:                      2px solid;
+	border-radius:               24px;
+	border-color:                #BB9AF780;
+	background-color:            rgba(26, 27, 38, 0.6);
+	text-color:                  #C0CAF5;
+	cursor:                      pointer;
+	orientation:                 vertical;
+	children:                    [ "element-text" ];
+}
+
+element selected.normal {
+	background-image:            linear-gradient(45deg, #7AA2F7, #BB9AF7);
+	border-color:                #7AA2F7;
+	text-color:                  #1A1B26;
+}
+
+element-text {
+	background-color:            transparent;
+	text-color:                  inherit;
+	cursor:                      inherit;
+	vertical-align:              0.5;
+	horizontal-align:            0.5;
+	markup:                      true;
+	font:                        "Hack Nerd Font 52";
+}

@@ -1,27 +1,25 @@
 @import "~/.config/rofi/themes/nord.rasi"
-/* ---- Configuration ---- */
-/********************************************************************************************/
-/* configuration {                                                                          */
-/* 																						    */
-/* 	display-window:             "WINDOW";												    */
-/* 	hover-select:               true;													    */
-/* 	me-select-entry:            "";														    */
-/* 	me-accept-entry:            "MousePrimary";											    */
-/* 	drun-display-format:        "{name}";												    */
-/* 	window-format:              "{w} · {c} · {t}";										    */
-/* 																						    */
-/* }																					    */
-/********************************************************************************************/
 
+configuration {
+	modi:                       "drun,run,filebrowser,ssh";
+	show-icons:                 true;
+	display-drun:               "Apps";
+	display-run:                "Run";
+	display-filebrowser:        "Files";
+	display-ssh:                "SSH";
+	drun-display-format:        "{name}";
+	window-format:              "{w} · {c} · {t}";
+}
 
 /* ---- Window ---- */
 window {
 	height: 28%;
 	width:                        15%;
+	transparency: "real";
 	x-offset:                     0px;
 	y-offset:                     0px;
 	spacing:                      0px;
-	padding:                      5px;
+	padding:                      15px;
 	margin:                       0px;
 	border:                       0px;
 	cursor:                       "default";
@@ -39,30 +37,33 @@ mainbox {
 	// enabled:                      true;
 	// orientation:                  horizontal;
 	padding: 0px 0px;
-	spacing:                      2px;
+	spacing:                      0px;
+	border: 0px;
 	// margin:                       0px;
 	// background-color:             @background;
 	  children:                     ["inputbar", "listbox"];
 }
 
 inputbar {
-	enabled:                      true;
 	spacing:                      0px;
 	padding:                      10px;
 	border-radius:                0px;
+	border: 0px;
 	children:                     [ "textbox-prompt-colon", "entry" ];
 }
 
 textbox-prompt-colon {
 	expand:                       false;
+	border: 0px;
 	padding:                      0px 0px;
 	str:                          " ";
 }
 
 entry {
 	// background-color:             transparent;
-	padding: 0px 5px;
+	padding: 0px 8px;
 	border-radius: 12px;
+	margin-bottom: 2px;
 	placeholder:                  "Search ...";
 //	placeholder-color:            inherit;
 }
@@ -70,6 +71,7 @@ entry {
 /* ---- Listbox ---- */
 listbox {
 	spacing:                     0px;
+	padding: 0px 0px;
 	// background-color:            transparent;
 	orientation:                 vertical;
 	children:                    [ "listview" ];
@@ -82,7 +84,7 @@ listview {
 	scrollbar:                    false;
 	reverse:                      false;
 	spacing:                      5px;
-	padding:                      0px 10px;
+	padding:                      0px 15px;
 	margin:                       0px;
 	border:0px;
 	border-radius: 0px;
@@ -90,6 +92,18 @@ listview {
 
 element {
 	padding:                      10px;
-	border: 0;
+	border: 0px;
 	border-radius:                12px;
+}
+
+
+element-icon {
+	background-color:            transparent;
+	size:                        12px;
+}
+
+element-text {
+	background-color:            transparent;
+	text-color:                  inherit;
+	vertical-align:              0.5;
 }

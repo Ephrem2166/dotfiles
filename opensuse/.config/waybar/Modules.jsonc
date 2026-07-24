@@ -283,9 +283,9 @@
 	  "ethernet": [""],
 	  "disconnected": ["󰤭 "],
 	},
-	"on-click": "alacritty -e nmtui",
+	// "on-click": "alacritty -e nmtui",
 
-	// "on-click": "$HOME/.config/rofi/rofi-wifi.sh",
+	"on-click": "$HOME/.config/waybar/scripts/wifi-menu",
 	"tooltip": true,
 	//   "tooltip-format-wifi": "{essid}||{signaldBm}dB||{frequency}MHz\n{ipaddr}/{cidr}\n{bandwidthUpBits}/{bandwidthDownBits}",
 	//  "tooltip-format-ethernet": "{ipaddr}/{cidr}\n{bandwidthUpBits}/{bandwidthDownBits}",

@@ -19,7 +19,7 @@
 
 
 window {
-  border-color:     @white;
+ // border-color:     @white;
   color: @foreground;
   background-color: @background;
 }
@@ -74,7 +74,7 @@ element-icon {
 }
 
 element-text {
-  highlight:        @highlight;
+//  highlight:        @highlight;
 }
 
 
