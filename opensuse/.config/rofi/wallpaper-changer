@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+WALLPAPER_DIR="$HOME/Pictures/backgrounds"
+
+# RANDOM_WALLPAPER=$(find -L "$WALLPAPER_DIR" -maxdepth 1 -type f \( -name '*.jpg' -o -name '*.png' -o -name '*.jpeg' \) | shuf -n 1)
+#
+# if [ -n "$RANDOM_WALLPAPER" ]; then
+#   # Change the wallpaper in Sway using proper command format
+#   # swaymsg output \* bg "$RANDOM_WALLPAPER" fill
+#
+#   awww img "$RANDOM_WALLPAPER"
+#
+#   # Send a notification
+#   notify-send -i "$RANDOM_WALLPAPER" "󰸉 Wallpaper Changed"
+# fi
+
+# Build Rofi menu with thumbnails
+SELECTED=$(find "$WALLPAPER_DIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) -print0 |
+  while IFS= read -r -d '' file; do
+	name=$(basename "$file")
+	# This exact format comes straight from the Rofi thumbnails docs:
+	#   label\0icon\x1fthumbnail://path/to/file
+	printf "%s\0icon\x1fthumbnail://%s\n" "$name" "$file"
+  done |
+  rofi -dmenu -show-icons -p \
+	-theme ~/.config/rofi/config-wallpaper.rasi)
+
+[ -z "$SELECTED" ] && exit
+
+# Find the actual selected path
+WALL_PATH="$WALLPAPER_DIR/$SELECTED"
+
+# Set wallpaper via awww
+awww img "$WALL_PATH" \
+  --transition-type center \
+  --transition-duration 1 \
+  --transition-fps 60
+
+# Send a notification
+notify-send -i "$SELECTED" "󰸉 Wallpaper Changed"

@@ -37,6 +37,10 @@
 	"tooltip": true,
 	"tooltip-format": "Launch Browser",
   },
+  "custom/cava": {
+	"format": "{}",
+	"exec": "~/.config/waybar/scripts/cava"
+  },
   "custom/clipboard": {
 	"format": "󱓥 {}",
 	"exec": "~/.config/waybar/scripts/clipboard.sh --clipboard",
@@ -281,5 +285,37 @@
 	"tooltip": true,
 	"tooltip-format": "Network Manager",
 	"interval": 5,
-  }
+  },
+  // Media
+	"group/multimedia": {
+	  "orientation": "horizontal",
+	  "modules": ["custom/playpause" , "custom/playing-text"]
+	},
+	"custom/playing-text": {
+	  "format": "{}",
+	  "exec": "~/.config/waybar/scripts/now_playing",
+	  "tooltip": true,
+	  "tooltip-format": "Now Playing",
+	  "interval": 1
+	},
+	"custom/playpause": {
+	  "format": "{} ",
+	  "exec": "~/.config/waybar/scripts/play_pause",
+	  "on-click": "playerctl play-pause",
+	  "tooltip": false,
+	  "tooltip-format": "Now Playing",
+	  "interval": 1
+	},
+	"custom/next": {
+	  "format": "{}",
+	  "exec": "echo 󰒭",
+	  "tooltip": false,
+	  "on-click": "playerctl next"
+	},
+	"custom/previous":{
+	  "format":"{}",
+	  "exec": "echo 󰒮",
+	  "tooltip": false,
+	  "on-click": "playerctl previous"
+	}
 }
