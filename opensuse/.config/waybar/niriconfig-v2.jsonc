@@ -25,6 +25,7 @@
 	// "custom/launcher",
 	"niri/workspaces",
 	// "group/system"
+
 	"niri/window"
   ],
   "modules-center": ["mpd"],
