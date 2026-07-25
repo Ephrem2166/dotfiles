@@ -93,3 +93,8 @@ element-icon {
 element-text {
 	enabled: false;
 }
+
+element selected.normal {
+	background-color: @background;
+	text-color:       @background;
+}
