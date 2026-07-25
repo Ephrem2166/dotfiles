@@ -182,9 +182,9 @@
 	"tooltip": "false",
 	"format": "{icon} ",
 	"format-icons": {
-	  "performance": "<span foreground='#ef9f76'></span>",
-	  "balanced": "<span foreground='#85c1dc'></span>",
-	  "power-saver": "<span foreground='#a6d189'>󰌪</span>",
+	  "performance": "<span foreground='#ef9f76'> </span>",
+	  "balanced": "<span foreground='#85c1dc'> </span>",
+	  "power-saver": "<span foreground='#a6d189'>󰌪 </span>",
 	},
 	"interval": 5,
 	"return-type": "json",
