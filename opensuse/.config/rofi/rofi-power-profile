@@ -16,7 +16,7 @@ rofi_cmd() {
   done
 
   printf "%s\n" "${options_with_icons[@]}" |
-	rofi -dmenu -no-config-warnings -i -p " $USER@$host" \
+	rofi -dmenu -show-icons -no-config-warnings -i -p " $USER@$host" \
 	  -kb-select-1 "b" \
 	  -kb-select-2 "e" \
 	  -kb-select-3 "p" \
