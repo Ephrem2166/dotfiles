@@ -1,26 +1,113 @@
-@import "~/.config/rofi/config.rasi"
+@import "~/.config/rofi/themes/nord.rasi"
 
-/* ---- Mainbox ---- */
-mainbox {
-  children: [ "entry", "message" ];
-  height: inherit;
+/* ---- Configuration ---- */
+configuration {
+	show-icons:                     false;
 }
 
-/* ---- Window ---- */
+/* ---- Load pywal colors (custom wal template) ---- */
+@import "~/.config/rofi/custom/colors.rasi"
+
+/* ---- Global Properties ---- */
+* {
+	// font:                           "Fira Code Medium 12";
+}
+
+/* ---- Main Window ---- */
 window {
-  width: 30%;
-  height: inherit;
+	padding:                        0px;
+	border:                         2px;
+	border-radius:                  10px;
+	border-color:                   @background;
+	border: 1px solid;
+	cursor:                         "default";
+	background-color:               @bg0;
+	location:                       center;
+	anchor:                         center;
+	fullscreen:                     false;
+	width:                          400px;
+	height:                         79px;
+	x-offset:                       0px;
+	y-offset:                       0px;
 }
 
-/* ---- Entry ---- */
-entry {
-  expand: true;
-  placeholder: " Select e for powersave | b for balanced | p for performance";
+/* ---- Main Box ---- */
+mainbox {
+	enabled:                        true;
+	spacing:                        0px;
+	margin:                         0px;
+	padding:                        0px;
+	border-radius:                  10px;
+	border:                         2px solid;
+	background-color:               @background;
+	children:                       [ "listview"];
 }
 
+/* ---- Inputbar ---- */
+inputbar {
+	enabled:                        true;
+	padding:						10px;
+	background-color:               transparent;
+	orientation:                    horizontal;
+	children:                       ["prompt"];
+}
+
+prompt {
+	enabled:                        true;
+	padding:						10px;
+	border-radius:					15px;
+	border-color:                   @foreground;
+	background-color:               @background-color;
+	text-color:                     @foreground;
+	cursor:                         text;
+}
+
+/* ---- Listview ---- */
 listview {
-    enable: true;
-columns: 1;
-lines: 5;
-cycle: true;
-    }
+	enabled:                        true;
+	columns:                        3;
+	lines:                          1;
+	cycle:                          true;
+	dynamic:                        true;
+	scrollbar:                      false;
+	layout:                         vertical;
+	reverse:                        false;
+	fixed-height:                   true;
+	fixed-columns:                  true;
+	spacing:                        10px;
+	padding:                        10px 10px;
+	background-color:               transparent;
+	cursor:                         "default";
+	border:                         0px;
+	border-color:                   @background;
+}
+
+/* ---- Elements ---- */
+element {
+	enabled:                        true;
+	// padding:                        0px;
+	border-radius:                  10px;
+	background-color:               transparent;
+	text-color:                     @foreground;
+	cursor:                         pointer;
+	// borrder-color: 2px solid red;
+}
+element-text {
+	font:                           "Hasklug Nerd Font Mono 30";
+	background-color:               transparent;
+	text-color:                     inherit;
+	cursor:                         inherit;
+	vertical-align:                 0.5;
+	horizontal-align:               0.5;
+}
+element selected.normal {
+	background-color:               @white;
+	text-color:                     @background;
+}
+element alternate.normal {
+	background-color:               @background;
+}
+
+element-icon {
+enabled: false;
+}
