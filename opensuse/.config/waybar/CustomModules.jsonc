@@ -49,14 +49,13 @@
 	"escape": true,
   },
   "custom/cliphist": {
-	"format": "{}",
-	"rotate": 0,
-	"exec": "echo ; echo 󰅇 clipboard history",
-	"on-click": "sleep 0.1 && cliphist.sh c",
-	"on-click-right": "sleep 0.1 && cliphist.sh d",
-	"on-click-middle": "sleep 0.1 && cliphist.sh w",
-	"interval": 86400, // once every day
-	"tooltip": true,
+	"format": " ",
+	"on-click": "sleep 0.1 && ~/.config/rofi/rofi-clipboard ",
+	"on-click-right": "sleep 0.1 && ~/.config/rofi/rofi-clipboard d",
+	"on-click-middle": "sleep 0.1 && ~/.config/rofi/rofi-clipboard w",
+	"tooltip-format": "Left: Open clipboard Manager\nRight: Delete an entry\nMiddle: Clear list",
+	"on-scroll-up": "true",
+	"on-scroll-down": "true"
   },
   "custom/dunst": {
 	"tooltip": true,
