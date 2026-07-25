@@ -12,19 +12,22 @@
 }
 
 /* Window */
-/* window {
- * 	background:linear-gradient(0deg, rgba(46, 52, 64, 0.3), rgba(46, 52, 64, 0.0));
- * 	border-radius:0px 0px 0px 0px;
- * 	margin-top:0px;
- * } */
+#window {
+	background:linear-gradient(0deg, rgba(46, 52, 64, 0.3), rgba(46, 52, 64, 0.0));
+	/* border-radius: 12px; */
+	padding: 0px 0px;
+	margin-left: 10px;
+}
 window#waybar {
 	background-color: rgba(46, 52, 64, 1);
 	opacity: 1.0;
-	/* color: @foreground; */
 	padding: 0px 10px;
 	margin: 0px 10px;
 	border: 100px solid @background;
 	border-radius: 0px;
+}
+window#waybar.empty #window {
+	background-color: transparent;
 }
 
 /* Tooltips */

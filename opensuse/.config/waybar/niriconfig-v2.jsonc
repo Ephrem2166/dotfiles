@@ -22,6 +22,7 @@
   "on-sigusr2": "reload",
   // "mode": "overlay",
   "modules-left": [
+	// "custom/launcher",
 	"niri/workspaces",
 	// "group/system"
 	"niri/window"
