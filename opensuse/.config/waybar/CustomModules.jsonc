@@ -100,6 +100,11 @@
 	"on-click": "kdeconnect-app",
 	"tooltip-format": "KDE Connect",
   },
+  "custom/launcher": {
+	"format": " ",
+	"on-click": "rofi -show drun -replace",
+	"tooltip": false
+  },
   "custom/media": {
 	"format": "{icon} {}",
 	"escape": true,
