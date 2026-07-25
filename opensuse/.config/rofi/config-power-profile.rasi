@@ -5,8 +5,6 @@ configuration {
 	show-icons:                     false;
 }
 
-/* ---- Load pywal colors (custom wal template) ---- */
-@import "~/.config/rofi/custom/colors.rasi"
 
 /* ---- Global Properties ---- */
 * {
