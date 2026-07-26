@@ -1,92 +1,17 @@
-# UI
-include catppuccin-mocha
-# Open document in fit-width mode by default
-set adjust-open "best-fit"
-# set font 'monospace normal 10'
-set font "Berkeley Nerd Font normal 10"
+# zathurarc config sample
+...
 
-set window-title-home-tilde true
-set window-title-page true
+# colors
+set default-bg     "#2E3440"
 
-# One page per row by default
-set pages-per-row 1
+# complementary foreground, but keep it light
+set default-fg     "#F4F1EC"
 
-#stop at page boundaries
-set smooth-scroll "true"
+# make it a bit lighter than background
+set statusbar-bg   "#6D7179"
 
-set statusbar-h-padding 0
-set statusbar-v-padding 0
-set page-padding 1
-set synctex true
+# make it darken by blending to a darken color
+set statusbar-fg   "#E3E6EC"
 
-
-
-# Show status line and vertical scroll bar
-set guioptions sv
-
-# Enable main clipboard (can paste with `Ctrl-v`)
-set selection-clipboard clipboard
-
-set recolor true
-
-# Keybindings
-map k scroll half-up
-map j scroll half-down
-
-map <C-l> scroll right
-map <c-h> scroll left
-map <C-j> scroll down
-map <C-k> scroll up
-
-map D toggle_page_mode
-map r reload
-map R rotate
-map <C-+> zoom in
-map <C--> zoom out
-
-map i recolor
-map p print
-map q abort
-map s search
-
-map ] rotate rotate-cw
-map [ rotate rotate-ccw
-
-map <C-n> next
-map <C-p> previous
-
-unmap f
-map f toggle_fullscreen
-map [fullscreen] f toggle_fullscreen
-
-
-# Index
-map i toggle_index
-map [index] q toggle_index
-map [index] zo navigate_index expand
-map [index] zc navigate_index collapse
-map [index] zm navigate_index collapse-all
-map [index] zr navigate_index expand-all
-
-
-# Presentation
-map [presentation] q toggle_presentation
-map [presentation] P toggle_presentation
-map [presentation] n navigate next
-map [presentation] p navigate previous
-map [presentation] <C-d> navigate next
-map [presentation] <C-u> navigate previous
-map [presentation] gg goto top
-map [presentation] G goto bottom
-map [presentation] f follow
-map [presentation] i toggle_index
-map [presentation] r recolor
-
-## Emacs
-map <C-g> abort
-map <C-a> scroll full-left
-map <C-b> scroll left
-map <C-e> scroll full-right
-map <C-f> scroll right
-map <C-n> scroll down
-map <C-p> scroll up
+# use it's complementary
+set inputbar-bg    "#403A2E"
