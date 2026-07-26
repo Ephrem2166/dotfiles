@@ -12,23 +12,23 @@ theme="listview { lines: ${lines}; columns: ${columns}; cycle:true; spacing:5px;
 
 export PREVIEW=true
 selected=$(find "$walldir" -type f |
-    while read -r A; do echo -en "$A\x00icon\x1f$A\n"; done |
-    rofi -dmenu \
-        -show-icons \
-        -p "Wallpaper" \
-        -theme "$HOME/.config/rofi/config-change-wall.rasi" \
-        -theme-str "$theme")
+  while read -r A; do echo -en "$A\x00icon\x1f$A\n"; done |
+  rofi -dmenu \
+	-show-icons \
+	-p "Wallpaper" \
+	-theme "$HOME/.config/rofi/config-change-wall.rasi" \
+	-theme-str "$theme")
 
 #cp "$selected" ~/.config/wall.png &&
 if [ -z "$selected" ]; then
-    exit 1
+  exit 1
 else
-    awww img "$selected" \
-        --transition-type=any \
-        --transition-step=60 \
-        --transition-fps=60 \
-        --transition-duration=.7
+  awww img "$selected" \
+	--transition-type=any \
+	--transition-step=60 \
+	--transition-fps=60 \
+	--transition-duration=.7
 
-    notify-send -i "$SELECTED" "󰸉 Wallpaper Changed"
+  notify-send -i "$SELECTED" "󰸉 Wallpaper Changed"
 # wal -n -e -a 80 -i "$HOME/.config/wall.png" && swaync-client -rs
 fi
