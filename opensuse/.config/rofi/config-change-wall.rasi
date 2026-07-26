@@ -15,8 +15,8 @@ configuration {
   padding:          0.2em;
   margin:           0px; //0.4em
   border-radius:    0.4em;
-	horizontal-align: 0.5;
-	vertical-align:   0.5;
+  horizontal-align: 0.5;
+  vertical-align:   0.5;
   border:           0px;
 	background-color: @background;
 }
@@ -26,7 +26,6 @@ window {
 	padding:          0.5em;
 	spacing:          @spacing;
   children:         [ wrap, listview-split];
-  border-color: @background;
 }
 
 
@@ -83,20 +82,20 @@ element {
   children: [element-icon, element-text];
 }
 element selected.active {
-	// background-color: @white;
-//	text-color:       @background;
+	background-color: @white;
+	text-color:       @background;
 }
 
 
 element-icon {
 	size: calc(((100% - 3.5em) / 7 ));// manually configured
-	background-color: @black;
+//	background-color: @black;
 //	text-color: @foreground;
 }
 
 element-text {
   padding: @padding;
-//  highlight: @highlight;
+  highlight: @highlight;
 }
 
 /**
