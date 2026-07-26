@@ -5,14 +5,12 @@ mkdir -p "$TMP_DIR"
 
 ALBUM_ART_PATH="$TMP_DIR/notification"
 
-mkdir -p "$ALBUM_ART_PATH"
-
-DEFAULT_ALBUM_ART_PATH="$TMP_DIR/music.png"
+DEFAULT_ALBUM_ART_PATH="$TMP_DIR/default.jpg"
 
 if ! rmpc albumart --output "$ALBUM_ART_PATH"; then
-	ALBUM_ART_PATH="${DEFAULT_ALBUM_ART_PATH}"
+  ALBUM_ART_PATH="${DEFAULT_ALBUM_ART_PATH}"
 fi
 
 notify-send -i "${ALBUM_ART_PATH}" "$TITLE" "<b>$ARTIST</b> - <i>$ALBUM</i> ($DATE)"
-echo "$ARTIST - $TITLE" > "$TMP_DIR/title"
-echo "$ALBUM" > "$TMP_DIR/album"
+echo "$ARTIST - $TITLE" >"$TMP_DIR/title"
+echo "$ALBUM" >"$TMP_DIR/album"

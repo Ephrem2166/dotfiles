@@ -64,10 +64,10 @@ if [[ -n "$DESKTOP_SESSION" && "$DESKTOP_SESSION" == "niri" ]]; then
     export MOZ_ENABLE_WAYLAND=1
     # Added
     export GDK_BACKEND="wayland"
-    #gsettings set org.gnome.desktop.interface color-scheme prefer-dark
-    #gsettings set org.gnome.desktop.interface gtk-theme Adwaita
-    #gsettings set org.gnome.desktop.interface cursor-theme Adwaita
-    #gsettings set org.gnome.desktop.interface cursor-size 18
+    gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+    gsettings set org.gnome.desktop.interface gtk-theme Adwaita
+    gsettings set org.gnome.desktop.interface cursor-theme Adwaita
+    gsettings set org.gnome.desktop.interface cursor-size 18
 fi
 
 # export paths
