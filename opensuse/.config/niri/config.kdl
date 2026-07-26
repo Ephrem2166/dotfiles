@@ -215,8 +215,7 @@ layout {
 	}
 
 	// You can also add a border. It's similar to the focus ring, but always visible.
-	border {
-		// The settings are the same as for the focus ring.
+	border {// The settings are the same as for the focus ring.
 		// If you enable the border, you probably want to disable the focus ring.
 		off
 
@@ -326,6 +325,8 @@ window-rule {
 	match app-id="nm-connection-editor"
 	match app-id="org.kde.polkit-kde-authentication-agent-1"
    match app-id="org.qbittorrent.qBittorrent"
+   match is-active-set=false // Matches typical dialog indicators
+	match title="^[Dd]ialog"   // Matches windows with "dialog" in the title
 
 
 	open-floating true

@@ -210,6 +210,13 @@
 	"signal": 1,
 	"on-click": "$HOME/.config/river/scripts/swayidle-toggle.sh; pkill -SIGRTMIN+1 waybar",
   },
+  "custom/temp": {
+	"exec": "~/.config/waybar/scripts/temperature",
+	"return-type": "json",
+	"interval": 2,
+	"format": "{}",
+	"tooltip": false
+  },
   "custom/tray-icon": {
 	"format": "󱗼 ",
 	"tooltip": false,
