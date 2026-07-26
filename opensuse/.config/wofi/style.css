@@ -3,7 +3,7 @@
   background-color: #2E3440;
   color: #D8DEE9;
   margin: 10px 10px;
-    border-radius: 10px;
+	border-radius: 10px;
   font-family: "Berkeley Nerd Font";
 }
 
@@ -14,7 +14,7 @@
   margin: 5px;
 }
 
-#input{  
+#input{
   background-color: #2E3440;
   border: 1px solid #2E3440;
   color: #D8DEE9;
@@ -26,9 +26,9 @@
 }
 
 #inner-box{
-    background-color: #2E3440;
-    color: #D8DEE9;
-    font-size: 14px;
+	background-color: #2E3440;
+	color: #D8DEE9;
+	font-size: 14px;
 }
 
 #img{
@@ -41,41 +41,40 @@
   font-family: "Berkeley Nerd Font";
   font-size: 15px;
   color: #D8DEE9;
-    /* font-weight: bold; */
+	/* font-weight: bold; */
 }
 
 
 
 #text:selected {
-    color: #ECEFF4;
+	color: #ECEFF4;
 }
 
 #entry {
-    background-color: transparent;
-    color: #D8DEE9;
-    padding: 5px;
-    border-radius: 5px;
+	background-color: transparent;
+	color: #D8DEE9;
+	padding: 5px;
+	border-radius: 5px;
 }
 
 #entry:selected {
-    background-color: #5E81AC;
-    color: #ECEFF4;          
+	background-color: #5E81AC;
+	color: #ECEFF4;
 }
 
 #expander-box {
-    background-color: #3B4252;
-    border: 1px solid #4C566A;
-    border-radius: 5px;
-    margin: 5px;
+	background-color: #3B4252;
+	border: 1px solid #4C566A;
+	border-radius: 5px;
+	margin: 5px;
 }
 
 .unselected {
-    background-color: transparent;
-    color: #D8DEE9;
+	background-color: transparent;
+	color: #D8DEE9;
 }
 
 .selected {
-    background-color: #5E81AC;
-    color: #ECEFF4;          
+	background-color: #5E81AC;
+	color: #ECEFF4;
 }
-
