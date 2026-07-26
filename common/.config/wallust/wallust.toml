@@ -1,0 +1,38 @@
+alpha=50
+backend = "full"
+# check_contrast = false
+color_space = "lch"
+# fallback_generator = "interpolation"
+palette = "dark"
+[templates]
+# A relative path that points to a file where wallust.toml is located, usually at ~/.config/wallust/templates
+#A template is simply a file that has placeholders in order to replace them with values.
+# Template Variables
+# color0
+# color1
+# color2
+# color3
+# color4
+# color5
+# color6
+# color7
+# color8
+# color9
+# color10
+# color11
+# color12
+# color13
+# color14
+# color15
+# background
+# foreground
+# cursor
+
+# To access template variables use {{variable name}} like {{color1}}
+wofi.template = 'templates/colors-wofi.css'
+# Absolute path in which to place a file with generated templated values
+wofi.target = '~/.config/wofi/style.css'
+
+
+# one liner for zathura
+zathura = { template = 'zathurarc', target = '~/.config/zathura/zathurarc' }
