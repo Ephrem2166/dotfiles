@@ -333,6 +333,25 @@ window-rule {
 	default-column-width { }
 	default-window-height { }
 }
+window-rule {
+	match app-id="xdg-desktop-portal-gtk"
+	background-effect {
+		blur true
+	}
+	popups {
+		geometry-corner-radius 0
+		background-effect {
+			blur true
+		}
+	}
+
+	min-width 952
+	min-height 576
+	max-width 952
+	max-height 1156
+
+	open-floating true
+}
 
 
 // Fullscreen Rule
