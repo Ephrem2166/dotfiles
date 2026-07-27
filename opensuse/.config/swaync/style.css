@@ -172,7 +172,7 @@ background: @background;
   background: @background;
 }
 .notification-group:focus {
-  background: @color2;
+  background: rgba(76,86,106,1);
 }
 .notification-group > .notification {
   padding: 0.5rem;
