@@ -785,7 +785,8 @@ spawn-at-startup "awww-daemon"
 // spawn-at-startup "swayidle" "-w" "timeout" "300" "hyprlock" "timeout" "330" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
 
 
-spawn-at-startup "swaync"
+//spawn-at-startup "swaync"
+spawn-at-startup "dunst"
 spawn-at-startup "/usr/bin/emacs" "--daemon"
 spawn-sh-at-startup "swaybg -o eDP-1 -i ~/Pictures/berserk.png"
 
