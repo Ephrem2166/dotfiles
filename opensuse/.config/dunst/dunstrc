@@ -24,13 +24,13 @@
 	# dynamic width from 0 to 300
 	# width = (0, 300)
 	# constant width of 300
-	width = 300
+	width = (320,500)
 
 	# The maximum height of a single notification, excluding the frame.
-	height = 800
+	height = (150,700)
 
 	# Position the notification in the top right corner
-	origin = top-right
+	origin = top-center
 
 	# Offset from the origin
 	offset = 10x50
@@ -55,7 +55,7 @@
 	progress_bar_frame_width = 1
 
 	# Set the minimum width for the progress bar
-	progress_bar_min_width = 150
+	progress_bar_min_width = 300
 
 	# Set the maximum width for the progress bar
 	progress_bar_max_width = 300
@@ -82,7 +82,7 @@
 	separator_height = 0
 
 	# Padding between text and separator.
-	padding = 8
+	padding = 6
 
 	# Horizontal padding.
 	horizontal_padding = 8
@@ -101,7 +101,7 @@
 	# If value is greater than 0, separator_height will be ignored and a border
 	# of size frame_width will be drawn around each notification instead.
 	# Click events on gaps do not currently propagate to applications below.
-	gap_size = 0
+	gap_size = 2
 
 	# Define a color for the separator.
 	# possible values are:
@@ -273,7 +273,7 @@
 
 	# Use the Xinerama extension instead of RandR for multi-monitor support.
 	# This setting is provided for compatibility with older nVidia drivers that
-	# do not support RandR and using it on systems that support RandR is highly
+	# do not support RandR and using it on systems that support RandR is y
 	# discouraged.
 	#
 	# By enabling this setting dunst will not be able to detect when a monitor

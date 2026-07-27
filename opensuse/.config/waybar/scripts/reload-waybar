@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 killall -q waybar
+# killall -q dunst
+# killall -q dunstify
 
 if [[ -n "$DESKTOP_SESSION" && "$DESKTOP_SESSION" == "niri" ]]; then
   CONFIG="$HOME/.config/waybar/niriconfig-v2.jsonc"
@@ -8,6 +10,6 @@ if [[ -n "$DESKTOP_SESSION" && "$DESKTOP_SESSION" == "niri" ]]; then
   # killall -SIGUSR2 waybar
   waybar --config $CONFIG --style $THEME --log-level debug
   notify-send -t 5000 -u low "󰑓 Waybar Reloaded"
-  # dunstify -e -t 5000 -u low "󰑓 Waybar Reloaded"
+  # dunstify -e -t 5000 -u normal "󰑓  Waybar Reloaded"
 
 fi
