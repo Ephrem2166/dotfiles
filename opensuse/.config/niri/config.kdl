@@ -325,7 +325,6 @@ window-rule {
 	match app-id="nm-connection-editor"
 	match app-id="org.kde.polkit-kde-authentication-agent-1"
    match app-id="org.qbittorrent.qBittorrent"
-	match title="^[Dd]ialog"   // Matches windows with "dialog" in the title
 
 
 	open-floating true
@@ -333,25 +332,26 @@ window-rule {
 	default-column-width { }
 	default-window-height { }
 }
-window-rule {
-	match app-id="xdg-desktop-portal-gtk"
-	background-effect {
-		blur true
-	}
-	popups {
-		geometry-corner-radius 0
-		background-effect {
-			blur true
-		}
-	}
 
-	min-width 952
-	min-height 576
-	max-width 952
-	max-height 1156
-
-	open-floating true
-}
+// window-rule {
+// 	match app-id="xdg-desktop-portal-gtk"
+// 	background-effect {
+// 		blur true
+// 	}
+// 	popups {
+// 		geometry-corner-radius 0
+// 		background-effect {
+// 			blur true
+// 		}
+// 	}
+//
+// 	min-width 952
+// 	min-height 576
+// 	max-width 952
+// 	max-height 1156
+//
+// 	open-floating true
+// }
 
 
 // Fullscreen Rule
@@ -781,12 +781,14 @@ spawn-at-startup "/usr/bin/gammastep"
 spawn-at-startup "/usr/bin/gammastep-indicator"
 spawn-at-startup "nm-applet" "--indicator"
 spawn-at-startup "swayidle" "-w"
-spawn-at-startup "awww-daemon"
 // spawn-at-startup "swayidle" "-w" "timeout" "300" "hyprlock" "timeout" "330" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
+spawn-at-startup "awww-daemon"
 
 
 spawn-at-startup "swaync"
 //spawn-at-startup "dunst"
+
+
 spawn-at-startup "/usr/bin/emacs" "--daemon"
 spawn-sh-at-startup "swaybg -o eDP-1 -i ~/Pictures/berserk.png"
 
@@ -810,7 +812,7 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 /// Environment
 environment {
  QT_QPA_PLATFORM "wayland"
-GTK_THEME "Adwaita:dark"
+// GTK_THEME "Adwaita:dark"
 }
 
 cursor {

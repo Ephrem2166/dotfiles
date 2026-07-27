@@ -1,19 +1,18 @@
 {
   "$schema": "/etc/xdg/swaync/configSchema.json",
+  "ignore-gtk-theme": true,
   "positionX": "right",
   "positionY": "top",
   "layer": "overlay",
-  "control-center-layer": "top",
   "layer-shell": true,
-  "cssPriority": "application",
+  "cssPriority": "user",
+  "control-center-layer": "top",
   "control-center-margin-top": 0,
-  "control-center-margin-bottom": 200,
+  "control-center-margin-bottom": 400,
   "control-center-margin-right": 10,
   "control-center-margin-left": 0,
-  "control-center-layer": "overlay",
   "notification-2fa-action": true,
   "notification-inline-replies": false,
-  "notification-icon-size": 24,
   "notification-body-image-height": 100,
   "notification-body-image-width": 200,
   "timeout": 10,
@@ -22,15 +21,14 @@
   "fit-to-screen": true,
   "relative-timestamps": true,
   "control-center-width": 300,
-  "control-center-height": 300,
+  "control-center-height": 100,
   "notification-window-width": 400,
   "keyboard-shortcuts": true,
   "image-visibility": "when-available",
   "transition-time": 200,
   "hide-on-clear": false,
   "hide-on-action": true,
-  "text-empty": "No Notification to Display",
-  "fit-to-screen": true,
+  "text-empty": "No Notification",
   "script-fail-notify": true,
   "widgets": [
 	"buttons-grid",
@@ -51,7 +49,7 @@
 	"title": {
 	  "text": "Notifications",
 	  "clear-all-button": true,
-	  "button-text": "Clear"
+	  "button-text": "󰆴 Clear"
 	},
 	"dnd": {
 	  "text": "Do Not Disturb"
@@ -61,8 +59,10 @@
 	  "text": "Notification"
 	},
 	"mpris": {
-	  "image-size": 50,
-	  "image-radius": 0
+	  "blacklist": [],
+	  "autohide": false,
+	  "show-album-art": "always",
+	  "loop-carousel": false
 	},
 	"volume": {
 	  "label": "󰕾"
@@ -71,6 +71,7 @@
 	  "label": "󰃟"
 	},
 	"buttons-grid": {
+	  "buttons-per-row": 4,
 	  "actions": [
 		{
 		  "label": "",
@@ -82,7 +83,7 @@
 		},
 		{
 		  "label": "󰂯",
-		  "command": "bluedevil-wizard"
+		  "command": "bash -c $HOME/.config/rofi/rofi-bluetooth.sh"
 		},
 		{
 		  "label": "",
@@ -90,9 +91,13 @@
 		},
 		{
 		  "label": " ",
+		  "command": "bash -c $HOME/.config/rofi/rofi-wifi.sh"
+		},
+		{
+		  "label": " ",
 		  "type": "toggle",
-		  "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && nmcli radio wifi on || nmcli radio wifi off'",
-		  "update-command": "sh -c '[[ $(nmcli radio wifi) == \"enabled\" ]] && echo true || echo false'"
+		  "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && swaync-client --dnd-on || swaync-client --dnd-off'",
+		  "update-command": "sh -c '$(swaync-client --get-dnd | grep -q \"false\" ) && echo false || echo true'"
 		}
 	  ]
 	}
