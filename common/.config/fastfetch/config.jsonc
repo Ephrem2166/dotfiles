@@ -69,6 +69,15 @@
 	  "key":"󰋊 ",
 	  "keyColor": "",
 	},
+	{
+	  "type": "display",
+	  "key": "󰍹",
+	},
+	{
+	  "type": "terminalfont",
+	  "key": "",
+  // "keyColor": "blue"
+	},
 	   "break",
 	{
 	  "type": "colors",
