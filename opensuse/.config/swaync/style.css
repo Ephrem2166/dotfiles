@@ -26,15 +26,6 @@
 
 /* Control Center */
 .control-center,
-.notification,
-.notification-row,
-.notification-content,
-.notification-group,
-.notification-background,
-.notification-action,
-.notification-default-action,
-.floating-notifications,
-.notification-row .notification-background .notification,
 .inline-reply-entry,
 .inline-reply-button,
 .widget-title,
@@ -180,8 +171,18 @@
 }
 
 /* Fix */
-notificationwindow,
-blankwindow {
-  background: transparent;
-  background-color: transparent;
+
+.notification,
+.notification-row,
+.notification-content,
+.notification-group,
+.notification-background,
+.notification-action,
+.notification-default-action,
+.floating-notifications,
+.notification-row .notification-background .notification,
+{
+	background: transparent;
+	background-color: transparent;
+
 }
