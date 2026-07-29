@@ -5,6 +5,7 @@
   "positionY": "top",
   "layer": "overlay",
   "layer-shell": true,
+  "layer-shell-cover-screen": false,
   "cssPriority": "user",
   "control-center-layer": "top",
   "control-center-margin-top": 0,
@@ -23,6 +24,7 @@
   "control-center-width": 300,
   "control-center-height": 100,
   "notification-window-width": 400,
+  "notification-window-height": 200,
   "keyboard-shortcuts": true,
   "image-visibility": "when-available",
   "transition-time": 200,
@@ -31,75 +33,75 @@
   "text-empty": "No Notification",
   "script-fail-notify": true,
   "widgets": [
-	"buttons-grid",
-	"inhibitors",
-	"title",
-	"volume",
-	"backlight",
-	"dnd",
-	"mpris",
-	"notifications"
+    "buttons-grid",
+    "inhibitors",
+    "title",
+    "volume",
+    "backlight",
+    "dnd",
+    "mpris",
+    "notifications"
   ],
   "widget-config": {
-	"inhibitors": {
-	  "text": "Inhibitors",
-	  "button-text": "Clear All",
-	  "clear-all-button": true
-	},
-	"title": {
-	  "text": "Notifications",
-	  "clear-all-button": true,
-	  "button-text": "󰆴 Clear"
-	},
-	"dnd": {
-	  "text": "Do Not Disturb"
-	},
-	"label": {
-	  "max-lines": 1,
-	  "text": "Notification"
-	},
-	"mpris": {
-	  "blacklist": [],
-	  "autohide": false,
-	  "show-album-art": "always",
-	  "loop-carousel": false
-	},
-	"volume": {
-	  "label": "󰕾"
-	},
-	"backlight": {
-	  "label": "󰃟"
-	},
-	"buttons-grid": {
-	  "buttons-per-row": 4,
-	  "actions": [
-		{
-		  "label": "",
-		  "command": "hyprlock"
-		},
-		{
-		  "label": "󰝟",
-		  "command": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-		},
-		{
-		  "label": "󰂯",
-		  "command": "bash -c $HOME/.config/rofi/rofi-bluetooth.sh"
-		},
-		{
-		  "label": "",
-		  "command": "bash -c $HOME/.config/rofi/rofi-power.sh"
-		},
-		{
-		  "label": " ",
-		  "command": "bash -c $HOME/.config/rofi/rofi-wifi.sh"
-		},
-		{
-		  "label": " ",
-		  "type": "toggle",
-		  "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && swaync-client --dnd-on || swaync-client --dnd-off'",
-		  "update-command": "sh -c '$(swaync-client --get-dnd | grep -q \"false\" ) && echo false || echo true'"
-		}
-	  ]
-	}
+    "inhibitors": {
+      "text": "Inhibitors",
+      "button-text": "Clear All",
+      "clear-all-button": true
+    },
+    "title": {
+      "text": "Notifications",
+      "clear-all-button": true,
+      "button-text": "󰆴 Clear"
+    },
+    "dnd": {
+      "text": "Do Not Disturb"
+    },
+    "label": {
+      "max-lines": 1,
+      "text": "Notification"
+    },
+    "mpris": {
+      "blacklist": [],
+      "autohide": false,
+      "show-album-art": "always",
+      "loop-carousel": false
+    },
+    "volume": {
+      "label": "󰕾"
+    },
+    "backlight": {
+      "label": "󰃟"
+    },
+    "buttons-grid": {
+      "buttons-per-row": 4,
+      "actions": [
+        {
+          "label": "",
+          "command": "hyprlock"
+        },
+        {
+          "label": "󰝟",
+          "command": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+        },
+        {
+          "label": "󰂯",
+          "command": "bash -c $HOME/.config/rofi/rofi-bluetooth.sh"
+        },
+        {
+          "label": "",
+          "command": "bash -c $HOME/.config/rofi/rofi-power.sh"
+        },
+        {
+          "label": " ",
+          "command": "bash -c $HOME/.config/rofi/rofi-wifi.sh"
+        },
+        {
+          "label": " ",
+          "type": "toggle",
+          "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && swaync-client --dnd-on || swaync-client --dnd-off'",
+          "update-command": "sh -c '$(swaync-client --get-dnd | grep -q \"false\" ) && echo false || echo true'"
+        }
+      ]
+    }
   }
 }

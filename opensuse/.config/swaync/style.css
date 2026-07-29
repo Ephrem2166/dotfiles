@@ -20,8 +20,8 @@
 @define-color color15 #8FBCBB;
 
 * {
-	font-family: "Berkeley Nerd Font";
-	font-size: 12px;
+  font-family: "Berkeley Nerd Font";
+  font-size: 12px;
 }
 
 /* Control Center */
@@ -55,7 +55,7 @@
   color: @foreground;
   border-radius: 0.75rem;
   box-shadow: none;
-background: @background;
+  background: @background;
 }
 
 /* Control center window */
@@ -135,7 +135,7 @@ background: @background;
 
 /* For notification outside of control center */
 .notification-row .notification-background .notification {
-	font-size: 20px;
+  font-size: 20px;
   background: @background;
   padding: 0.5rem;
   border: 2px solid @foreground;
@@ -150,7 +150,7 @@ background: @background;
 .notification-background,
 .notification-row {
   padding: 0;
-  background: none;
+  background: transparent;
   outline: none;
   margin: 0;
 }
@@ -172,9 +172,16 @@ background: @background;
   background: @background;
 }
 .notification-group:focus {
-  background: rgba(76,86,106,1);
+  background: rgba(76, 86, 106, 1);
 }
 .notification-group > .notification {
   padding: 0.5rem;
   margin: 0.5rem;
+}
+
+/* Fix */
+notificationwindow,
+blankwindow {
+  background: transparent;
+  background-color: transparent;
 }
