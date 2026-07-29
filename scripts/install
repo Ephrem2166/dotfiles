@@ -42,24 +42,24 @@ echo "Started Installation ..."
 if [[ $package_manager == 'zypper' ]]; then
   sudo zypper refresh
   for package in "${package_list[@]}"; do
-    echo "Installing $package ..."
-    sudo zypper --non-interactive install "$package"
+	echo "Installing $package ..."
+	sudo zypper --non-interactive install "$package"
   done
 elif [[ $package_manager == 'pacman' ]]; then
   sudo pacman -Sy --noconfirm
   for package in "${package_list[@]}"; do
-    echo "Installing $package ..."
-    sudo pacman -S --noconfirm "$package"
+	echo "Installing $package ..."
+	sudo pacman -S --noconfirm "$package"
   done
 elif [[ $package_manager == 'dnf' ]]; then
   for package in "${package_list[@]}"; do
-    sudo dnf install -y "$package"
+	sudo dnf install -y "$package"
   done
 elif [[ $package_manager == 'apt' ]]; then
   sudo apt update -y
   for package in "${package_list[@]}"; do
-    echo "Installing $package ..."
-    sudo apt install -y "$package"
+	echo "Installing $package ..."
+	sudo apt install -y "$package"
   done
 fi
 echo "Finished!!!"

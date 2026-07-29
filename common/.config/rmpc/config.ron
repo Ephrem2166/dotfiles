@@ -7,8 +7,8 @@
 	theme: "Nord",
 	enable_config_hot_reload: true,
 	cache_dir: "$HOME/.cache/rmpc/", // Original Value: None
-	 //on_song_change: ["./notify"], // FIXME: Original Value: None
-	on_song_change: None,
+	on_song_change: ["~/.config/rmpc/notify"],
+//	on_song_change: None,
 	// on_song_change: ["notify-send", "song changed!"],
 	volume_step: 5,
 	max_fps: 30,

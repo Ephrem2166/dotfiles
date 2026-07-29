@@ -1,17 +1,11 @@
-# zathurarc config sample
-...
-
-# colors
 set default-bg     "#2E3440"
 
-# complementary foreground, but keep it light
 set default-fg     "#F4F1EC"
 
-# make it a bit lighter than background
 set statusbar-bg   "#6D7179"
 
-# make it darken by blending to a darken color
 set statusbar-fg   "#E3E6EC"
 
-# use it's complementary
 set inputbar-bg    "#403A2E"
+
+set selection-clipboard clipboard
