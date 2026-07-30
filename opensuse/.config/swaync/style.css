@@ -180,9 +180,7 @@
 .notification-action,
 .notification-default-action,
 .floating-notifications,
-.notification-row .notification-background .notification,
-{
-	background: transparent;
-	background-color: transparent;
-
+.notification-row .notification-background .notification {
+  background: transparent;
+  background-color: transparent;
 }
