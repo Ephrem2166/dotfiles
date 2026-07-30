@@ -31,6 +31,7 @@
   "modules-center": ["mpd"],
   "modules-right": [
 	"custom/notification",
+	// "custom/swaync",
 	"custom/cliphist",
 	// "custom/uptime",
 	"pulseaudio",

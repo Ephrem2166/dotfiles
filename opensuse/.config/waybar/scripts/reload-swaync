@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Description: Reload swaync config and style
+swaync-client -R && swaync-client -rs
+notify-send "Swaync" "Reloaded Swaync"

@@ -9,7 +9,7 @@ if [[ -n "$DESKTOP_SESSION" && "$DESKTOP_SESSION" == "niri" ]]; then
   THEME="$HOME/.config/waybar/style-2.css"
   # killall -SIGUSR2 waybar
   waybar --config $CONFIG --style $THEME --log-level debug
-  notify-send -t 5000 -u low "󰑓 Waybar Reloaded"
+  notify-send -t 5000 -u low "Waybar" "󰑓 Waybar Reloaded"
   # dunstify -e -t 5000 -u normal "󰑓  Waybar Reloaded"
 
 fi

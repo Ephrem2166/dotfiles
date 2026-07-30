@@ -1,1 +1,313 @@
-/home/ephrem/.config/waybar/styles/monochrome.css
+@import "./colors/nord-dark.css";
+/* General */
+* {
+	/* background-color: @background; */
+	/* color: @foreground; */
+	/* border: none; */
+	font-family:
+		"Berkeley Nerd Font", "JetBrainsMono Nerd Font", Roboto, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	min-height: 0;
+
+}
+
+/* Window */
+#window {
+	background:linear-gradient(0deg, rgba(46, 52, 64, 0.3), rgba(46, 52, 64, 0.0));
+	/* border-radius: 12px; */
+	padding: 0px 0px;
+	margin-left: 10px;
+}
+window#waybar {
+	/* background-color: rgba(76, 86, 106, 1); */
+
+	background:linear-gradient(0deg, rgba(46, 52, 64, 0.9), rgba(46, 52, 64, 0.9));
+	/* opacity: 1.0; */
+	/* border: 100px solid @background; */
+	/* border-radius: 0px; */
+}
+window#waybar.empty #window {
+	background-color: rgba(76, 86, 106, 1);
+}
+
+/* Tooltips */
+tooltip {
+	background-color: rgba(67,76,94,0.7);
+	opacity: 0.8;
+	border: none;
+	outline: none;
+	border-radius: 12px;
+	/* text-shadow: 2px 2px @background; */
+	margin: 2px 0px;
+	padding: 0px 0px;
+	color: @foreground;
+}
+tooltip label {
+	font-size: 14px;
+	color: @foreground;
+}
+
+/* Modules */
+
+.modules-left {
+	padding: 0px 5px;
+	/* margin: 1px 5px; */
+	background-color: rgba(46, 52, 64, 0.9);
+	border-radius: 12px;
+	border: 1px solid transparent;
+}
+.modules-center {
+	padding: 0px 5px;
+	/* margin: 1px 10px; */
+	background-color: rgba(46, 52, 64, 0.9);
+	border-radius: 12px;
+	border: 1px solid transparent;
+	/* box-shadow: inset 0 -3px; */
+}
+.modules-right {
+	padding: 1px 1px;
+	/* margin: 1px 10px; */
+	background-color: rgba(46, 52, 64, 0.9);
+	border-radius: 12px;
+	border: 1px solid transparent;
+}
+
+/* -----------------------------------------------------
+ * Workspaces
+ * ----------------------------------------------------- */
+#workspaces {
+	/* color: @bordercolor; */
+	/* background-color: @background; */
+	/* border: 0.1rem solid @bordercolor; */
+	/* border-radius: 0.5rem; */
+	/* padding: 0.1rem 0.5rem; */
+	/* margin: 0.1rem; */
+}
+#workspaces button {
+	margin: 0px 0px;
+	/* outline: 0; */
+	border: 0px solid transparent;
+	padding: 0px 0px;
+	border-radius: 12px;
+	/* text-shadow: 2px 2px rgba(0, 0, 0, 0); */
+	/* box-shadow: 2px 2px rgba(0, 0, 0, 0); */
+	transition: all 0.3s ease-in-out;
+}
+
+#workspaces button label {
+	padding: 0px 8px;
+	border-radius: 12px;
+}
+#workspaces button.focused {
+	/* border: solid 1px @cyan; */
+	/* color: rgba(208,135,112,0.8); */
+	background-color: rgba(143, 188, 187, 0.5);
+	/* margin: 0px 5px; */
+	/* border-radius: 14px; */
+}
+#workspaces button.active {
+	background-color: rgba(94,129,172, 0.5);
+	color: @white;
+	/* opacity: 1; */
+}
+
+#workspaces button.urgent {
+	background: rgba(191, 97, 106, 0.5);
+	/* border: none; */
+}
+#workspaces button.empty {
+	/* background-color: rgba(67,76,94,0.2); */
+	opacity: 0.4;
+}
+#workspaces button:hover,
+#workspaces button:hover label {
+	/* color: @foreground; */
+	background-color: rgba(94, 129, 172, 0.4);
+	/* border: 1px solid transparent; */
+}
+
+#workspaces button.visible label {
+	background-color: rgba(143, 188, 187, 0.4);
+}
+#workspaces button.focused label {
+	/* background-color: rgba(143, 188, 187, 0.6); */
+}
+#workspaces button.active label {
+	background-color: rgba(143, 188, 187, 0.4);
+	/* background: @blue; */
+}
+
+/* Modules */
+#battery,
+#backlight#screen,
+#backlight#keyboard,
+#backlight-slider,
+#bluetooth,
+#clock,
+#clock#1,
+#cpu,
+#cava,
+#disk,
+#image#album-art,
+#memory,
+#mpd,
+#mpris,
+#network,
+#network#speed,
+#pulseaudio,
+#pulseaudio-slider,
+#temperature,
+#tray,
+/* #tray menu, */
+#taskbar,
+#wireplumber,
+#keyboard-state,
+#custom-ddcutil,
+#custom-power,
+#custom-media,
+#custom-primary,
+#custom-clipboard,
+#custom-cliphist,
+#custom-dunst,
+#custom-hyprshade,
+#custom-separator,
+#custom-bluetooth,
+#custom-wifi,
+#system,
+#custom-group,
+#custom-notification,
+#custom-kdeconnect,
+#custom-volume,
+#custom-uptime,
+#temperature,
+#kdeconnect,
+#power-profiles-daemon,
+#idle_inhibitor {
+	background: @background;
+	padding: 1px 4px;
+	margin: 1px 1px;
+	/* border-color: @border-color; */
+	border: 1px;
+	/*border-right: 1px solid #D8DEE9;*/
+}
+
+#battery.charging,
+#battery.plugged {
+	color: @green;
+}
+
+#battery.critical #battery.warning {
+	color: @red;
+}
+#battery.good {
+	color: @green;
+}
+/* #network.wifi, */
+#network.connected,
+#bluetooth.on,
+#bluetooth.connected {
+	color: @green;
+}
+#bluetooth.off,
+#network.disconnected,
+#pulseaudio.muted,
+#wireplumber.muted {
+	color: @red;
+}
+
+#bluetooth.disabled {
+	color: @red;
+}
+#bluetooth.pairable,
+#bluetooth.discoverable {
+	color: @magenta;
+}
+#bluetooth.discovering {
+	color: @orange;
+}
+#tray {
+	padding: 0px 5px;
+}
+
+#tray menu * {
+	min-height: 16px;
+}
+
+#tray menu separator {
+	min-height: 10px;
+}
+#backlight-slider slider {
+	min-height: 0px;
+	min-width: 0px;
+	opacity: 0;
+	background-image: none;
+	border: none;
+	box-shadow: none;
+	background-color: @red;
+}
+#backlight-slider trough {
+	min-height: 20px;
+	min-width: 10px;
+	border-radius: 5px;
+	background-color: @cyan;
+}
+#backlight-slider highlight {
+	min-width: 10px;
+	border-radius: 5px;
+	background-color: @blue;
+}
+
+#power-profiles-daemon {
+	padding-right: 15px;
+}
+
+#power-profiles-daemon.performance {
+	background-color: @red;
+	color: @foreground;
+}
+
+#power-profiles-daemon.balanced {
+	background-color: @blue;
+	color: #ffffff;
+}
+
+#power-profiles-daemon.power-saver {
+	background-color: @green;
+	color: #000000;
+}
+
+/* Pulseaudio */
+
+#pulseaudio-slider slider {
+	min-height: 0px;
+	min-width: 0px;
+	opacity: 0;
+	color: @red;
+}
+
+#pulseaudio-slider trough {
+	min-height: 80px;
+	min-width: 10px;
+	border-radius: 5px;
+	background: @black;
+}
+
+#pulseaudio-slider highlight {
+	min-width: 10px;
+	border-radius: 5px;
+	background: @green;
+}
+
+/* Custom  */
+
+#custom-kdeconnect {
+	padding: 0px 2px;
+}
+/* upower */
+/* #upower */
+/* #upower.charging */
+/* #upower.discharging */
+/* #upower.full */
+/* #upower.empty  */
+/* #upower.unknown-states */

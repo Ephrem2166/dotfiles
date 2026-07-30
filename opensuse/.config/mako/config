@@ -5,7 +5,7 @@ actions=1
 font=JetBrainsMono Nerd Font 10
 border-color=#002028
 border-size=2
-background-color=##2e3440AA
+background-color=#2e3440AA
 text-color=#d8dee9AA
 format=<b>%s</b> <span color="#93a1a1">(%a)</span>\n%b
 margin=8
@@ -58,4 +58,3 @@ width=250
 
 [grouped]
 border-color=#073642
-
