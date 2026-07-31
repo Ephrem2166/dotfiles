@@ -163,7 +163,7 @@ Also adds `cape-file' as a fallback."
 (use-package corfu
   :ensure t
   ;; Only in GUI mode
-  :if (display-graphic-p)
+;;   :if (display-graphic-p)
 										; :hook
 										; ((minibufer-setup . corfu-enable-always-in-minibuffer
 										;                   ))
