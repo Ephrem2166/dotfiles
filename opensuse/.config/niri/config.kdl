@@ -576,7 +576,7 @@ XF86MonBrightnessUp allow-when-locked=true { spawn  "brightnessctl" "set" "+5%";
 	Mod+Shift+9 { move-window-to-workspace 9; }
 	// Switches focus between the current and the previous workspace.
 	 // Mod+Tab { focus-workspace-down; }
-	 Mod+Tab { focus-workspace-previous; }
+	//  Mod+Tab { focus-workspace-previous; }
 	 // Mod+Shift+Tab { focus-workspace-up; }
 
 	// The following binds move the focused window in and out of a column.
@@ -725,6 +725,15 @@ match app-id="obsidian"
 open-on-workspace "office"
 }
 
+// Open Maximized
+window-rule {
+	match app-id="Alacritty"
+	match app-id="emacs"
+	match app-id="telegram"
+	open-maximized true
+}
+
+
 // Fullscreen rule
 window-rule{
    match app-id="mpv"
@@ -819,7 +828,9 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 /// Environment
 environment {
  QT_QPA_PLATFORM "wayland"
-// GTK_THEME "Adwaita:dark"
+ GTK_THEME "Adwaita:dark"
+	QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+
 }
 
 cursor {
@@ -842,4 +853,36 @@ clipboard {
 
 config-notification {
 	 disable-failed
+}
+
+// Recent Windows
+recent-windows {
+	// off
+	debounce-ms 750
+
+	open-delay-ms 150
+
+	highlight {
+		active-color "#999999ff"
+		urgent-color "#ff9999ff"
+		padding 30
+		corner-radius 0
+	}
+
+	previews {
+		max-height 480
+		max-scale 0.5
+	}
+
+	binds {
+		Alt+Tab         { next-window; }
+		Alt+Shift+Tab   { previous-window; }
+		Alt+grave       { next-window     filter="app-id"; }
+		Alt+Shift+grave { previous-window filter="app-id"; }
+
+		Mod+Tab         { next-window; }
+		Mod+Shift+Tab   { previous-window; }
+		Mod+grave       { next-window     filter="app-id"; }
+		Mod+Shift+grave { previous-window filter="app-id"; }
+	}
 }
