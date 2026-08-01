@@ -1,0 +1,14 @@
+window {
+  /* background-image: url("~/Pictures/nord/GNU.jpg"); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #2E3440;
+  opacity: 0.8;
+}
+
+#date-label,
+#input-label,
+#clock-label {
+  color: #E5E9F0;
+}
