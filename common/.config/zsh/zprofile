@@ -62,7 +62,6 @@ if [[ -n "$DESKTOP_SESSION" && "$DESKTOP_SESSION" == "niri" ]]; then
 	export GTK_USE_PORTAL=0
 	export _JAVA_AWT_WM_NONREPARENTING=1
 	export MOZ_ENABLE_WAYLAND=1
-export ADW_DISABLE_PORTAL=1
 	# Added
 	# export GDK_BACKEND="wayland"
 	# gsettings set org.gnome.desktop.interface color-scheme prefer-dark
