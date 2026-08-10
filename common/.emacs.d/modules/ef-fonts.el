@@ -54,7 +54,7 @@
    'default nil
    :family my/available-mono-font
    ;; Height = point size x 10 = 12 x 10 = 120
-   :height 120
+   :height 110
    :weight 'regular))
 
 ;;; Set Fixed Font
@@ -62,7 +62,7 @@
   (set-face-attribute
    'fixed-pitch nil
    :family my/available-mono-font
-   :height 120
+   :height 110
    :weight 'regular))
 
 ;;; Set Variable Font
@@ -70,7 +70,7 @@
   (set-face-attribute
    'variable-pitch nil
    :family my/available-variable-font
-   :height 120
+   :height 110
    :weight 'regular))
 
 ;;; Modeline
