@@ -270,13 +270,14 @@ Auto-completion is disabled."
   (corfu-popupinfo-min-width 30))
 
 ;;; Corfu Terminal
-(use-package corfu-terminal
-  :ensure t
-  :after corfu
-  :config
-  (unless (display-graphic-p)
-	(corfu-terminal-mode +1))
-  )
+;; Not needed in emacs > 31
+;; (use-package corfu-terminal
+;;   :ensure t
+;;   :after corfu
+;;   :config
+;;   (unless (display-graphic-p)
+;; 	(corfu-terminal-mode +1))
+;;   )
 
 ;;; Corfu Prescient
 (use-package corfu-prescient
