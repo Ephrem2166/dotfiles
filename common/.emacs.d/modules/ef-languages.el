@@ -201,39 +201,47 @@
   )
 
 ;;;; Markdown (markdown-mode)
-(use-package markdown-mode
-  :ensure t
-  :preface
-  (defun my/markdown-hook ()
-	(setq fill-column 100)
-	(flyspell-mode)
-	(visual-line-mode)
-	)
-  :hook (
-		 (markdown-mode . my/markdown-hook)
-		 (markdown-mode . my/markdown-headers)
-		 )
-
-  :mode (("\\.md\\'" . markdown-mode)
-		 ("\\.markdown\\'" . markdown-mode))
+;; (use-package markdown-mode
+;;   :ensure t
+;;   :preface
+;;   (defun my/markdown-hook ()
+;; 	(setq fill-column 100)
+;; 	(flyspell-mode)
+;; 	(visual-line-mode)
+;; 	)
+;;   :hook (
+;; 		 (markdown-mode . my/markdown-hook)
+;; 		 (markdown-mode . my/markdown-headers)
+;; 		 )
+;;
+;;   :mode (("\\.md\\'" . markdown-mode)
+;; 		 ("\\.markdown\\'" . markdown-mode))
+;;   :config
+;;   ;; (require 'lsp-marksman)
+;;   (setopt markdown-indent-on-enter 'indent-and-new-item)
+;;   (setopt markdown-hide-markup t)
+;;   (setopt markdown-enable-math t)
+;;   (setopt markdown-enable-highlighting-syntax t)
+;;   (setopt markdown-list-item-bullets '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
+;;   (setopt markdown-fontify-code-blocks-natively t)
+;;
+;;   (defun my/markdown-strike-completed-tasks ()
+;; 	"Highlight completed markdown tasks with a strike-through."
+;; 	(font-lock-add-keywords nil
+;; 							'(("^\\s-*\\([-+*]\\|\\s-*[0-9]+\\.\\)\\s-+\\(\\[x\\].*\\)$" 2 '(:strike-through t) t))))
+;;
+;;   (add-hook 'markdown-mode-hook 'my/markdown-strike-completed-tasks)
+;;
+;;
+;;   )
+;;; Markdown-ts-mode
+(use-package markdown-ts-mode
+  :ensure nil
+  :mode ("\\.md\\'" "\\.mdx\\'" "\\.markdown\\'")
   :config
-  ;; (require 'lsp-marksman)
-  (setopt markdown-indent-on-enter 'indent-and-new-item)
-  (setopt markdown-hide-markup t)
-  (setopt markdown-enable-math t)
-  (setopt markdown-enable-highlighting-syntax t)
-  (setopt markdown-list-item-bullets '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
-  (setopt markdown-fontify-code-blocks-natively t)
-
-  (defun my/markdown-strike-completed-tasks ()
-	"Highlight completed markdown tasks with a strike-through."
-	(font-lock-add-keywords nil
-							'(("^\\s-*\\([-+*]\\|\\s-*[0-9]+\\.\\)\\s-+\\(\\[x\\].*\\)$" 2 '(:strike-through t) t))))
-
-  (add-hook 'markdown-mode-hook 'my/markdown-strike-completed-tasks)
+  (require 'markdown-ts-mode-x))
 
 
-  )
 
 ;;; Markdown Preview Mode
 ;; To view markdown files in a browser (firefox)
