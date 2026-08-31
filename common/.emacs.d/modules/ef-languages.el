@@ -234,10 +234,54 @@
 ;;
 ;;
 ;;   )
-;;; Markdown-ts-mode
+
+;;; MARKDOWN-TS-MODE
+;; Markdown Header Configuration
+(defun my/markdown-headers ()
+  ;; (set-face-attribute 'markdown-header-face-1 nil :height 2.0)
+  ;; (set-face-attribute 'markdown-header-face-2 nil :height 1.75)
+  ;; (set-face-attribute 'markdown-header-face-3 nil :height 1.5)
+  ;; (set-face-attribute 'markdown-header-face-4 nil :height 1.3)
+  ;; (set-face-attribute 'markdown-header-face-5 nil :height 1.15)
+  ;; (set-face-attribute 'markdown-header-face-6 nil :height 1.05)
+  ;; (set-face-attribute 'markdown-code-face nil :inherit 'fixed-pitch)
+  (set-face-attribute 'markdown-ts-heading-1 nil :height 2.0)
+  (set-face-attribute 'markdown-ts-heading-2 nil :height 1.75)
+  (set-face-attribute 'markdown-ts-heading-3 nil :height 1.5)
+  (set-face-attribute 'markdown-ts-heading-4 nil :height 1.3)
+  (set-face-attribute 'markdown-ts-heading-4 nil :height 1.15)
+  (set-face-attribute 'markdown-ts-heading-6 nil :height 1.05)
+  (set-face-attribute 'markdown-ts-code-block nil :inherit 'fixed-pitch)
+  ;; '(custom-set-faces!
+  ;;   '(markdown-header-face-1 :height 1.25 :weight extra-bold :inherit markdown-header-face)
+  ;;   '(markdown-header-face-2 :height 1.15 :weight bold       :inherit markdown-header-face)
+  ;;   '(markdown-header-face-3 :height 1.08 :weight bold       :inherit markdown-header-face)
+  ;;   '(markdown-header-face-4 :height 1.00 :weight bold       :inherit markdown-header-face)
+  ;;   '(markdown-header-face-5 :height 0.90 :weight bold       :inherit markdown-header-face)
+  ;;   '(markdown-header-face-6 :height 0.75 :weight extra-bold :inherit markdown-header-face))
+  )
+
 (use-package markdown-ts-mode
   :ensure nil
   :mode ("\\.md\\'" "\\.mdx\\'" "\\.markdown\\'")
+  :preface
+  (defun my/markdown-hook ()
+ 	(setq fill-column 100)
+ 	(flyspell-mode)
+ 	(visual-line-mode)
+ 	)
+  ;; FIXME: Not working
+  (defun my/markdown-strike-completed-tasks ()
+ 	"Highlight completed markdown tasks with a strike-through."
+ 	(font-lock-add-keywords nil
+ 							'(("^\\s-*\\([-+*]\\|\\s-*[0-9]+\\.\\)\\s-+\\(\\[x\\].*\\)$" 2 '(:markdown-ts-strikethrough t) t))))
+
+  (add-hook 'markdown-ts-mode 'my/markdown-strike-completed-tasks)
+  :hook (
+ 		 (markdown-ts-mode . my/markdown-hook)
+ 		 (markdown-ts-mode . my/markdown-headers)
+ 		 )
+
   :config
   (require 'markdown-ts-mode-x))
 
