@@ -1,4 +1,4 @@
-	;;; ef-writing.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
+;;; ef-writing.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
 

@@ -1,3 +1,8 @@
+;;; init.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
+;;; Commentary:
+;;; Code:
+
+
 (dolist (paths (list (expand-file-name "modules" user-emacs-directory)))
   (add-to-list 'load-path paths))
 
