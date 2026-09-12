@@ -31,7 +31,9 @@
 	(setf (alist-get 'biome apheleia-formatters)    '("biome" "format" "--stdin-file-path" filepath))
 	(setf (alist-get 'stylua apheleia-formatters)   '("stylua" "-"))
 	(setf (alist-get 'shfmt apheleia-formatters)    '("shfmt" "-i" "2" "-ci"))
-	(setf (alist-get 'tombi apheleia-formatters)    '("tombi" "format" "-")))
+	(setf (alist-get 'tombi apheleia-formatters)    '("tombi" "format" "-"))
+	)
+
   ;; Customize mode-to-formatter mapping.
   (setq apheleia-mode-alist
 		'((python-mode . black)
@@ -40,7 +42,7 @@
 		  (ruby-mode . rubocop)
 		  (sh-mode . shfmt)
 		  (lua-mode . stylua)
-		  ((yaml-mode yaml-ts-mode) . prettier)
+		  ((yaml-mode yaml-ts-mode) . yamlfmt)
 		  ;;; TRYING biome
 		  ((css-mode css-ts-mode js-json-mode js-mode json-mode json-ts-mode tsx-ts-mode) . biome)
 		  ((toml-ts-mode toml-mode) . tombi)
