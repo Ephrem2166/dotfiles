@@ -21,6 +21,7 @@ require("mason").setup({
 require("mason-tool-installer").setup({
 
 	ensure_installed = {
+		"yamlfmt",
 		{ "bash-language-server" },
 		{ "lua-language-server" },
 		{ "vim-language-server" },
