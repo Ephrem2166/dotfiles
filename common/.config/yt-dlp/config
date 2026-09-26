@@ -4,74 +4,114 @@
 # Save in ~/Videos
 -o ~/Videos/%(title)s.%(ext)s
 
---buffer-size 4096
+# Prefer 1080p or lower
+-f "bv*[height<=1080]+ba/b[height<=1080]/b"
+# If you want to prefer mp4/m4a:
+# -S "res:1080,ext:mp4:m4a"
 
-# Prefer 1080p or lower resolutions
--f bestvideo[ext=mp4][width<1920][height<=1080]+bestaudio[ext=m4a]/bestvideo[ext=webm][width<1920][height<=1080]+bestaudio[ext=webm]/bestvideo[width<1920][height<=1080]+bestaudio/best[width<1920][height<=1200]/best
-
-# Download mp4 if available, else download whatever and reencode to mp4
-# -S res,ext:mp4:m4a --recode mp3
-
-
-# Embed metadata to the video file. Also adds chapters to file
 --embed-metadata
-
-# Do not overwrite existing output files
 --no-overwrites
-
-# Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
 --restrict-filenames
-
-# Languages of the subtitle to download
 --sub-langs "en.*"
-
-#  Embed subtitles in the video (only for mp4, webm and mkv videos)
 --embed-subs
-
-# Embed thumbnail in the video as cover art
 --embed-thumbnail
-
-#  Add chapter markers to the video file
 --embed-chapters
 
-# Containers that may be used when merging formats
+# Change to "mkv/mp4" if you prefer MKV
 --merge-output-format "mkv/mp4"
 
-# Delete downloaded fragments after downloading is finished
---no-keep-fragments
-
-# Do not use .part files - write directly into output file
---no-part
-
-# do not use mtime from the upload but rather the real mtime on disk
+# --no-keep-fragments
 --no-mtime
 
-# Metadata management
---replace-in-metadata "title" "\(Official Video\)|\(Audio\)|Official Video HD\)" ""
---replace-in-metadata "title" "\[Official Video\]|\[Audio\]|Official Video HD\]" ""
+--replace-in-metadata "title" "\(Official Video\)|\(Audio\)|\(Official Video HD\)" ""
+--replace-in-metadata "title" "\[Official Video\]|\[Audio\]|\[Official Video HD\]" ""
 --replace-in-metadata "title" "\(Official Music Video\)|\(Audio\)" ""
 --replace-in-metadata "title" "\[Official Music Video\]|\[Audio\]" ""
 --replace-in-metadata "title" "\[Official HD Video\]|\[Audio\]" ""
---replace-in-metadata "title" "\(Official\)" ""
---replace-in-metadata "title" "\(official\)" ""
---replace-in-metadata "title" "\(HD\)" ""
---replace-in-metadata "title" "\[HD\]" ""
+--replace-in-metadata "title" "\(Official\)|\(official\)|\(HD\)|\[HD\]" ""
 
-#--parse-metadata ":(?P<meta_>)"
 --parse-metadata "title:%(artist)s - %(title)s"
---metadata-from-title "%(artist)s - %(title)s"
---metadata-from-title "%(artist)s | %(title)s"
---add-metadata
+--parse-metadata "title:%(artist)s | %(title)s"
 
-# Download Options
 --concurrent-fragments 5
-
-
-# Show progress bar, even in quiet mode
 --progress
-
-# Display progress in console titlebar
-# --console-title
+--trim-filenames 100
 
 
---trim-filenames=100
+# --ignore-errors
+# # --no-playlist
+#
+# # Save in ~/Videos
+# -o ~/Videos/%(title)s.%(ext)s
+#
+# --buffer-size 4096
+#
+# # Prefer 1080p or lower resolutions
+# -f bestvideo[ext=mp4][width<1920][height<=1080]+bestaudio[ext=m4a]/bestvideo[ext=webm][width<1920][height<=1080]+bestaudio[ext=webm]/bestvideo[width<1920][height<=1080]+bestaudio/best[width<1920][height<=1200]/best
+#
+# # Download mp4 if available, else download whatever and reencode to mp4
+# # -S res,ext:mp4:m4a --recode mp3
+#
+#
+# # Embed metadata to the video file. Also adds chapters to file
+# --embed-metadata
+#
+# # Do not overwrite existing output files
+# --no-overwrites
+#
+# # Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
+# --restrict-filenames
+#
+# # Languages of the subtitle to download
+# --sub-langs "en.*"
+#
+# #  Embed subtitles in the video (only for mp4, webm and mkv videos)
+# --embed-subs
+#
+# # Embed thumbnail in the video as cover art
+# --embed-thumbnail
+#
+# #  Add chapter markers to the video file
+# --embed-chapters
+#
+# # Containers that may be used when merging formats
+# --merge-output-format "mkv/mp4"
+#
+# # Delete downloaded fragments after downloading is finished
+# --no-keep-fragments
+#
+# # Do not use .part files - write directly into output file
+# --no-part
+#
+# # do not use mtime from the upload but rather the real mtime on disk
+# --no-mtime
+#
+# # Metadata management
+# --replace-in-metadata "title" "\(Official Video\)|\(Audio\)|Official Video HD\)" ""
+# --replace-in-metadata "title" "\[Official Video\]|\[Audio\]|Official Video HD\]" ""
+# --replace-in-metadata "title" "\(Official Music Video\)|\(Audio\)" ""
+# --replace-in-metadata "title" "\[Official Music Video\]|\[Audio\]" ""
+# --replace-in-metadata "title" "\[Official HD Video\]|\[Audio\]" ""
+# --replace-in-metadata "title" "\(Official\)" ""
+# --replace-in-metadata "title" "\(official\)" ""
+# --replace-in-metadata "title" "\(HD\)" ""
+# --replace-in-metadata "title" "\[HD\]" ""
+#
+# #--parse-metadata ":(?P<meta_>)"
+# --parse-metadata "title:%(artist)s - %(title)s"
+# --metadata-from-title "%(artist)s - %(title)s"
+# --metadata-from-title "%(artist)s | %(title)s"
+# --add-metadata
+#
+# # Download Options
+# --concurrent-fragments 5
+#
+#
+# # Show progress bar, even in quiet mode
+# --progress
+#
+# # Display progress in console titlebar
+# # --console-title
+#
+#
+# --trim-filenames=100
