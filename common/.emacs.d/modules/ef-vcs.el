@@ -33,8 +33,8 @@
   :custom
   (log-edit-headers-alist
    '(("Summary" . log-edit-summary)
-     ("Fixes")
-     ("Author")))
+	 ("Fixes")
+	 ("Author")))
   (log-edit-setup-add-author nil)
   )
 
@@ -52,8 +52,8 @@
   (setq magit-auto-revert-mode nil)  ; we do this ourselves further down
   ;; Must be set early to prevent ~/.emacs.d/transient from being created
   (setq transient-levels-file  (concat user-emacs-directory "transient/levels")
-        transient-values-file  (concat user-emacs-directory  "transient/values")
-        transient-history-file (concat user-emacs-directory "transient/history"))
+		transient-values-file  (concat user-emacs-directory  "transient/values")
+		transient-history-file (concat user-emacs-directory "transient/history"))
   :after transient
   :custom
   (magit-no-message (list "Turning on magit-auto-revert-mode..."))
@@ -64,8 +64,8 @@
   (magit-refs-show-commit-count 'all)
   ;; (magit-refresh-status-buffer nil)
   (magit-repository-directories '(
-                                  ("~/dotfiles/" . 0)
-                                  ))
+								  ("~/dotfiles/" . 0)
+								  ))
   (magit-bury-buffer-function 'magit-mode-quit-window)
   :config
   (setq magit-push-always-verify t)
@@ -76,12 +76,12 @@
   (setq transient-display-buffer-action '(display-buffer-below-selected))
   (add-hook 'magit-popup-mode-hook #'hide-mode-line-mode)
   (with-eval-after-load 'magit
-    (setq magit-format-file-function #'magit-format-file-nerd-icons))
+	(setq magit-format-file-function #'magit-format-file-nerd-icons))
 
   (with-eval-after-load 'magit
-    (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
-    (remove-hook 'server-switch-hook 'magit-commit-diffq)
-    (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
+	(remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
+	(remove-hook 'server-switch-hook 'magit-commit-diffq)
+	(remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
 
   )
 
