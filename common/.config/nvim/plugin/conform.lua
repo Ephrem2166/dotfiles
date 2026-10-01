@@ -18,7 +18,7 @@ require("conform").setup({
 		javascriptreact = { "prettierd", "prettier" },
 		json = { "prettierd", "prettier" },
 		-- jsonc = { "prettierd", "prettier" },
-		-- markdown = { "prettierd", "prettier", "injected" },
+		markdown = { "prettierd", "prettier" },
 		python = { "isort", "ruff" },
 		-- rasi = { "prettierd", "prettier" },
 		sh = { "shfmt" },

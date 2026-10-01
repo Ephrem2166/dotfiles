@@ -88,3 +88,32 @@ vim.g.netrw_altv = 1
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
+
+-- Diagnostic Settings
+local use_nerd_icons = true
+local use_special_chars = true
+local custom_diagnostic_symbols = use_nerd_icons
+		and {
+			error = "󰅚 ",
+			warn = "󰀪 ",
+			hint = " ",
+			info = " ",
+		}
+	or {
+		error = "E",
+		warn = "W",
+		hint = "H",
+		info = "I",
+	}
+
+vim.diagnostic.config({
+	float = { border = vim.o.winborder },
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = custom_diagnostic_symbols.error,
+			[vim.diagnostic.severity.WARN] = custom_diagnostic_symbols.warn,
+			[vim.diagnostic.severity.HINT] = custom_diagnostic_symbols.hint,
+			[vim.diagnostic.severity.INFO] = custom_diagnostic_symbols.info,
+		},
+	},
+})
