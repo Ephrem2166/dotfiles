@@ -3,7 +3,7 @@
 #########
 #theme = dark:vesper,light:catppuccin-latte
 #theme = dark:catppuccin-mocha,light:catppuccin-latte
-theme = dark:nord,light:nord-light
+theme = dark:Nord,light:Nord-light
 # background = #1c2021
 #background = #0B1215
 #background-opacity = 0.90
@@ -19,7 +19,7 @@ cursor-style-blink = true
 # Fonts #
 #########
 font-family = "Berkeley Nerd Font"
-font-family-bold = "Berkeley Nerd Font" 
+font-family-bold = "Berkeley Nerd Font"
 font-family-italic = "Berkeley Nerd Font"
 font-family-bold-italic = "Berkeley Nerd Font"
 font-size = 11
@@ -49,12 +49,12 @@ copy-on-select = true
 ###############
 # Keybindings #
 ###############
-# Format keybind = trigger = action 
-# keybind = ctrl+n=new_window 
+# Format keybind = trigger = action
+# keybind = ctrl+n=new_window
 # keybind = super+shift+q=close_window
-# keybind = super+shift+c=close_all_windows 
-# keybind = ctrl+t=toggle_window_decorations 
-# 
+# keybind = super+shift+c=close_all_windows
+# keybind = ctrl+t=toggle_window_decorations
+#
 # keybind = super+shift+f=toggle_fullscreen
 # keybind = super+shift+t=new_tab
 # keybind = ctrl+shift+r=reload_config
@@ -63,7 +63,7 @@ copy-on-select = true
 # keybind = super+shift+c=copy_to_clipboard
 # keybind = super+shift+v=paste_from_clipboard
 # keybind = super+shift+u=new_split:up
-# keybind = super+shift+l=new_split:left  
+# keybind = super+shift+l=new_split:left
 # keybind = super+shift+r=new_split:right
 # keybind = super+shift+b=new_split:down
 # keybind = ctrl+h=goto_split:left
