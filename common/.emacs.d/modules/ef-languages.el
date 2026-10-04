@@ -272,11 +272,13 @@
  	)
   ;; FIXME: Not working
   (defun my/markdown-strike-completed-tasks ()
- 	"Highlight completed markdown tasks with a strike-through."
- 	(font-lock-add-keywords nil
- 							'(("^\\s-*\\([-+*]\\|\\s-*[0-9]+\\.\\)\\s-+\\(\\[x\\].*\\)$" 2 '(:markdown-ts-strikethrough t) t))))
+	"Strike through completed Markdown task list items."
+	(font-lock-add-keywords
+	 nil
+	 '(("^\\s-*\\(?:[-+*]\\|[0-9]+\\.\\)\\s-+\\[[xX]\\]\\s-+.*$"
+		0 '(:strike-through t) t))))
 
-  (add-hook 'markdown-ts-mode 'my/markdown-strike-completed-tasks)
+  (add-hook 'markdown-ts-mode-hook #'my/markdown-strike-completed-tasks)
   :hook (
  		 (markdown-ts-mode . my/markdown-hook)
  		 (markdown-ts-mode . my/markdown-headers)
