@@ -270,14 +270,13 @@
  	(flyspell-mode)
  	(visual-line-mode)
  	)
-  ;; FIXME: Not working
+  ;; Strike-Through.Completed Tasks
   (defun my/markdown-strike-completed-tasks ()
 	"Strike through completed Markdown task list items."
 	(font-lock-add-keywords
 	 nil
-	 '(("^\\s-*\\(?:[-+*]\\|[0-9]+\\.\\)\\s-+\\[[xX]\\]\\s-+.*$"
-		0 '(:strike-through t) t))))
-
+	 '(("^\\s-*\\(?:[-+*]\\|[0-9]+\\.\\)\\s-+\\[[xX]\\]\\s-+\\(.*\\)$"
+		1 '(:strike-through t) t))))
   (add-hook 'markdown-ts-mode-hook #'my/markdown-strike-completed-tasks)
   :hook (
  		 (markdown-ts-mode . my/markdown-hook)
