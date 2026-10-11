@@ -62,16 +62,16 @@
 
 ;;; Vterm
 ;; Fully featured terminal emulator
-(use-package vterm
-  :ensure t
-  :defer t
-  :bind
-  (("M-<RET>" . vterm))
-  :config
-  (setq vterm-kill-buffer-on-exit nil)
-  (setq vterm-timer-delay nil)
-  (setq vterm-shell "/usr/bin/zsh"
-        vterm-always-compile-module t))
+;; (use-package vterm
+;;   :ensure t
+;;   :defer t
+;;   :bind
+;;   (("M-<RET>" . vterm))
+;;   :config
+;;   (setq vterm-kill-buffer-on-exit nil)
+;;   (setq vterm-timer-delay nil)
+;;   (setq vterm-shell "/usr/bin/zsh"
+;; 		vterm-always-compile-module t))
 
 (provide 'ef-shell)
 ;;; ef-shell.el ends here
