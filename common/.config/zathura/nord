@@ -3,7 +3,7 @@
 set window-title-basename true
 set statusbar-home-tilde  true
 set recolor               true
-set selection-clipboard   clipboard
+set selection-clipboard   primary
 
 # LAYOUT SETTINGS
 # ---------------

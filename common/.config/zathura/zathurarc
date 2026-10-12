@@ -15,3 +15,5 @@ set statusbar-fg   "#E3E6EC"
 
 # use it's complementary
 set inputbar-bg    "#403A2E"
+
+selection-clipboard "clipboard"
