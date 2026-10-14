@@ -10,22 +10,11 @@ shell.program = "/bin/zsh"
 draw_bold_text_with_bright_colors = true
 
 [font]
-# normal = { family = "FantasqueSansM Nerd Font", style = "Regular" }
-# bold = { family = "FantasqueSansM Nerd Font", style = "Bold" }
-# italic = { family = "FantasqueSansM Nerd Font", style = "Italic" }
-# bold_italic = { family = "FantasqueSansM Nerd Font", style = "Bold Italic" }
-
 # JetBrainsMono
 # normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
 # bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
 # italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
 # bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
-
-# JuliaMono
-# normal = { family = "JuliaMono", style = "Regular" }
-# bold = { family = "JuliaMono", style = "Bold" }
-# italic = { family = "JuliaMono", style = "Italic" }
-# bold_italic = { family = "JuliaMono", style = "Bold Italic" }
 
 # normal = { family = "Iosevka Nerd Font Mono", style = "Regular" }
 # bold = { family = "Iosevka Nerd Font Mono", style = "Bold" }
@@ -44,7 +33,7 @@ draw_bold_text_with_bright_colors = true
 # italic = { family = "SpaceMono Nerd Font", style = "Italic" }
 # bold_italic = { family = "SpaceMono Nerd Font", style = "Bold Italic" }
 
-# PragmataPro Mono
+# # PragmataPro Mono
 # normal = { family = "PragmataProMono Nerd Font", style = "Regular" }
 # bold = { family = "PragmataProMono Nerd Font", style = "Bold" }
 # italic = { family = "PragmataProMono Nerd Font", style = "Italic" }
