@@ -188,7 +188,7 @@
   :bind ("C-c C-n" . flymake-show-buffer-diagnostics)
   :hook
   (prog-mode . flymake-mode)
-  (text-mode . flymake-mode)
+  ;; (text-mode . flymake-mode)
   (web-mode . flymake-mode)
   :config
   ;; Disable the legacy proc backend.

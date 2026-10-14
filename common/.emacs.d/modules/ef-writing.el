@@ -12,7 +12,7 @@
   :commands (flyspell-mode flyspell-prog-mode)
   :hook (
 		 (prog-mode . flyspell-prog-mode)
-		 ((org-mode text-mode markdown-mode) . flyspell-mode)
+;;		 ((org-mode text-mode markdown-mode) . flyspell-mode)
 		 )
   :bind ("C-c C-;" . flyspell-auto-correct-word)
   :config
