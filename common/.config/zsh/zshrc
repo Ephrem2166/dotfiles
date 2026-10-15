@@ -101,8 +101,8 @@ export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
 
 # # Automatically switch to Fish for interactive sessions
 # Launch fish as the interactive shell, but only if it's installed and we're interactive
-if [[ $- == *i* ]] && command -v fish >/dev/null 2>&1; then
-  exec fish
-fi
+# if [[ $- == *i* ]] && command -v fish >/dev/null 2>&1; then
+#   exec fish
+# fi
 # FIXME: move it to alias
 # alias ls="eza"
