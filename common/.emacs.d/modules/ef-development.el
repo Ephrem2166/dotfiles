@@ -5,8 +5,7 @@
 ;;; Apheleia
 (use-package apheleia
   :ensure t
-  :defer t
-  :hook (apheleia-post-format . delete-trailing-whitespace)
+  :hook (apheleia-post-format-hook . delete-trailing-whitespace)
   :config
   (setq apheleia-formatters-respect-fill-column t)
   (setq apheleia-formatters-respect-indent-level t)
@@ -46,8 +45,7 @@
 		  ;;; TRYING biome
 		  ((css-mode css-ts-mode js-json-mode js-mode json-mode json-ts-mode tsx-ts-mode) . biome)
 		  ((toml-ts-mode toml-mode) . tombi)
-		  )        )
-  :init
+		  ))
   (apheleia-global-mode 1))
 
 
@@ -67,9 +65,9 @@
   (eldoc-echo-area-prefer-doc-buffer t)
   :config
   (setq eldoc-minor-mode-string "")
-  (setq eldoc-message-function #'message)
+  ;; (setq eldoc-message-function #'message)
   :init
-  (global-eldoc-mode)
+  (global-eldoc-mode 1)
   )
 
 ;;; Eglot
@@ -109,7 +107,10 @@
   ;;        (before-save . eglot-format-buffer)
   ;; )
   :config
-  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+  ;; Cape integration only if cape is loaded.
+  ;; (when (fboundp 'cape-wrap-buster)
+  ;; 	(advice-add 'eglot-completion-at-point :around #'cape-wrap-buster))
+
   ;; use eglot-server-programs variable to find out LSP
   ;; (with-eval-after-load 'eglot
   ;;   (add-to-list 'eglot-server-programs
@@ -125,37 +126,36 @@
   ;; (add-to-list 'eglot-server-programs '(python-ts-mode . ("pylsp")))
   ;;   )
   (setq eglot-send-changes-idle-time 0.1)
-  (setq eglot-events-buffer 0)
-  (setq eglot-autoshutdown t)
-  (setq eglot-sync-connect 1)
-  (setq eglot-confirm-server-edits nil)
+  ;; (setq eglot-events-buffer 0) ;; Deprecated
+  (setq eglot-autoshutdown nil)
+  ;; (setq eglot-sync-connect 1) ;; Deprecated
+  (setq eglot-confirm-server-edits 'summary)
+  (setq eglot-connect-timeout 1)
   (setq eglot-extend-to-xref t)
   (setq eglot-autoreconnect t)
-  (setq eglot-stay-out-of '(yasnippet))
+  (setq eglot-stay-out-of '(yasnippet flymake))
   (setq eglot-prefer-plaintext nil)
   (setq jsonrpc-event-hook nil)
   (setq eglot-events-buffer-config '(:size 0 :format full))
-  (with-eval-after-load 'eglot
-	(add-to-list
-	 'eglot-server-programs
-	 '(markdown-mode . ("marksman"))))
-  (with-eval-after-load 'eglot
-	(add-to-list
-	 'eglot-server-programs
-	 '((html-mode) .  ("vscode-html-language-server" "--stdio"))
-
-	 ))
-  (add-to-list 'eglot-server-programs '((toml-ts-mode) . ("tombi" "--stdio")))
+  (setq eglot-ignored-server-capabilities '(:inlayHintProvider :codeLensProvider))
+  ;; Register extra servers.
+  (dolist (entry '((markdown-mode . ("marksman"))
+				   ((html-mode)    . ("vscode-html-language-server" "--stdio"))
+				   ((toml-ts-mode) . ("tombi" "--stdio"))))
+	(add-to-list 'eglot-server-programs entry))
   ;; Don't log every event
-  (fset #'jsonrpc--log-event #'ignore)
+  ;;   (fset #'jsonrpc--log-event #'ignore)
+  (advice-add 'jsonrpc--log-event :override #'ignore)
   ;; (advice-add 'jsonrpc--log-event :override #'ignore)
-  (setq completion-category-overrides '((eglot (styles orderless))))
-  (defun my/eglot-setup ()
-	"Setup eglot mode with specific exclusions."
-	(unless (eq major-mode 'emacs-lisp-mode)
+  ;; (setq completion-category-overrides '((eglot (styles orderless))))
+  (add-to-list 'completion-category-overrides '(eglot (styles orderless)))
+  ;; Auto-start eglot in prog-mode buffers, skipping modes with no server.
+  (defun ef/eglot-setup ()
+	"Start eglot in the current buffer unless opted out."
+	(unless (or (eq major-mode 'emacs-lisp-mode)
+				(bound-and-true-p eglot--managed-mode))
 	  (eglot-ensure)))
-
-  (add-hook 'prog-mode-hook #'my/eglot-setup)
+  (add-hook 'prog-mode-hook #'ef/eglot-setup)
   ;; Eldoc Integration
   (add-hook 'eglot-managed-mode-hook
 			(lambda ()
@@ -217,7 +217,7 @@
 		  (warning "!" compilation-warning)
 		  (note    "■" compilation-info)))
 
-  (flymake-mode t)
+  ;; (flymake-mode t)
   )
 
 ;;; Flymake Collection
@@ -289,127 +289,91 @@
   :ensure nil
   :defer t
   :mode
-  ("/\\.env\\'" . sh-mode)
-  ("/\\.env\\." . sh-mode)
-  ("/\\.envrc\\'" . sh-mode)
-  ("/\\.envrc\\." . sh-mode)
-  ("\\.zsh\\'" . sh-mode)
-  ("/zshenv\\'" . sh-mode)
-  ("/zshrc\\'" . sh-mode)
-  ("\\.tmux\\'" . sh-mode)
-  ("\\.tmuxsh\\'" . sh-mode)
-  ("\\.tmuxtheme\\'" . sh-mode)
-
+  ("\\(?:^\\|/\\)\\.env\\(?:rc\\)?\\(?:\\.\\|\\'\\)" . sh-mode)
+  ("\\(?:^\\|/\\)\\.zsh\\(?:rc\\|env\\|profile\\)?\\'" . sh-mode)
+  ("\\(?:^\\|/\\)\\.\\(?:ba\\|z\\)shrc\\'" . sh-mode)
+  ("\\(?:^\\|/\\)\\.tmux\\(?:sh\\|themes?\\|\\.conf\\)?\\'" . sh-mode)
   ;; Auto-chmod scripts on save
-  :hook (after-save . executable-make-buffer-file-executable-if-script-p)
-  :bind (:map sh-mode-map
-			  ([remap display-local-help] . man))
+  ;; :hook (after-save . executable-make-buffer-file-executable-if-script-p)
+  :hook (sh-mode . (lambda () (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p nil t)))
   :custom
   (sh-basic-offset 2)
   (sh-indentation  2)
-  (sh-indent-for-continuation 'always)
+  ;; (sh-indent-for-continuation 'always)
+  (sh-indent-after-continuation 'always)
   )
 
 ;;; Treesiter
+
 (use-package treesit
   :ensure nil
-  :defer t
-  ;; :hook (bash-ts-mode json-ts-mode toml-ts-mode js-ts-mode python-ts-mode elisp-ts-mode markdown-ts-mode yaml-ts-mode css-ts-mode)
+  :preface
+  (defun ef/maybe-remap-mode (from to)
+	"Push (FROM . TO) onto `major-mode-remap-alist' if TO is bound."
+	(when (fboundp to)
+	  (push (cons from to) major-mode-remap-alist)))
+  (defun ef/treesit-install-all ()
+	"Install every missing grammar in `treesit-language-source-alist'."
+	(interactive)
+	(dolist (entry treesit-language-source-alist)
+	  (let ((lang (car entry)))
+		(unless (treesit-language-available-p lang)
+		  (message "Installing tree-sitter grammar: %s" lang)
+		  (condition-case err
+			  (treesit-install-language-grammar lang)
+			(error (display-warning
+					'treesitter
+					(format "Failed %s: %s" lang (error-message-string err))
+					:error)))))))
   :init
   (setq treesit-font-lock-level 4)
-  ;; (setq treesit-auto-install-grammar t)
-  ;; To check if grammar is working:
-  ;; (treesit-language-available-p 'python)
   (setq treesit-language-source-alist
-		'(
-		  (bash "https://github.com/tree-sitter/tree-sitter-bash")
-		  (c . ("https://github.com/tree-sitter/tree-sitter-c"))
+		'((bash            . ("https://github.com/tree-sitter/tree-sitter-bash"))
+		  (c               . ("https://github.com/tree-sitter/tree-sitter-c"))
 		  (cmake           . ("https://github.com/uyha/tree-sitter-cmake"))
-		  (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp"))
-		  (css "https://github.com/tree-sitter/tree-sitter-css")
+		  (cpp             . ("https://github.com/tree-sitter/tree-sitter-cpp"))
+		  (css             . ("https://github.com/tree-sitter/tree-sitter-css"))
 		  (dockerfile      . ("https://github.com/camdencheek/tree-sitter-dockerfile"))
-		  (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-		  (html . ("https://github.com/tree-sitter/tree-sitter-html"))
+		  (elisp           . ("https://github.com/Wilfred/tree-sitter-elisp"))
+		  (html            . ("https://github.com/tree-sitter/tree-sitter-html"))
 		  (java            . ("https://github.com/tree-sitter/tree-sitter-java"))
-		  (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
+		  (javascript      . ("https://github.com/tree-sitter/tree-sitter-javascript"))
+		  (jsdoc           . ("https://github.com/tree-sitter/tree-sitter-jsdoc"))
 		  (json            . ("https://github.com/tree-sitter/tree-sitter-json"))
-		  (jsdoc . "https://github.com/tree-sitter/tree-sitter-jsdoc" )
 		  (latex           . ("https://github.com/latex-lsp/tree-sitter-latex"))
-		  ;; (lua . ("https://github.com/Azganoth/tree-sitter-lua"))
 		  (lua             . ("https://github.com/tree-sitter-grammars/tree-sitter-lua"))
-		  (json "https://github.com/tree-sitter/tree-sitter-json")
-		  (make . ("https://github.com/alemuller/tree-sitter-make"))
-		  ;; 		  (markdown . (https://github.com/tree-sitter-grammars/tree-sitter-markdown ))
-		  (markdown "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown/src")
-		  ;; (markdown-inline . "https://github.com/tree-sitter-grammars/tree-sitter-markdown")
-		  (markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src")
-		  ;; (php . ("https://github.com/tree-sitter/tree-sitter-php"))
-		  (python . ("https://github.com/tree-sitter/tree-sitter-python"))
-		  ;; (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
-		  ;; (sql . ("https://github.com/m-novikov/tree-sitter-sql"))
-		  (typescript . "https://github.com/tree-sitter/tree-sitter-typescript")
-		  (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
-		  (yaml .  "https://github.com/tree-sitter-grammars/tree-sitter-yaml")
-
-
-		  ))
+		  (make            . ("https://github.com/alemuller/tree-sitter-make"))
+		  (markdown        . ("https://github.com/tree-sitter-grammars/tree-sitter-markdown"
+							  "split_parser" "tree-sitter-markdown/src"))
+		  (markdown-inline . ("https://github.com/tree-sitter-grammars/tree-sitter-markdown"
+							  "split_parser" "tree-sitter-markdown-inline/src"))
+		  (python          . ("https://github.com/tree-sitter/tree-sitter-python"))
+		  (typescript      . ("https://github.com/tree-sitter/tree-sitter-typescript"))
+		  (toml            . ("https://github.com/tree-sitter/tree-sitter-toml"))
+		  (yaml            . ("https://github.com/tree-sitter-grammars/tree-sitter-yaml"))))
   :config
-  (dolist (lang '(bash c cmake cpp elisp html javascript json lua make yaml css python toml))
-	(unless (treesit-language-available-p lang)
-	  (treesit-install-language-grammar lang)))
-  (setq major-mode-remap-alist
-		'((bash-mode . bash-ts-mode)
-		  (c-mode . c-ts-mode)
-		  (c++-mode . c++-ts-mode)
-		  (cpp-mode . cpp-ts-mode)
-		  (html-mode . html-ts-mode)
-		  (javascript-mode . javascript-ts-mode)
-		  (json-mode . json-ts-mode)
-		  (lua-mode . lua-ts-mode)
-		  (css-mode . css-ts-mode)
-		  (elisp-mode . elisp-ts-mode)
-		  ;; (markdown-mode . markdown-ts-mode)
-		  ;; (php-mode . php-ts-mode)
-		  (python-mode . python-ts-mode)
-		  ;; (rust-mode . rust-ts-mode)
-		  (sh-mode . bash-ts-mode)
-		  (shell-script-mode . bash-ts-mode)
-		  (toml-mode . toml-ts-mode)
-		  (yaml-mode . yaml-ts-mode)))
-  ;; Alternative
-  (push '(css-mode . css-ts-mode) major-mode-remap-alist)
-  (push '(typescript-mode . tsx-ts-mode) major-mode-remap-alist)
-  ;; FIXME: Functions
-  ;;   (defun treesitter-config-reinstall-grammars ()
-  ;; 	"Force reinstallation of all grammars in `treesit-language-source-alist'.
-  ;; Use this to update grammars to their latest versions."
-  ;; 	(interactive)
-  ;; 	(dolist (lang-source treesit-language-source-alist)
-  ;; 	  (let ((lang (car lang-source)))
-  ;; 		(message "Treesitter: Reinstalling grammar for %s..." lang)
-  ;; 		(cl-letf (((symbol-function 'y-or-n-p) (lambda (&rest _) t)))
-  ;; 		  (treesit-install-language-grammar lang)))))
-  ;;
-  ;;   ;; Bootstrap missing grammars
-  ;;   (dolist (lang-source treesit-language-source-alist)
-  ;; 	(let ((lang (car lang-source)))
-  ;; 	  (unless (treesit-language-available-p lang)
-  ;; 		(message "Treesitter: Installing grammar for %s..." lang)
-  ;; 		(condition-case err
-  ;; 			(cl-letf (((symbol-function 'y-or-n-p) (lambda (&rest _) t)))
-  ;; 			  (treesit-install-language-grammar lang))
-  ;; 		  (error
-  ;; 		   (display-warning 'treesitter
-  ;; 							(format "Failed to install tree-sitter grammar for %s: %s"
-  ;; 									lang (error-message-string err))
-  ;; 							:error)))))))
-  ;;
-  ;; ;; Warn if tree-sitter is unavailable
-  ;; (unless (and (fboundp 'treesit-available-p)
-  ;; 			 (treesit-available-p))
-  ;;   (display-warning 'treesitter "Tree-sitter is not available (not compiled in or library missing); skipping grammar bootstrap." :warning)
+  ;; Install on demand, not at startup.
+  (unless (treesit-language-available-p 'python)
+	(message "tree-sitter grammars missing — run M-x ef/treesit-install-all"))
 
-  )
+  ;; Only remap when the target mode is actually defined.
+  (mapc (lambda (pair) (ef/maybe-remap-mode (car pair) (cdr pair)))
+		'((bash-mode       . bash-ts-mode)
+		  (c-mode          . c-ts-mode)
+		  (c++-mode        . c++-ts-mode)
+		  (css-mode        . css-ts-mode)
+		  (html-mode       . html-ts-mode)
+		  (js-mode         . js-ts-mode)
+		  (json-mode       . json-ts-mode)
+		  (lua-mode        . lua-ts-mode)
+		  (python-mode     . python-ts-mode)
+		  (sh-mode         . bash-ts-mode)
+		  (toml-mode       . toml-ts-mode)
+		  (typescript-mode . typescript-ts-mode)
+		  (yaml-mode       . yaml-ts-mode)
+		  (emacs-lisp-mode . elisp-ts-mode))))
+
+
 
 
 (provide 'ef-development)

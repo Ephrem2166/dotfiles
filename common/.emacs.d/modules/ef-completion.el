@@ -6,11 +6,10 @@
 ;; Cape provides Completion At Point Extensions
 (use-package cape
   :ensure t
-  :after (corfu orderless)
-  :bind ("C-c p" . cape-prefix-map
-		 )
+  :after corfu
+  :bind ("C-c p" . cape-prefix-map)
 
-  :init
+  ;; :init
   ;; (add-hook 'completion-at-point-functions #'cape-elisp-block)
   ;; (add-hook 'completion-at-point-functions #'cape-elisp-symbol) ;; Elisp symbol
   ;; (add-hook 'completion-at-point-functions #'cape-keyword) ;; Programming keywords
@@ -19,28 +18,19 @@
   ;; (add-to-list 'completion-at-point-functions #'cape-abbrev) ;; Abbreviations
   ;; (add-to-list 'completion-at-point-functions #'cape-line)   ;; Complete whole lines
   ;; (add-hook 'completion-at-point-functions #'cape-emoji)
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev) ;; Dynamic
-  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-  (add-to-list 'completion-at-point-functions #'cape-history) ;; Completion history
-  (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
-  (add-to-list 'completion-at-point-functions #'cape-file)   ;; File paths
-  (add-to-list 'completion-at-point-functions #'cape-dict) ;; Dict
-  (add-to-list 'completion-at-point-functions #'cape-emoji)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev) ;; Dynamic
+  ;; (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+  ;; (add-to-list 'completion-at-point-functions #'cape-history) ;; Completion history
+  ;; (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+  ;; (add-to-list 'completion-at-point-functions #'cape-file)   ;; File paths
+  ;; (add-to-list 'completion-at-point-functions #'cape-dict) ;; Dict
+  ;; (add-to-list 'completion-at-point-functions #'cape-emoji)
+  ;; (add-to-list 'completion-at-point-functions #'cape-keyword)
   :config
-  (setq cape-dict-file (concat user-emacs-directory "etc/dictionary.txt"))
-  (defun my/eglot-capf ()
-	(setq-local completion-at-point-functions
-				(cons (cape-capf-super
-					   #'eglot-completion-at-point
-					   #'cape-dabbrev
-					   #'tempel-expand
-					   #'cape-file
-					   #'tempel-complete)
-					  completion-at-point-functions)))
-  (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
+  ;; (setq cape-dict-file (concat user-emacs-directory "etc/dictionary.txt"))
+  (setq cape-dict-file (expand-file-name "etc/dictionary.txt" user-emacs-directory))
   ;; Make capfs composable
-  (advice-add #'eglot-completion-at-point :around #'cape-wrap-nonexclusive)
+  ;; (advice-add #'eglot-completion-at-point :around #'cape-wrap-nonexclusive)
   (advice-add #'comint-completion-at-point :around #'cape-wrap-nonexclusive)
 
   ;; Silence then pcomplete capf, no errors or messages!
@@ -50,120 +40,209 @@
   ;; and behaves as a pure `completion-at-point-function'.
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
   ;; Use Company backends as Capfs.
-  (setq-local completion-at-point-functions
-			  (mapcar #'cape-company-to-capf
-					  (list #'company-files #'company-keywords #'company-dabbrev)))
+  ;; (setq-local completion-at-point-functions
+  ;; (mapcar #'cape-company-to-capf
+  ;; (list #'company-files #'company-keywords #'company-dabbrev)))
   ;; Merge the dabbrev, dict and keyword capfs, display candidates together.
-  (setq-local completion-at-point-functions
-			  (list (cape-capf-super #'cape-dabbrev #'cape-dict #'cape-keyword)))
+  ;; (setq-local completion-at-point-functions
+  ;; (list (cape-capf-super #'cape-dabbrev #'cape-dict #'cape-keyword)))
   ;; Eglot Tempel
-  (defun init-cape-eglot-capf ()
-	(setq-local completion-at-point-functions
-				(list #'cape-file
-					  (cape-capf-super (cape-capf-buster #'eglot-completion-at-point #'string-prefix-p)
-									   :with #'tempel-complete))))
-  (add-hook 'eglot-managed-mode #'init-cape-eglot-capf)
-  ;; Writing
-  (defun ef-writing-capf ()
+  ;; FIXME
+  (defun ef/prog-mode-capf ()
+	"Base capf for programming buffers."
 	(setq-local completion-at-point-functions
 				(list (cape-capf-super
-					   #'cape-dict
+					   (cape-capf-case-fold #'cape-dabbrev)
+					   #'cape-file
+					   #'tempel-expand))))
+  (defun ef/text-mode-capf ()
+	"Base capf for prose buffers."
+	(setq-local completion-at-point-functions
+				(list #'cape-file
+					  (cape-capf-case-fold #'cape-dabbrev)
+					  #'cape-dict
+					  #'cape-emoji
+					  #'tempel-expand)))
+
+  ;; (defun ef/org-mode-capf ()
+  ;; 	"Capf for Org buffers: word completion first, then contextual."
+  ;; 	(setq-local completion-at-point-functions
+  ;; 				(list #'cape-dabbrev
+  ;; 					  (cape-capf-super #'cape-dict #'cape-keyword)
+  ;; 					  #'tempel-complete
+  ;; 					  #'cape-tex
+  ;; 					  #'cape-elisp-block
+  ;; 					  #'cape-emoji)))
+  ;; (defun ef/org-mode-capf ()
+  ;; 	(setq-local completion-at-point-functions
+  ;; 				(list (cape-capf-super
+  ;; 					   #'cape-dabbrev
+  ;; 					   #'cape-dict
+  ;; #'tempel-expand))))
+  (defun ef/eglot-capf ()
+	"Capf for eglot-managed buffers."
+	(setq-local completion-at-point-functions
+				(list (cape-capf-super
+					   #'eglot-completion-at-point
 					   #'cape-dabbrev
 					   #'cape-file
-					   #'cape-history
-					   #'cape-keyword
-					   )))
-	)
-  (add-hook 'org-mode-hook #'ef-writing-capf)
+					   #'tempel-expand))))
 
-  ;; Prog Mode
-  (defun ef-setup-completion ()
-	(setq-local completion-at-point-functions
-				(list (cape-capf-super
-					   #'cape-elisp-symbol
-					   #'cape-dabbrev
-					   #'cape-file))))
-  (add-hook 'prog-mode-hook #'ef-setup-completion)
-
-  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
-  ;; Remove keywords from the candidate list
-  (defun my/emacs-lisp-ignore-keywords (cand)
-	"Remove keywords from the CAND list, unless the completion text
-starts with a `:'."
+  (defun ef/emacs-lisp-ignore-keywords (cand)
+	"Return non-nil if CAND is not a bare keyword, or point is after `:'."
 	(or (not (keywordp cand))
 		(eq (char-after (car completion-in-region--data)) ?:)))
-  (defun my/emacs-lisp-capf ()
-	"`completion-at-point-functions' for `emacs-lisp-mode', including
-support for symbols currently unknown to Emacs, using `cape-dabbrev'.
-Also adds `cape-file' as a fallback."
+
+  (defun ef/elisp-mode-capf ()
+	"Capf for Emacs Lisp buffers: symbols + dabbrev, plus file fallback."
 	(setq-local completion-at-point-functions
-				`(,(cape-capf-super
-					(cape-capf-predicate
-					 #'elisp-completion-at-point
-					 #'my/emacs-lisp-ignore-keywords)
-					#'cape-dabbrev)
-				  cape-file)
+				(list (cape-capf-super
+					   (cape-capf-predicate
+						#'elisp-completion-at-point
+						#'ef/emacs-lisp-ignore-keywords)
+					   #'cape-dabbrev)
+					  #'cape-file)
 				cape-dabbrev-min-length 5))
-  (add-hook 'emacs-lisp-mode #'my/emacs-lisp-capf)
-  ;; Org Mode Setup
-  (defun my/org-mode-setup-capf ()
-	"Configure CAPFs for Org buffer"
-	(when buffer-file-name
-	  (setq-local completion-at-point-functions
-				  (list #'tempel-complete
-						#'cape-tex
-						;; FIXME:
-						;; #'org-block-capf
-						#'cape-elisp-block
-						(cape-capf-super #'cape-dabbrev
-										 #'cape-dict
-										 #'cape-keyword)
-						#'cape-emoji
-						)))
 
-	)
-  (add-hook 'org-mode-hook #'my/org-mode-setup-capf)
-  ;; Text and Prog Mode
-  (defun my/extra-completion-options ()
+  (add-hook 'prog-mode-hook #'ef/prog-mode-capf)
+  (add-hook 'text-mode-hook #'ef/text-mode-capf)
+  ;; (add-hook 'org-mode-hook #'ef/org-mode-capf)
+  (add-hook 'eglot-managed-mode-hook #'ef/eglot-capf)
+  (add-hook 'emacs-lisp-mode-hook #'ef/elisp-mode-capf)
+
+  (defun ef/org-mode-capf ()
 	(setq-local completion-at-point-functions
-				(list #'cape-file
-					  #'cape-dabbrev
-					  #'cape-abbrev
-					  #'cape-dict))
-	)
-  (add-hook 'prog-mode-hook #'my/extra-completion-options)
-  (add-hook 'text-mode-hook #'my/extra-completion-options)
-  ;; Cape ELisp
-  (let ((elisp-capf (cape-capf-super
-					 (cape-capf-nonexclusive
-					  (cape-capf-inside-code 'cape-elisp-symbol))
-					 (cape-capf-nonexclusive
-					  (cape-capf-inside-code 'cape-elisp-block)))))
+				(list #'cape-dabbrev
+					  (cape-capf-super #'cape-dict #'cape-keyword)
+					  #'tempel-complete
+					  #'cape-tex
+					  #'cape-elisp-block
+					  #'cape-emoji)))
+  (add-hook 'org-mode-hook #'ef/org-mode-capf)
 
-	(add-hook 'emacs-lisp-mode-hook
-			  (lambda ()
-				(kill-local-variable 'completion-at-point-functions)
-				(add-hook 'completion-at-point-functions elisp-capf nil t))))
-  ;; "Complete using LSP if available, with feedback."
-  (defun +cape-complete-lsp ()
-	"Complete using LSP if available, with feedback."
-	(interactive)
-	(if (bound-and-true-p lsp-mode)
-		(let ((completion-at-point-functions '(lsp-completion-at-point)))
-		  (completion-at-point))
-	  (message "LSP not active in this buffer")))
-  :custom
-  (text-mode-ispell-word-completion nil)
+
+  ;; (defun my/eglot-capf ()
+  ;; 	"Base capf for programming buffers."
+  ;; 	(setq-local completion-at-point-functions
+  ;; 				(cons (cape-capf-super
+  ;; 					   #'eglot-completion-at-point
+  ;; 					   #'cape-dabbrev
+  ;; 					   #'tempel-expand
+  ;; 					   #'cape-file
+  ;; 					   #'tempel-complete)
+  ;; 					  completion-at-point-functions)))
+  ;; (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
+
+  ;; (defun init-cape-eglot-capf ()
+  ;; (setq-local completion-at-point-functions
+  ;; (list #'cape-file
+  ;; (cape-capf-super (cape-capf-buster #'eglot-completion-at-point #'string-prefix-p)
+  ;; :with #'tempel-complete))))
+  ;; (add-hook 'eglot-managed-mode-hook #'init-cape-eglot-capf)
+
+
+
+  ;; (defun ef-setup-completion ()
+  ;; 	(setq-local completion-at-point-functions
+  ;; 				(list (cape-capf-super
+  ;; 					   #'cape-elisp-symbol
+  ;; 					   #'cape-dabbrev
+  ;; 					   #'cape-file))))
+  ;; (add-hook 'prog-mode-hook #'ef-setup-completion)
+
+  ;; Text and Prog Mode
+  ;; (defun my/extra-completion-options ()
+  ;; 	(setq-local completion-at-point-functions
+  ;; 				(list #'cape-file
+  ;; 					  #'cape-dabbrev
+  ;; 					  #'cape-abbrev
+  ;; 					  #'cape-dict))
+  ;; 	)
+  ;; (add-hook 'prog-mode-hook #'my/extra-completion-options)
+  ;; (add-hook 'text-mode-hook #'my/extra-completion-options)
+
+
+
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+  ;; ;; Remove keywords from the candidate list
+  ;;   (defun my/emacs-lisp-ignore-keywords (cand)
+  ;; 	"Remove keywords from the CAND list, unless the completion text
+  ;; starts with a `:'."
+  ;; 	(or (not (keywordp cand))
+  ;; 		(eq (char-after (car completion-in-region--data)) ?:)))
+  ;;   (defun my/emacs-lisp-capf ()
+  ;; 	"`completion-at-point-functions' for `emacs-lisp-mode', including
+  ;; support for symbols currently unknown to Emacs, using `cape-dabbrev'.
+  ;; Also adds `cape-file' as a fallback."
+  ;; 	(setq-local completion-at-point-functions
+  ;; 				`(,(cape-capf-super
+  ;; 					(cape-capf-predicate
+  ;; 					 #'elisp-completion-at-point
+  ;; 					 #'my/emacs-lisp-ignore-keywords)
+  ;; 					#'cape-dabbrev)
+  ;; 				  cape-file)
+  ;; 				cape-dabbrev-min-length 5))
+  ;;   (add-hook 'emacs-lisp-mode-hook #'my/emacs-lisp-capf)
+  ;;   ;; Org Mode Setup
+  ;;   (defun my/org-mode-setup-capf ()
+  ;; 	"Configure CAPFs for Org buffer"
+  ;; 	(when buffer-file-name
+  ;; 	  (setq-local completion-at-point-functions
+  ;; 				  (list #'tempel-complete
+  ;; 						#'cape-tex
+  ;; 						;; FIXME:
+  ;; 						;; #'org-block-capf
+  ;; 						#'cape-elisp-block
+  ;; 						(cape-capf-super #'cape-dabbrev
+  ;; 										 #'cape-dict
+  ;; 										 #'cape-keyword)
+  ;; 						#'cape-emoji
+  ;; 						)))
+  ;;
+  ;; 	)
+  ;;   (add-hook 'org-mode-hook #'my/org-mode-setup-capf)
+  ;;
+  ;;   ;; Cape ELisp
+  ;;   (let ((elisp-capf (cape-capf-super
+  ;; 					 (cape-capf-nonexclusive
+  ;; 					  (cape-capf-inside-code 'cape-elisp-symbol))
+  ;; 					 (cape-capf-nonexclusive
+  ;; 					  (cape-capf-inside-code 'cape-elisp-block)))))
+  ;;
+  ;; 	(add-hook 'emacs-lisp-mode-hook
+  ;; 			  (lambda ()
+  ;; 				;; (kill-local-variable 'completion-at-point-functions)
+  ;; 				(add-hook 'completion-at-point-functions elisp-capf nil t))))
+  ;;   ;; "Complete using LSP if available, with feedback."
+  ;;   (defun +cape-complete-lsp ()
+  ;; 	"Complete using LSP if available, with feedback."
+  ;; 	(interactive)
+  ;; 	(if (bound-and-true-p lsp-mode)
+  ;; 		(let ((completion-at-point-functions '(lsp-completion-at-point)))
+  ;; 		  (completion-at-point))
+  ;; 	  (message "LSP not active in this buffer")))
+
 
   )
 
 ;;; Corfu
 ;; Corfu Corfu enhances in-buffer completion with a small complet ion
 ;; popup.
+(defun ef/org-mode-capf ()
+  (setq-local completion-at-point-functions
+			  (list #'cape-dabbrev
+					(cape-capf-super #'cape-dict #'cape-keyword)
+					#'tempel-complete
+					#'cape-tex
+					#'cape-elisp-block
+					#'cape-emoji)))
+(add-hook 'org-mode-hook #'ef/org-mode-capf)
+
+
 (use-package corfu
   :ensure t
   ;; Only in GUI mode
-;;   :if (display-graphic-p)
+  ;;   :if (display-graphic-p)
 										; :hook
 										; ((minibufer-setup . corfu-enable-always-in-minibuffer
 										;                   ))
@@ -197,12 +276,12 @@ Also adds `cape-file' as a fallback."
   ;; Ensure savehist is on and add corfu-history to it.
   (unless (bound-and-true-p savehist-mode) (savehist-mode 1))
   (add-to-list 'savehist-additional-variables 'corfu-history)
-  (add-hook 'corfu-mode-hook
-			(lambda ()
-			  ;; Settings only for Corfu
-			  (setq-local completion-styles '(basic)
-						  completion-category-overrides nil
-						  completion-category-defaults nil)))
+  ;; (add-hook 'corfu-mode-hook
+  ;; 			(lambda ()
+  ;; 			  ;; Settings only for Corfu
+  ;; 			  (setq-local completion-styles '(basic)
+  ;; 						  completion-category-overrides nil
+  ;; 						  completion-category-defaults nil)))
   ;; FIXME: Completing in the minibuffer (Annoyance)
   ;; (setq global-corfu-minibuffer
   ;;       (lambda ()
@@ -285,7 +364,7 @@ Auto-completion is disabled."
   :after corfu prescient
   :config
   (setopt corfu-prescient-enable-sorting t)
-  (setopt corfu-prescient-override-sorting nil)
+  (setopt corfu-prescient-override-sorting t)
   (setopt corfu-prescient-enable-filtering nil)
   (setopt corfu-prescient-completion-style '(prescient flex))
   (setopt corfu-prescient-completion-category-overrides
@@ -386,6 +465,22 @@ Auto-completion is disabled."
 ;; It provides an orderless completion style that divides the pattern
 ;; into space-separated components, and matches candidates that match
 ;; all of the components in any order
+;; Various Functions
+;; Style dispatchers
+(defun ef-orderless-literal (word _index _total)
+  "Read WORD= as a literal string."
+  (when (string-suffix-p "=" word)
+	;; The `orderless-literal' is how this should be treated by
+	;; orderless.  The `substring' form omits the `=' from the
+	;; pattern.
+	`(orderless-literal . ,(substring word 0 -1))))
+
+(defun ef-orderless-beg-or-end (word _index _total)
+  "Expand WORD~ to \\(^WORD\\|WORD$\\)."
+  (when-let* (((string-suffix-p "~" word))
+			  (word (substring word 0 -1)))
+	`(orderless-regexp . ,(format "\\(^%s\\|%s$\\)" word word))))
+
 (use-package orderless
   :ensure t
   :config
@@ -396,42 +491,26 @@ Auto-completion is disabled."
 									orderless-initialism
 									orderless-literal))
   (setq completion-styles '(orderless partial-completion basic))
-  (setq completion-category-overrides '((file (styles basic partial-completion))))
+  (setq completion-category-overrides '((file (styles partial-completion))
+										(eglot (styles orderless flex))
+										))
   ;; General
   (setq completion-ignore-case t)
   (setq read-buffer-completion-ignore-case t)
-  (setq-default case-fold-search t)   ; For general regexp
+  ;; (setq-default case-fold-search t)   ; For general regexp
   (setq read-file-name-completion-ignore-case t)
   (setq completion-category-defaults nil)
   (setq  completion-category-overrides
 		 '((file (styles partial-completion))))
   (setq orderless-style-dispatchers
 		'(ef-orderless-literal
-		  ef-orderless-literal
 		  ef-orderless-beg-or-end))
-  ;; Various Functions
-  ;; Style dispatchers
-  (defun ef-orderless-literal (word _index _total)
-	"Read WORD= as a literal string."
-	(when (string-suffix-p "=" word)
-	  ;; The `orderless-literal' is how this should be treated by
-	  ;; orderless.  The `substring' form omits the `=' from the
-	  ;; pattern.
-	  `(orderless-literal . ,(substring word 0 -1))))
-
   (defun ef-orderless-file-ext (word _index _total)
 	"Expand WORD. to a file suffix when completing file names."
 	(when (and minibuffer-completing-file-name
 			   (string-suffix-p "." word))
 	  `(orderless-regexp . ,(format "\\.%s\\'" (substring word 0 -1)))))
 
-  (defun ef-orderless-beg-or-end (word _index _total)
-	"Expand WORD~ to \\(^WORD\\|WORD$\\)."
-	(when-let* (((string-suffix-p "~" word))
-				(word (substring word 0 -1)))
-	  `(orderless-regexp . ,(format "\\(^%s\\|%s$\\)" word word))))
-  ;; Orderless with eglot
-  (add-to-list 'completion-category-overrides '(eglot (styles . (orderless flex))))
 
   )
 
@@ -464,14 +543,14 @@ Auto-completion is disabled."
   (setq tempel-path (concat user-emacs-directory "etc/tempel/templates.eld"))
   (setq tempel-auto-reload nil)
   :init
-  (defun tempel-setup-capf ()
-	(setq-local completion-at-point-functions
-				(cons #'tempel-expand
-					  completion-at-point-functions)))
-
-  (add-hook 'conf-mode-hook 'tempel-setup-capf)
-  (add-hook 'prog-mode-hook 'tempel-setup-capf)
-  (add-hook 'text-mode-hook 'tempel-setup-capf)
+  ;; (defun tempel-setup-capf ()
+  ;; 	(setq-local completion-at-point-functions
+  ;; 				(cons #'tempel-expand
+  ;; 					  completion-at-point-functions)))
+ ;;
+  ;; (add-hook 'conf-mode-hook 'tempel-setup-capf)
+  ;; (add-hook 'prog-mode-hook 'tempel-setup-capf)
+  ;; (add-hook 'text-mode-hook 'tempel-setup-capf)
   ;; Hippie Exapand Integration
   (defun tempel-hippie-try-expand (old)
 	"Integrate with hippie expand. Just put this function in `hippie-expand-try-functions-list'."
@@ -523,7 +602,7 @@ Auto-completion is disabled."
   :custom
   ;; Sorting
   (vertico-prescient-enable-sorting t)
-  (vertico-prescient-override-sorting nil)
+  (vertico-prescient-override-sorting t)
   ;; Filtering
   (vertico-prescient-enable-filtering nil)
   ;; Completion
@@ -583,6 +662,7 @@ Auto-completion is disabled."
 		  (imenu (vertico-count . 14))
 		  (jinx grid (vertico-grid-annotate . 20))
 		  ))
+
   (setq vertico-multiform-commands
 		'((consult-line buffer)
 		  (consult-buffer buffer)

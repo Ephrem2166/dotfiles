@@ -174,7 +174,8 @@
   (org-modern-checkbox
    '((?X . " ")
 	 (?- . "▣")
-	 (?\s . "")))
+	 (?\s . " ")))
+
   ;;org-modern-star '("◉" "○" "◎" "▣" "▢" "◈" "◇")
   ;; (org-modern-fold-stars
   ;; '(("▶" . "▼")

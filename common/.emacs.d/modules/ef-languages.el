@@ -33,7 +33,8 @@
 ;; Simple major mode for editing conf/ini/properties files
 (use-package conf-mode
   :ensure nil
-  :mode ("\\*.conf\\'" "\\config\\'" "\\.env\\..*\\'" "\\.env\\'")
+  :mode ("\\.conf\\'" "\\`config\\'" "\\.env\\'" "\\.env\\..*\\'"
+		 "\\.properties\\'" "\\.ini\\'")
   :hook (conf-mode . conf-mode-setup)
   :preface
   (defun conf-mode-setup()
@@ -45,7 +46,7 @@
 ;;; CSS
 (use-package css-ts-mode
   :ensure nil
-  :mode ("\\*.css\\'"))
+  :mode ("\\.css\\'"))
 
 ;;; Docker
 (use-package dockerfile-mode
@@ -130,22 +131,12 @@
   )
 
 ;;; Jsonrpc
-(use-package jsonrpc
-  :ensure nil
-  :config
-  (fset #'jsonrpc--log-event #'ignore) ;; speed up lsp output.
-  )
+;; (use-package jsonrpc
+;;   :ensure nil
+;;   :config
+;;   (fset #'jsonrpc--log-event #'ignore) ;; speed up lsp output.
+;;   )
 
-;;; JavaScript
-(use-package js-json-mode
-  :ensure nil
-  :defer t
-  :hook (
-		 (js-json-mode . rainbow-mode)
-		 (js-json-mode . display-line-numbers-mode)
-		 )
-  :mode ("\\.json\\’" "\\.jsonc\\’")
-  )
 
 ;;; Lispy
 (use-package lispy
@@ -156,18 +147,18 @@
 ;;; LUA
 (when (fboundp 'lua-ts-mode)
   (use-package lua-ts-mode
-	:ensure nil
-	:mode ("\\.lua\\'")
+	:ensure t
+	:mode "\\.lua\\'"
 	:custom
 	(lua-ts-indent-offset 2)
 	)
   ;; Otherwise use lua-mode
   (use-package lua-mode
 	:ensure t
-	:mode ("\\.lua$\\'" . lua-mode)
+	:mode "\\.lua\\'"
 	:interpreter "lua"
-	;; :custom
-	;; (lua-indent-level 2)
+	:custom
+	(lua-indent-level 2)
 	;; (lua-indent-string-contents t)
 	;; :config
 	;; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
@@ -221,12 +212,12 @@
 
   :hook ((markdown-mode . (lambda ()
 							(setq fill-column 120)
-							(flyspell-mode)
-							(visual-line-mode)
+							(flyspell-mode 1)
+							(visual-line-mode 1)
 							;; Enable outline folding
-							(outline-minor-mode)
-							(auto-fill-mode)
-							(setq imenu-add-menubar-index t)
+							(outline-minor-mode 1)
+							(auto-fill-mode 1)
+							;; (setq imenu-add-menubar-index t)
 							(setq-local imenu-auto-rescan t)
 							;; Custom Functions
 							(my/markdown-headers)
@@ -320,10 +311,10 @@
   )
 
 ;;; Prettier
-(use-package prettier-js
-  :ensure t
-  :hook
-  ((json-mode js2-mode inferior-js-mode typescript-mode css-mode) . prettier-js-mode))
+;; (use-package prettier-js
+;;   :ensure t
+;;   :hook
+;;   ((json-mode js2-mode inferior-js-mode typescript-mode css-mode) . prettier-js-mode))
 
 ;;; TODO Python
 (use-package python-ts-mode
@@ -349,39 +340,39 @@
 ;;; Rusty Object Notation (RON)
 (use-package ron-mode
   :ensure t
-  :mode "\\.ron'"
+  :mode "\\.ron\\'"
   )
 
 
 ;;; Shell Mode
-(use-package sh-script
-  :ensure nil
-  :defer t
-  :hook (sh-mode . flymake-mode)
-  :mode ("\\.\\(sh\\|bash\\|zsh\\|zsh-theme\\)\\'" . sh-mode)
-  :mode
-  ("/\\.env\\'" . sh-mode)
-  ("/\\.env\\." . sh-mode)
-  ("/\\.envrc\\'" . sh-mode)
-  ("/\\.envrc\\." . sh-mode)
-  ("\\.zsh\\'" . sh-mode)
-  ("/zshenv\\'" . sh-mode)
-  ("//zshrc\\'" . sh-mode)
-  ("\\.tmux\\'" . sh-mode)
-  ("\\.tmuxsh\\'" . sh-mode)
-  ("\\.tmuxtheme\\'" . sh-mode)
-  ("bashrc$" . sh-mode)
-  ("bash_profile$" . sh-mode)
-  ("bash_aliases$" . sh-mode)
-  ("bash_local$" . sh-mode)
-  ("bash_completion$" . sh-mode)
-  ("runcoms/[a-zA-Z]+$" . sh-mode)
-  :custom
-  (sh-basic-offset 2)
-  (sh-indentation 2)
-  (sh-indent-after-continuation 'always)
-
-  )
+;; (use-package sh-script
+;;   :ensure nil
+;;   :defer t
+;;   :hook (sh-mode . flymake-mode)
+;;   :mode ("\\.\\(sh\\|bash\\|zsh\\|zsh-theme\\)\\'" . sh-mode)
+;;   :mode
+;;   ("/\\.env\\'" . sh-mode)
+;;   ("/\\.env\\." . sh-mode)
+;;   ("/\\.envrc\\'" . sh-mode)
+;;   ("/\\.envrc\\." . sh-mode)
+;;   ("\\.zsh\\'" . sh-mode)
+;;   ("/zshenv\\'" . sh-mode)
+;;   ("//zshrc\\'" . sh-mode)
+;;   ("\\.tmux\\'" . sh-mode)
+;;   ("\\.tmuxsh\\'" . sh-mode)
+;;   ("\\.tmuxtheme\\'" . sh-mode)
+;;   ("bashrc$" . sh-mode)
+;;   ("bash_profile$" . sh-mode)
+;;   ("bash_aliases$" . sh-mode)
+;;   ("bash_local$" . sh-mode)
+;;   ("bash_completion$" . sh-mode)
+;;   ("runcoms/[a-zA-Z]+$" . sh-mode)
+;;   :custom
+;;   (sh-basic-offset 2)
+;;   (sh-indentation 2)
+;;   (sh-indent-after-continuation 'always)
+;;
+;;   )
 
 ;;; TOML
 (use-package toml-ts-mode
@@ -395,11 +386,11 @@
   :mode "/\\(Cargo.lock\\|\\.cargo/config\\)\\'"
   )
 
-(use-package conf-toml-mode
-  :ensure nil
-  :mode "\\.toml\\'" "Cargo\\.lock\\'"
-  :hook
-  (conf-toml-mode . prog-mode))
+;; (use-package conf-toml-mode
+;;   :ensure nil
+;;   :mode "\\.toml\\'" "Cargo\\.lock\\'"
+;;   :hook
+;;   (conf-toml-mode . prog-mode))
 
 ;;; Vimrc
 (use-package vimrc-mode

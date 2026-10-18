@@ -1,19 +1,14 @@
 ;;; early-init.el --- Emacs Early Startup -*- no-byte-compile: t; lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
+;;; General
+(setopt user-emacs-directory "~/dotfiles/common/.emacs.d/")
 ;;; Garbage Collection Settings
-(setq read-process-output-max (* 1024 1024 3))
 (setq gc-cons-threshold most-positive-fixnum
-	  gc-cons-percentage 0.6)
-;; From Doom Emacs
-(add-hook 'emacs-startup-hook
-		  (lambda ()
-			(setq gc-cons-threshold (* 100 1024 1024))
-			(setq gc-cons-percentage 0.1)
-			))
-;; Suppress GC messages for a cleaner startup log.
-(setq garbage-collection-messages nil)
+	  gc-cons-percentage 0.6
+	  read-process-output-max (* 4 1024 1024))
 
+;; From Doom Emacs
 ;;; File Name Handler List
 ;; Every file opened and
 ;; loaded by Emacs will run through this list to check for a proper handler for
@@ -22,7 +17,13 @@
 (setq file-name-handler-alist nil)
 (add-hook 'emacs-startup-hook
 		  (lambda ()
-			(setq file-name-handler-alist file-name-handler-alist-old)))
+			(setq gc-cons-threshold (* 100 1024 1024))
+			(setq gc-cons-percentage 0.1)
+			(setq file-name-handler-alist file-name-handler-alist-old)
+			))
+;; Suppress GC messages for a cleaner startup log.
+(setq garbage-collection-messages nil)
+
 
 ;;; Native Compilation
 ;; Ensure JIT compilation is enabled for improved performance by
@@ -39,8 +40,8 @@
 (setq native-comp-async-query-on-exit t)
 (setq confirm-kill-processes t)
 
-(setq native-comp-async-jobs-number 1) ;; Slower but also quieter
-
+;; (setq native-comp-async-jobs-number 1) ;; Slower but also quieter
+(setq native-comp-async-jobs-number (min 4 (num-processors)))
 ;;; Hack to avoid being flashbanged
 (defun my/emacs-no-minibuffer-scroll-bar (frame)
   "Remove the minibuffer scroll bars from FRAME."
@@ -48,7 +49,12 @@
 	(set-window-scroll-bars (minibuffer-window frame) nil nil nil nil :persistent)))
 
 (add-hook 'after-make-frame-functions #'my/emacs-no-minibuffer-scroll-bar)
-
+;; Remove minibuffer scroll bars (initial frame included).
+;; (defun ef/disable-minibuffer-scroll-bars (&optional frame)
+;;   (when-let ((win (minibuffer-window frame)))
+;; 	(set-window-scroll-bars win nil nil nil nil :persistent)))
+;; (add-hook 'after-init-hook   #'ef/disable-minibuffer-scroll-bars)
+;; (add-hook 'after-make-frame-functions #'ef/disable-minibuffer-scroll-bars)
 (defun my/emacs-re-enable-frame-theme (_frame)
   "Re-enable active theme, if any, upon FRAME creation.
  Add this to `after-make-frame-functions' so that new frames do
@@ -59,7 +65,6 @@
 
 (defun ef/avoid-initial-flash-of-light ()
   "Avoid flash of light when starting Emacs."
-  (setq mode-line-format nil)
   (setq default-frame-alist '(
 							  (tool-bar-lines . 0)
 							  (menu-bar-lines . 0)
@@ -69,18 +74,29 @@
 							  (background-color . "#282C34")
 							  (ns-appearance . dark)
 							  (ns-transparent-titlebar . t)
+							  (width . 80)
+							  (height . 44)
 							  )
 		)
+  ;; Alternatively
+  ;; (push '(width . 80) default-frame-alist)
+  ;; (push '(height . 44) default-frame-alist)
+
+
   ;; These colors should match your selected theme for maximum effect
   ;; Note that for catppuccin whenever we create a new frame or open it on terminal
   ;; it is necessary to reload the theme.
   (set-face-attribute 'default nil :background "#282C34" :foreground "#FFFFFF")
-  (set-face-attribute 'mode-line nil :background "#282C34" :foreground "#FFFFFF" :box 'unspecified)
+  (set-face-attribute 'mode-line nil :background "#282C34" :foreground "#FFFFFF" :box nil)
   (add-hook 'after-make-frame-functions #'my/emacs-re-enable-frame-theme)
   )
 
 (ef/avoid-initial-flash-of-light)
 
+;; Hide mode line during startup, restore after.
+(setq mode-line-format nil)
+;; (add-hook 'emacs-startup-hook
+;; 		  (lambda () (setq-default mode-line-format default-mode-line-format)))
 
 
 ;;;; Another option to avoid white light before start
@@ -92,12 +108,12 @@
 ;;    (set-frame-parameter nil 'alpha-background nil)))
 
 ;;; Disable GUI Elements
-(setopt menu-bar-mode nil)
-(setopt tool-bar-mode nil)
-(setopt scroll-bar-mode nil)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 
-(if (fboundp 'tooltip-mode) (tooltip-mode -1))
-(if (fboundp 'fringe-mode) (fringe-mode -1))
+(when (fboundp 'tooltip-mode) (tooltip-mode -1))
+(when (fboundp 'fringe-mode) (fringe-mode -1))
 
 ;;; Default Emacs Window Size
 ;; FIXME: Move to avoid ef/avoid-initial-flash-of-light
@@ -105,9 +121,6 @@
 ;; (push '(vertical-scroll-bars) default-frame-alist)
 ;; (push '(horizontal-scroll-bars) default-frame-alist)
 ;; (push '(menu-bar-lines . 0) default-frame-alist)
-(push '(width . 80) default-frame-alist)
-(push '(height . 44) default-frame-alist)
-
 ;;; Frame
 (setopt frame-resize-pixelwise t)
 (setopt frame-inhibit-implied-resize t)
@@ -118,7 +131,7 @@
 
 ;;; Inhibit Startup Properties
 (setopt inhibit-splash-screen t)
-(setopt inhibit-startup-screen t)
+;; (setopt inhibit-startup-screen t)
 (setopt inhibit-x-resources t)
 (setopt inhibit-startup-buffer-menu t)
 ;; (setopt inhibit-startup-echo-area-message t)
@@ -131,8 +144,8 @@
 (unless (daemonp)
   (advice-add #'display-startup-echo-area-message :override #'ignore))
 
-(advice-add #'display-startup-screen :override #'ignore)
-
+;; (advice-add #'display-startup-screen :override #'ignore)
+(advice-add #'display-splash-screen :override #'ignore)
 
 ;; once the config is loaded settings from our configuration will make
 ;; x-resources redundant. ignore it.

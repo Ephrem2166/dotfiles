@@ -46,8 +46,8 @@
   (save-abbrevs 'silently)
   (abbrev-suggest t)
   (abbrev-suggest-hint-threshold 2)
-  (setq-default abbrev-mode t)
   :config
+  (setq-default abbrev-mode t)
   (define-abbrev-table 'global-abbrev-table
 	'(
 
@@ -69,12 +69,12 @@
 (use-package autorevert
   :ensure nil
   :custom
-  (auto-revert-interval 3)
+  (auto-revert-interval 60)
   (auto-revert-avoid-polling t)
   (auto-revert-check-vc-info t)
   (auto-revert-verbose nil)
   (global-auto-revert-non-file-buffers t)
-  (auto-revert-use-notify nil)
+  ;; (auto-revert-use-notify nil)
   (auto-revert-avoid-polling t)
   (auto-revert-stop-on-user-input nil)
   ;; (setq global-auto-revert-ignore-modes '(Buffer-menu-mode))
@@ -84,16 +84,16 @@
   ;; (global-auto-revert-mode)
   ;; Performance
   (defun my/visible-buffers (&optional buffer-list all-frames)
-	"Return a list of visible buffers (i.e. not buried)."
-	(let ((buffers
-		   (delete-dups
-			(cl-loop for frame in (if all-frames (visible-frame-list) (list (selected-frame)))
-					 if (window-list frame)
-					 nconc (mapcar #'window-buffer it)))))
+	"Return a list of visible buffers, optionally filtered by BUFFER-LIST.
+When ALL-FRAMES is non-nil, consider every visible frame."
+	(let* ((frames (if all-frames (visible-frame-list) (list (selected-frame))))
+		   (buffers (delete-dups
+					 (cl-loop for frame in frames
+							  for wins = (window-list frame)
+							  when wins
+							  nconc (mapcar #'window-buffer wins)))))
 	  (if buffer-list
-		  (cl-loop for buf in buffers
-				   unless (memq buf buffer-list)
-				   collect buffers)
+		  (cl-remove-if (lambda (b) (memq b buffer-list)) buffers)
 		buffers)))
 
 
@@ -142,7 +142,7 @@
 (use-package bookmark
   :ensure nil
   :custom
-  (bookmark-set-fring-mark nil)
+  (bookmark-set-fringe-mark nil)
   (bookmark-use-annotations nil)
   (bookmark-automatically-show-annotations nil)
   (bookmark-default-file (expand-file-name "bookmarks" user-emacs-directory))
@@ -188,7 +188,6 @@
   (setq next-error-verbose nil)
   (setq compilation-window-height 100)
   (setq compilation-message-face 'default)
-  (setq next-error-message-highlight nil)
   (setq compilation-read-command nil))
 
 
@@ -286,9 +285,9 @@
   :config
   ;; Personal Information
   (setopt user-full-name "Ephrem Getachew")
-  (setopt user-login-name "ephrem")
+  ;; (setopt user-login-name "ephrem")
   (setopt user-mail-address "ephrem2166@gmail.com")
-  (setopt user-emacs-directory "~/dotfiles/common/.emacs.d/")
+
   ;; Genertal Settings
   (setopt visible-bell nil)
   (setopt ring-bell-function #'ignore)
@@ -345,9 +344,9 @@
 
   ;; Cursor Style Bar
   (setopt cursor-type 'box)
-  (setopt blink-cursor-mode nil)
+  (blink-cursor-mode -1)
+  (cursor-intangible-mode 1)
   (setopt x-stretch-cursor t)
-  (setopt cursor-intangible-mode t)
   ;; Truncate
   (setopt truncate-string-ellipsis "...")
   ;; Position undelines at the descent line
@@ -382,7 +381,7 @@
   ;; Disable wrapping by default due to its performance cost.
   (setq-default truncate-lines t)
   ;; Truncate lines in all buffers
-  (setq-default global-visual-line-mode t)
+  (global-visual-line-mode 1)
 
   ;; Various Modes
   (set-fringe-mode 8)
@@ -393,7 +392,7 @@
 
   ;; Stop the system from hangind when
   ;; visiting files with long lines
-  (global-so-long-mode t)
+  ;; (global-so-long-mode t)
   ;; Avoid collision of mouse at point
   (mouse-avoidance-mode t)
   ;; Show context menu on right click
@@ -514,7 +513,7 @@
   :config
   (electric-pair-mode 1)
   ;; (electric-quote-mode 1)
-  (electric-indent-mode -1)
+  (electric-indent-mode 1)
   (setq electric-pair-pairs '(
 							  (?\{ . ?\})
 							  (?\[ . ?\])
@@ -567,7 +566,7 @@
   ;; Case insensitive search if case-sensitive search fails.
   (setq auto-mode-case-fold nil)
   (setq make-backup-files nil)
-  (setq delete-old-version t)
+  (setq delete-old-versions t)
   (setq auto-save-default nil)
   (setq create-lockfiles nil)
   (setq auto-save-visited-mode t)
@@ -598,12 +597,12 @@
   (setq auto-save-list-file-prefix
 		(expand-file-name "etc/autosave/" user-emacs-directory))
   (setq view-read-only t)
-  (setq write-file-functions '(my/maybe-check-parens))
+
   ;;; Check Parens in Emacs Mode Before Closing
   (defun my/maybe-check-parens ()
 	"If derived-mode is Lisp data, check for parenthesis correcteness."
 	(if (derived-mode-p 'lisp-data-mode) (check-parens)))
-
+  (add-hook 'write-file-functions #'my/maybe-check-parens)
   )
 
 ;;; Frame
@@ -777,9 +776,11 @@
   (setq ibuffer-filter-group-name-face '(:inherit (success bold)))
   (setq ibuffer-default-display-maybe-show-predicates t)
   ;; Kill ibuffer after quit
-  (advice-add ibuffer-quit (after kill-ibuffer activate)
-			  "Kill the ibuffer buffer on exit."
-			  (kill-buffer "*Ibuffer*"))
+  (advice-add 'ibuffer-quit :after
+			  (lambda (&rest _)
+				(when (get-buffer "*Ibuffer*")
+				  (kill-buffer "*Ibuffer*"))))
+
 
   (setq ibuffer-saved-filter-groups
 		'(("default"
@@ -902,12 +903,13 @@
   (setq imenu-auto-rescan t)
   (setq use-package-enable-imenu-support t)
   (setq imenu-flatten 'group)
-  (dolist (imenu-modes '(org-mode markdown-mode text-mode prog-mode)
-					   )
-	(add-hook 'imenu-modes #'my/imenu-setup)
-
-	)
-
+  ;; (dolist (imenu-modes '(org-mode markdown-mode text-mode prog-mode)
+  ;; 					   )
+  ;; 	(add-hook 'imenu-modes #'my/imenu-setup)
+  ;;
+  ;; 	)
+  (dolist (mode '(org-mode markdown-mode text-mode prog-mode))
+	(add-hook (intern (format "%s-hook" mode)) #'my/imenu-setup))
 
   )
 
@@ -928,7 +930,10 @@
 	(face-remap-set-base 'default `(:height 1.0))
 
 	)
-  (add-hook 'Info-selection-hook 'info-colors-fontify-node)
+  (add-hook 'Info-selection-hook
+			(lambda (&rest _)
+			  (when (fboundp 'info-colors-fontify-node)
+				(info-colors-fontify-node))))
   )
 
 ;;; Info Look
@@ -1006,7 +1011,7 @@ confines of word boundaries (e.g. multiple words)."
 	  (while (or (not isearch-success) isearch-error)
 		(isearch-pop-state)))
 	(isearch-update))
-  (define-key isearch-mode-map (kbd "<backspace>") #'my/abort-isearch-dwim)
+  (define-key isearch-mode-map (kbd "C-<backspace>") #'my/abort-isearch-dwim)
   ;; Search under the cursor
   (defun my/isearch-yank-symbol ()
 	"*Put symbol at current point into search string."
@@ -1064,7 +1069,7 @@ Intended to be added to `isearch-mode-hook'."
 ;;; Man
 (use-package man
   :ensure nil
-  :hook (Man-Mode . display-line-numbers)
+  :hook (Man-Mode . display-line-numbers-mode)
   :defer t
   :config
   (setq Man-notify-method 'pushy)
@@ -1140,6 +1145,11 @@ Intended to be added to `isearch-mode-hook'."
   (outline-blank-line t)
   (outline-minor-mode-use-buttons nil)
   (outline-minor-mode-use-margins nil)
+  :preface
+  (defun ef/outline-up-heading-first ()
+	"Jump to current heading first, unless already there."
+	(unless (outline-on-heading-p)
+	  (outline-backward-same-level 0)))
   :config
 
 
@@ -1163,18 +1173,7 @@ Intended to be added to `isearch-mode-hook'."
 			  (when (and outline-minor-mode (derived-mode-p 'emacs-lisp-mode))
 				(hide-sublevels 1000))))
 
-  (advice-add 'outline-up-heading :around
-			  (defun outline-up-heading--goto-current-first+ (func arg &optional invisible-ok)
-				"make `outline-up-heading' goto the current heading first
-unless already there."
-				(unless (outline-on-heading-p invisible-ok)
-				  (outline-backward-same-level 0)
-				  (when arg
-					(setq arg (if (> arg 0) (- arg 1) (+ arg 1)))))
-
-				(when arg
-				  (apply func arg invisible-ok))))
-
+  (advice-add 'outline-up-heading :before #'ef/outline-up-heading-first)
   )
 
 ;;; Paren
@@ -1207,12 +1206,13 @@ unless already there."
 		  scroll-up-aggressively nil
 		  scroll-down-aggressively nil
 		  scroll-margin 2
-		  pixel-scroll-precision-mode t
 		  scroll-step 1
 		  fast-but-imprecise-scrolling t
 		  hscroll-margin 2
 		  hscroll-step 1
-		  auto-window-vscroll nil)  )
+		  auto-window-vscroll nil)
+  (pixel-scroll-precision-mode 1)
+  )
 
 ;;; Profiling
 (use-package profiler
@@ -1449,7 +1449,6 @@ unless already there."
   ;; Idle time delay before updating various things on the screen.
   (setopt idle-update-delay 1.0)
   (setopt next-error-recenter '(4))
-  (setopt next-error-message-highlight nil)
   (setopt kill-do-not-save-duplicates t)
   ;; Repeatedly pop mark with C-u SPC
   (setopt set-mark-command-repeat-pop t)
@@ -1526,11 +1525,13 @@ unless already there."
 					  java-mode java-ts-mode js-mode js-ts-mode) . subword-mode))
 
 
-;;; FIXME: So long
-(use-package so-long
-  :ensure nil
-  :hook (after-init-hook . global-so-long-mode)
-  )
+;;; 🔥  FIXME::: So long
+;; (use-package so-long
+;;   :ensure nil
+;;   :hook (after-init-hook . global-so-long-mode)
+;;
+;;
+;;   )
 
 
 ;;; Display Time
@@ -1634,7 +1635,7 @@ to the IFF buffer or  the files listed."
 (use-package which-key
   :ensure nil
   :init
-  (which-key-mode)
+  (which-key-mode 1)
   :config
   (setq which-key-side-window-location 'bottom)
   (setq which-key-side-window-slot -10)
@@ -1806,19 +1807,24 @@ to the IFF buffer or  the files listed."
 	"Select WINDOW for 'display-buffer-alist'."
 	(select-window window))
   ;; window-height seems to have no effect. it's always huge.
-  (setq display-buffer-alist
-		'((;;"\\*Occur\\*"
-		   (or . ((derived-mode . occur-mode)))
-		 ;;; placement functions
-		   (display-buffer-reuse-mode-window
-			display-buffer-below-selected)
-		 ;;; Parameters
-		   (body-function . my/give-buffer-focus)
-		   ;;(window-height . 10)
-		   (window-height . fit-window-to-buffer)
-		   (dedicated . t)
-		   )))
-
+  ;; (setq display-buffer-alist
+  ;; 		'((;;"\\*Occur\\*"
+  ;; 		   (or . ((derived-mode . occur-mode)))
+  ;; 		 ;;; placement functions
+  ;; 		   (display-buffer-reuse-mode-window
+  ;; 			display-buffer-below-selected)
+  ;; 		 ;;; Parameters
+  ;; 		   (body-function . my/give-buffer-focus)
+  ;; 		   ;;(window-height . 10)
+  ;; 		   (window-height . fit-window-to-buffer)
+  ;; 		   (dedicated . t)
+  ;; 		   )))
+  (add-to-list 'display-buffer-alist
+			   '((derived-mode . occur-mode)
+				 (display-buffer-reuse-mode-window display-buffer-below-selected)
+				 (body-function . my/give-buffer-focus)
+				 (window-height . fit-window-to-buffer)
+				 (dedicated . t)))
   ;; Don't create new frames
   ;; (setq display-buffer-alist (quote (("" ignore (nil . reusable-frames)))))
 
@@ -1928,7 +1934,7 @@ to the IFF buffer or  the files listed."
 (use-package woman
   :ensure nil
   :defer t
-  :hook (woman-mode . olivetti-mode)
+  :hook (woman-mode . (lambda () (when (fboundp 'olivetti-mode) (olivetti-mode 1))))
   :config
   (setq woman-imenu t)
   )
@@ -1961,7 +1967,7 @@ to the IFF buffer or  the files listed."
   (xref-show-definitions-function #'xref-show-definitions-completing-read)
   (xref-show-xrefs-function #'xref-show-definitions-buffer)
   (xref-file-name-display 'project-relative)
-  (xref-search-program 'ripgrep)
+  (xref-search-program (if (executable-find "rg") 'ripgrep 'grep))
   (xref-history-storage 'xref-window-local-history) ; Per-window history of `xref-go-*'
   )
 

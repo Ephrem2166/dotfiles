@@ -123,15 +123,14 @@
 
 		  ("w" "Movie"    checkitem
 		   (file+headline "~/Org/capture/lists.org" "Watchlist")
-		   :prepend t)
+		   )
 
 		  ("r" "Read"     checkitem
-		   (file+headline "~/Org/capture/lists.org" "Reading List")
-		   :prepend t)
+		   (file+headline "~/Org/capture/lists.org" "Reading List"))
 
 		  ("g" "Get list" checkitem
 		   (file+headline "~/Org/capture/lists.org" "Get List")
-		   :prepend t)))
+		   )))
 
 
 
