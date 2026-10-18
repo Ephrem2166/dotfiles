@@ -2,6 +2,8 @@
 
 ;;; Commentary:
 ;;; Code:
+;; Disable automatic flyspell for Org-mode
+(remove-hook 'org-mode-hook #'flyspell-mode)
 ;;; Functions
 (defun ef/org-mode-hooks ()
   "Various modes to run in org mode."
@@ -474,8 +476,8 @@
   (setq org-src-block-faces nil)
   (setq org-inline-src-prettify-results '("⟨" . "⟩"))
   (setq org-src-window-setup 'current-window)
-  (setq org-src-fontify-natively t)
-  (setq org-src-tab-acts-natively t)
+  (setq org-src-fontify-natively nil)
+  (setq org-src-tab-acts-natively nil)
   (setq org-src-preserve-indentation t)
   (setq org-edit-src-persistent-message nil)
   (setq org-edit-src-turn-on-auto-save nil)
@@ -586,120 +588,120 @@
 		  (:comments . "link")))
   (setq org-confirm-babel-evaluate t))
 
-;;; Better Org-Return
+;;; FIXME: Better Org-Return
 ;;;; Option 1
-(use-package org
-  :ensure nil
-  :bind (:map org-mode-map
-			  ("RET" . my/org-return-dwim))
-  :config
-
-  (defun my/org-element-descendant-of (type element)
-	"Return non-nil if ELEMENT is a descendant of TYPE.
-TYPE should be an element type, like `item' or `paragraph'.
-ELEMENT should be a list like that returned by `org-element-context'."
-	;; MAYBE: Use `org-element-lineage'.
-	(when-let* ((parent (org-element-property :parent element)))
-	  (or (eq type (car parent))
-		  (my/org-element-descendant-of type parent))))
-
-  (defun my/org-return-dwim (&optional default)
-	"A helpful replacement for `org-return'.  With prefix, call `org-return'.
-
-On headings, move point to position after entry content.  In
-lists, insert a new item or end the list, with checkbox if
-appropriate.  In tables, insert a new row or end the table."
-	;; Inspired by John Kitchin:
-	;; http://kitchingroup.cheme.cmu.edu/blog/2017/04/09/A-better-return-in-org-mode/
-	(interactive "P")
-	(if default
-		(org-return)
-	  (cond
-	   ;; Act depending on context around point.
-
-	   ((and (eq 'link (car (org-element-context)))
-			 org-return-follows-link)
-		;; Link: Open it.
-		(org-open-at-point-global))
-
-	   ;; ((or (eq
-	   ;;       (get-char-property (min (1+ (point)) (point-max)) 'org-overlay-type)
-	   ;;       'org-latex-overlay)
-	   ;;      (let ((context (org-element-context)))
-	   ;;        (and (memq (org-element-type context)
-	   ;;                   '(latex-fragment latex-environment))
-	   ;;             (eq (point)
-	   ;;                 (save-excursion
-	   ;;                   (goto-char (org-element-property :end context))
-	   ;;                   (skip-chars-backward "\n\r\t ")
-	   ;;                   (point))))))
-	   ;;  (org-latex-preview))
-
-	   ((org-at-heading-p)
-		;; Heading: Move to position after entry content.
-		;; NOTE: This is probably the most interesting feature of this function.
-		(let ((heading-start (org-entry-beginning-position)))
-		  (goto-char (org-entry-end-position))
-		  (cond ((and (org-at-heading-p)
-					  (= heading-start (org-entry-beginning-position)))
-				 ;; Entry ends on its heading; add newline after
-				 (end-of-line)
-				 (insert "\n\n"))
-				(t
-				 ;; Entry ends after its heading; back up
-				 (forward-line -1)
-				 (end-of-line)
-				 (when (org-at-heading-p)
-				   ;; At the same heading
-				   (forward-line)
-				   (insert "\n")
-				   (forward-line -1))
-				 ;; FIXME: looking-back is supposed to be called with more arguments.
-				 (while (not (looking-back (rx (repeat 3 (seq (optional blank) "\n")))))
-				   (insert "\n"))
-				 (forward-line -1)))))
-
-	   ((org-in-item-p)
-		;; Plain list.  Yes, this gets a little complicated...
-		(let ((context (org-element-context)))
-		  (if (or (eq 'plain-list (car context))  ; First item in list
-				  (and (eq 'item (car context))
-					   (not (eq (org-element-property :contents-begin context)
-								(org-element-property :contents-end context))))
-				  (my/org-element-descendant-of 'item context))  ; Element in list item, e.g. a link
-			  ;; Non-empty item: Add new item.
-			  (if (org-at-item-checkbox-p)
-				  (org-insert-todo-heading nil)
-				(org-insert-item))
-			;; Empty item: Close the list.
-			;; TODO: Do this with org functions rather than operating on the
-			;; text. Can't seem to find the right function.
-			(delete-region (line-beginning-position) (line-end-position))
-			(insert "\n"))))
-
-	   ((when (fboundp 'org-inlinetask-in-task-p)
-		  (org-inlinetask-in-task-p))
-		;; Inline task: Don't insert a new heading.
-		(org-return))
-
-	   ((org-at-table-p)
-		(cond ((save-excursion
-				 (beginning-of-line)
-				 ;; See `org-table-next-field'.
-				 (cl-loop with end = (line-end-position)
-						  for cell = (org-element-table-cell-parser)
-						  always (equal (org-element-property :contents-begin cell)
-										(org-element-property :contents-end cell))
-						  while (re-search-forward "|" end t)))
-			   ;; Empty row: end the table.
-			   (delete-region (line-beginning-position) (line-end-position))
-			   (org-return))
-			  (t
-			   ;; Non-empty row: call `org-return'.
-			   (org-return))))
-	   (t
-		;; All other cases: call `org-return'.
-		(org-return))))))
+;; (use-package org
+;;   :ensure nil
+;;   :bind (:map org-mode-map
+;; 			  ("RET" . my/org-return-dwim))
+;;   :config
+;;
+;;   (defun my/org-element-descendant-of (type element)
+;; 	"Return non-nil if ELEMENT is a descendant of TYPE.
+;; TYPE should be an element type, like `item' or `paragraph'.
+;; ELEMENT should be a list like that returned by `org-element-context'."
+;; 	;; MAYBE: Use `org-element-lineage'.
+;; 	(when-let* ((parent (org-element-property :parent element)))
+;; 	  (or (eq type (car parent))
+;; 		  (my/org-element-descendant-of type parent))))
+;;
+;;   (defun my/org-return-dwim (&optional default)
+;; 	"A helpful replacement for `org-return'.  With prefix, call `org-return'.
+;;
+;; On headings, move point to position after entry content.  In
+;; lists, insert a new item or end the list, with checkbox if
+;; appropriate.  In tables, insert a new row or end the table."
+;; 	;; Inspired by John Kitchin:
+;; 	;; http://kitchingroup.cheme.cmu.edu/blog/2017/04/09/A-better-return-in-org-mode/
+;; 	(interactive "P")
+;; 	(if default
+;; 		(org-return)
+;; 	  (cond
+;; 	   ;; Act depending on context around point.
+;;
+;; 	   ((and (eq 'link (car (org-element-context)))
+;; 			 org-return-follows-link)
+;; 		;; Link: Open it.
+;; 		(org-open-at-point-global))
+;;
+;; 	   ;; ((or (eq
+;; 	   ;;       (get-char-property (min (1+ (point)) (point-max)) 'org-overlay-type)
+;; 	   ;;       'org-latex-overlay)
+;; 	   ;;      (let ((context (org-element-context)))
+;; 	   ;;        (and (memq (org-element-type context)
+;; 	   ;;                   '(latex-fragment latex-environment))
+;; 	   ;;             (eq (point)
+;; 	   ;;                 (save-excursion
+;; 	   ;;                   (goto-char (org-element-property :end context))
+;; 	   ;;                   (skip-chars-backward "\n\r\t ")
+;; 	   ;;                   (point))))))
+;; 	   ;;  (org-latex-preview))
+;;
+;; 	   ((org-at-heading-p)
+;; 		;; Heading: Move to position after entry content.
+;; 		;; NOTE: This is probably the most interesting feature of this function.
+;; 		(let ((heading-start (org-entry-beginning-position)))
+;; 		  (goto-char (org-entry-end-position))
+;; 		  (cond ((and (org-at-heading-p)
+;; 					  (= heading-start (org-entry-beginning-position)))
+;; 				 ;; Entry ends on its heading; add newline after
+;; 				 (end-of-line)
+;; 				 (insert "\n\n"))
+;; 				(t
+;; 				 ;; Entry ends after its heading; back up
+;; 				 (forward-line -1)
+;; 				 (end-of-line)
+;; 				 (when (org-at-heading-p)
+;; 				   ;; At the same heading
+;; 				   (forward-line)
+;; 				   (insert "\n")
+;; 				   (forward-line -1))
+;; 				 ;; FIXME: looking-back is supposed to be called with more arguments.
+;; 				 (while (not (looking-back (rx (repeat 3 (seq (optional blank) "\n")))))
+;; 				   (insert "\n"))
+;; 				 (forward-line -1)))))
+;;
+;; 	   ((org-in-item-p)
+;; 		;; Plain list.  Yes, this gets a little complicated...
+;; 		(let ((context (org-element-context)))
+;; 		  (if (or (eq 'plain-list (car context))  ; First item in list
+;; 				  (and (eq 'item (car context))
+;; 					   (not (eq (org-element-property :contents-begin context)
+;; 								(org-element-property :contents-end context))))
+;; 				  (my/org-element-descendant-of 'item context))  ; Element in list item, e.g. a link
+;; 			  ;; Non-empty item: Add new item.
+;; 			  (if (org-at-item-checkbox-p)
+;; 				  (org-insert-todo-heading nil)
+;; 				(org-insert-item))
+;; 			;; Empty item: Close the list.
+;; 			;; TODO: Do this with org functions rather than operating on the
+;; 			;; text. Can't seem to find the right function.
+;; 			(delete-region (line-beginning-position) (line-end-position))
+;; 			(insert "\n"))))
+;;
+;; 	   ((when (fboundp 'org-inlinetask-in-task-p)
+;; 		  (org-inlinetask-in-task-p))
+;; 		;; Inline task: Don't insert a new heading.
+;; 		(org-return))
+;;
+;; 	   ((org-at-table-p)
+;; 		(cond ((save-excursion
+;; 				 (beginning-of-line)
+;; 				 ;; See `org-table-next-field'.
+;; 				 (cl-loop with end = (line-end-position)
+;; 						  for cell = (org-element-table-cell-parser)
+;; 						  always (equal (org-element-property :contents-begin cell)
+;; 										(org-element-property :contents-end cell))
+;; 						  while (re-search-forward "|" end t)))
+;; 			   ;; Empty row: end the table.
+;; 			   (delete-region (line-beginning-position) (line-end-position))
+;; 			   (org-return))
+;; 			  (t
+;; 			   ;; Non-empty row: call `org-return'.
+;; 			   (org-return))))
+;; 	   (t
+;; 		;; All other cases: call `org-return'.
+;; 		(org-return))))))
 
 
 
@@ -875,15 +877,15 @@ context.  When called with an argument, unconditionally call
 
 ;;; Flyspell
 ;; Enable on-the-fly spell checking.
-(add-hook 'org-mode-hook
-		  (lambda ()
-			(let ((buffer-name (buffer-name)))
-			  (if (or (eq (aref buffer-name 0) ?\s) ; Buffer starting with " *".
-					  (and (boundp 'org-babel-exp-reference-buffer)
-						   org-babel-exp-reference-buffer)) ; Export buffer.
-				  (message "[DON'T TURN ON Flyspell mode in `%s']" buffer-name)
-				(message "[Turning on Flyspell mode in `%s']" buffer-name)
-				(flyspell-mode)))))
+;; (add-hook 'org-mode-hook
+;; 		  (lambda ()
+;; 			(let ((buffer-name (buffer-name)))
+;; 			  (if (or (eq (aref buffer-name 0) ?\s) ; Buffer starting with " *".
+;; 					  (and (boundp 'org-babel-exp-reference-buffer)
+;; 						   org-babel-exp-reference-buffer)) ; Export buffer.
+;; 				  (message "[DON'T TURN ON Flyspell mode in `%s']" buffer-name)
+;; 				(message "[Turning on Flyspell mode in `%s']" buffer-name)
+;; 				(flyspell-mode)))))
 
 ;;; Force org-code use monospace fonts for better visualization
 (define-minor-mode unpackaged/org-table-face-mode
@@ -956,44 +958,44 @@ A `font-lock-keywords' function that searches up to LIMIT."
 
 ;;; Outline number overlays
 ;;;###autoload
-(defun unpackaged/org-outline-numbers (&optional remove-p)
-  "Add outline number overlays to the current buffer.
-When REMOVE-P is non-nil (interactively, with prefix), remove
-them.  Overlays are not automatically updated when the outline
-structure changes."
-  ;; NOTE: This does not necessarily play nicely with org-indent-mode
-  ;; or org-bullets, but it probably wouldn't be too hard to fix that.
-  (interactive (list current-prefix-arg))
-  (cl-labels ((heading-number ()
-				(or (when-let ((num (previous-sibling-number)))
-					  (1+ num))
-					1))
-			  (previous-sibling-number ()
-				(save-excursion
-				  (let ((pos (point)))
-					(org-backward-heading-same-level 1)
-					(when (/= pos (point))
-					  (heading-number)))))
-			  (number-list ()
-				(let ((ancestor-numbers (save-excursion
-										  (cl-loop while (org-up-heading-safe)
-												   collect (heading-number)))))
-				  (nreverse (cons (heading-number) ancestor-numbers))))
-			  (add-overlay ()
-				(let* ((ov-length (org-current-level))
-					   (ov (make-overlay (point) (+ (point) ov-length)))
-					   (ov-string (concat (mapconcat #'number-to-string (number-list) ".")
-										  ".")))
-				  (overlay-put ov 'org-outline-numbers t)
-				  (overlay-put ov 'display ov-string))))
-	(remove-overlays nil nil 'org-outline-numbers t)
-	(unless remove-p
-	  (org-with-wide-buffer
-	   (goto-char (point-min))
-	   (when (org-before-first-heading-p)
-		 (outline-next-heading))
-	   (cl-loop do (add-overlay)
-				while (outline-next-heading))))))
+;; (defun unpackaged/org-outline-numbers (&optional remove-p)
+;;   "Add outline number overlays to the current buffer.
+;; When REMOVE-P is non-nil (interactively, with prefix), remove
+;; them.  Overlays are not automatically updated when the outline
+;; structure changes."
+;;   ;; NOTE: This does not necessarily play nicely with org-indent-mode
+;;   ;; or org-bullets, but it probably wouldn't be too hard to fix that.
+;;   (interactive (list current-prefix-arg))
+;;   (cl-labels ((heading-number ()
+;; 				(or (when-let ((num (previous-sibling-number)))
+;; 					  (1+ num))
+;; 					1))
+;; 			  (previous-sibling-number ()
+;; 				(save-excursion
+;; 				  (let ((pos (point)))
+;; 					(org-backward-heading-same-level 1)
+;; 					(when (/= pos (point))
+;; 					  (heading-number)))))
+;; 			  (number-list ()
+;; 				(let ((ancestor-numbers (save-excursion
+;; 										  (cl-loop while (org-up-heading-safe)
+;; 												   collect (heading-number)))))
+;; 				  (nreverse (cons (heading-number) ancestor-numbers))))
+;; 			  (add-overlay ()
+;; 				(let* ((ov-length (org-current-level))
+;; 					   (ov (make-overlay (point) (+ (point) ov-length)))
+;; 					   (ov-string (concat (mapconcat #'number-to-string (number-list) ".")
+;; 										  ".")))
+;; 				  (overlay-put ov 'org-outline-numbers t)
+;; 				  (overlay-put ov 'display ov-string))))
+;; 	(remove-overlays nil nil 'org-outline-numbers t)
+;; 	(unless remove-p
+;; 	  (org-with-wide-buffer
+;; 	   (goto-char (point-min))
+;; 	   (when (org-before-first-heading-p)
+;; 		 (outline-next-heading))
+;; 	   (cl-loop do (add-overlay)
+;; 				while (outline-next-heading))))))
 
 ;;; Org OX
 (use-package ox
