@@ -1,41 +1,48 @@
 ;;; ef-org.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
-
 ;;; Commentary:
 ;;; Code:
-;; Disable automatic flyspell for Org-mode
-(remove-hook 'org-mode-hook #'flyspell-mode)
-;;; Functions
+
+(defgroup ef/org nil "Personal Org Configuration" :group 'org)
+
+(defvar ef/org-directory (expand-file-name "~/Notes/")
+  "Root directory for Org files."
+  )
+;;; Hooks
 (defun ef/org-mode-hooks ()
   "Various modes to run in org mode."
-  (setq-default line-spacing 1)
-  ;; Toggle automatic line breaking (Auto Fill mode).
-  (auto-fill-mode)
-  (visual-line-mode 1)
-  (display-line-numbers-mode -1)
-  (prettify-symbols-mode)
-  (setq evil-auto-indent nil)
+  (setq-local line-spacing 1)
   (setq-local fill-column 120)
   (setq-local evil-auto-indent nil)
+  ;; Toggle automatic line breaking (Auto Fill mode).
+  (auto-fill-mode 1)
+  (visual-line-mode 1)
+  (display-line-numbers-mode -1)
+  (prettify-symbols-mode 1)
+
   ;; default `org-indent-line' inserts extra spaces at the beginning of lines
   (setq-local indent-line-function 'indent-relative)
+  (setq-local truncate-lines nil)
+  (setq-local word-wrap t)
   ;; It conflicts with org-modern block prettification
   ;; Use it with org-modern-indent
   ;; (org-indent-mode 1)
   ;; (truncate-lines 1)
   ;; (center-document-mode 1)
-  (org-display-inline-images 1)
+  ;; (org-display-inline-images 1)
   ;; It messes with org-table
   ;; (variable-pitch-mode)
   ;; (lambda () (setq-local line-spacing 0.2 fill-column 100))
   ;; display wrapped lines instead of truncated lines
-  (setq truncate-lines nil)
-  (setq word-wrap t)
   ;; (toc-org-enable)
   ;; Prevent flickering when org indent is enabled
-  (show-paren-mode nil)
-  (abbrev-mode)
-  )
+  ;; (show-paren-mode nil)
+  (abbrev-mode 1)
+  ;; Disable automatic flyspell for Org-mode
+  (when (bound-and-true-p flyspell-mode)
+	(flyspell-mode -1)))
+
 (add-hook 'org-mode-hook #'ef/org-mode-hooks)
+
 
 
 ;;; Variable Pitch Mode
@@ -96,6 +103,7 @@
 ;;                     '(org-checkbox-statistics-done ((t (:inherit fixed-pitch)))))
 ;;   )
 
+;;; General Settings
 ;;;; Org SRC Code Block in monospace font
 (use-package org
   :ensure nil
@@ -127,9 +135,8 @@
   :defer-incrementally (calendar find-func format-spec org-macs org-compat org-faces org-entities
 								 org-list org-pcomplete org-src org-footnote org-macro ob org org-agenda
 								 org-capture)
-  :preface
-  (setq org-directory (expand-file-name "~/Notes/"))
   :init
+  (setq org-directory ef/org-directory)
   (unless (file-exists-p org-directory)
 	(mkdir org-directory t)
 	)
@@ -292,7 +299,7 @@
   :ensure nil
   :config
   (setq org-todo-keywords
-		'((sequence "TODO" "|" "IN-PROGRESS" "|" "DONE" "|" "CANCELED")
+		'((sequence "TODO"  "IN-PROGRESS" "|" "DONE" "CANCELED")
 		  (sequence "TOREAD" "|" "READ")
 		  (sequence "TOWATCH" "|" "WATCHED")
 		  ))
@@ -482,7 +489,6 @@
   (setq org-edit-src-persistent-message nil)
   (setq org-edit-src-turn-on-auto-save nil)
   ;; Fontify highlighting in code blocks in latext
-  (setq org-latex-listings 'minted)
   (setq org-edit-src-auto-save-idle-delay 3)
   (setq org-edit-src-content-indentation 0))
 
@@ -510,7 +516,6 @@
 							  (:endgroup)
 							  ("PERSONAL" . ?p)
 							  ("WORK" . ?W)
-							  ("crypt" . ?c)
 							  ("EMACS" . ?e)
 							  ("CLASS" . ?c)
 							  ("IDEA" . ?i)
@@ -540,7 +545,7 @@
   (setq org-link-abbrev-alist
 		'(("github"      . "https://github.com/%s")
 		  ("youtube"     . "https://youtube.com/watch?v=%s")
-		  ("google"      . "https://google.com/search?q=")
+		  ("google"      . "https://google.com/search?q=%s")
 		  ("wikipedia"   . "https://en.wikipedia.org/wiki/%s")))
 
   (setq org-link-context-for-files t)
@@ -705,21 +710,6 @@
 
 
 
-;;;; ORG META RETURN ADVICE
-(defun my/org-meta-return (&optional arg)
-  "Insert a new heading or wrap a region in a table.
-Calls `org-insert-heading', `org-insert-item',
-`org-table-wrap-region', or `modi/org-split-block' depending on
-context.  When called with an argument, unconditionally call
-`org-insert-heading'."
-  (interactive "P")
-  (org-check-before-invisible-edit 'insert)
-  (or (run-hook-with-args-until-success 'org-metareturn-hook)
-	  (call-interactively (cond (arg #'org-insert-heading)
-								((org-at-table-p) #'org-table-wrap-region)
-								((org-in-item-p) #'org-insert-item)
-								(t #'org-insert-heading)))))
-(advice-add 'org-meta-return :override #'my/org-meta-return)
 ;;; TODO Org-Refile
 ;; (defconst my-org-todos "~/Org/Capture/")
 
@@ -740,85 +730,11 @@ context.  When called with an argument, unconditionally call
 
 ;; Remove hooks
 ;; For better tables
-(remove-hook 'text-mode-hook #'visual-line-mode)
+;; (remove-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'auto-fill-mode)
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Better Org Modern ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package org
-  :ensure nil
-  :config
-  ;;; Better Org Modern
-  (defun my/org-modern-hook ()
-	"Enabling org-modern and changing all sorts of settings according to its README."
-	(interactive)
-
-	;; Option 1: Per buffer
-	(add-hook 'org-mode-hook #'org-modern-mode)
-	(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
-
-	;; Option 2: Globally
-	(global-org-modern-mode)
-
-	;; Minimal UI
-	(package-initialize)
-	(menu-bar-mode -1)
-	(tool-bar-mode -1)
-	(scroll-bar-mode -1)
-										;  (modus-themes-load-operandi)
-
-	;; Choose some fonts
-	(set-face-attribute 'default nil :family "Berkeley Nerd Font")
-	(set-face-attribute 'variable-pitch nil :family "SN Pro")
-	(set-face-attribute 'org-modern-symbol nil :family "Berkeley Nerd Font")
-
-	;; Add frame borders and window dividers
-	(modify-all-frames-parameters
-	 '((right-divider-width . 40)
-	   (internal-border-width . 40)))
-	(dolist (face '(window-divider
-					window-divider-first-pixel
-					window-divider-last-pixel))
-	  (face-spec-reset-face face)
-	  (set-face-foreground face (face-attribute 'default :background)))
-	(set-face-background 'fringe (face-attribute 'default :background))
-
-	(setq
-	 ;; Edit settings
-	 org-auto-align-tags nil
-	 org-tags-column 0
-	 org-catch-invisible-edits 'show-and-error
-	 org-special-ctrl-a/e t
-	 org-insert-heading-respect-content t
-
-	 ;; Org styling, hide markup etc.
-	 org-hide-emphasis-markers t
-	 org-pretty-entities t
-	 org-ellipsis "…"
-
-	 ;; Do not add source block fringe markers if org-indent-mode is
-	 ;; enabled. org-indent-mode uses line prefixes for indentation.
-	 ;; Therefore we cannot have both.
-
-	 ;; Agenda styling
-	 org-agenda-tags-column 0
-	 org-agenda-block-separator ?─
-	 org-agenda-time-grid
-	 '((daily today require-timed)
-	   (800 1000 1200 1400 1600 1800 2000)
-	   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-	 org-agenda-current-time-string
-	 "⭠ now ─────────────────────────────────────────────────")
-
-	;; (global-org-modern-mode)
-
-	)
-
-
-  )
 
 
 ;;; Beautify Org Mode (Word)
@@ -887,17 +803,6 @@ context.  When called with an argument, unconditionally call
 ;; 				(message "[Turning on Flyspell mode in `%s']" buffer-name)
 ;; 				(flyspell-mode)))))
 
-;;; Force org-code use monospace fonts for better visualization
-(define-minor-mode unpackaged/org-table-face-mode
-  "Apply `org-table' face family to all text in Org tables.
-Useful for forcibly applying the face to portions of table data
-that might have a different face, which could affect alignment."
-  :global nil
-  (let ((keywords '((unpackaged/org-table-face-matcher 0 'org-table))))
-	(if unpackaged/org-table-face-mode
-		(font-lock-add-keywords nil keywords 'append)
-	  (font-lock-remove-keywords nil keywords))
-	(font-lock-flush)))
 
 (cl-defun unpackaged/org-table-face-matcher
 	(limit &optional (face `(:family ,(face-attribute 'org-table :family))))
@@ -1024,7 +929,6 @@ A `font-lock-keywords' function that searches up to LIMIT."
   (setopt org-export-dispatch-use-expert-ui t)
   (setopt org-export-use-babel t)
   (setq org-export-headline-levels 8)
-  (setq org-export-dispatch-use-expert-ui nil)
   )
 
 ;;; Export to html
@@ -1032,7 +936,7 @@ A `font-lock-keywords' function that searches up to LIMIT."
   :ensure nil
   :config
   ;; Other options css, inline css
-  (setq org-html-htmlize-output-type nil)
+  (setq org-html-htmlize-output-type 'css)
   (setq org-html-head-include-default-style nil)
   (setq org-html-head-include-scripts nil)
   )
@@ -1047,31 +951,6 @@ A `font-lock-keywords' function that searches up to LIMIT."
 ;;              htmlize-many-files-dired
 ;;              htmlize-region))
 
-
-;;;; Ox-ODT
-(use-package ox-odt
-  :ensure nil
-  :config
-  (setq org-odt-preferred-output-format "docx"))
-
-;;;; TODO ox-epub
-;;;; OX-Latex
-(use-package ox-latex
-  :ensure nil
-  :after org
-  :custom
-  (org-latex-compiler "lualatex")
-  (org-latex-src-block-backend 'engraved)
-  (org-latex-pdf-process
-   (list "latexmk -shell-escape  -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"))
-  (org-export-with-toc t)
-  )
-;;;; Ox-pandoc
-;; Export to whatever file format pandoc can export to
-(use-package ox-pandoc
-  :ensure t
-  :after org
-  )
 
 (define-key org-mode-map (kbd "C-<tab>") 'yas-expand)
 

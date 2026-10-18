@@ -248,6 +248,80 @@
 
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; Better Org Modern ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package org
+  :ensure nil
+  :config
+  ;;; Better Org Modern
+  (defun my/org-modern-hook ()
+	"Enabling org-modern and changing all sorts of settings according to its README."
+	(interactive)
+
+	;; Option 1: Per buffer
+	(add-hook 'org-mode-hook #'org-modern-mode)
+	(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+
+	;; Option 2: Globally
+	(global-org-modern-mode)
+
+	;; Minimal UI
+	(package-initialize)
+	(menu-bar-mode -1)
+	(tool-bar-mode -1)
+	(scroll-bar-mode -1)
+										;  (modus-themes-load-operandi)
+
+	;; Choose some fonts
+	(set-face-attribute 'default nil :family "Berkeley Nerd Font")
+	(set-face-attribute 'variable-pitch nil :family "SN Pro")
+	(set-face-attribute 'org-modern-symbol nil :family "Berkeley Nerd Font")
+
+	;; Add frame borders and window dividers
+	(modify-all-frames-parameters
+	 '((right-divider-width . 40)
+	   (internal-border-width . 40)))
+	(dolist (face '(window-divider
+					window-divider-first-pixel
+					window-divider-last-pixel))
+	  (face-spec-reset-face face)
+	  (set-face-foreground face (face-attribute 'default :background)))
+	(set-face-background 'fringe (face-attribute 'default :background))
+
+	(setq
+	 ;; Edit settings
+	 org-auto-align-tags nil
+	 org-tags-column 0
+	 org-catch-invisible-edits 'show-and-error
+	 org-special-ctrl-a/e t
+	 org-insert-heading-respect-content t
+
+	 ;; Org styling, hide markup etc.
+	 org-hide-emphasis-markers t
+	 org-pretty-entities t
+	 org-ellipsis "…"
+
+	 ;; Do not add source block fringe markers if org-indent-mode is
+	 ;; enabled. org-indent-mode uses line prefixes for indentation.
+	 ;; Therefore we cannot have both.
+
+	 ;; Agenda styling
+	 org-agenda-tags-column 0
+	 org-agenda-block-separator ?─
+	 org-agenda-time-grid
+	 '((daily today require-timed)
+	   (800 1000 1200 1400 1600 1800 2000)
+	   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+	 org-agenda-current-time-string
+	 "⭠ now ─────────────────────────────────────────────────")
+
+	;; (global-org-modern-mode)
+
+	)
+
+
+  )
 
 ;;; Org Noter
 ;; A synchronized org-mode document annotator
@@ -434,7 +508,33 @@
   (setq valign-fancy-bar t)
   )
 
+;;;; Ox-ODT
+(use-package ox-odt
+  :ensure nil
+  :config
+  (setq org-odt-preferred-output-format "docx"))
+
+;;;; TODO ox-epub
+;;;; OX-Latex
+(use-package ox-latex
+  :ensure nil
+  :after org
+  :custom
+  (org-latex-compiler "lualatex")
+  (org-latex-src-block-backend 'engraved)
+  (org-latex-pdf-process
+   (list "latexmk -shell-escape  -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"))
+  (org-export-with-toc t)
+  )
+;;;; Ox-pandoc
+;; Export to whatever file format pandoc can export to
+(use-package ox-pandoc
+  :ensure t
+  :after org
+  )
+
 
 
 (provide 'ef-org-external)
+
 ;;; ef-org-external.el ends here
