@@ -68,48 +68,70 @@
   ;; 		  )
   ;; 		)
   (setq org-capture-templates
-		'(("t" "Task" entry
+		'(;; ── Tasks ───────────────────────────────────────────────────────
+		  ("t" "Task" entry
 		   (file+headline "~/Org/capture/tasks.org" "My tasks")
-		   "* TODO %^{Task} %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%?")
+		   "* TODO %^{Task} %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%?"
+		   :empty-lines 1)
 
+		  ;; ── Appointments ────────────────────────────────────────────────
 		  ("a" "Appointment" entry
 		   (file+headline "~/Org/capture/appt.org" "Appointment")
 		   "* TODO %^{Appointment} %^g\nSCHEDULED: %^T\n%i"
 		   :empty-lines 1)
 
+		  ;; ── Links ───────────────────────────────────────────────────────
 		  ("l" "Link" entry
 		   (file+headline "~/Org/capture/links.org" "Links")
-		   "* READ %^{Title} %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%^{URL}")
-
-		  ("n" "Note" entry
-		   (file+headline "~/Org/capture/notes.org" "Notes")
-		   "* %^{Title} %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%?"
+		   "* TOREAD %^{Title} %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%^{URL}"
 		   :empty-lines 1)
 
+		  ;; ── Notes ───────────────────────────────────────────────────────
+		  ("n" "Note" entry
+		   (file+headline "~/Org/capture/notes.org" "Notes")
+		   "* %^{Title} %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%?"
+		   :empty-lines 1)
+
+		  ;; ── Today ───────────────────────────────────────────────────────
 		  ("." "Today task" entry
 		   (file+headline "~/Org/capture/today.org" "Today's Tasks")
-		   "* TODO %^{Task}\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%?")
+		   "* TODO %^{Task}\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%?"
+		   :empty-lines 1)
 
+		  ;; ── Journal ─────────────────────────────────────────────────────
 		  ("j" "Journal" entry
 		   (file+olp+datetree "~/Org/capture/journal.org" "Journal")
-		   "* %^{Title}%?\n:PROPERTIES:\n:CREATED: %U\n:CUSTOM_ID: h:%(format-time-string \"%Y%m%dT%H%M%S\")\n:END:\n%i"
+		   "* %^{Title}\n:PROPERTIES:\n:CREATED: %U\n:CUSTOM_ID: h:%(format-time-string \"%Y%m%dT%H%M%S\")\n:END:\n%i%?"
 		   :empty-lines-after 1)
 
+		  ;; ── Inbox (unprocessed) ────────────────────────────────────────
 		  ("u" "Unprocessed" entry
 		   (file+headline "~/Org/capture/unprocessed.org" "Unprocessed")
 		   "* %^{Title}\n:PROPERTIES:\n:CAPTURED: %U\n:CUSTOM_ID: h:%(format-time-string \"%Y%m%dT%H%M%S\")\n:END:\n%i\n%?"
 		   :empty-lines 1)
 
+		  ;; ── Code snippets ───────────────────────────────────────────────
 		  ("c" "Code snippet" entry
 		   (file+headline "~/Org/capture/codes.org" "Snippets")
-		   "* %?\t%^g\n#+BEGIN_SRC %^{Language}\n\n#+END_SRC")
+		   "* %?\t%^g\n#+BEGIN_SRC %^{Language}\n\n#+END_SRC"
+		   :empty-lines 1)
 
-		  ("i" "Item"     checkitem (file "~/Org/capture/lists.org"))
-		  ("w" "Movie"    checkitem (file+headline "~/Org/capture/lists.org" "Watchlist"))
-		  ("r" "Read"     checkitem (file+headline "~/Org/capture/lists.org" "Reading List"))
-		  ("g" "Get list" checkitem (file+headline "~/Org/capture/lists.org" "Get List"))))
+		  ;; ── Lists (checkitems) ─────────────────────────────────────────
+		  ("i" "Item"     checkitem
+		   (file+headline "~/Org/capture/lists.org" "Inbox")
+		   :prepend t)
 
+		  ("w" "Movie"    checkitem
+		   (file+headline "~/Org/capture/lists.org" "Watchlist")
+		   :prepend t)
 
+		  ("r" "Read"     checkitem
+		   (file+headline "~/Org/capture/lists.org" "Reading List")
+		   :prepend t)
+
+		  ("g" "Get list" checkitem
+		   (file+headline "~/Org/capture/lists.org" "Get List")
+		   :prepend t)))
 
 
 
