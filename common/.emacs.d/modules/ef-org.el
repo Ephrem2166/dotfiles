@@ -149,15 +149,15 @@
   ;; Editing and Appearance
   (setq org-hide-leading-stars t)
   (setq org-hide-emphasis-markers t)
+  ;; Macro Replacement
+  (setq org-hide-macro-markers t)
+
 
   ;;(setq org-odd-levels-only nil)
   (setq org-special-ctrl-a/e t)
   (setq org-special-ctrl-k nil)
   (setq org-return-follows-link t)
   ;; (setq org-blank-before-new-entry t)
-
-  ;; Macro Replacement
-  (setq org-hide-macro-markers t)
 
   ;; Leave an empty line between folded subtrees
   (setq org-cycle-separator-lines 1)
@@ -197,14 +197,13 @@
   (setq org-startup-indented t)
   (setq org-startup-with-inline-images t)
   (setq org-startup-with-latex-preview nil)
-  (setq org-startup-align-all-tables t)
   (setq org-startup-shrink-all-tables t)
   ;; Pretty
   (setq org-pretty-entities t)
   (setq org-pretty-entities-include-sub-superscripts nil)
   (setq org-use-sub-superscripts nil)
   ;; Image
-  (setq org-image-actual-width 400)
+  (setq org-image-actual-width 700)
   (setq org-image-align 'center)
 
   ;; Blank line before new entry
@@ -238,7 +237,17 @@
   (setq org-fontify-done-headline t)
   (setq org-fontify-quote-and-verse-blocks t)
   (setq org-fontify-whole-heading-line t)
-  (setq org-fontify-whole-block-delimiter-line t))
+  (setq org-fontify-whole-block-delimiter-line t)
+  ;; Force source / code / table text to fixed-pitch while preserving
+  ;; any existing inheritance.
+  (dolist (face '(org-code org-block org-verbatim org-table org-formula
+						   org-special-keyword org-property-value
+						   org-document-info-keyword))
+	(let ((cur (face-attribute face :inherit)))
+	  (when (eq cur 'unspecified) (setq cur nil))
+	  (setq cur (if (listp cur) cur (list cur)))
+	  (cl-pushnew 'fixed-pitch cur)
+	  (set-face-attribute face nil :inherit cur))))
 
 
 ;;;  FIXME  Autoinsertion for Org
@@ -367,63 +376,80 @@
   )
 
 ;;; Pretty Symbol List
-(use-package org
-  :ensure nil
-  :config
-  (setq-default prettify-symbols-alist '(
-										 ;; SRC CODE
-										 ("#+BEGIN_SRC" . "»")
-										 ("#+END_SRC" . "«")
-										 ("#+begin_src" . "»")
-										 ("#+end_src" . "«")
-										 ;; Quote
-										 ("#+begin_quote" . "")
-										 ("#+end_quote" . "―")
-										 ;; Greek Symbols
-										 ("delta"  . ?Δ)
-										 ("gamma"  . ?Γ)
-										 ("phi"    . ?φ)
-										 ("psi"    . ?ψ)
-										 ("lambda"  . "λ")
-										 ;; Arrow
-										 ("->" . "→")
-										 ("->>" . "↠")
+(defconst ef/org-prettify-alist
+  '(
+	;; SRC CODE
+	("#+BEGIN_SRC" . "»")
+	("#+END_SRC" . "«")
+	("#+begin_src" . "»")
+	("#+end_src" . "«")
+	;; Quote
+	("#+begin_quote" . "")
+	("#+end_quote" . "―")
+	;; Greek Symbols
+	("delta"  . ?Δ)
+	("gamma"  . ?Γ)
+	("phi"    . ?φ)
+	("psi"    . ?ψ)
+	("lambda"  . "λ")
+	;; Arrow
+	("->" . "→")
+	("->>" . "↠")
 										; Agenda tags 
-										 (":@projects:"  . ?☕)
-										 (":work:"       . ?🚀)
-										 (":@inbox:"     . ?✉)
-										 (":goal:"       . ?🎯)
-										 (":task:"       . ?📋)
-										 (":@thesis:"    . ?📝)
-										 (":thesis:"     . ?📝)
-										 (":emacs:"      . ?)
-										 (":learn:"      . ?🌱)
-										 (":code:"       . ?💻)
-										 (":fix:"        . ?🛠)
-										 (":bug:"        . ?🚩)
-										 (":read:"       . ?📚)
+	(":@projects:"  . ?☕)
+	(":work:"       . ?🚀)
+	(":@inbox:"     . ?✉)
+	(":goal:"       . ?🎯)
+	(":task:"       . ?📋)
+	(":@thesis:"    . ?📝)
+	(":thesis:"     . ?📝)
+	(":emacs:"      . ?)
+	(":learn:"      . ?🌱)
+	(":code:"       . ?💻)
+	(":fix:"        . ?🛠)
+	(":bug:"        . ?🚩)
+	(":read:"       . ?📚)
 										; Drawers
-										 (":properties:" . ?)
+	(":properties:" . ?)
 										; Agenda scheduling
-										 ("#+STARTUP:" . "")
-										 ("#+TITLE: " . "")
-										 ("#+title: " . "")
-										 ("#+RESULTS:" . "")
-										 ("#+NAME:" . "")
-										 ("#+ROAM_TAGS:" . "")
-										 ("#+FILETAGS:" . "")
-										 ("#+HTML_HEAD:" . "")
-										 ("#+SUBTITLE:" . "")
-										 ("#+AUTHOR:" . "")
-										 (":Effort:" . "")
-										 ("SCHEDULED:" . "")
-										 ("DEADLINE:" . "")
-										 ("SCHEDULED:"   . ?🕘)
-										 ("DEADLINE:"    . ?⏰)
+	("#+STARTUP:" . "")
+	("#+TITLE: " . "")
+	("#+title: " . "")
+	("#+RESULTS:" . "")
+	("#+NAME:" . "")
+	("#+ROAM_TAGS:" . "")
+	("#+FILETAGS:" . "")
+	("#+HTML_HEAD:" . "")
+	("#+SUBTITLE:" . "")
+	("#+AUTHOR:" . "")
+	(":Effort:" . "")
+	("SCHEDULED:" . "")
+	("DEADLINE:" . "")
+	("SCHEDULED:"   . ?🕘)
+	("DEADLINE:"    . ?⏰)	) )
 
-										 ))
+(defun ef/org-apply-prettify ()
+  "Install `ef/org-prettify-alist' locally and enable prettify."
+  (setq-local prettify-symbols-alist ef/org-prettify-alist)
+  (push '("[ ]" . "☐") prettify-symbols-alist)
+  (push '("[X]" . "☑") prettify-symbols-alist)
+  (push '("[-]" . "❍") prettify-symbols-alist)
+  (setq-local prettify-symbols-unprettify-at-point 'right-edge)
+  (prettify-symbols-mode 1))
+(add-hook 'org-mode-hook #'ef/org-apply-prettify)
 
-  (setq prettify-symbols-unprettify-at-point 'right-edge))
+;; Strikethrough
+(defface org-checkbox-done-text
+  '((t (:foreground "#71696A" :strike-through t)))
+  "Face for the text part of a checked org-mode checkbox.")
+
+(font-lock-add-keywords
+ 'org-mode
+ `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)"
+	1 'org-checkbox-done-text prepend))
+ 'append)
+
+
 
 ;;; Org-archive
 (use-package org-archive
@@ -457,7 +483,7 @@
   (org-attach-preferred-new-method 'id) ; Necessary to add the ATTACH tag
   (org-attach-auto-tag "ATTACH")       ; See `org-roam-db-node-include-function'
   (org-attach-dir-relative nil)        ; Use relative file paths?
-  (org-attach-id-dir (expand-file-name "resources" org-directory))
+  (org-attach-id-dir (expand-file-name "resources" ef/org-directory))
   (org-attach-method 'cp)            ; Attach copies of files
   (org-attach-archive-delete 'query) ; If subtree is deleted or archived, ask user
   (org-attach-id-to-path-function-list
@@ -553,35 +579,19 @@
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 
 
-
-;;; Org-faces
-(use-package org-faces
-  :ensure nil
-  :after org
-  :custom
-  (org-fontify-todo-headline nil)
-  (org-fontify-done-headline nil)
-  (org-fontify-whole-block-delimiter-line nil)
-  (org-fontify-quote-and-verse-blocks t))
-
 ;;; Org-babel
-(use-package ob
-  :ensure nil
-  :after org
-  :hook (after-init . (lambda ()
-						"Activate Languages"
-						(org-babel-do-load-languages
-						 'org-babel-load-languages
-						 '((emacs-lisp . t)
-						   (python . t)
-						   ;; (shell . t)
-						   ;; (mermaid . t)
-						   (org . t)
-						   (plantuml . t)
-						   (latex . t)
-						   (js . t)
-						   ))))
-  :config
+(with-eval-after-load 'org
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+	 (python . t)
+	 ;; (shell . t)
+	 ;; (mermaid . t)
+	 (org . t)
+	 (plantuml . t)
+	 (latex . t)
+	 (js . t)
+	 ))
   (setq org-babel-default-header-args
 		'((:session . "none")
 		  (:results . "replace")
@@ -591,8 +601,8 @@
 		  (:hlines . "no")
 		  (:tangle . "no")
 		  (:comments . "link")))
-  (setq org-confirm-babel-evaluate t))
-
+  (setq org-confirm-babel-evaluate t)
+  )
 ;;; FIXME: Better Org-Return
 ;;;; Option 1
 ;; (use-package org
@@ -769,28 +779,6 @@
 	(set-face-attribute 'org-property-value nil :height 0.85)
 	(set-face-attribute 'org-special-keyword nil :height 0.85)))
 
-;;; Better Checkboxes
-(use-package org
-  :ensure nil
-  :config
-  (add-hook 'org-mode-hook (lambda ()
-							 "Beautify Org Checkbox Symbol"
-							 (push '("[ ]" .  "☐") prettify-symbols-alist)
-							 (push '("[X]" . "☑" ) prettify-symbols-alist)
-							 (push '("[-]" . "❍" ) prettify-symbols-alist)
-							 (prettify-symbols-mode)))
-  ;; Strikethrough
-  (defface org-checkbox-done-text
-	'((t (:foreground "#71696A" :strike-through t)))
-	"Face for the text part of a checked org-mode checkbox.")
-
-  (font-lock-add-keywords
-   'org-mode
-   `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)"
-	  1 'org-checkbox-done-text prepend))
-   'append)
-  )
-
 ;;; Flyspell
 ;; Enable on-the-fly spell checking.
 ;; (add-hook 'org-mode-hook
@@ -951,9 +939,9 @@ A `font-lock-keywords' function that searches up to LIMIT."
 ;;              htmlize-many-files-dired
 ;;              htmlize-region))
 
-
-(define-key org-mode-map (kbd "C-<tab>") 'yas-expand)
-
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-<tab>") 'yas-expand)
+  )
 
 
 (provide 'ef-org)
