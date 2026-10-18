@@ -4,13 +4,14 @@
 
 (defgroup ef/org nil "Personal Org Configuration" :group 'org)
 
-(defvar ef/org-directory (expand-file-name "~/Notes/")
+(defvar ef/org-directory (expand-file-name "~/Org/")
   "Root directory for Org files."
   )
 ;;; Hooks
 (defun ef/org-mode-hooks ()
   "Various modes to run in org mode."
-  (setq-local line-spacing 1)
+  ;;  (setq-local line-spacing 1)
+  (setq-local line-spacing (if (bound-and-true-p org-modern-mode) 0.4 0.0))
   (setq-local fill-column 120)
   (setq-local evil-auto-indent nil)
   ;; Toggle automatic line breaking (Auto Fill mode).
@@ -194,6 +195,7 @@
 
   ;; Startup
   (setq org-startup-align-all-tables t)
+  ;; Conflicts with org-modern-indent, turn off
   (setq org-startup-indented t)
   (setq org-startup-with-inline-images t)
   (setq org-startup-with-latex-preview nil)
@@ -454,6 +456,8 @@
 ;;; Org-archive
 (use-package org-archive
   :ensure nil
+  :config
+  (setq org-archive-location (concat (expand-file-name "archive/%s_archive::" ef/org-directory)))
   :custom
   (org-archive-subtree-save-file-p 'from-org)
   (org-archive-subtree-add-inherited-tags t))
@@ -511,7 +515,7 @@
   (setq org-src-window-setup 'current-window)
   (setq org-src-fontify-natively nil)
   (setq org-src-tab-acts-natively nil)
-  (setq org-src-preserve-indentation t)
+  (setq org-src-preserve-indentation nil)
   (setq org-edit-src-persistent-message nil)
   (setq org-edit-src-turn-on-auto-save nil)
   ;; Fontify highlighting in code blocks in latext
@@ -791,48 +795,6 @@
 ;; 				(message "[Turning on Flyspell mode in `%s']" buffer-name)
 ;; 				(flyspell-mode)))))
 
-
-(cl-defun unpackaged/org-table-face-matcher
-	(limit &optional (face `(:family ,(face-attribute 'org-table :family))))
-  "Apply FACE to entire Org tables.
-A `font-lock-keywords' function that searches up to LIMIT."
-  (cl-flet* ((find-face (face &optional limit not)
-			   ;; Return next position up to LIMIT that has FACE, or doesn't if NOT.
-			   (cl-loop with prev-pos
-						with pos = (point)
-						while (not (eobp))
-						do (setf pos (next-single-property-change pos 'face nil limit))
-						while (and pos (not (equal pos prev-pos)))
-						for face-at = (get-text-property pos 'face)
-						for face-matches-p = (or (eq face-at face)
-												 (when (listp face-at)
-												   (member face face-at)))
-						when (or (and not (not face-matches-p))
-								 face-matches-p)
-						return pos
-						do (setf prev-pos pos)))
-			 (apply-face-from (pos face)
-			   (unless (eobp)
-				 (let* ((property-at-start (get-text-property pos 'face))
-						(table-face-start (if (or (eq property-at-start 'org-table)
-												  (when (listp property-at-start)
-													(member 'org-table property-at-start)))
-											  (point)
-											(find-face 'org-table limit)))
-						table-face-end)
-				   (when table-face-start
-					 (goto-char table-face-start)
-					 (setf table-face-end (line-end-position))
-					 (add-face-text-property table-face-start table-face-end face)
-					 (goto-char table-face-end))))))
-	(cl-loop with applied-p
-			 for applied = (apply-face-from (point) face)
-			 when applied
-			 do (setf applied-p t)
-			 while applied
-			 finally return applied-p)))
-
-(add-hook 'org-mode-hook #'unpackaged/org-table-face-mode)
 
 ;;; Center Org Buffers
 

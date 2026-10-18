@@ -22,7 +22,7 @@
 		org-appear-delay 0.0
 		org-appear-autokeywords t
 		org-appear-inside-latex t
-		org-appear-triggger 'always
+		org-appear-trigger 'always
 		)
   (run-at-time nil nil #'org-appear--set-elements))
 
@@ -52,14 +52,16 @@
 ;; Image drag-and-drop for org-mode
 (use-package org-download
   :ensure t
-  :after org
+  :after (org org-attach)
   ;; :ensure-system-package (scrot)
   :hook (org-mode . org-download-enable)
   :custom
   (org-image-actual-width 400)
   (org-download-method 'attach)
   (org-download-screenshot-method "scrot -s %s") ; Use scrot
-  (org-download-image-dir (progn (require 'org-attach) org-attach-id-dir))
+  ;; (org-download-image-dir (progn (require 'org-attach) org-attach-id-dir))
+  (org-attach-id-dir (expand-file-name "attachments/" ef/org-directory))
+  ;; (org-download-image-dir (expand-file-name "resources" ef/org-directory))
   (org-download-heading-lvl nil)
   (org-download-timestamp "%Y-%m-%d_%H-%M-%S_") ; Default
   (org-download-image-html-width 700))
@@ -69,10 +71,12 @@
 ;; Instead of org outline mode
 (use-package org-modern-indent
   :ensure (:host github :repo "jdtsmith/org-modern-indent")
-  :defer t
-  :init
-  ;; Add late to hook
-  (add-hook 'org-mode-hook #'org-modern-indent-mode))
+  :after org
+  :hook (org-indent-mode . org-modern-indent-mode)
+  ;; NOTE: add-hook default = prepend; use (add-hook 'org-mode-hook
+  ;; #'org-modern-indent-mode 95) if you need it to run late in the hook.
+  ;;  (add-hook 'org-mode-hook #'org-modern-indent-mode 95)
+  )
 
 
 
@@ -81,7 +85,8 @@
   :ensure t
   :after org
   :config
-  (setq org-journal-dir (expand-file-name (concat org-directory "my_journal/")))
+  (setq org-journal-dir (expand-file-name "journal/" org-directory))
+  ;;(setq org-journal-dir (expand-file-name (concat org-directory "my_journal/")))
   (setq org-journal-file-type 'weekly)
   (setq org-journal-file-format "%Y-%m-%d.org")
   (setq org-journal-date-format "%A, %Y-%m-%d")
@@ -91,13 +96,12 @@
 
 ;;; Mermaid
 ;; Org-babel support for mermaid evaluation
-(defconst mermaid-folder "$HOME/.npm/bin/mmdc")
 (use-package ob-mermaid
   :ensure t
   :defer t
   :after org
   :config
-  (setq ob-mermaid-cli-path mermaid-folder))
+  (ob-mermaid-cli-path (expand-file-name "~/.npm/bin/mmdc")))
 
 
 ;;; Org Modern
@@ -105,6 +109,11 @@
 (use-package org-modern
   :ensure t
   :after org
+  :preface
+  (defun ef/org-modern-spacing ()
+	(setq-local line-spacing (if (bound-and-true-p org-modern-mode) 0.4 0.0))
+	)
+
   ;; :config
   ;; (global-org-modern-mode)
   :hook
@@ -112,18 +121,13 @@
    (org-agenda-finalize . org-modern-agenda)
    (org-mode . ef/org-modern-spacing)
    )
-  :config
-  (defun ef/org-modern-spacing ()
-	(setq-local line-spacing
-				(if org-modern-mode
-					0.3 0.0)))
   :custom
   (org-catch-invisible-edits 'show-and-error)
   (org-modern-block-fringe nil)
   ;; Needed for org-modern-indent
   (org-modern-hide-stars nil)
   ;; Todo
-  (org-modern-todo nil)
+  (org-modern-todo t)
   (org-modern-todo-faces
    '(("NEXT" :inherit (bold success org-modern-todo))
 	 ("TODO" :inherit (org-todo org-modern-todo))
@@ -138,7 +142,7 @@
   ;; Footnote
   (org-modern-footnote '(nil (raise 0.15) (height 0.9)))
   ;; Tag
-  (org-modern-tag nil)
+  (org-modern-tag t)
   (org-modern-tag-faces
    `(("project"
 	  :foreground ,(face-background 'default nil t)
@@ -153,10 +157,10 @@
 	 (?E :inverse-video t :inherit (shadow org-priority))
 	 (?F :inverse-video t :inherit (shadow org-priority))))
   ;; Table
-  (org-modern-table nil)
+  (org-modern-table t)
   (org-modern-table-vertical nil)
   (org-modern-table-horizontal nil)
-  (org-modern-horizontal-rule t)
+  ;;(org-modern-horizontal-rule t)
   ;; List
   (org-modern-list '((?+ . "+")
 					 (?- . "-")
@@ -241,7 +245,7 @@
    )
   ;; Miscellaneous
   (org-modern-timestamp t)
-
+  :init
   (modify-all-frames-parameters
    '((right-divider-width . 2)
 	 (internal-border-width . 0)))
@@ -308,7 +312,7 @@
 
 	 ;; Agenda styling
 	 org-agenda-tags-column 0
-	 org-agenda-block-separator ?─
+	 ;; org-agenda-block-separator ?─
 	 org-agenda-time-grid
 	 '((daily today require-timed)
 	   (800 1000 1200 1400 1600 1800 2000)
@@ -327,7 +331,7 @@
 ;; A synchronized org-mode document annotator
 ;; Just press i
 (use-package org-noter
-  :ensure nil
+  :ensure t
   :defer
   :after org
   :custom
@@ -360,7 +364,7 @@
   :after org
   :preface
   (defun my/org-present-start (&rest args)
-	(menu-bar--display-line-numbers-mode-none)
+	(display-line-numbers-mode -1)
 	(visual-line-mode 1)
 	(org-display-inline-images)
 	(org-present-hide-cursor)
@@ -368,7 +372,8 @@
 	(org-present-big)
 	(setq header-line-format " "))
   (defun my/org-present-end (&rest args)
-	(menu-bar--display-line-numbers-mode-visual)
+	(display-line-numbers-mode 1)
+	(setq display-line-numbers-type 'visual)
 	(visual-line-mode 0)
 	(org-remove-inline-images)
 	(org-present-show-cursor)
@@ -381,10 +386,11 @@
 	(org-fold-show-entry)
 	;; Show only direct subheadings of the slide but don't expand them
 	(org-fold-show-children))
-  :hook (org-present-mode . my/org-present-start)
-  :hook (org-present-mode-quit . my/org-present-end)
+  :hook
+  ((org-present-mode . my/org-present-start)
+   (org-present-mode-quit . my/org-present-end))
   :custom
-  (org-present-after-navigate-functions  #'my/org-present-prepare-slide)
+  (org-present-after-navigate-functions  '(my/org-present-prepare-slide))
   )
 
 
@@ -394,7 +400,7 @@
 ;; EPUB books and Info documentation with using Org mode.
 (use-package org-remark
   :ensure t
-  :hook (on-first-file . org-remark-global-tracking-mode)
+  :hook (after-init . org-remark-global-tracking-mode)
   :after org
   :bind (;; :bind keyword also implicitly defers org-remark itself.
 		 ;; Keybindings before :map is set for global-map. Adjust the keybinds
@@ -473,11 +479,13 @@
 (use-package toc-org
   :ensure t
   :after (org markdown-mode)
+  :hook (
+		 (org-mode . toc-org-enable)
+		 (markdown-mode . toc-org-enable)
+		 )
   :commands toc-org-enable
   :init
-  (add-hook 'org-mode-hook 'toc-org-enable)
-  (add-to-list 'org-tag-alist '("TOC" . ?T))
-  :hook (markdown-mode . toc-org-mode)  )
+  (add-to-list 'org-tag-alist '("TOC" . ?T)))
 
 ;;; Org Make TOC
 ;; (use-package org-make-toc
