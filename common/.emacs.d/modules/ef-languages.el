@@ -184,12 +184,12 @@
 ;;; MARKDOWN
 ;; Markdown Header Configuration
 (defun my/markdown-headers ()
-  (set-face-attribute 'markdown-header-face-1 nil :height 2.0)
-  (set-face-attribute 'markdown-header-face-2 nil :height 1.75)
-  (set-face-attribute 'markdown-header-face-3 nil :height 1.5)
-  (set-face-attribute 'markdown-header-face-4 nil :height 1.3)
-  (set-face-attribute 'markdown-header-face-5 nil :height 1.15)
-  (set-face-attribute 'markdown-header-face-6 nil :height 1.05)
+  (set-face-attribute 'markdown-header-face-1 nil :height 2.0 :weight 'bold)
+  (set-face-attribute 'markdown-header-face-2 nil :height 1.75 :weight 'bold)
+  (set-face-attribute 'markdown-header-face-3 nil :height 1.5 :weight 'bold)
+  (set-face-attribute 'markdown-header-face-4 nil :height 1.3 :weight 'bold)
+  (set-face-attribute 'markdown-header-face-5 nil :height 1.15 :weight 'bold)
+  (set-face-attribute 'markdown-header-face-6 nil :height 1.05 :weight 'bold)
   (set-face-attribute 'markdown-code-face nil :inherit 'fixed-pitch)
   ;; '(custom-set-faces!
   ;;   '(markdown-header-face-1 :height 1.25 :weight extra-bold :inherit markdown-header-face)
@@ -199,92 +199,100 @@
   ;;   '(markdown-header-face-5 :height 0.90 :weight bold       :inherit markdown-header-face)
   ;;   '(markdown-header-face-6 :height 0.75 :weight extra-bold :inherit markdown-header-face))
   )
+;; Highlight completed tasks with strike-through
+;; (defun my/markdown-strike-completed-tasks ()
+;;   "Highlight completed markdown tasks with a strike-through."
+;;   (font-lock-add-keywords nil
+;; 						  '(("^\\s-*\\([-+*]\\|\\s-*[0-9]+\\.\\)\\s-+\\(\\[x\\].*\\)$" 2 '(:strike-through t) t))))
+
+(defun my/markdown-strike-completed-tasks ()
+  "Strike through completed Markdown task list items."
+  (font-lock-add-keywords
+   nil
+   '(("^\\s-*\\(?:[-+*]\\|[0-9]+\\.\\)\\s-+\\[[xX]\\]\\s-+\\(.*\\)$"
+ 	  1 '(:strike-through t) t))))
 
 ;;;; Markdown (markdown-mode)
-;; (use-package markdown-mode
-;;   :ensure t
-;;   :preface
-;;   (defun my/markdown-hook ()
-;; 	(setq fill-column 100)
-;; 	(flyspell-mode)
-;; 	(visual-line-mode)
-;; 	)
-;;   :hook (
-;; 		 (markdown-mode . my/markdown-hook)
-;; 		 (markdown-mode . my/markdown-headers)
-;; 		 )
-;;
-;;   :mode (("\\.md\\'" . markdown-mode)
-;; 		 ("\\.markdown\\'" . markdown-mode))
-;;   :config
-;;   ;; (require 'lsp-marksman)
-;;   (setopt markdown-indent-on-enter 'indent-and-new-item)
-;;   (setopt markdown-hide-markup t)
-;;   (setopt markdown-enable-math t)
-;;   (setopt markdown-enable-highlighting-syntax t)
-;;   (setopt markdown-list-item-bullets '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
-;;   (setopt markdown-fontify-code-blocks-natively t)
-;;
-;;   (defun my/markdown-strike-completed-tasks ()
-;; 	"Highlight completed markdown tasks with a strike-through."
-;; 	(font-lock-add-keywords nil
-;; 							'(("^\\s-*\\([-+*]\\|\\s-*[0-9]+\\.\\)\\s-+\\(\\[x\\].*\\)$" 2 '(:strike-through t) t))))
-;;
-;;   (add-hook 'markdown-mode-hook 'my/markdown-strike-completed-tasks)
-;;
-;;
-;;   )
+(use-package markdown-mode
+  :ensure t
+  ;; gfm-mode adds github features
+  :mode (("\\.md\\'" . gfm-mode)
+		 ("\\.markdown\\'" . markdown-mode))
+
+  :hook ((markdown-mode . (lambda ()
+							(setq fill-column 120)
+							(flyspell-mode)
+							(visual-line-mode)
+							;; Enable outline folding
+							(outline-minor-mode)
+							(auto-fill-mode)
+							(setq imenu-add-menubar-index t)
+							(setq-local imenu-auto-rescan t)
+							;; Custom Functions
+							(my/markdown-headers)
+							(my/markdown-strike-completed-tasks)							))
+		 )
+  :config
+  ;; (require 'lsp-marksman)
+  (setopt markdown-indent-on-enter 'indent-and-new-item)
+  (setopt markdown-hide-markup t)
+  (setopt markdown-enable-math t)
+  (setopt markdown-enable-highlighting-syntax t)
+  (setopt markdown-fontify-whole-heading-line t)
+  ;; (setopt markdown-list-item-bullets '("✖" "✚" "◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
+  (setopt markdown-list-item-bullets '("-" "+" "*"))
+  (setopt markdown-fontify-code-blocks-natively t)  )
 
 ;;; MARKDOWN-TS-MODE
 ;; Markdown Header Configuration
-(defun my/markdown-headers ()
-  ;; (set-face-attribute 'markdown-header-face-1 nil :height 2.0)
-  ;; (set-face-attribute 'markdown-header-face-2 nil :height 1.75)
-  ;; (set-face-attribute 'markdown-header-face-3 nil :height 1.5)
-  ;; (set-face-attribute 'markdown-header-face-4 nil :height 1.3)
-  ;; (set-face-attribute 'markdown-header-face-5 nil :height 1.15)
-  ;; (set-face-attribute 'markdown-header-face-6 nil :height 1.05)
-  ;; (set-face-attribute 'markdown-code-face nil :inherit 'fixed-pitch)
-  (set-face-attribute 'markdown-ts-heading-1 nil :height 2.0)
-  (set-face-attribute 'markdown-ts-heading-2 nil :height 1.75)
-  (set-face-attribute 'markdown-ts-heading-3 nil :height 1.5)
-  (set-face-attribute 'markdown-ts-heading-4 nil :height 1.3)
-  (set-face-attribute 'markdown-ts-heading-4 nil :height 1.15)
-  (set-face-attribute 'markdown-ts-heading-6 nil :height 1.05)
-  (set-face-attribute 'markdown-ts-code-block nil :inherit 'fixed-pitch)
-  ;; '(custom-set-faces!
-  ;;   '(markdown-header-face-1 :height 1.25 :weight extra-bold :inherit markdown-header-face)
-  ;;   '(markdown-header-face-2 :height 1.15 :weight bold       :inherit markdown-header-face)
-  ;;   '(markdown-header-face-3 :height 1.08 :weight bold       :inherit markdown-header-face)
-  ;;   '(markdown-header-face-4 :height 1.00 :weight bold       :inherit markdown-header-face)
-  ;;   '(markdown-header-face-5 :height 0.90 :weight bold       :inherit markdown-header-face)
-  ;;   '(markdown-header-face-6 :height 0.75 :weight extra-bold :inherit markdown-header-face))
-  )
-
-(use-package markdown-ts-mode
-  :ensure nil
-  :mode ("\\.md\\'" "\\.mdx\\'" "\\.markdown\\'")
-  :preface
-  (defun my/markdown-hook ()
- 	(setq fill-column 100)
- 	(flyspell-mode)
- 	(visual-line-mode)
- 	)
-  ;; Strike-Through.Completed Tasks
-  (defun my/markdown-strike-completed-tasks ()
-	"Strike through completed Markdown task list items."
-	(font-lock-add-keywords
-	 nil
-	 '(("^\\s-*\\(?:[-+*]\\|[0-9]+\\.\\)\\s-+\\[[xX]\\]\\s-+\\(.*\\)$"
-		1 '(:strike-through t) t))))
-  (add-hook 'markdown-ts-mode-hook #'my/markdown-strike-completed-tasks)
-  :hook (
- 		 (markdown-ts-mode . my/markdown-hook)
- 		 (markdown-ts-mode . my/markdown-headers)
- 		 )
-
-  :config
-  (require 'markdown-ts-mode-x))
+;; (defun my/markdown-headers ()
+;;   ;; (set-face-attribute 'markdown-header-face-1 nil :height 2.0)
+;;   ;; (set-face-attribute 'markdown-header-face-2 nil :height 1.75)
+;;   ;; (set-face-attribute 'markdown-header-face-3 nil :height 1.5)
+;;   ;; (set-face-attribute 'markdown-header-face-4 nil :height 1.3)
+;;   ;; (set-face-attribute 'markdown-header-face-5 nil :height 1.15)
+;;   ;; (set-face-attribute 'markdown-header-face-6 nil :height 1.05)
+;;   ;; (set-face-attribute 'markdown-code-face nil :inherit 'fixed-pitch)
+;;   (set-face-attribute 'markdown-ts-heading-1 nil :height 2.0)
+;;   (set-face-attribute 'markdown-ts-heading-2 nil :height 1.75)
+;;   (set-face-attribute 'markdown-ts-heading-3 nil :height 1.5)
+;;   (set-face-attribute 'markdown-ts-heading-4 nil :height 1.3)
+;;   (set-face-attribute 'markdown-ts-heading-4 nil :height 1.15)
+;;   (set-face-attribute 'markdown-ts-heading-6 nil :height 1.05)
+;;   (set-face-attribute 'markdown-ts-code-block nil :inherit 'fixed-pitch)
+;;   ;; '(custom-set-faces!
+;;   ;;   '(markdown-header-face-1 :height 1.25 :weight extra-bold :inherit markdown-header-face)
+;;   ;;   '(markdown-header-face-2 :height 1.15 :weight bold       :inherit markdown-header-face)
+;;   ;;   '(markdown-header-face-3 :height 1.08 :weight bold       :inherit markdown-header-face)
+;;   ;;   '(markdown-header-face-4 :height 1.00 :weight bold       :inherit markdown-header-face)
+;;   ;;   '(markdown-header-face-5 :height 0.90 :weight bold       :inherit markdown-header-face)
+;;   ;;   '(markdown-header-face-6 :height 0.75 :weight extra-bold :inherit markdown-header-face))
+;;   )
+;;
+;; (use-package markdown-ts-mode
+;;   :ensure nil
+;;   :mode ("\\.md\\'" "\\.mdx\\'" "\\.markdown\\'")
+;;   :preface
+;;   (defun my/markdown-hook ()
+;;  	(setq fill-column 100)
+;;  	(flyspell-mode)
+;;  	(visual-line-mode)
+;;  	)
+;;   ;; Strike-Through.Completed Tasks
+;;   (defun my/markdown-strike-completed-tasks ()
+;; 	"Strike through completed Markdown task list items."
+;; 	(font-lock-add-keywords
+;; 	 nil
+;; 	 '(("^\\s-*\\(?:[-+*]\\|[0-9]+\\.\\)\\s-+\\[[xX]\\]\\s-+\\(.*\\)$"
+;; 		1 '(:strike-through t) t))))
+;;   (add-hook 'markdown-ts-mode-hook #'my/markdown-strike-completed-tasks)
+;;   :hook (
+;;  		 (markdown-ts-mode . my/markdown-hook)
+;;  		 (markdown-ts-mode . my/markdown-headers)
+;;  		 )
+;;
+;;   :config
+;;   (require 'markdown-ts-mode-x))
 
 
 
