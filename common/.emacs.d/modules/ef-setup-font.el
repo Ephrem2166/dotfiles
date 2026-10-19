@@ -28,22 +28,22 @@
 
 (defcustom wal-fixed-fonts
   '("JetBrains Mono"
-    "Berkeley Nerd Font"
-    "Iosevka"
-    "Fira Code"
-    "mononoki"
-    "Input Mono"
-    "Source Code Pro"
-    "DejaVu Sans Mono")
+	"Berkeley Nerd Font"
+	"Iosevka"
+	"Fira Code"
+	"mononoki"
+	"Input Mono"
+	"Source Code Pro"
+	"DejaVu Sans Mono")
   "Fixed fonts ordered by preference."
   :type '(repeat string)
   :group 'wal-visuals)
 
 (defcustom wal-variable-fonts
   '("DeJa Vu Sans"
-    "SN Pro"
-    "Liberation Serif"
-    "Ubuntu")
+	"SN Pro"
+	"Liberation Serif"
+	"Ubuntu")
   "Variable fonts ordered by preference."
   :type '(repeat string)
   :group 'wal-visuals)
@@ -76,19 +76,19 @@ This returns the made updates. Affects all frames unless ARG is
 t."
   (let ((frame (when arg (selected-frame))))
 
-    (mapc (lambda (it)
-            (when (internal-lisp-face-p it)
-              (set-face-attribute it frame attribute value)))
-          faces)
+	(mapc (lambda (it)
+			(when (internal-lisp-face-p it)
+			  (set-face-attribute it frame attribute value)))
+		  faces)
 
-    (run-hooks 'wal-fonts-updated-hook)))
+	(run-hooks 'wal-fonts-updated-hook)))
 
 (defun wal-read-sensible-font-height (type)
   "Read a sensible font height for TYPE."
   (let* ((current (face-attribute type :height))
-         (num (read-number (format "Set %s font (currently: %s): " type current))))
+		 (num (read-number (format "Set %s font (currently: %s): " type current))))
 
-    (max (min num 300) 80)))
+	(max (min num 300) 80)))
 
 (defun wal-available-fonts (fonts)
   "Filter FONTS down to available fonts."
@@ -97,11 +97,11 @@ t."
 (defun wal-read-font (type)
   "Read a font for TYPE."
   (let* ((name (intern (format "%s-pitch" type)))
-         (prev (face-attribute name :family))
-         (fonts (symbol-value (intern (format "wal-%s-fonts" type))))
-         (font (completing-read (format "Select %s font (current: %s) " type prev) (wal-available-fonts fonts))))
+		 (prev (face-attribute name :family))
+		 (fonts (symbol-value (intern (format "wal-%s-fonts" type))))
+		 (font (completing-read (format "Select %s font (current: %s) " type prev) (wal-available-fonts fonts))))
 
-    font))
+	font))
 
 (defun wal-select-fixed-font (font)
   "Select fixed (available) FONT."
@@ -145,11 +145,11 @@ If PREFER is true, variable `wal-preferred-fonts' is not nil and
 preferred fonts are available, return the first of those
 instead."
   (let* ((available-fonts (wal-available-fonts fonts))
-         (preferred (and prefer (wal-preferred-fonts available-fonts))))
+		 (preferred (and prefer (wal-preferred-fonts available-fonts))))
 
-    (if preferred
-        (car preferred)
-      (car available-fonts))))
+	(if preferred
+		(car preferred)
+	  (car available-fonts))))
 
 ;; Slanted and enchanted.
 (defun wal-font-lock ()
