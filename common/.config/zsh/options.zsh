@@ -1,12 +1,13 @@
 # General Settings
 # check `man zshoptions`
+
+
+
 # Use Emacs Keybindings
 # bindkey -e
 
-# Autoload the completion system
-autoload -U compinit
-compinit
-
+# Default is 40 (0.4s)
+KEYTIMEOUT=1   # 10 ms
 # Go to folder path without using CD
 setopt AUTO_CD
 # Push the old directory onto the stack on cd.
@@ -28,7 +29,7 @@ setopt PROMPT_SUBST # enable command substitution in prompt
 setopt LIST_PACKED  # The completion menu takes less space.
 
 # Do not show error
-unsetopt BEEP
+setopt BEEP
 # don't beep on ambiguous completions
 setopt NO_LIST_BEEP
 # setopt no_beep
@@ -44,6 +45,7 @@ setopt HIST_IGNORE_SPACE      # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS      # Do not write a duplicate event to the history file.
 setopt HIST_VERIFY            # Do not execute immediately upon history expansion.
 setopt HIST_REDUCE_BLANKS     # Remove extra blanks from each command added to history
+setopt HIST_FCNTL_LOCK
 # Don't wait until shell exits to add commands to history
 setopt INC_APPEND_HISTORY
 
@@ -67,7 +69,7 @@ unsetopt COMPLETE_ALIASES
 setopt ALWAYS_TO_END
 
 # Autoselect the first completion entry
-setopt MENU_COMPLETE
+unsetopt MENU_COMPLETE
 
 # Show completion menu on successive tab press (menu_complete overrides)
 setopt AUTO_MENU
@@ -87,7 +89,7 @@ setopt COMPLETE_IN_WORD
 setopt AUTO_NAME_DIRS
 
 # Allow globs to match dotfiles.
-setopt GLOB_DOTS
+unsetopt GLOB_DOTS
 
 # Sort numeric filenames numerically, instead of lexicographically.
 setopt NUMERIC_GLOB_SORT
@@ -101,13 +103,19 @@ setopt MARK_DIRS
 # Interrupt me to let me know a background jobs finished.
 setopt NOTIFY
 
-# Ambiguous completion candidate automatically shows options on tab.
-setopt AUTOLIST
+# Prevents accidental shell exit on Ctrl-D
+setopt IGNORE_EOF
+
+# fix the "partial line" artifact where a command
+# output without a trailing newline eats your prompt
+setopt PROMPT_SP
+setopt PROMPT_CR
 
 # Display red dots whilst waiting for commands to complete.
 # COMPLETION_WAITING_DOTS="true"
 # COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-autoload -U colors && colors
+# 🔥 FIXME:: Conflicts with starship
+# autoload -U colors && colors
 
 # Now we autoload run-help and several extensions to it which provide
 # more precise help for certain external commands.
@@ -116,8 +124,94 @@ autoload -Uz run-help-git
 autoload -Uz run-help-ip
 autoload -Uz run-help-sudo
 
-# completion to include dotfiles by default (without typing a leading dot)
-_comp_options+=(globdots)
-
 # Selecting options using Tab, arrows, and C-p / C-n:
 zmodload zsh/complist
+
+
+# General Settings
+
+# --- Shell mode ---
+bindkey -e
+
+# --- Options ---
+setopt AUTO_CD
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_SILENT
+setopt PUSHD_TO_HOME
+
+setopt EXTENDED_GLOB
+setopt NOMATCH
+setopt NUMERIC_GLOB_SORT
+setopt NO_CASE_GLOB
+# NOTE: GLOB_DOTS intentionally NOT set globally — see completion file's `_comp_options+=(globdots)`
+# setopt MARK_DIRS   # enable only if you want trailing / on every directory match
+
+setopt PROMPT_SUBST
+setopt PROMPT_SP
+setopt PROMPT_CR
+setopt LIST_PACKED
+
+setopt NO_BEEP
+setopt IGNORE_EOF
+setopt INTERACTIVE_COMMENTS
+setopt MULTIOS
+# setopt NO_CLOBBER   # uncomment if you want > to refuse overwriting files
+
+# --- History ---
+HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+HISTSIZE=50000
+SAVEHIST=50000
+[[ -d ${HISTFILE:h} ]] || mkdir -p ${HISTFILE:h}
+
+setopt APPENDHISTORY
+setopt EXTENDED_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_FCNTL_LOCK
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_VERIFY
+setopt HIST_REDUCE_BLANKS
+setopt INC_APPEND_HISTORY
+
+# --- Correction ---
+setopt RM_STAR_WAIT
+setopt CORRECT
+unsetopt CORRECT_ALL
+
+# --- Completion-related shell behavior ---
+unsetopt COMPLETE_ALIASES
+setopt ALWAYS_TO_END
+setopt COMPLETE_IN_WORD
+setopt AUTO_PARAM_SLASH
+setopt AUTO_NAME_DIRS
+setopt NOTIFY
+
+# Menu: pick ONE of the two below
+unsetopt MENU_COMPLETE
+setopt AUTO_MENU
+
+setopt AUTO_LIST
+# setopt AUTOLIST    # duplicate of AUTO_LIST
+
+# --- Keys ---
+KEYTIMEOUT=1
+
+# --- Help system ---
+autoload -Uz run-help
+autoload -Uz run-help-git
+autoload -Uz run-help-ip
+autoload -Uz run-help-sudo
+
+# --- PATH  ---
+typeset -U path PATH
+path=(
+  "$HOME/.local/bin"
+  "$HOME/bin"
+  /usr/local/bin
+  $path
+)

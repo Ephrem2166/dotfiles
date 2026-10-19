@@ -2,6 +2,7 @@
 # Command completion
 setopt extended_glob
 
+# Autoload the completion system
 autoload -Uz compinit
 compinit
 
@@ -122,6 +123,18 @@ zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompcach
 
 # Max errors for approximate and correct
 zstyle ':completion:*:approximate:::' max-errors 1 numeric
+
+# completion to include dotfiles by default (without typing a leading dot)
+_comp_options+=(globdots)
+
+
+# Try exact prefix match first, then case-insensitive,
+# then substring matching, then fuzzy matching.
+zstyle ':completion:*' matcher-list \
+  '' \
+  'm:{a-zA-Z}={A-Za-z}' \
+  'l:|=* r:|=*' \
+  'r:|?=**'
 
 # menuselect
 bindkey '^[[Z' reverse-menu-complete
