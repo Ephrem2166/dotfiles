@@ -8,7 +8,7 @@
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+		doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (load-theme 'doom-nord t)
 
   ;; Enable flashing mode-line on errors
@@ -328,11 +328,11 @@
   :config
   (setq catppuccin-flavor 'mocha) ;; options: 'frappe latte, 'macchiato, or 'mocha
   (defun my/catppuccin-hack (_)
-    "A catppuccin hack to make sure everything is loaded"
-    (catppuccin-reload))
+	"A catppuccin hack to make sure everything is loaded"
+	(catppuccin-reload))
   (add-hook 'after-init-hook (lambda ()
-                               (run-with-timer 0.3 nil
-                                               (lambda ()(my/catppuccin-hack nil)))))
+							   (run-with-timer 0.3 nil
+											   (lambda ()(my/catppuccin-hack nil)))))
   (add-hook 'after-make-frame-functions 'my/catppuccin-hack)
   )
 

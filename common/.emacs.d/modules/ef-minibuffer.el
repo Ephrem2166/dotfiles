@@ -1,14 +1,15 @@
 ;;; ef-minibuffer.el ---  -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; Commentary:
 ;;; Code:
-;;; TODO Completion Preview
+;;; 👷 TODO:: Completion Preview
+;; Conflicts with corfu
 (use-package completion-preview
+  :disabled
   :ensure nil
+  :hook (after-init . completion-preview-mode)
   :custom
   (completion-preview-ignore-case t)
   (completion-preview-minimum-symbol-length 3)
-  :config
-  (completion-preview-mode 1)
 
   )
 
@@ -40,52 +41,48 @@
 		 ("C-n" . minibuffer-next-completion)
 		 )
   :config
-  (setopt enable-recursive-minibuffers t)
-  (setopt tab-always-indent 'complete)
-  (setopt read-buffer-completion-ignore-case t)
-  (setopt read-file-name-completion-ignore-case t)
-  (setopt completion-auto-help t)
-  (setopt completions-detailed t)
-  (setopt completion-auto-select 'second-tab)
-  (setopt completion-cycle-threshold 5)
-  (setopt completions-format 'one-column)
-  (setopt completions-sort 'historical)
-  (setopt completions-max-height 100)
-  (setopt completion-show-help t)
-  (setopt completion-ignore-case t)
-  (setopt enable-recursive-minibuffers t)
-  (setopt completion-styles '(partial-completion flex substring basic initials))
-;;;; Keep the cursor out of the read-only portions of the minibuffer
-  (setopt minibuffer-prompt-properties
-		  '(read-only t
-					  cursor-intangible t
-					  face minibuffer-prompt))
+  ;; Don't allow the cursor in the minibuffer
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  (setopt enable-recursive-minibuffers t)
+  ;; (setopt tab-always-indent 'complete)
+  ;; (setopt read-buffer-completion-ignore-case t)
+  ;; (setopt read-file-name-completion-ignore-case t)
+  ;; 📎 NOTE:: Conflicts with vertico
+  ;; (setopt completion-auto-help t)
+  ;; (setopt completions-detailed t)
+  ;; (setopt completion-auto-select 'second-tab)
+  ;; (setopt completion-cycle-threshold 5)
+  ;; (setopt completions-format 'one-column)
+  ;; (setopt completions-sort 'historical)
+  ;; (setopt completions-max-height 100)
+  ;; (setopt completion-show-help t)
+  ;; (setopt completion-ignore-case t)
+  ;; (setopt completion-styles '(partial-completion flex substring basic initials))
+;;;; Keep the cursor out of the read-only portions of the minibuffer
+  ;; (setopt minibuffer-prompt-properties
+  ;; '(read-only t
+  ;; cursor-intangible t
+  ;; face minibuffer-prompt))
+										;
   )
 
-;;; Don't allow the cursor in the minibuffer
-(use-package minibuffer
-  :ensure nil
-  :config
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-  )
 
 ;; From Doom Emacs
 (use-package minibuffer
   :ensure nil
-  :hook ((minibuffer-setup . defer-garbage-collection)
-		 (minibuffer-setup . restore-garbage-collection))
+  :hook ((minibuffer-setup . ef/defer-garbage-collection)
+		 (minibuffer-setup . ef/restore-garbage-collection))
 
   :preface
-  (defun defer-garbage-collection ()
+  (defun ef/defer-garbage-collection ()
 	(setq gc-cons-threshold most-positive-fixnum))
 
-  (defvar default-gc-cons-threshold 16777216)
-  (defun restore-garbage-collection ()
+  (defvar ef/default-gc-cons-threshold (* 16 1024 1024))
+  (defun ef/restore-garbage-collection ()
 	;; Deferred so that commands launched immediately after will enjoy the
 	;; benefits.
 	(run-at-time
-	 1 nil (lambda () (setq gc-cons-threshold default-gc-cons-threshold))))
+	 1 nil (lambda () (setq gc-cons-threshold ef/default-gc-cons-threshold))))
 
   )
 

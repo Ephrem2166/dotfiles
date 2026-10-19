@@ -5,15 +5,19 @@
 ;;; Diff
 (use-package diff
   :ensure nil
-  :defer t
   :config
   (setq diff-default-read-only t)
   (setq diff-advance-after-apply-hunk t)
-  (setq diff-update-on-the-fly t)
   (setq diff-refine nil)
-  (setq diff-font-lock-syntax 'hunk-also)
-  (setq diff-font-lock-prettify t))
+  (setq diff-font-lock-prettify t)
 
+  (when (boundp 'diff-font-lock-syntax)
+	(setq diff-font-lock-syntax 'hunk-also)
+	)
+  (when (boundp 'diff-update-on-the-fly)
+	(setq diff-update-on-the-fly t))
+
+  )
 ;;; Ediff
 (use-package ediff
   :ensure nil
@@ -42,14 +46,16 @@
 ;;; TODO MAGIT
 ;; Since magit requires a newer version of transient
 ;; we need to install it on top of the built-in transient
-(use-package transient)
+(use-package transient
+  :ensure t
+  :demand t)
 
 ;;;; Magit
 (use-package magit
   :ensure t
   :defer-incrementally (dash f s with-editor git-commit transient)
   :init
-  (setq magit-auto-revert-mode nil)  ; we do this ourselves further down
+  ;; (setq magit-auto-revert-mode nil)
   ;; Must be set early to prevent ~/.emacs.d/transient from being created
   (setq transient-levels-file  (concat user-emacs-directory "transient/levels")
 		transient-values-file  (concat user-emacs-directory  "transient/values")
@@ -66,7 +72,7 @@
   (magit-repository-directories '(
 								  ("~/dotfiles/" . 0)
 								  ))
-  (magit-bury-buffer-function 'magit-mode-quit-window)
+
   :config
   (setq magit-push-always-verify t)
   (setq transient-default-level 5)
@@ -74,13 +80,10 @@
   (setq magit-save-repository-buffers nil)
   (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
   (setq transient-display-buffer-action '(display-buffer-below-selected))
-  (add-hook 'magit-popup-mode-hook #'hide-mode-line-mode)
-  (with-eval-after-load 'magit
-	(setq magit-format-file-function #'magit-format-file-nerd-icons))
-
-  (with-eval-after-load 'magit
-	(remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
-	(remove-hook 'server-switch-hook 'magit-commit-diffq)
+  (setq magit-format-file-function #'magit-format-file-nerd-icons)
+  (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
+  (with-eval-after-load 'magit-commit
+	(remove-hook 'server-switch-hook 'magit-commit-diff)
 	(remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
 
   )
