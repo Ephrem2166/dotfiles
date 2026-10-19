@@ -9,29 +9,27 @@
   :ensure t
   :demand t
   :init
-  (setq evil-want-keybinding nil)
-  (setq evil-overriding-maps nil)
-  (setq evil-intercept-maps nil)
-  (setq evil-insert-state-bindings nil)
+  ;; (setq evil-want-keybinding nil)
+  ;; (setq evil-overriding-maps nil)
+  ;; (setq evil-intercept-maps nil)
+  (setq evil-disable-insert-state-bindings t)
   ;; Basics
-  (setq evil-want-integration t)
+  ;; (setq evil-want-integration t)
   (setq evil-search-module 'isearch)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-d-scroll t)
   (setq evil-want-C-i-jump nil)
   (setq evil-vsplit-window-right t)
   (setq evil-split-window-below t)
-  (setq evil-undo-system 'undo-redo)
-  (setq evil-respect-visual-line-mode t)
-  (setq evil-want-C-i-jump nil)
-  (setq evil-want-Y-yank-to-eol t)
   ;; Undo with u and redo with C-r
   (setq evil-undo-system 'undo-redo)
+  (setq evil-respect-visual-line-mode t)
+  (setq evil-want-Y-yank-to-eol t)
   ;; prevent esc-key from translating to meta-key in terminal mode
   (setq evil-esc-delay 0)
   ;;Colors
   (setq evil-mode-line-format nil)
-  (setq evil-normal-state-cursor '(box "#C678DD"))
+  ;; (setq evil-normal-state-cursor '(box "#C678DD"))
   (setq evil-normal-state-cursor '(box "#DFDFDF"))
   (setq evil-motion-state-cursor '(box "#98BE65"))
   (setq evil-insert-state-cursor '(bar "#51AFEf"))
@@ -74,7 +72,6 @@
 (use-package evil-surround
   :ensure t
   :after evil
-  :defer t
   :custom
   (evil-surround-pairs-alist
    '((?\( . ("(" . ")"))
@@ -123,31 +120,31 @@
 (use-package evil-org
   :ensure t
   :after (evil org)
-  :hook (org-mode . (lambda () evil-org-mode))
+  :hook (org-mode . evil-org-mode)
   :config
   (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys)
-  (evil-org-set-key-theme '(navigation todo insert textobjects additional))
+  (with-eval-after-load 'org-agenda
+	(evil-org-agenda-set-keys)
+	)
+  (evil-org-set-key-theme '(navigation todo textobjects additional))
   ;; For Terminal
-  (setq evil-want-C-i-jump nil)
+  ;; (setq evil-want-C-i-jump nil)
   )
 
 ;;; Evil Visualizer
 ;; Starts a * or # search from the visual selection
 (use-package evil-visualstar
-  :after evil
   :ensure t
-  :defer t
-  :commands global-evil-visualstar-mode
+  :after evil
+  ;; :defer t
+  ;; :commands global-evil-visualstar-mode
   :hook (after-init . global-evil-visualstar-mode))
 
 ;;; Evil Snipe
 ;; Emulate vim-sneak & vim-seek
 (use-package evil-snipe
   :ensure t
-  :defer t
-  :commands evil-snipe-mode
-  :hook (after-init . evil-snipe-mode)
+  :hook (after-init . global-evil-snipe-mode)
   :custom
   (evil-snipe-scope 'buffer)
   (evil-snipe-repeat-scope 'buffer)
@@ -176,17 +173,18 @@
 (use-package evil-escape
   :ensure t
   :config
-  (setq-default evil-escape-key-sequence "jk")
-  (setq evil-escape-delay 0.2)
-  (setq-default evil-escape-excluded-major-modes
-				'(magit-status-mode
-				  magit-diff-mode
-				  magit-revision-mode
-				  magit-log-mode
-				  org-agenda-mode))
-  (setq-default evil-escape-excluded-states '(visual))
-  :init
-  (evil-escape-mode 1))
+  (evil-escape-mode 1)
+  :custom
+  (evil-escape-key-sequence "jk")
+  (evil-escape-delay 0.2)
+  (evil-escape-excluded-major-modes
+   '(magit-status-mode
+	 magit-diff-mode
+	 magit-revision-mode
+	 magit-log-mode
+	 org-agenda-mode))
+  (evil-escape-excluded-states '(visual))
+  )
 
 ;;; Code Ends Here
 (provide 'ef-evil)
