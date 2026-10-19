@@ -72,6 +72,20 @@
 
 ;;; Eglot
 ;; Eglot (built-in client for the language server protocol)
+;; Auto format eglot buffer
+(defun ef/setup-eglot-format-on-save ()
+  "Enable format-on-save for Eglot managed buffers.
+
+Add `eglot-format-buffer' to the buffer-local `before-save-hook' when Eglot
+manages the current buffer. Otherwise, remove it. Run formatting at depth -10,
+before hooks at the default depth."
+  (when (fboundp 'eglot-format-buffer)
+	(if (and (fboundp 'eglot-managed-p)
+			 (eglot-managed-p))
+		(add-hook 'before-save-hook #'eglot-format-buffer -10 t)
+	  (remove-hook 'before-save-hook #'eglot-format-buffer t))))
+
+(add-hook 'eglot-managed-mode-hook #'ef/setup-eglot-format-on-save)
 (use-package eglot
   :ensure nil
   ;; :disabled

@@ -113,7 +113,7 @@
 		  ;; ── Code snippets ───────────────────────────────────────────────
 		  ("c" "Code snippet" entry
 		   (file+headline "~/Org/capture/codes.org" "Snippets")
-		   "* %?\t%^g\n#+BEGIN_SRC %^{Language}\n\n#+END_SRC"
+		   "* %^{Title}\t%^g\n#+BEGIN_SRC %^{Language||emacs-lisp|python|sh|js|css|html|json|yaml|toml|sql}\n%?\n#+END_SRC"
 		   :empty-lines 1)
 
 		  ;; ── Lists (checkitems) ─────────────────────────────────────────

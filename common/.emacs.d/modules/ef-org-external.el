@@ -9,9 +9,8 @@
 ;;; Org Appear
 ;; Shows emphasis markers when the cursor is on the emphasized region
 (use-package org-appear
-  :disabled
-  :after org
   :ensure t
+  :after org
   :hook (org-mode . org-appear-mode)
   :config
   (setq org-appear-autoemphasis   t
