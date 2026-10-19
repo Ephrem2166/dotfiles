@@ -79,7 +79,7 @@
 (defvar-keymap ef-applications-keymap
   :doc "Prefix for toggling stuff."
   )
-(bind-key "C-c a" ef-applications-keymap 'global-map)
+(bind-key "C-c A" ef-applications-keymap 'global-map)
 
 ;;;; Buffer Mapping
 (defvar-keymap ef-buffer-keymap

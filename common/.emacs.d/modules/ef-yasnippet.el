@@ -9,9 +9,9 @@
   :bind
 
   (:map yas-minor-mode-map
-        ("<tab>" . nil)
+		("<tab>" . nil)
 
-        ("<backtab>" . yas-expand))
+		("<backtab>" . yas-expand))
 
 
   ;; :preface
@@ -24,22 +24,22 @@
   ;; :init
   ;; (yas-global-mode 1)
   :hook (((prog-mode LaTeX-mode org-mode
-                     eval-expression-minibuffer-setup)
-          . yas-minor-mode))
+					 eval-expression-minibuffer-setup)
+		  . yas-minor-mode))
   :config
   ;; Integrate YASnippet with `hippie-expand'.
-  (with-eval-after-load 'yasnippet
 
-    (add-to-list 'hippie-expand-try-functions-list
-                 'yas-hippie-try-expand))
-                                        ; Makes more sense when placed at the
-                                        ; top of the list.
+  (add-to-list 'hippie-expand-try-functions-list
+			   'yas-hippie-try-expand)
+										; Makes more sense when placed at the
+										; top of the list.
   ;; (setq yas-trigger-symbol "<tab>")
   (setq yas-wrap-around-region t)
   (setq yas-verbosity 1)
   (setq yas-snippet-dirs '("~/dotfiles/common/.emacs.d/etc/snippets/"))
   ;; (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "etc/snippets/"))
   ;; to load Yasnippet on a per bxuffer basis
+  (setq yas-prompt-functions '(yas-ignore-errors-return))
   (yas-reload-all)
   )
 ;;; Yasnippet snippets

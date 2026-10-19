@@ -81,7 +81,7 @@
 		 ;; (olivetti-mode-on . my/olivetti-mode-on)
 		 ;; (olivetti-mode-off . my/olivetti-mode-off)
 
-		 ((org-mode Info-mode  markdown-mode) . olivetti-mode)
+		 ((Info-mode  markdown-mode) . olivetti-mode)
 		 )
   :config
   (setq olivetti-lighter nil)
@@ -155,20 +155,11 @@
   :ensure t
   ;;:defer t
   :mode ("\\.pdf\\'" . pdf-view-mode)
+  :magic ("%PDF" . pdf-view-mode)
+  ;; :init
+  ;; (pdf-tools-install :no-query)
+  ;; Run `pdf-tools-install'
   :config
-  (pdf-tools-install :no-query)
-  (require 'pdf-tools)
-  (require 'pdf-view)
-  (require 'pdf-misc)
-  (require 'pdf-occur)
-  (require 'pdf-util)
-  (require 'pdf-annot)
-  (require 'pdf-info)
-  (require 'pdf-isearch)
-  (require 'pdf-history)
-  (require 'pdf-links)
-  (require 'pdf-outline)
-  (require 'pdf-sync)
   ;; (pdf-tools-install :no-query)
   (setq-default pdf-view-display-size 'fit-page)
   ;; (setq pdf-view-midnight-colors '("#D8DEE9" . "#2E3440"))

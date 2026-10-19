@@ -21,6 +21,7 @@
 		 )
   :defer t
   :init (global-flycheck-mode)
+  :config
   (setq flycheck-idle-change-delay 1.0)
   ;; Display errors a little quicker (default is 0.9s))
   (setq flycheck-display-errors-delay 0.25)
@@ -68,19 +69,9 @@
 ;; Colorize color names in buffers
 (use-package rainbow-mode
   :ensure t
-  :diminish rainbow-mode
-  :hook
-  ((prog-mode
-	org-mode
-	conf-mode
-	help-mode
-	emacs-lisp-mode
-	web-mode
-	css-mode
-	yaml-ts-mode
-	js-json-mode
-	typescript-mode
-	js2-mode) . rainbow-mode )
+  :hook ((prog-mode . rainbow-mode)
+		 (org-mode . rainbow-mode)
+		 )
   )
 
 (provide 'ef-programming)
