@@ -18,6 +18,13 @@
 	(setq diff-update-on-the-fly t))
 
   )
+
+;;; Diff-hl
+(use-package diff-hl
+  :ensure t
+  :hook (prog-mode . diff-hl-mode) (dired-mode . diff-hl-dired-mode)
+  (magit-post-refresh . diff-hl-magit-post-refresh))
+
 ;;; Ediff
 (use-package ediff
   :ensure nil
