@@ -52,26 +52,52 @@
 		 ("C-c j w" . jinx-correct-word)
 		 ("C-c j /" . jinx-correct-nearest)
 		 ("C-c j ," . jinx-languages))
-  :init
-  (setq jinx-languages "en_US")
-  :config
-  (dolist (hook '(text-mode-hook
-				  org-mode-hook
-				  markdown-mode-hook))
-	(add-hook hook #'jinx-mode)))
+  :hook ((text-mode     . jinx-mode)
+		 (org-mode      . jinx-mode)
+		 (markdown-mode . jinx-mode))
+  :custom
+  (jinx-languages "en_US")
+
+  (set-face-attribute 'jinx-misspelled nil :underline '(:style wave :color "orange red"))
+  )
 
 
 ;;; Writeroom
 ;; A distraction-free writing mode
+;; Writerroom with Org-Mode
+(defun my/writeroom-org-prose-setup ()
+  "Adjust Org settings for a distraction-free prose experience."
+  (when (eq major-mode 'org-mode)
+	;; 1. Disable visual clutter
+	(display-line-numbers-mode -1)
+	(org-indent-mode -1) ; Optional: turns off indentation for a more "flat" look
+
+	;; 2. Adjust text width (visual-fill-column is used by writeroom internally)
+	(setq-local visual-fill-column-width 70) ; A comfortable width for reading
+
+	;; 3. (Optional) Tweak org-modern if you use it
+	(when (featurep 'org-modern)
+	  (setq-local org-modern-hide-stars t)
+	  (org-modern-mode -1)
+	  (org-modern-mode 1))))
+
+(defun my/writeroom-org-prose-teardown ()
+  "Restore Org settings after exiting writeroom."
+  (when (eq major-mode 'org-mode)
+	;; Restore original settings. You may want to save the previous state.
+	(display-line-numbers-mode 1)
+	(org-indent-mode 1)
+	;; Note: org-modern will be restored by its own global mode
+	))
 (use-package writeroom-mode
   :ensure t
   :bind (
 		 :map ef-toggle-keymap
 		 ("w" . writeroom-mode))
-  :defer t
-  :hook
-  (writeroom-mode-enable . set-buffer-writing-font)
-  (writeroom-mode-disable . unset-buffer-writing-font)
+  :hook (
+		 (writeroom-mode-enable . my/writeroom-org-prose-setup)
+		 (writeroom-mode-disable . my/writeroom-org-prose-teardown)
+		 (writeroom-mode . my/writeroom-toggle-font))
   :custom
   (writeroom-width 80)
   (writeroom-maximize-window nil)
@@ -85,21 +111,29 @@
 	 )
    )
   :preface
+  (defvar-local my/writeroom-saved-line-spacing nil
+	"Line spacing before writeroom-mode was enabled.")
+
   (defface my-writing-face
-	'((t (:height 1.5 :family "ia Writer Duo S")))
-	"A face used for writing")
+	`((t (:height 1.5 :family
+				  ,(or (when (find-font (font-spec :family "ia Writer Duo S"))
+						 "ia Writer Duo S")
+					   (and (boundp 'my/available-variable-font)
+							my/available-variable-font)
+					   "Sans"))))
+	"Face for distraction-free writing.")
 
-  (defun set-buffer-writing-font ()
-	"Sets font in current buffer"
-	(interactive)
-	(buffer-face-set 'my-writing-face)
-	(setq line-spacing 4))
+  (defun my/writeroom-toggle-font ()
+	"Apply or remove the writing face and line spacing.
+Bound to `writeroom-mode-hook', checks `writeroom-mode' to decide direction."
+	(if writeroom-mode
+		(progn
+		  (setq-local my/writeroom-saved-line-spacing line-spacing)
+		  (buffer-face-set 'my-writing-face)
+		  (setq-local line-spacing 4))
+	  (buffer-face-set 'default)
+	  (setq-local line-spacing my/writeroom-saved-line-spacing)))
 
-  (defun unset-buffer-writing-font ()
-	"Sets font in current buffer"
-	(interactive)
-	(buffer-face-set 'default)
-	(setq line-spacing nil))
   )
 
 

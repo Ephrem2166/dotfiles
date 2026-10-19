@@ -427,7 +427,7 @@ possible."
 
 (advice-add 'after-find-file :around #'doom--optimize-for-large-files-a)
 
-;;;; Incremenal Loading
+;;; Incremenal Loading
 ;; https://github.com/hlissner/doom-emacs/blob/42a21dffddeee57d84e82a9f0b65d1b0cba2b2af/core/core.el#L353
 (defvar doom-incremental-packages '(t)
   "A list of packages to load incrementally after startup. Any large packages
