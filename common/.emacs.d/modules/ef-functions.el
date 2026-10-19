@@ -1840,17 +1840,12 @@ Initialize with ELEMENT-LIST if this is the first time."
 		(beginning-of-line)
 		(comment-search-forward (line-end-position) t))))
 
-;; It might be nice to figure out what state we're
-;; in and then cycle to the next one if we're just
-;; working with a single paragraph. In the
-;; meantime, just going by repeats is fine.
+
 (defun my-reformat-paragraph-or-region ()
-  "Cycles the paragraph between three states: filled/unfilled/fill-sentences.
-If a region is selected, handle all paragraphs within that region."
+  "Cycle paragraph between filled and unfilled."
   (interactive)
   (let ((func (my-repeat-next 'my-reformat-paragraph
-							  '(fill-paragraph my-unfill-paragraph fill-paragraph-semlf
-											   my-fill-paragraph-semlf-long)
+							  '(fill-paragraph my-unfill-paragraph)
 							  (not (eq this-command last-command))))
 		(deactivate-mark nil))
 	(if (region-active-p)
@@ -1867,15 +1862,13 @@ If a region is selected, handle all paragraphs within that region."
 				  (org-forward-paragraph))
 				 ((member (org-element-type elem)
 						  '(src-block export-block headline property-drawer))
-				  (goto-char
-				   (org-element-end (org-element-context))))
+				  (goto-char (org-element-end (org-element-context))))
 				 (t
 				  (funcall func)
 				  (if fill-forward-paragraph-function
 					  (funcall fill-forward-paragraph-function)
-					(forward-paragraph)))))
-			  )))
-	  (funcall func))))
+					(forward-paragraph)))))))
+		  (funcall func)))))
 
 (keymap-global-set "M-q" #'my-reformat-paragraph-or-region)
 
