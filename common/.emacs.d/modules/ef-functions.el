@@ -429,138 +429,83 @@ possible."
 
 ;;; Incremenal Loading
 ;; https://github.com/hlissner/doom-emacs/blob/42a21dffddeee57d84e82a9f0b65d1b0cba2b2af/core/core.el#L353
-(defvar doom-incremental-packages '(t)
-  "A list of packages to load incrementally after startup. Any large packages
-here may cause noticeable pauses, so it's recommended you break them up into
-sub-packages. For example, `org' is comprised of many packages, and can be
-broken up into:
-  (doom-load-packages-incrementally
-   '(calendar find-func format-spec org-macs org-compat
-	 org-faces org-entities org-list org-pcomplete org-src
-	 org-footnote org-macro ob org org-clock org-agenda
-	 org-capture))
-This is already done by the lang/org module, however.
-If you want to disable incremental loading altogether, either remove
-`doom-load-packages-incrementally-h' from `emacs-startup-hook' or set
-`doom-incremental-first-idle-timer' to nil.")
 
-(defvar doom-incremental-first-idle-timer 5.0
-  "How long (in idle seconds) until incremental loading starts.
-Set this to nil to disable incremental loading.")
+(defvar ef/incremental-queue nil
+  "Packages waiting to be loaded incrementally.")
 
-(defvar doom-incremental-idle-timer 0.75
-  "How long (in idle seconds) in between incrementally loading packages.")
+(defvar ef/incremental-draining-p nil
+  "Non-nil while the incremental drain timer is active.
+Prevents double-scheduling if `ef/load-packages-incrementally' is
+called with NOW while a drain is already running.")
 
-(defvar doom-incremental-load-immediately nil
-  ;; (daemonp)
-  "If non-nil, load all incrementally deferred packages immediately at startup.")
+(defvar ef/incremental-first-idle-delay 2.0
+  "Idle seconds before the first incremental load begins.
+Set to nil to disable incremental loading.")
 
-(defmacro appendq! (sym &rest lists)
-  "Append LISTS to SYM in place."
-  `(setq ,sym (append ,sym ,@lists)))
+(defvar ef/incremental-tick 0.5
+  "Idle seconds between successive package loads.")
 
-(defun doom-load-packages-incrementally (packages &optional now)
-  "Registers PACKAGES to be loaded incrementally.
-If NOW is non-nil, load PACKAGES incrementally, in `doom-incremental-idle-timer'
-intervals."
+(defun ef/incremental-drain ()
+  "Load one package from `ef/incremental-queue', then reschedule.
+Reads the live queue each tick, so packages queued mid-drain are
+picked up automatically."
+  (when-let* ((pkg (pop ef/incremental-queue)))
+	(unless (featurep pkg)
+	  (condition-case err
+		  (let ((default-directory user-emacs-directory)
+				(gc-cons-threshold most-positive-fixnum)
+				file-name-handler-alist)
+			(unless (while-no-input (progn (require pkg nil t) t))
+			  ;; Interrupted by user input — retry on the next tick.
+			  (push pkg ef/incremental-queue)))
+		(error (message "ef/incremental: failed to load %s: %s"
+						pkg (error-message-string err))))))
+  (if ef/incremental-queue
+	  (run-with-idle-timer ef/incremental-tick nil #'ef/incremental-drain)
+	(setq ef/incremental-draining-p nil)
+	(message "ef/incremental: finished")))
+
+(defun ef/load-packages-incrementally (packages &optional now)
+  "Queue PACKAGES for incremental loading.
+With NOW non-nil, begin draining the queue (one package per idle tick)."
   (if (not now)
-	  (appendq! doom-incremental-packages packages)
-	(while packages
-	  (let ((req (pop packages)))
-		(unless (featurep req)
-		  (message "Incrementally loading %s" req)
-		  (condition-case e
-			  (or (while-no-input
-					;; If `default-directory' is a directory that doesn't exist
-					;; or is unreadable, Emacs throws up file-missing errors, so
-					;; we set it to a directory we know exists and is readable.
-					(let ((default-directory user-emacs-directory)
-						  (gc-cons-threshold most-positive-fixnum)
-						  file-name-handler-alist)
-					  (require req nil t))
-					t)
-				  (push req packages))
-			((error debug)
-			 (message "Failed to load '%s' package incrementally, because: %s"
-					  req e)))
-		  (if (not packages)
-			  (message "Finished incremental loading")
-			(run-with-idle-timer doom-incremental-idle-timer
-								 nil #'doom-load-packages-incrementally
-								 packages t)
-			(setq packages nil)))))))
+	  (setq ef/incremental-queue
+			(append ef/incremental-queue packages))
+	(unless ef/incremental-draining-p
+	  (when (and (numberp ef/incremental-first-idle-delay)
+				 ef/incremental-queue)
+		(setq ef/incremental-draining-p t)
+		(run-with-idle-timer ef/incremental-first-idle-delay
+							 nil #'ef/incremental-drain)))))
 
-(defun doom-load-packages-incrementally-h ()
-  "Begin incrementally loading packages in `doom-incremental-packages'.
-If this is a daemon session, load them all immediately instead."
-  (if doom-incremental-load-immediately
-	  (mapc #'require (cdr doom-incremental-packages))
-	(when (numberp doom-incremental-first-idle-timer)
-	  (run-with-idle-timer doom-incremental-first-idle-timer
-						   nil #'doom-load-packages-incrementally
-						   (cdr doom-incremental-packages) t))))
-
-;;; Explicit Approach
-;; (doom-load-packages-incrementally
-;;  '(calendar find-func format-spec org-agenda org-macs org-compat
-;;             org-faces org-entities org-list org-pcomplete org-src
-;;             org-footnote org-macro ob org org-clock org-agenda
-;;             org-capture))
-
-(doom-load-packages-incrementally
- '(calendar find-func format-spec org-macs org-compat
-			org-faces org-entities org-list org-pcomplete org-src
-			org-footnote org-macro ob org org-clock org-agenda org-capture
-			org-attach magit-log magit-diff magit-status bookmark
-			eshell em-alias em-banner em-basic em-cmpl em-glob em-hist em-ls
-			em-prompt em-script em-term em-unix em-smart
-			init-eglot)
- )
-;;;;
-;; Adds two keywords to `use-package' to expand its lazy-loading capabilities:
-;;
-;;   :after-call SYMBOL|LIST
-;;   :defer-incrementally SYMBOL|LIST|t
-;;
-;; Check out `use-package!'s documentation for more about these two.
-(eval-when-compile
-  (dolist (keyword '(:defer-incrementally :after-call))
-	(push keyword use-package-deferring-keywords)
-	(setq use-package-keywords
-		  (use-package-list-insert keyword use-package-keywords :after)))
-
-  (defalias 'use-package-normalize/:defer-incrementally #'use-package-normalize-symlist)
-  (defun use-package-handler/:defer-incrementally (name _keyword targets rest state)
+;; use-package :defer-incrementally keyword
+(eval-and-compile
+  (push :defer-incrementally use-package-deferring-keywords)
+  (setq use-package-keywords
+		(use-package-list-insert :defer-incrementally
+								 use-package-keywords :after))
+  (defalias 'use-package-normalize/:defer-incrementally
+	#'use-package-normalize-symlist)
+  (defun use-package-handler/:defer-incrementally
+	  (name _keyword targets rest state)
 	(use-package-concat
-	 `((doom-load-packages-incrementally
+	 `((ef/load-packages-incrementally
 		',(if (equal targets '(t))
 			  (list name)
 			(append targets (list name)))))
 	 (use-package-process-keywords name rest state))))
 
-(add-hook 'emacs-startup-hook #'doom-load-packages-incrementally-h)
 
-;; Adds two keywords to `use-package' to expand its lazy-loading capabilities:
+;; Incremental loading for specific packages
+(ef/load-packages-incrementally
+ '(org           ; pulls in org-macs, org-agenda, org-capture, org-clock
+   magit-status  ; pulls in magit-log, magit-diff, magit-commit
+   eshell))      ; pulls in em-alias, em-hist, em-term, etc.
+
+(add-hook 'emacs-startup-hook
+		  (lambda () (ef/load-packages-incrementally nil t)))
+
 ;;
-;;   :after-call SYMBOL|LIST
-;;   :defer-incrementally SYMBOL|LIST|t
-;;
-;; Check out `use-package!'s documentation for more about these two.
-(eval-when-compile
-  (dolist (keyword '(:defer-incrementally :after-call))
-	(push keyword use-package-deferring-keywords)
-	(setq use-package-keywords
-		  (use-package-list-insert keyword use-package-keywords :after)))
-
-  (defalias 'use-package-normalize/:defer-incrementally #'use-package-normalize-symlist)
-  (defun use-package-handler/:defer-incrementally (name _keyword targets rest state)
-	(use-package-concat
-	 `((doom-load-packages-incrementally
-		',(if (equal targets '(t))
-			  (list name)
-			(append targets (list name)))))
-	 (use-package-process-keywords name rest state))))
-
 ;;; Move Text Up and Down
 (defun move-text-internal (arg)
   (cond
