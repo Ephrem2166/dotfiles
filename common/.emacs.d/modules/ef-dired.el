@@ -4,25 +4,32 @@
 ;;; Dired
 (use-package dired
   :ensure nil
-  :bind
-  ("C-x d" . list-directory)
+  :bind ("C-x d" . dired)
   :hook (
-		 (dired-mode . dired-hide-details-mode)
-		 (dired-mode . hl-line-mode)
+		 (dired-mode . diredfl-mode-fn)   ; helper below
+		 (dired-mode . dired-hide-details-mode-fn)
+		 (dired-mode . hl-line-mode-fn)
+		 (dired-mode . dired-omit-mode-fn)
+		 (dired-mode . my/dired-mode-setup)
 		 )
+  :preface
+  (defun diredfl-mode-fn ()        (diredfl-mode 1))
+  (defun dired-hide-details-mode-fn () (dired-hide-details-mode 1))
+  (defun hl-line-mode-fn ()         (hl-line-mode 1))
+  (defun dired-omit-mode-fn ()     (dired-omit-mode 1))
+  (defun my/dired-mode-setup ()
+	(setq-local truncate-lines t))
   :config
   (setq dired-deletion-confirmer 'y-or-n-p)
   ;; (setq dired-recursive-copies 'always)
-  (setq dired-create-destination-dirs 'ask)
   (setq dired-dwim-target t)
   (setq delete-by-moving-to-trash t)
-  (setq dired-omit-files "^\\.[^.]\\|$Rhistory\\|$RData\\|__pycache__")
+  (setq dired-omit-files
+		"^\\.\\|\\.Rhistory\\|\\.RData\\|__pycache__")
   (setq dired-omit-verbose nil)
-  (setq dired-dwim-target 'dired-dwim-target-next)
   (setq dired-hide-details-hide-symlink-targets nil)
   (setq dired-kill-when-opening-new-dired-buffer t)
   (setq dired-create-destination-dirs 'ask)
-  (setq dired-omit-verbose nil)
   (setq dired-listing-switches
 		"-AGFhlv --group-directories-first --time-style=long-iso")
   (setq dired-auto-revert-buffer #'dired-directory-changed-p) ; also see `dired-do-revert-buffer'
@@ -32,7 +39,7 @@
 		 (list "\\.pptx?$" "libreoffice &")
 		 (list "\\.odf$" "libreoffice &")
 		 (list "\\.odt$" "libreoffice &")
-		 (list "\\.odt$" "libreoffice &")
+
 		 (list "\\.svg$" "gimp")
 		 (list "\\.csv$" "libreoffice &")
 		 (list "\\.sla$" "scribus")
@@ -92,7 +99,7 @@
 ;; Extra font lock rules for a more colorful dired
 ;; Colorful dired
 (use-package diredfl
-  :hook (dired-mode . diredfl-mode))
+  :hook (dired-mode . (lambda  () (diredfl-mode))))
 
 ;;; Dired-subtree
 ;; Insert subdirectories in a tree like fashion
@@ -105,11 +112,6 @@
   :bind (
 		 :map dired-mode-map
 		 ("TAB" . dired-subtree-toggle))
-  :config
-  (advice-add 'dired-subtree-toggle
-			  :after (lambda () (interactive)
-					   (when all-the-icons-dired-mode
-						 (revert-buffer))))
   )
 
 
@@ -141,24 +143,24 @@
 ;;   :ensure nil
 ;;   :after dired)
 
-;;; Dired Aux
 (use-package dired-aux
   :ensure nil
-  ;; :disabled
-  :defer
   :after dired
-  :bind
-  ( :map dired-mode-map
-	("C-+" . dired-create-empty-file)
-	("M-s f" . nil)
-	("C-<return>" . dired-do-open) ; Emacs 30
-	("C-x v v" . dired-vc-next-action)) ; Emacs 28
+  :bind (:map dired-mode-map
+			  ("C-+"       . dired-create-empty-file)
+			  ("M-s f"     . nil)
+			  ("C-x v v"   . dired-vc-next-action))
   :config
-  (setq dired-isearch-filenames 'dwim)
-  (setq dired-create-destination-dirs 'ask) ; Emacs 27
-  (setq dired-vc-rename-file t)             ; Emacs 27
-  (setq dired-do-revert-buffer (lambda (dir) (not ))) ; Emacs 28
-  (setq dired-create-destination-dirs-on-trailing-dirsep t)) ; Emacs 29
+  (setq dired-isearch-filenames 'dwim
+		dired-vc-rename-file t
+		dired-create-destination-dirs 'ask)
+  (when (boundp 'dired-do-revert-buffer)
+	(setq dired-do-revert-buffer (lambda (_dir) t)))  ; always revert
+  (when (boundp 'dired-create-destination-dirs-on-trailing-dirsep)
+	(setq dired-create-destination-dirs-on-trailing-dirsep t))
+  (when (fboundp 'dired-do-open)
+	(define-key dired-mode-map (kbd "C-<return>") #'dired-do-open)))
+
 
 ;;; Dired-x
 (use-package dired-x
@@ -169,7 +171,6 @@
 	("I" . dired-info))
   :config
   (setq dired-clean-up-buffers-too t)
-  (setq dired-clean-confirm-killing-deleted-buffers t)
   (setq dired-x-hands-off-my-keys t)    ; easier to show the keys I use
 
   (setq dired-bind-man nil)
@@ -195,7 +196,8 @@
 ;; Preview files before loading them.
 (use-package peep-dired
   :ensure t
-  :defer t
+  :after dired
+  :bind (:map dired-mode-map ("P" . peep-dired-toggle-peep-mode))
   )
 
 ;;; Trashed
@@ -293,9 +295,9 @@
 		 ("<backspace>" . dired-up-directory)
 		 ("." . dired-find-file)
 		 ("c" . dired-create-directory)
-		 ("d" . dired-do-delete)
-		 ("i" . dired-info)
-		 ("r" . dired-do-rename)
+		 ("I" . dired-info)
+		 ;; ("r" . dired-do-rename)
+
 		 ))
 
 ;; (define-key dired-mode-map (kbd "<backspace>") 'dired-up-directory)

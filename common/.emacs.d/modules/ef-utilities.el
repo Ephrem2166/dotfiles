@@ -101,7 +101,8 @@
   ;; Narrowing Key
   (setq consult-narrow-key "<")
   ;; Preview trigger keys
-  (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key 'any)
+  (setq consult-preview-key '("M-." "C-." any))
   (setq consult-project-function nil)
   ;; (show-smartparens-global-mode +1)
 
@@ -112,16 +113,17 @@
 (use-package consult-dir
   :ensure t
   :after consult
-  :hook (consult)
   :bind (("C-x C-d" . consult-dir)
 		 :map minibuffer-local-filename-completion-map
 		 ("C-x C-d" . consult-dir)
 		 ("C-x C-j" . consult-dir-jump-file))
   )
 
-;;; Consult flycheck
-(use-package consult-flycheck
-  :after (:all consult flycheck))
+;;; Consult flymake
+(use-package consult-flymake
+  :ensure t
+  :after (consult flymake)
+  :bind (("C-c C-n" . consult-flymake)))
 
 ;;; Consult Flyspell
 (use-package consult-flyspell
@@ -148,8 +150,8 @@
 
 ;;; Diminish
 ;; Diminished modes are minor modes with no modeline display
-(use-package diminish
-  :ensure t)
+;; (use-package diminish
+;;   :ensure t)
 
 ;;; Dumb Jump
 (use-package dumb-jump
@@ -159,7 +161,7 @@
   (setq dumb-jump-force-searcher 'rg)
   (setq dumb-jump-prefer-searcher 'rg)
   (setq dumb-jump-rg-search-args "")
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate 99)
   :bind (
 
 		 ("C-c . g" . dumb-jump-go)
@@ -204,13 +206,13 @@
    ("C-/" . embark-become)
    )
   :config
-  (setq embark-confirm-all-all nil)
-  (setq embark-mixed-indicator-both nil)
+  ;; (setq embark-confirm-all-all nil)
+  ;; (setq embark-mixed-indicator-both nil)
   (setq embark-indicators '(embark-mixed-indicator embark-highlight-indicator))
   (setq embark-verbose-indicator-nested nil)
   (setq embark-verbose-indicator-buffer-sections '(bindings))
-  (setq embark-cycle-key "<XF86Travel>")
-  ;; (setq embark-cycle-key (kbd "C-n"))
+  ;; (setq embark-cycle-key "<XF86Travel>")
+  (setq embark-cycle-key (kbd "C-'"))
   (setq prefix-help-command #'embark-prefix-help-command)
   (setq embark-quit-after-action '((kill-buffer . t) (t . nil)))
   (setq embark-verbose-indicator-excluded-actions
@@ -240,9 +242,9 @@
   :ensure t
   :defer t
   :bind (("C-=" . er/expand-region)
-		 ("C--" . er/contract-region)
-		 ("C-(" . er/mark-outside-pairs)
-		 ("C-)" . er/mark-inside-pairs)
+		 ("C-M-=" . er/contract-region)
+		 ("M-(" . er/mark-outside-pairs)
+		 ("M-)" . er/mark-inside-pairs)
 		 )
   )
 
@@ -252,7 +254,6 @@
   ;; :disabled
   :ensure t
   :demand t
-  :diminish gcmh-mode
   :init
   (setq gcmh-idle-delay 'auto)
   (setq gcmh-auto-idle-delay-factor 10)
@@ -272,9 +273,6 @@
 (use-package helpful
   :ensure t
   :defer t
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
   ;; Keybindings
   :bind
   ([remap describe-function] . helpful-function)
@@ -291,8 +289,9 @@
 ;; Highlight TODO and similar keywords
 (use-package hl-todo
   :ensure t
-  :hook (prog-mode . global-hl-todo-mode)
-  :bind
+  :hook (prog-mode . hl-todo-mode)
+  :config
+  (global-hl-todo-mode 1)
   :custom
   (hl-todo-include-modes '(prog-mode elisp-mode conf-mode text-mode))
   (hl-todo-text-modes '(markdown-mode org-mode text-mode))
@@ -309,7 +308,6 @@
 	 ("REVIEW" font-lock-keyword-face bold)
 	 ("GOTCHA" . "#FF4500")
 	 ;; Documentation and closure.
-	 ("NOTE"       . "#1E90FF")    ; Dodger blue - Informational notes.
 	 ("DEPRECATED" . "#B22222")    ; Fire brick - Deprecated code.
 	 ("STUB"   . "#1E90FF"))))
 
@@ -352,10 +350,10 @@
   :ensure t
   :defer t
   :bind (
-		 ("C-M-a" . mc/edit-lines)
-		 ("C-M-/" . mc/mark-all-dwim)
-		 ("C-M-." . mc/mark-next-like-this)
-		 ("C-M-," . mc/mark-previous-like-this)
+		 ("C-c m" . mc/edit-lines)
+		 ("C-c m" . mc/mark-all-dwim)
+		 ("C->" . mc/mark-next-like-this)
+		 ("C-<" . mc/mark-previous-like-this)
 		 )  )
 
 
@@ -571,12 +569,6 @@
 ;;; Undo-fu
 (use-package undo-fu
   :ensure t
-  :config
-  ;; Increase undo history limits to reduce likelihood of data loss
-  (setq undo-limit 400000           ; 400kb (default is 160kb)
-		undo-strong-limit 3000000   ; 3mb   (default is 240kb)
-		undo-outer-limit 48000000)  ; 48mb  (default is 24mb)
-
   :bind (([remap undo] . undo-fu-only-undo)
 		 ([remap redo] . undo-fu-only-redo)
 		 ("C-_" . undo-fu-only-undo)

@@ -2,12 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
-;;; Maximum decoration level for fontification.
-(setq font-lock-maximum-decoration t)
-
 ;;; Change Font Functions
 (defun my/font-available-p (font-name)
-  " Check for available fonts"
+  "Return non-nil if FONT-NAME is available in the current Emacs session."
   (when (stringp font-name)
 	(member font-name (font-family-list))))
 
@@ -15,7 +12,15 @@
   "Return available fonts"
   (seq-find #'my/font-available-p fonts))
 (defvar my/available-mono-font
-  (my/available-font "Berkeley Nerd Font" "PragmataProMono Nerd Font" "PragmataPro Mono" "Iosevka Nerd Font Mono" "JetBrains Nerd Font" "Ubuntu Mono Nerd Font" "Monospace")
+  (my/available-font "Berkeley Nerd Font"
+					 "PragmataProMono Nerd Font"
+					 "PragmataPro Mono"
+					 "Iosevka Nerd Font Mono"
+					 "JetBrains Nerd Font"
+					 "Ubuntu Mono Nerd Font"
+					 "Menlo"
+					 "Monaco"
+					 "Monospace")
   "Primary monospaced fonts"
   )
 
@@ -27,7 +32,6 @@
    "Triplicate A"
    "SN Pro"
    "Atkinson Hyperlegible"
-   "Iosevka Aile"
    "PragmataPro"
    "Avenir"
    "Iosevka Nerd Font"
@@ -46,7 +50,7 @@
 ;;   (set-face-attribute 'variable-pitch nil
 ;;                       :font (font-spec :family my/available-variable-font :size 16.0 :weight 'regular)))
 
-(set-frame-font "Berkeley Nerd Font 10")
+;; (set-frame-font "Berkeley Nerd Font 10")
 
 ;;; Set Default Font
 (when my/available-mono-font
@@ -74,12 +78,15 @@
    :weight 'regular))
 
 ;;; Modeline
-(set-face-attribute 'mode-line nil :family "Berkeley Nerd Font 9" :weight 'bold)
-(set-face-attribute 'mode-line-inactive nil :family "Berkeley Nerd Font 9" :weight 'bold)
+;; (set-face-attribute 'mode-line nil :family "Berkeley Nerd Font 9" :weight 'bold)
+;; (set-face-attribute 'mode-line-inactive nil :family "Berkeley Nerd Font 9" :weight 'bold)
 
 ;;; Minibuffer
-(set-face-attribute 'minibuffer-prompt nil :family "Berkeley Nerd Font 9" :weight 'regular)
+;; (set-face-attribute 'minibuffer-prompt nil :family "Berkeley Nerd Font 9" :weight 'regular)
 
+(set-face-attribute 'mode-line          nil :family my/available-mono-font :height 90 :weight 'bold)
+(set-face-attribute 'mode-line-inactive nil :family my/available-mono-font :height 90 :weight 'bold)
+(set-face-attribute 'minibuffer-prompt  nil :family my/available-mono-font :height 90 :weight 'regular)
 
 ;;; Debugging
 ;; To show during startup
@@ -166,23 +173,22 @@
 ;;       (force-window-update))))
 
 ;;; Better Way to Change Fonts Dynamically
-(defun my/setup-fonts ()
-  "List of system fonts."
-  (x-list-fonts "*"))
+;; (defun my/setup-fonts ()
+;;   "List of system fonts."
+;;   (x-list-fonts "*"))
 ;; Set Default Face
 (defun my/set-default-face ()
   "Set the default font and height interactively."
   (interactive)
   (let* ((selected-font
-		  (completing-read "Select default font: "
-						   (my-system-fonts)))
-
+		  (completing-read "Select default font: " (font-family-list)))
 		 (selected-size
 		  (read-number "Select default font size: " 12)))
+	;; (set-face-attribute 'default nil :family selected-font)
+	;; (set-face-attribute 'default nil :height (* 10 selected-size))
+	(set-face-attribute 'default nil :family selected-font :height (* 10 selected-size))
 
-	(set-face-attribute 'default nil :font selected-font )
-	(set-face-attribute 'default nil :height (* 10 selected-size))))
-
+	))
 
 
 ;;; Better Describe Font
@@ -199,8 +205,14 @@
 									(font-family-list))))
 	(if (member font-name (font-family-list))
 		(set-face-attribute 'default nil :font font-name)
+	  (add-to-list 'default-frame-alist (cons 'font font-name))
 	  (error "'%s' font not found" font-name))))
 
+
+;;; Troubleshooting (uncomment during font troubleshooting)
+;; (message "Mono:     %s" my/available-mono-font)
+;; (message "Variable: %s" my/available-variable-font)
+;; (message "Default:  %s" (face-attribute 'default :font))
 
 (provide 'ef-fonts)
 ;;; ef-fonts.el ends here
