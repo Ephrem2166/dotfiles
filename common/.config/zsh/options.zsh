@@ -29,7 +29,8 @@ setopt LIST_PACKED  # The completion menu takes less space.
 
 # Do not show error
 unsetopt BEEP
-
+# don't beep on ambiguous completions
+setopt NO_LIST_BEEP
 # setopt no_beep
 # History Related
 setopt APPENDHISTORY
@@ -63,7 +64,7 @@ unsetopt COMPLETE_ALIASES
 
 # When completing from the middle of a word, move the cursor to the end of the
 # word;
-unsetopt ALWAYS_TO_END
+setopt ALWAYS_TO_END
 
 # Autoselect the first completion entry
 setopt MENU_COMPLETE
@@ -91,6 +92,9 @@ setopt GLOB_DOTS
 # Sort numeric filenames numerically, instead of lexicographically.
 setopt NUMERIC_GLOB_SORT
 
+# case-insensitive globbing
+setopt NO_CASE_GLOB
+
 # Append trailing / to filename expansion when they match a directory
 setopt MARK_DIRS
 
@@ -111,6 +115,9 @@ autoload -Uz run-help
 autoload -Uz run-help-git
 autoload -Uz run-help-ip
 autoload -Uz run-help-sudo
+
+# completion to include dotfiles by default (without typing a leading dot)
+_comp_options+=(globdots)
 
 # Selecting options using Tab, arrows, and C-p / C-n:
 zmodload zsh/complist

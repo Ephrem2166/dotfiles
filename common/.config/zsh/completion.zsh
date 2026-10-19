@@ -1,210 +1,130 @@
 # Check https://github.com/trapd00r/configs/blob/master/zsh/zshrc
 # Command completion
-# Use `compinstall` for interactive configuration
+setopt extended_glob
+
 autoload -Uz compinit
 compinit
 
-# General Setting
-# Syntax for zstyle; `zstyle <pattern> <style> <values>`
-# Syntax for completion: `:completion:<function>:<completer>:<command>:<argument>:<tag>`
-# Define completers
-zstyle ':completion:*' completer _complete _correct _approximate _extensions
+zmodload -i zsh/complist
 
-# Use cache for commands
+# General settings
+zstyle ':completion:*' completer _complete _correct _approximate
 zstyle ':completion:*' use-cache on
-
-# Menu Select
-zstyle ':completion:*' menu select auto
-# zstyle ':completion:*' menu no
-
-
-zstyle ':completion:*' accept-ezact '*(N)'
-
-# Detailed file listing
+zstyle ':completion:*' menu select
+zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' file-list all
-
-zstyle ':completion:*:manuals' separate-sections true
-
 zstyle ':completion:*' force-list always
 zstyle ':completion:*:killall:*' force-list always
 
 # Grouping
-# For all completions: grouping the output
 zstyle ':completion:*' group-name ''
-# dirs: reorder output sorting: named dirs over userdirs
-zstyle ':completion::*:-tilde-:*:*' group-order named-directories users
+zstyle ':completion:*:*:-tilde-:*:*' group-order named-directories users
 zstyle ':completion:*:*:-command-:*:*' group-order alias functions builtins commands
 
-# Case insensitive completion
-# zstyle ':completion:*' m# Only display some tags for the command cd
-zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directorieeatcher-list 'm:{a-zA-Z}={A-Za-z}'
-# Case insensitive and partial completion
-# zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*' 'l:|=* r:|=*'
+# Case-insensitive and partial matching
+zstyle ':completion:*' matcher-list \
+  'm:{a-zA-Z}={A-Za-z}' \
+  'r:|=*' \
+  'l:|=* r:|=*'
 
-
-# statusline for many hits
-zstyle ':completion:*:default' select-prompt $'\e[01;35m -- Match %M    %P -- \e[00;00m'
-
-# Enable verbose completion
 zstyle ':completion:*' verbose yes
-
-# The default directories to be completed are listed separately from and before completion for other files.
 zstyle ':completion:*' list-dirs-first true
 
-# kill: advanced kill completion
-zstyle ':completion::*:kill:*:*' command 'ps xf -U $USER -o pid,%cpu,cmd'
-zstyle ':completion::*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
+# kill completion
+zstyle ':completion:*:*:kill:*:*' command 'ps xf -U $USER -o pid,%cpu,cmd'
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
 
-
-zstyle  ':completion:*' complete true
-
-
-# STYLE
-# Colors for files and directory
-zstyle ':completion:*:*:*:*:default' list-colors ${(s.:.)LS_COLORS}
-# For all completions: color
-# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# #zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-# zstyle ':completion:*:*:kill:*' list-colors '=(#b) #([0-9]#)*( *[a-z])*=34=31=33'
-# zstyle ':completion:' cache-path "$HOME/.cache/zsh/.zcompcache"
-# zstyle ':completion:*:parameters' list-colors '=*=1;35'
-# zstyle ':completion:*:builtins' list-colors '=*=1;34'
-# zstyle ':completion:*:aliases' list-colors '=*=1;33'
-# zstyle ':completion:*:options' list-colors '=^(-- *)=34'
+# Colors
+if [[ -n ${LS_COLORS:-} ]]; then
+  zstyle ':completion:*:*:*:*:default' list-colors ${(s.:.)LS_COLORS}
+fi
 
 # Others
-# Allows // to be expanded as /
 zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*' file-sort name
 
-# Autocomplete CD instead of showing a directory stack
-zstyle ':completion:*' complete-options true
-# Sorting matched files
-# Values: dummyvalue (alphabetically), size, links, modification, access, change or inode
-zstyle ':completion:*' file-sort dummyvalue
-
-# Only display some tags for the command cd
+# cd tag order
 zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
 
-# Disable completion for commands we don't use
+# Ignore noisy completions
 zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
-# Don't complete unavailable commands.
 zstyle ':completion:*:(functions|parameters)' ignored-patterns '(_*|.*|-*|+*|autosuggest-*|pre(cmd|exec))'
-zstyle ':completion:*:cd:*' ignored-patterns '(*/)#lost+found'
-# zstyle ':completion:*' ignored-patterns \
-#     ".git" ".DS_Store" ".localized" "node_modules" "__pycache__"
+zstyle ':completion:*:*:cd:*' ignored-patterns '(*/)#lost+found'
 
-
-# Optimize completion for specific commands
+# Optimize common commands
 zstyle ':completion:*:*:(cd|ls|rm|cp|mv):*' ignore-parents parent pwd
 zstyle ':completion:*:*:(cd|ls|rm|cp|mv):*' file-sort name
-zstyle ':completion:*:*:(cd|ls|rm|cp|mv):*' group-order 'named-directories path-directories users'
+zstyle ':completion:*:*:(cd|ls|rm|cp|mv):*' group-order named-directories path-directories users
 
-
-# Disable completion for commands that don't need it
 zstyle ':completion:*:*:(rm|kill|diff):*' ignore-line yes
 zstyle ':completion:*:*:(scp|rsync):*' file-list false
-
-
-# Omit parent and current directories from completion results when they are
-# already named in the input.
 zstyle ':completion:*:*:cd:*' ignore-parents parent pwd
 
-# Optimize completion for git
+# git user commands
 zstyle ':completion:*:*:git:*' user-commands ${${(M)${(k)commands}:#git-*}/git-/}
 
-# If there is only one candidate just insert it.
+# zsh-autocomplete
 zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
 
-# Man
+# Man pages
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:manuals.(^1*)' insert-sections true
 
-# If there is only one candidate just insert it.
-zstyle ':autocomplete:*complete*:*' INSERT-UNAMBIGUOUS YESS
-
-
-
-# Format
-# zstyle ':completion:*:*:*:*:descriptions' format '%F{green}%d %f'
-# zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
-# zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
-# zstyle ':completion:*:warnings' format ' %F{red}no matches found %f'
-# zstyle ':completion:*:default' list-prompt '%S%M matches%s'
-
-# zstyle ':completion:*:descriptions' format "- %d -"
+# Formatting
 zstyle ':completion:*:descriptions' format "[%d]"
+zstyle ':completion:*:messages' format "- %d -"
+zstyle ':completion:*:corrections' format "- %d - (errors %e)"
+zstyle ':completion:*:default' select-prompt "Match %m  Line %l  %p"
+zstyle ':completion:*:default' list-prompt "Line %l  Continue?"
+zstyle ':completion:*:warnings' format "- no match - %d"
 
-
-zstyle ':completion:*:messages'     format "- %d -"
-zstyle ':completion:*:corrections'  format "- %d - (errors %e)"
-zstyle ':completion:*:default'      select-prompt "Match %m  Line %l  %p"
-zstyle ':completion:*:default'      list-prompt "Line %l  Continue?"
-zstyle ':completion:*:warnings'     format "- no match - %d"
-
+# History words
 zstyle ':completion:*:history-words' stop yes
 zstyle ':completion:*:history-words' remove-all-dups yes
 zstyle ':completion:*:history-words' list false
 zstyle ':completion:*:history-words' menu yes
 
-# Fzf-tab
-# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+# fzf-tab previews
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --color=always $realpath'
-# preview directory's content with eza when completing cd and ls
-# zstyle ':fzf-tab:complete:*:*' fzf-preview 'file $realpath | sed -E "s/^.+: //"; hr -fg 137 -c _ -s 30;echo;eza -1 --color=always $realpath ;'
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:complete:vim:*' fzf-preview 'bat --color=always $realpath'
-# environment variables
+
 zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
   fzf-preview 'echo ${(P)word}'
 
-# preview systemctl status
 zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
 
-# give a preview of commandline arguments when completing kill
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
 zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
   '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
 zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
 
-# accept with one key
-zstyle ':fzf-tab:*' fzf-bindings 'space:accept'
-zstyle ':fzf-tab:*' fzf-bindings 'ctrl-j:accept' 'ctrl-a:toggle-all'
-zstyle ':fzf-tab:*' fzf-bindings 'ctrl-a:toggle-all'
+# fzf-tab bindings
+zstyle ':fzf-tab:*' fzf-bindings 'space:accept' 'ctrl-j:accept' 'ctrl-a:toggle-all'
 zstyle ':fzf-tab:*' fzf-min-height 100
-
-# custom fzf flags
-# NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
-# zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
-
-# switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
+# Set dumpfile location
+export ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-${ZSH_VERSION}"
 
-# FIXME: On empty buffer, `tab` opens `cd` completion menu, otherwise, select completion.
-# _tab-on-empty-buffer() {
-#     # source: https://stackoverflow.com/a/29103676/22114136
-#     if [[ -z "$BUFFER" && "$CONTEXT" == "start" ]]; then
-#         BUFFER="cd "
-#         export CURSOR=3
-#         zle list-choices # open completion
-#     else
-#         zle menu-select # select completion (w/o zsh-autocomplete use `zle expand-or-complete`)
-#     fi
-# }
-# zle -N _tab-on-empty-buffer
-# bindkey '^I' _tab-on-empty-buffer
+# Create cache directory if needed
+[[ -d ${ZSH_COMPDUMP:h} ]] || mkdir -p ${ZSH_COMPDUMP:h}
 
+# Only rebuild cache once per day; otherwise use -C (fast path)
+if [[ -n ${ZSH_COMPDUMP}(#qN.mh+24) ]]; then
+	compinit -d "$ZSH_COMPDUMP"
+else
+	compinit -C -d "$ZSH_COMPDUMP"
+fi
 
-# do not save in public dotfile repo
-# export ZSH_COMPDUMP="$HOME/.local/share/zsh/zcompdump"
+# Completion cache path
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompcache"
 
+# Max errors for approximate and correct
+zstyle ':completion:*:approximate:::' max-errors 1 numeric
 
 # menuselect
-## offers interactive completion selection
-zmodload -i zsh/complist
-# zstyle ':completion:*' menu select=1
-bindkey '^[[Z' reverse-menu-complete # backtab
+bindkey '^[[Z' reverse-menu-complete
 
 bindkey -M menuselect "^p" backward-char
 bindkey -M menuselect "^n" forward-char
@@ -214,5 +134,4 @@ bindkey -M menuselect "^j" down-line-or-history
 bindkey -M menuselect "^k" up-line-or-history
 bindkey -M menuselect "^l" forward-char
 
-# bindkey -M menuselect "^l" accept-line
 bindkey -M menuselect "^o" accept-and-infer-next-history
