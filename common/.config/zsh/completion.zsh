@@ -128,13 +128,12 @@ zstyle ':completion:*:approximate:::' max-errors 1 numeric
 _comp_options+=(globdots)
 
 
-# Try exact prefix match first, then case-insensitive,
-# then substring matching, then fuzzy matching.
+# Try exact prefix, then case-insensitive prefix,
+# then case-insensitive substring matching.
 zstyle ':completion:*' matcher-list \
   '' \
   'm:{a-zA-Z}={A-Za-z}' \
-  'l:|=* r:|=*' \
-  'r:|?=**'
+  'm:{a-zA-Z}={A-Za-z} l:|=* r:|=*'
 
 # menuselect
 bindkey '^[[Z' reverse-menu-complete
