@@ -49,6 +49,18 @@
   (apheleia-global-mode 1))
 
 
+;;; Editorconfig
+(use-package editorconfig
+  :ensure nil                    ; built into Emacs 30+
+  :hook (after-init . editorconfig-mode)
+  ;; :custom
+  ;; Optional: use ws-butler instead of delete-trailing-whitespace
+  ;; (editorconfig-trim-whitespaces-mode 'ws-butler-mode)
+  :config
+  (add-to-list 'editorconfig-indentation-alist
+			   '(emacs-lisp-mode lisp-body-indent))
+  )
+
 ;;; Eldoc
 ;;;; Eldoc (Emacs live documentation feedback)
 ;; Document thing at point.
