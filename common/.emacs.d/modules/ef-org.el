@@ -40,7 +40,7 @@
   (abbrev-mode 1)
   ;; Disable automatic flyspell for Org-mode
   (when (bound-and-true-p flyspell-mode)
-	(flyspell-mode -1)))
+    (flyspell-mode -1)))
 
 (add-hook 'org-mode-hook #'ef/org-mode-hooks)
 
@@ -110,37 +110,37 @@
   :ensure nil
   :config
   (defun my-adjoin-to-list-or-symbol (element list-or-symbol)
-	(let ((list (if (not (listp list-or-symbol))
-					(list list-or-symbol)
-				  list-or-symbol)))
-	  (require 'cl-lib)
-	  (cl-adjoin element list)))
+    (let ((list (if (not (listp list-or-symbol))
+                    (list list-or-symbol)
+                  list-or-symbol)))
+      (require 'cl-lib)
+      (cl-adjoin element list)))
 
   (eval-after-load "org"
-	'(mapc
-	  (lambda (face)
-		(set-face-attribute
-		 face nil
-		 :inherit
-		 (my-adjoin-to-list-or-symbol
-		  'fixed-pitch
-		  (face-attribute face :inherit))))
-	  (list 'org-code 'org-block
-			;; 'org-table 'org-block-background
-			)))
+    '(mapc
+      (lambda (face)
+        (set-face-attribute
+         face nil
+         :inherit
+         (my-adjoin-to-list-or-symbol
+          'fixed-pitch
+          (face-attribute face :inherit))))
+      (list 'org-code 'org-block
+            ;; 'org-table 'org-block-background
+            )))
   )
 
 ;;; Org General Settings
 (use-package org
   :ensure nil
-  :defer-incrementally (calendar find-func format-spec org-macs org-compat org-faces org-entities
-								 org-list org-pcomplete org-src org-footnote org-macro ob org org-agenda
-								 org-capture)
+  ;; :defer-incrementally (calendar find-func format-spec org-macs org-compat org-faces org-entities
+  ;;   							 org-list org-pcomplete org-src org-footnote org-macro ob org org-agenda
+  ;;   							 org-capture)
   :init
   (setq org-directory ef/org-directory)
   (unless (file-exists-p org-directory)
-	(mkdir org-directory t)
-	)
+    (mkdir org-directory t)
+    )
   ;; (setq-default org-directory "~/Org/")
   :config
   ;; General Settings
@@ -174,17 +174,17 @@
 
   ;; Automatically change the list bullets when you change list levels
   (setq org-list-demote-modify-bullet '(("+" . "-")
-										("*" . "-")
-										("1." . "-")
-										("1)" . "-")
-										("A)" . "-")
-										("B)" . "-")
-										("a)" . "-")
-										("b)" . "-")
-										("A." . "-")
-										("B." . "-")
-										("a." . "-")
-										("b." . "-")))
+                                        ("*" . "-")
+                                        ("1." . "-")
+                                        ("1)" . "-")
+                                        ("A)" . "-")
+                                        ("B)" . "-")
+                                        ("a)" . "-")
+                                        ("b)" . "-")
+                                        ("A." . "-")
+                                        ("B." . "-")
+                                        ("a." . "-")
+                                        ("b." . "-")))
 
 
   ;; (setq org-highlight-latex-and-related nil)
@@ -210,10 +210,10 @@
 
   ;; Blank line before new entry
   (setq org-blank-before-new-entry
-		'(
-		  (heading . t)
-		  (plain-list-item . auto)
-		  ))
+        '(
+          (heading . t)
+          (plain-list-item . auto)
+          ))
 
   ;; Allow a, A, a) and A) as list elements
   (setq org-list-allow-alphabetical t)
@@ -231,9 +231,9 @@
   :ensure nil
   :config
   (setq org-priority-faces
-		'((?A . error)
-		  (?B . warning)
-		  (?C . success)))
+        '((?A . error)
+          (?B . warning)
+          (?C . success)))
   (setq org-fontify-emphasized-text t)
   (setq org-fontify-todo-headline t)
   (setq org-fontify-done-headline t)
@@ -243,13 +243,13 @@
   ;; Force source / code / table text to fixed-pitch while preserving
   ;; any existing inheritance.
   (dolist (face '(org-code org-block org-verbatim org-table org-formula
-						   org-special-keyword org-property-value
-						   org-document-info-keyword))
-	(let ((cur (face-attribute face :inherit)))
-	  (when (eq cur 'unspecified) (setq cur nil))
-	  (setq cur (if (listp cur) cur (list cur)))
-	  (cl-pushnew 'fixed-pitch cur)
-	  (set-face-attribute face nil :inherit cur))))
+                           org-special-keyword org-property-value
+                           org-document-info-keyword))
+    (let ((cur (face-attribute face :inherit)))
+      (when (eq cur 'unspecified) (setq cur nil))
+      (setq cur (if (listp cur) cur (list cur)))
+      (cl-pushnew 'fixed-pitch cur)
+      (set-face-attribute face nil :inherit cur))))
 
 
 ;;;  FIXME  Autoinsertion for Org
@@ -258,13 +258,13 @@
   :after org
   :config
   (define-auto-insert 'org-mode
-	'(t
-	  "#+TITLE: " (read-string "Title: ") "\n"
-	  "#+AUTHOR: " (user-full-name) "\n"
-	  (if (y-or-n-p "Add Date? ") (concat "#+DATE: " (format-time-string "%Y-%m-%d") "\n"))
-	  ;; Startup options completion
-	  ;; "#+startup: " ((completing-read "Startup: " org-startup-options nil t) str " ") "\n"
-	  )    )
+    '(t
+      "#+TITLE: " (read-string "Title: ") "\n"
+      "#+AUTHOR: " (user-full-name) "\n"
+      (if (y-or-n-p "Add Date? ") (concat "#+DATE: " (format-time-string "%Y-%m-%d") "\n"))
+      ;; Startup options completion
+      ;; "#+startup: " ((completing-read "Startup: " org-startup-options nil t) str " ") "\n"
+      )    )
 
   )
 
@@ -278,7 +278,7 @@
 ;;   (org-num-skip-unnumbered t))
 
 
-										;Org Indent
+                                        ;Org Indent
 ;; (use-package org
 ;;   :ensure nil
 ;;   :config
@@ -292,8 +292,8 @@
   :ensure nil
   :config
   (setq org-refile-targets
-		'((org-agenda-files . (:maxlevel . 2))
-		  (nil . (:maxlevel . 2))))
+        '((org-agenda-files . (:maxlevel . 2))
+          (nil . (:maxlevel . 2))))
   (setq org-refile-use-outline-path t)
   (setq org-refile-allow-creating-parent-nodes 'confirm)
   (setq org-refile-use-cache t)
@@ -310,26 +310,26 @@
   :ensure nil
   :config
   (setq org-todo-keywords
-		'((sequence "TODO"  "IN-PROGRESS" "|" "DONE" "CANCELED")
-		  (sequence "TOREAD" "|" "READ")
-		  (sequence "TOWATCH" "|" "WATCHED")
-		  ))
+        '((sequence "TODO"  "IN-PROGRESS" "|" "DONE" "CANCELED")
+          (sequence "TOREAD" "|" "READ")
+          (sequence "TOWATCH" "|" "WATCHED")
+          ))
 
   (setq org-todo-keyword-faces
-		'(("TODO" . "#BF616A")        ;; Polar Night Red
-		  ("NEXT" . "#D08770")
-		  ("IN-PROGRESS" . "#EBCB8B") ;; Nordic Yellow
-		  ("WAITING" . "#B48EAD")     ;; Nordic Purple
-		  ("HOLD" . "#4C566A")        ;; Dark Gray (Polar Night)
-		  ("DONE" . "#A3BE8C")        ;; Nordic Green
-		  ("CANCELED" . "#BF616A")
-		  ("DELEGATED" . "#81A1C1")   ;; Nordic Blue
-		  ("REVIEW" . "#88C0D0")      ;; Light Blue
-		  ("READ" . "#BF616A")
-		  ("WATCH" . "#BF616A")
-		  ("WATCHED" . "#A3BE8C")        ;; Nordic Green
-		  ("BLOCKED" . "#5E81AC"))
-		)   ;; Deep Blue
+        '(("TODO" . "#BF616A")        ;; Polar Night Red
+          ("NEXT" . "#D08770")
+          ("IN-PROGRESS" . "#EBCB8B") ;; Nordic Yellow
+          ("WAITING" . "#B48EAD")     ;; Nordic Purple
+          ("HOLD" . "#4C566A")        ;; Dark Gray (Polar Night)
+          ("DONE" . "#A3BE8C")        ;; Nordic Green
+          ("CANCELED" . "#BF616A")
+          ("DELEGATED" . "#81A1C1")   ;; Nordic Blue
+          ("REVIEW" . "#88C0D0")      ;; Light Blue
+          ("READ" . "#BF616A")
+          ("WATCH" . "#BF616A")
+          ("WATCHED" . "#A3BE8C")        ;; Nordic Green
+          ("BLOCKED" . "#5E81AC"))
+        )   ;; Deep Blue
   (setq org-use-fast-todo-selection t)
   )
 
@@ -342,93 +342,93 @@
   :after org
   :config
   (setq org-structure-template-alist
-		'(("s" . "src")
-		  ("S" . "src sh")
-		  ("c" . "comment")
-		  ("C" . "center")
-		  ("v" . "verse")
-		  ("l" . "latex")
-		  ("e" . "src emacs-lisp")
-		  ("E" . "src emacs-lisp :results value code :lexical t")
-		  ("t" . "src emacs-lisp :tangle FILENAME")
-		  ("T" . "src emacs-lisp :tangle FILENAME :mkdirp yes")
-		  ("x" . "example")
-		  ("X" . "export")
-		  ("q" . "quote")))
+        '(("s" . "src")
+          ("S" . "src sh")
+          ("c" . "comment")
+          ("C" . "center")
+          ("v" . "verse")
+          ("l" . "latex")
+          ("e" . "src emacs-lisp")
+          ("E" . "src emacs-lisp :results value code :lexical t")
+          ("t" . "src emacs-lisp :tangle FILENAME")
+          ("T" . "src emacs-lisp :tangle FILENAME :mkdirp yes")
+          ("x" . "example")
+          ("X" . "export")
+          ("q" . "quote")))
   ;;Add my own alist
   (tempo-define-template "org-title-block"
-						 '("#+title: " (p) n
-						   "#+author: Ephrem G." n
-						   (concat "#+date: " (format-time-string "%B %e, %Y")) n %))
+                         '("#+title: " (p) n
+                           "#+author: Ephrem G." n
+                           (concat "#+date: " (format-time-string "%B %e, %Y")) n %))
   (add-to-list 'org-tempo-tags '("<n" . tempo-template-org-title-block))
   (tempo-define-template "org-title-options-block"
-						 '("#+title: " (p) n
-						   "#+author: Ephrem G." n
-						   (concat "#+date: " (format-time-string "%B %e, %Y")) n
-						   n
-						   "#+jekyll_tags:" n
-						   "#+options: toc:nil date:nil" n %))
+                         '("#+title: " (p) n
+                           "#+author: Ephrem G." n
+                           (concat "#+date: " (format-time-string "%B %e, %Y")) n
+                           n
+                           "#+jekyll_tags:" n
+                           "#+options: toc:nil date:nil" n %))
   (add-to-list 'org-tempo-tags '("<no" . tempo-template-org-title-options-block))
   (add-to-list 'org-tempo-tags '("<N" . tempo-template-org-title-options-block))
   ;; To fix electric-mode inhibiting tempo
   (add-hook 'org-mode-hook (lambda ()
-							 (setq-local electric-pair-inhibit-predicate
-										 `(lambda (c)
-											(if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
+                             (setq-local electric-pair-inhibit-predicate
+                                         `(lambda (c)
+                                            (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
   )
 
 ;;; Pretty Symbol List
 (defconst ef/org-prettify-alist
   '(
-	;; SRC CODE
-	("#+BEGIN_SRC" . "»")
-	("#+END_SRC" . "«")
-	("#+begin_src" . "»")
-	("#+end_src" . "«")
-	;; Quote
-	("#+begin_quote" . "")
-	("#+end_quote" . "―")
-	;; Greek Symbols
-	("delta"  . ?Δ)
-	("gamma"  . ?Γ)
-	("phi"    . ?φ)
-	("psi"    . ?ψ)
-	("lambda"  . "λ")
-	;; Arrow
-	("->" . "→")
-	("->>" . "↠")
-										; Agenda tags 
-	(":@projects:"  . ?☕)
-	(":work:"       . ?🚀)
-	(":@inbox:"     . ?✉)
-	(":goal:"       . ?🎯)
-	(":task:"       . ?📋)
-	(":@thesis:"    . ?📝)
-	(":thesis:"     . ?📝)
-	(":emacs:"      . ?)
-	(":learn:"      . ?🌱)
-	(":code:"       . ?💻)
-	(":fix:"        . ?🛠)
-	(":bug:"        . ?🚩)
-	(":read:"       . ?📚)
-										; Drawers
-	(":properties:" . ?)
-										; Agenda scheduling
-	("#+STARTUP:" . "")
-	("#+TITLE: " . "")
-	("#+title: " . "")
-	("#+RESULTS:" . "")
-	("#+NAME:" . "")
-	("#+ROAM_TAGS:" . "")
-	("#+FILETAGS:" . "")
-	("#+HTML_HEAD:" . "")
-	("#+SUBTITLE:" . "")
-	("#+AUTHOR:" . "")
-	(":Effort:" . "")
-	("SCHEDULED:" . "")
-	("DEADLINE:" . "")
-	("SCHEDULED:"   . ?🕘)
-	("DEADLINE:"    . ?⏰)	) )
+    ;; SRC CODE
+    ("#+BEGIN_SRC" . "»")
+    ("#+END_SRC" . "«")
+    ("#+begin_src" . "»")
+    ("#+end_src" . "«")
+    ;; Quote
+    ("#+begin_quote" . "")
+    ("#+end_quote" . "―")
+    ;; Greek Symbols
+    ("delta"  . ?Δ)
+    ("gamma"  . ?Γ)
+    ("phi"    . ?φ)
+    ("psi"    . ?ψ)
+    ("lambda"  . "λ")
+    ;; Arrow
+    ("->" . "→")
+    ("->>" . "↠")
+                                        ; Agenda tags 
+    (":@projects:"  . ?☕)
+    (":work:"       . ?🚀)
+    (":@inbox:"     . ?✉)
+    (":goal:"       . ?🎯)
+    (":task:"       . ?📋)
+    (":@thesis:"    . ?📝)
+    (":thesis:"     . ?📝)
+    (":emacs:"      . ?)
+    (":learn:"      . ?🌱)
+    (":code:"       . ?💻)
+    (":fix:"        . ?🛠)
+    (":bug:"        . ?🚩)
+    (":read:"       . ?📚)
+                                        ; Drawers
+    (":properties:" . ?)
+                                        ; Agenda scheduling
+    ("#+STARTUP:" . "")
+    ("#+TITLE: " . "")
+    ("#+title: " . "")
+    ("#+RESULTS:" . "")
+    ("#+NAME:" . "")
+    ("#+ROAM_TAGS:" . "")
+    ("#+FILETAGS:" . "")
+    ("#+HTML_HEAD:" . "")
+    ("#+SUBTITLE:" . "")
+    ("#+AUTHOR:" . "")
+    (":Effort:" . "")
+    ("SCHEDULED:" . "")
+    ("DEADLINE:" . "")
+    ("SCHEDULED:"   . ?🕘)
+    ("DEADLINE:"    . ?⏰)	) )
 
 (defun ef/org-apply-prettify ()
   "Install `ef/org-prettify-alist' locally and enable prettify."
@@ -448,7 +448,7 @@
 (font-lock-add-keywords
  'org-mode
  `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)"
-	1 'org-checkbox-done-text prepend))
+    1 'org-checkbox-done-text prepend))
  'append)
 
 
@@ -492,19 +492,19 @@
   (org-attach-archive-delete 'query) ; If subtree is deleted or archived, ask user
   (org-attach-id-to-path-function-list
    '(org-attach-id-ts-folder-format
-	 org-attach-id-uuid-folder-format
-	 org-attach-id-fallback-folder-format)))
+     org-attach-id-uuid-folder-format
+     org-attach-id-fallback-folder-format)))
 
 ;;; Org Text Colors
 (use-package org
   :ensure nil
   :config
   (setq org-emphasis-alist '(("*" (bold :foreground "#BF616a"))
-							 ("/" (italic :foreground "#8aadf4"))
-							 ("_" underline)
-							 ("=" (:foreground "#a3be8c" :family "Berkeley Nerd Font"))
-							 ("~" (:foreground "#d08770" :family "Berkeley Nerd Font"))
-							 )))
+                             ("/" (italic :foreground "#8aadf4"))
+                             ("_" underline)
+                             ("=" (:foreground "#a3be8c" :family "Berkeley Nerd Font"))
+                             ("~" (:foreground "#d08770" :family "Berkeley Nerd Font"))
+                             )))
 
 ;;; Org SRC Blocks
 (use-package org
@@ -538,19 +538,19 @@
   ;; (setq org-tag-alist nil)
   ;; Tags with fast selection keys
   (setq org-tag-alist (quote ((:startgroup)
-							  ("WAITING" . ?w)
-							  ("HOLD" . ?h)
-							  ("MEETING" . ?m)
-							  ("REVIEW" . ?r)
-							  ("NOTE" . ?n)
-							  (:endgroup)
-							  ("PERSONAL" . ?p)
-							  ("WORK" . ?W)
-							  ("EMACS" . ?e)
-							  ("CLASS" . ?c)
-							  ("IDEA" . ?i)
-							  ("LINUX" . ?l)
-							  ("FLAGGED" . ??))))
+                              ("WAITING" . ?w)
+                              ("HOLD" . ?h)
+                              ("MEETING" . ?m)
+                              ("REVIEW" . ?r)
+                              ("NOTE" . ?n)
+                              (:endgroup)
+                              ("PERSONAL" . ?p)
+                              ("WORK" . ?W)
+                              ("EMACS" . ?e)
+                              ("CLASS" . ?c)
+                              ("IDEA" . ?i)
+                              ("LINUX" . ?l)
+                              ("FLAGGED" . ??))))
   (setq org-auto-align-tags nil)
   ;; Allow setting single tags without the menu
   (setq org-fast-tag-selection-single-key (quote expert))
@@ -573,10 +573,10 @@
   :after org
   :config
   (setq org-link-abbrev-alist
-		'(("github"      . "https://github.com/%s")
-		  ("youtube"     . "https://youtube.com/watch?v=%s")
-		  ("google"      . "https://google.com/search?q=%s")
-		  ("wikipedia"   . "https://en.wikipedia.org/wiki/%s")))
+        '(("github"      . "https://github.com/%s")
+          ("youtube"     . "https://youtube.com/watch?v=%s")
+          ("google"      . "https://google.com/search?q=%s")
+          ("wikipedia"   . "https://en.wikipedia.org/wiki/%s")))
 
   (setq org-link-context-for-files t)
   (setq org-link-keep-stored-after-insertion nil)
@@ -588,23 +588,23 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
-	 (python . t)
-	 ;; (shell . t)
-	 ;; (mermaid . t)
-	 (org . t)
-	 (plantuml . t)
-	 (latex . t)
-	 (js . t)
-	 ))
+     (python . t)
+     ;; (shell . t)
+     ;; (mermaid . t)
+     (org . t)
+     (plantuml . t)
+     (latex . t)
+     (js . t)
+     ))
   (setq org-babel-default-header-args
-		'((:session . "none")
-		  (:results . "replace")
-		  (:exports . "code")
-		  (:cache . "no")
-		  (:noweb . "no")
-		  (:hlines . "no")
-		  (:tangle . "no")
-		  (:comments . "link")))
+        '((:session . "none")
+          (:results . "replace")
+          (:exports . "code")
+          (:cache . "no")
+          (:noweb . "no")
+          (:hlines . "no")
+          (:tangle . "no")
+          (:comments . "link")))
   (setq org-confirm-babel-evaluate t)
   )
 ;;; FIXME: Better Org-Return
@@ -736,11 +736,11 @@
   (setq org-fontify-done-headline t)
   (custom-set-faces
    '(org-done ((t (:foreground "PaleGreen"
-							   :weight normal
-							   :strike-through t))))
+                               :weight normal
+                               :strike-through t))))
    '(org-headline-done
-	 ((((class color) (min-colors 16) (background dark))
-	   (:foreground "LightSalmon" :strike-through t))))))
+     ((((class color) (min-colors 16) (background dark))
+       (:foreground "LightSalmon" :strike-through t))))))
 
 ;; Remove hooks
 ;; For better tables
@@ -756,32 +756,32 @@
   "Configure `org-mode' fonts and faces."
   (interactive)
   (when window-system
-	;; First step is to make all Org header levels to use the variable
-	;; font, and be the same color as the default text:
-	(let ((default-color (face-attribute 'default :foreground)))
-	  (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
-								  org-level-5 org-level-6 org-level-7 org-level-8))
-		(set-face-attribute face nil :height 1.1
-							:foreground default-color :weight 'bold
-							:font "Berkeley Nerd Font")))
+    ;; First step is to make all Org header levels to use the variable
+    ;; font, and be the same color as the default text:
+    (let ((default-color (face-attribute 'default :foreground)))
+      (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
+                                  org-level-5 org-level-6 org-level-7 org-level-8))
+        (set-face-attribute face nil :height 1.1
+                            :foreground default-color :weight 'bold
+                            :font "Berkeley Nerd Font")))
 
-	;; Change the header sizes to show their level visually:
-	(set-face-attribute 'org-level-1 nil :height 2.2)
-	(set-face-attribute 'org-level-2 nil :height 1.8)
-	(set-face-attribute 'org-level-3 nil :height 1.4)
-	(set-face-attribute 'org-level-4 nil :height 1.2)
+    ;; Change the header sizes to show their level visually:
+    (set-face-attribute 'org-level-1 nil :height 2.2)
+    (set-face-attribute 'org-level-2 nil :height 1.8)
+    (set-face-attribute 'org-level-3 nil :height 1.4)
+    (set-face-attribute 'org-level-4 nil :height 1.2)
 
-	(dolist (face '(org-block org-code org-verbatim org-table org-drawer
-							  org-table org-formula org-special-keyword org-block
-							  org-property-value org-document-info-keyword))
-	  (set-face-attribute face nil :inherit 'fixed-pitch :height 'unspecified))
+    (dolist (face '(org-block org-code org-verbatim org-table org-drawer
+                              org-table org-formula org-special-keyword org-block
+                              org-property-value org-document-info-keyword))
+      (set-face-attribute face nil :inherit 'fixed-pitch :height 'unspecified))
 
-	(set-face-attribute 'org-block-begin-line nil :height 0.85)
-	(set-face-attribute 'org-block-end-line nil :height 0.8)
+    (set-face-attribute 'org-block-begin-line nil :height 0.85)
+    (set-face-attribute 'org-block-end-line nil :height 0.8)
 
-	(set-face-attribute 'org-drawer nil :height 0.8)
-	(set-face-attribute 'org-property-value nil :height 0.85)
-	(set-face-attribute 'org-special-keyword nil :height 0.85)))
+    (set-face-attribute 'org-drawer nil :height 0.8)
+    (set-face-attribute 'org-property-value nil :height 0.85)
+    (set-face-attribute 'org-special-keyword nil :height 0.85)))
 
 ;;; Flyspell
 ;; Enable on-the-fly spell checking.
@@ -801,7 +801,7 @@
 
 (defun my/org-mode-visual-fill ()
   (setq visual-fill-column-width 100
-		visual-fill-column-center-text t)
+        visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
 
 (add-hook 'org-mode-hook #'my/org-mode-visual-fill)
@@ -867,10 +867,10 @@
   (setq org-export-async-debug t)
   (setq org-export-with-section-numbers nil)
   (setq org-time-stamp-formats
-		'("%Y-%m-%d %a" . "%Y-%m-%d %a %H:%M"))
+        '("%Y-%m-%d %a" . "%Y-%m-%d %a %H:%M"))
   (setq org-display-custom-times t)
   (setq org-time-stamp-custom-formats
-		'("%a, %b %-d" . "%a, %b %-d (%-H:%M%p)"))
+        '("%a, %b %-d" . "%a, %b %-d (%-H:%M%p)"))
   (setq org-image-actual-width 700)
   (setq org-export-in-background nil)
 

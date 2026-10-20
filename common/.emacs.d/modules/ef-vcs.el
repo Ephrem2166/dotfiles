@@ -12,10 +12,10 @@
   (setq diff-font-lock-prettify t)
 
   (when (boundp 'diff-font-lock-syntax)
-	(setq diff-font-lock-syntax 'hunk-also)
-	)
+    (setq diff-font-lock-syntax 'hunk-also)
+    )
   (when (boundp 'diff-update-on-the-fly)
-	(setq diff-update-on-the-fly t))
+    (setq diff-update-on-the-fly t))
 
   )
 
@@ -44,8 +44,8 @@
   :custom
   (log-edit-headers-alist
    '(("Summary" . log-edit-summary)
-	 ("Fixes")
-	 ("Author")))
+     ("Fixes")
+     ("Author")))
   (log-edit-setup-add-author nil)
   )
 
@@ -60,13 +60,12 @@
 ;;;; Magit
 (use-package magit
   :ensure t
-  :defer-incrementally (dash f s with-editor git-commit transient)
   :init
   ;; (setq magit-auto-revert-mode nil)
   ;; Must be set early to prevent ~/.emacs.d/transient from being created
   (setq transient-levels-file  (concat user-emacs-directory "transient/levels")
-		transient-values-file  (concat user-emacs-directory  "transient/values")
-		transient-history-file (concat user-emacs-directory "transient/history"))
+        transient-values-file  (concat user-emacs-directory  "transient/values")
+        transient-history-file (concat user-emacs-directory "transient/history"))
   :after transient
   :custom
   (magit-no-message (list "Turning on magit-auto-revert-mode..."))
@@ -77,8 +76,8 @@
   (magit-refs-show-commit-count 'all)
   ;; (magit-refresh-status-buffer nil)
   (magit-repository-directories '(
-								  ("~/dotfiles/" . 0)
-								  ))
+                                  ("~/dotfiles/" . 0)
+                                  ))
 
   :config
   (setq magit-push-always-verify t)
@@ -90,8 +89,8 @@
   (setq magit-format-file-function #'magit-format-file-nerd-icons)
   (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
   (with-eval-after-load 'magit-commit
-	(remove-hook 'server-switch-hook 'magit-commit-diff)
-	(remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
+    (remove-hook 'server-switch-hook 'magit-commit-diff)
+    (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
 
   )
 

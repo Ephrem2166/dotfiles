@@ -21,8 +21,8 @@
 
 (require 'ef-core)
 (require 'ef-themes)
-(require 'ef-fonts)
 (require 'ef-icons)
+(require 'ef-fonts)
 (require 'ef-evil)
 
 (require 'ef-keybindings)

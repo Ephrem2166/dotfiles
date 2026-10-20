@@ -99,7 +99,7 @@
 ;;   (add-hook 'after-change-major-mode-hook 'clean-mode-line)
 ;;   )
 
-;;; Doom Modeline
+;; Doom Modeline
 ;; (use-package doom-modeline
 ;;   :ensure t
 ;;   :init (doom-modeline-mode 1)
@@ -184,16 +184,16 @@
   :bind (("C-c t s" . spacious-padding-mode))
   :init
   (setq spacious-padding-widths '(
-								  :internal-border-width 15
-								  :header-line-width 4
-								  :mode-line-width 6
-								  :tab-bar-width 4
-								  :tab-line-width 2
-								  :tab-width 4
-								  :right-divider-width 10
-								  ;; :scroll-bar-width 2
-								  :fringe-width 20
-								  ))
+                                  :internal-border-width 15
+                                  :header-line-width 4
+                                  :mode-line-width 6
+                                  :tab-bar-width 4
+                                  :tab-line-width 2
+                                  :tab-width 4
+                                  :right-divider-width 10
+                                  ;; :scroll-bar-width 2
+                                  :fringe-width 20
+                                  ))
   (setq spacious-padding-subtle-mode-line t)
   :init
   (spacious-padding-mode)

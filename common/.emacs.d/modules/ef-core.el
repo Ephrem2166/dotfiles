@@ -1128,37 +1128,73 @@ Intended to be added to `isearch-mode-hook'."
 
 
 ;;; Outline Mode
+;; (use-package outline
+;;   :ensure nil
+;;   :hook ((prog-mode conf-mode text-mode) . my/prog-outline)
+;;   :bind ((:map ef-toggle-keymap
+;;                ("o" . outline-toggle-children))
+;;          :map outline-minor-mode-map
+;;          ("TAB" . outline-cycle)
+;;          ("<S-tab>" . outline-cycle-buffer)
+;;          )
+;;   :custom
+;;   (outline-minor-mode-highlight t)
+;;   (outline-minor-mode-cycle t)
+;;   (outline-minor-mode-cycle-filter nil)
+;;   (outline-minor-mode-highlight 'append)
+;;   (outline-blank-line t)
+;;   (outline-minor-mode-use-buttons nil)
+;;   (outline-minor-mode-use-margins nil)
+;;   :preface
+;;   (defun ef/outline-up-heading-first ()
+;;     "Jump to current heading first, unless already there."
+;;     (unless (outline-on-heading-p)
+;;       (outline-backward-same-level 0)))
+;;   :config
+;;
+;;
+;;   ;; Outline headings
+;;   (defun my/outline-cycle ()
+;;     (interactive)
+;;     (if (save-excursion (forward-line 0)
+;;                         (looking-at-p outline-regexp))
+;;         (call-interactively #'outline-cycle)
+;;       (let* ((outline-minor-mode nil)
+;;              (cmd (or (key-binding (this-command-keys-vector))
+;;                       (key-binding (key-parse "TAB")))))
+;;         (when cmd
+;;           (setq this-command cmd)
+;;           (call-interactively cmd)))))
+;;   (defun my/prog-outline ()
+;;     (outline-minor-mode 1)
+;;     (outline-hide-sublevels 1))
+;;   (add-hook 'outline-minor-mode-hook
+;;             (lambda ()
+;;               (when (and outline-minor-mode (derived-mode-p 'emacs-lisp-mode))
+;;                 (hide-sublevels 1000))))
+;;
+;;   (advice-add 'outline-up-heading :before #'ef/outline-up-heading-first)
+;;   )
+
+;;; Outline
 (use-package outline
   :ensure nil
-  :hook ((prog-mode conf-mode text-mode) . my/prog-outline)
-  :bind ((:map ef-toggle-keymap
-			   ("o" . outline-toggle-children))
-		 :map outline-minor-mode-map
-		 ("TAB" . my/outline-cycle)
-		 ("<tab>" . my/outline-cycle)
-		 ("<backtab>" . outline-cycle-buffer)
-		 )
-  :custom
-  (outline-minor-mode-highlight t)
-  (outline-minor-mode-cycle t)
-  (outline-minor-mode-cycle-filter nil)
-  (outline-minor-mode-highlight 'append)
-  (outline-blank-line t)
-  (outline-minor-mode-use-buttons nil)
-  (outline-minor-mode-use-margins nil)
+
   :preface
-  (defun ef/outline-up-heading-first ()
-	"Jump to current heading first, unless already there."
-	(unless (outline-on-heading-p)
-	  (outline-backward-same-level 0)))
-  :config
-
-
-  ;; Outline headings
+  ;; All defuns go here so they are available before :hook / :bind
+  ;; are processed.
   (defun my/outline-cycle ()
+	"Cycle current heading, or fall back to mode-local TAB off-heading.
+
+When point is on a heading line, defer to `outline-cycle' (which
+cycles hide-all → children-only → show-all for that subtree).
+When point is elsewhere, temporarily disable `outline-minor-mode'
+so TAB reaches the buffer's major-mode binding (indentation in
+prog modes, list continuation in Markdown, etc.)."
 	(interactive)
-	(if (save-excursion (forward-line 0)
-						(looking-at-p outline-regexp))
+	(if (save-excursion
+		  (forward-line 0)
+		  (looking-at-p outline-regexp))
 		(call-interactively #'outline-cycle)
 	  (let* ((outline-minor-mode nil)
 			 (cmd (or (key-binding (this-command-keys-vector))
@@ -1166,16 +1202,53 @@ Intended to be added to `isearch-mode-hook'."
 		(when cmd
 		  (setq this-command cmd)
 		  (call-interactively cmd)))))
+
   (defun my/prog-outline ()
+	"Enable `outline-minor-mode' and hide sublevels in prog/text buffers."
 	(outline-minor-mode 1)
 	(outline-hide-sublevels 1))
-  (add-hook 'outline-minor-mode-hook
-			(lambda ()
-			  (when (and outline-minor-mode (derived-mode-p 'emacs-lisp-mode))
-				(hide-sublevels 1000))))
 
-  (advice-add 'outline-up-heading :before #'ef/outline-up-heading-first)
-  )
+  (defun my/outline-hide-elisp-sublevels ()
+	"Collapse all bodies in Emacs Lisp buffers, leaving only headings.
+Triggered by `outline-minor-mode-hook' so every elisp buffer opens
+fully folded rather than expanded."
+	(when (and outline-minor-mode
+			   (derived-mode-p 'emacs-lisp-mode))
+	  (outline-hide-sublevels 1000)))
+
+  (defun ef/outline-up-heading-first ()
+	"Move to the current heading before jumping up a level."
+	(unless (outline-on-heading-p)
+	  (outline-backward-same-level 0)))
+
+  :hook
+  ((prog-mode . my/prog-outline)
+   (conf-mode . my/prog-outline)
+   (text-mode . my/prog-outline)
+   (outline-minor-mode . my/outline-hide-elisp-sublevels))
+
+  :bind
+  ((:map ef-toggle-keymap
+		 ("o" . outline-toggle-children))
+   :map outline-minor-mode-map
+   ("TAB"      . my/outline-cycle)
+   ("<tab>"    . my/outline-cycle)
+   ("<backtab>" . outline-cycle-buffer))
+
+  :custom
+  (outline-minor-mode-highlight 'append)
+  (outline-minor-mode-cycle t)
+  (outline-minor-mode-cycle-filter nil)
+  (outline-blank-line t)
+  (outline-minor-mode-use-buttons nil)
+  (outline-minor-mode-use-margins nil)
+
+  :config
+  (advice-add 'outline-up-heading :before #'ef/outline-up-heading-first))
+
+
+
+
 
 ;;; Paren
 (use-package paren
