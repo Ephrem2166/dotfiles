@@ -298,7 +298,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setopt confirm-kill-emacs 'y-or-n-p)
   (setopt confirm-kill-processes t)
   (setopt read-answer-short t)
-  (setopt warning-suppress-types '((lexical-binding)))
+  ;; (setopt warning-suppress-types '((lexical-binding)))
   (setopt undo-limit (* 13 160000)
 		  undo-strong-limit (* 13 240000)
 		  undo-outer-limit (* 13 24000000))
@@ -329,7 +329,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setopt text-quoting-style 'straight)
   ;; Debug on error
   (setopt debug-on-error init-file-debug)
-  (setopt delete-pair-blink-delay 0.03)
+
 
   ;; warn when opening files bigger than 100MB
   (setopt large-file-warning-threshold 1000000000)
@@ -356,7 +356,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setopt mark-even-if-inactive nil)
   ;; Show keystrokes
   (setopt echo-keystrokes 0.1)
-  (setopt show-trailing-whitespace nil)
+  ;; (setopt show-trailing-whitespace nil)
   (setq-default fill-column 85)
   ;; Title bar of visible frames
   ;; (setopt frame-title-format '("Emacs" emacs-version))
@@ -412,24 +412,25 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   ;; (setopt tab-first-completion 'word-or-paren-or-punct)
   (setopt tab-first-completion 'word)
   (setopt tab-width 4)
-  (setopt indent-bs-mode nil)
+  ;; (setopt indent-bs-mode nil)
   )
 
 
 ;;; Emacs: Essential Configuration
 (use-package emacs
-:ensure nil
-:demand t
-:config
-(setq delete-pair-blink-delay 0.1)
-(setq help-window-select t)
-(setq find-library-include-other-files nil)
-(setq-default truncate-partial-width-windows nil)
-;; Check paren when current emacs buffer is saved
-(when (boundp 'emacs-lisp-mode)
-  (add-hook 'after-save-hook #'check-parens)
+  :ensure nil
+  :config
+  (setq delete-pair-blink-delay 0.1)
+  (setq help-window-select t)
+  (setq find-library-include-other-files nil)
+  (setq-default truncate-partial-width-windows nil)
+  ;; Check paren when current emacs buffer is saved
+  ;; (when (boundp 'emacs-lisp-mode)
+  ;;   (add-hook 'after-save-hook #'check-parens)
+  ;;   )
+  (add-hook 'emacs-lisp-mode-hook
+			(lambda () (add-hook 'after-save-hook #'check-parens nil t)))
   )
-)
 
 
 ;;; Emacs: SAVE SETTINGS
@@ -569,7 +570,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setq delete-old-versions t)
   (setq auto-save-default nil)
   (setq create-lockfiles nil)
-  (setq auto-save-visited-mode t)
+
   (setq save-silently t)
   (setq auto-save-visited-interval 5)
   ;; Newline at the end of file
@@ -597,7 +598,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setq auto-save-list-file-prefix
 		(expand-file-name "etc/autosave/" user-emacs-directory))
   (setq view-read-only t)
-
+  (auto-save-visited-mode 1)
   ;;; Check Parens in Emacs Mode Before Closing
   (defun my/maybe-check-parens ()
 	"If derived-mode is Lisp data, check for parenthesis correcteness."
@@ -700,9 +701,8 @@ When ALL-FRAMES is non-nil, consider every visible frame."
 (use-package hl-line-mode
   :ensure nil
   :defer t
-  :hook ((text-mode . hl-line-mode)
-		 (org-mode . hl-line-mode)
-		 ( prog-mode . hl-line-mode))
+  :hook ((text-mode . (lambda () (hl-line-mode 1)))
+		 (prog-mode . (lambda () (hl-line-mode 1))))
   ;; :custom
   ;; (hl-line-sticky-flag nil "only highlight line in active mode")
   )
@@ -712,11 +712,11 @@ When ALL-FRAMES is non-nil, consider every visible frame."
 (use-package hi-lock
   :ensure nil
   :config
-  (add-hook 'prog-mode-hook
-			(defun emphasize-comments-starting-with-! ()
-			  (highlight-lines-matching-regexp ".*\\*.*!.*" 'hi-red-b)
-			  (highlight-lines-matching-regexp ".*//!.*" 'hi-red-b)
-			  (highlight-lines-matching-regexp ";;!.*" 'hi-red-b)))
+  ;; (add-hook 'prog-mode-hook
+  ;; 			(defun emphasize-comments-starting-with-! ()
+  ;; 			  (highlight-lines-matching-regexp ".*\\*.*!.*" 'hi-red-b)
+  ;; 			  (highlight-lines-matching-regexp ".*//!.*" 'hi-red-b)
+  ;; 			  (highlight-lines-matching-regexp ";;!.*" 'hi-red-b)))
 
   ;; (global-hi-lock-mode)
   )
@@ -1329,7 +1329,7 @@ Intended to be added to `isearch-mode-hook'."
 		   (if (= ?/ (aref dired-directory last-idx))
 			   (substring dired-directory 0 last-idx)
 			 dired-directory)))))
-  (add-hook 'dired-mode #'my/recentf-add-dired-directory)
+  (add-hook 'dired-mode-hook #'my/recentf-add-dired-directory)
   )
 
 
@@ -1460,8 +1460,6 @@ Intended to be added to `isearch-mode-hook'."
   (setopt next-error-message-highlight 'keep)
   (setopt eval-expression-print-length nil)
   (setopt kill-do-not-save-duplicates t)
-  (setopt column-number-mode t)
-  (setopt line-number-mode t)
   (setopt kill-whole-line t)
   (setopt line-move-visual nil)
   (setopt track-eol t)
@@ -1471,6 +1469,8 @@ Intended to be added to `isearch-mode-hook'."
   (setopt remote-file-name-inhibit-auto-save t)
   (setopt save-interprogram-paste-before-kill t)
 
+  (column-number-mode 1)
+  (line-number-mode 1)
   ;; Performance: Remove text properties for kill ring entries
   (defun unpropertize-kill-ring ()
 	(setq kill-ring (mapcar 'substring-no-properties kill-ring)))
@@ -1589,8 +1589,8 @@ to the IFF buffer or  the files listed."
   :mode "\\`\\(README\\|CHANGELOG\\|COPYING\\|LICENSE\\)\\'"
   :hook
   ((text-mode . turn-on-auto-fill)
-   (text-mode . visual-line-mode)
-   (prog-mode . (lambda () (setq-local sentence-end-double-space t)))
+   (text-mode . turn-on-visual-line-mode)
+   ;; (prog-mode . (lambda () (setq-local sentence-end-double-space t)))
    )
   :config
   (setq word-wrap-by-category t)
@@ -1697,7 +1697,7 @@ to the IFF buffer or  the files listed."
   (add-hook 'before-save-hook
 			(lambda ()
 			  "Remove trailing whitespace before save, skipping message-mode and diff-mode."
-			  (let ((buffer-undo-list buffer-undo-list))
+			  (let ((buffer-undo-list t))
 				(unless (or (derived-mode-p 'message-mode)
 							(derived-mode-p 'markdown-mode)
 							(derived-mode-p 'org-mode)
@@ -1740,7 +1740,8 @@ to the IFF buffer or  the files listed."
 		   (display-buffer-in-new-tab)
 		   (window-width . 100)
 		   (side . right)
-		   (slot . 1))
+		   ;; (slot . 1)
+		   )
 		  ("\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
 		   (display-buffer-in-side-window)
 		   (window-height . 0.25)
@@ -1845,7 +1846,7 @@ to the IFF buffer or  the files listed."
   ;; 		   (mode apropos-mode help-mode helpful-mode Info-mode Man-mode))))
 
   ;; Only one window on startup
-  (add-hook 'emacs-startup-hook 'delete-other-windows t)
+  (add-hook 'emacs-startup-hook 'delete-other-windows)
 
   ;; Helper Function
   ;; push and pop window configuration
