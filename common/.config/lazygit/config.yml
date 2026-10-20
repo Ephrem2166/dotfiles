@@ -19,10 +19,11 @@ gui:
     defaultFgColor:
       - "#d8dee9"
 git:
-  pagers:
+  diffRenderers:
     - colorArg: always
       # pager: delta --dark --paging=never --syntax-theme="Catppuccin-mocha"
-      externalDiffCommand: difft --color=always --display=inline --syntax-highlight=off
+      command: difft --color=always --display=inline --syntax-highlight=off
+      type: extDiff
 update:
   method: never
 notARepository: "quit"
