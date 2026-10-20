@@ -1,0 +1,77 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Emacs Lisp
+[*.el]
+indent_size = 2
+max_line_length = 120
+
+# C / C++
+[*.{c,h,cpp,hpp,cc,hh,cxx,hxx}]
+indent_size = 4
+max_line_length = 100
+
+# Rust
+[*.rs]
+indent_size = 4
+max_line_length = 100
+
+# Java
+[*.java]
+indent_size = 4
+max_line_length = 120
+
+# Python
+[*.py]
+indent_size = 4
+max_line_length = 88
+
+# JavaScript / TypeScript
+[*.{js,jsx,ts,tsx,mjs,cjs}]
+indent_size = 2
+max_line_length = 100
+
+# YAML
+[*.{yml,yaml}]
+indent_size = 2
+max_line_length = 120
+
+# TOML (Cargo convention)
+[*.toml]
+indent_size = 4
+max_line_length = 100
+
+# HTML
+[*.{html,htm}]
+indent_size = 2
+max_line_length = 120
+
+# Shell scripts
+[*.{sh,bash,zsh}]
+indent_size = 2
+max_line_length = 100
+
+# System / app config
+[*.{ini,cfg,conf,properties}]
+indent_size = 2
+max_line_length = 120
+
+# Makefiles — hard tabs required
+[Makefile]
+indent_style = tab
+indent_size = 8
+
+# Dockerfiles — 4 spaces
+[Dockerfile*]
+indent_size = 4
+
+# Git config
+[*.{gitconfig,gitignore,gitattributes}]
+indent_size = 2
