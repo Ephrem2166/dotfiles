@@ -22,7 +22,7 @@
 
   ;; default `org-indent-line' inserts extra spaces at the beginning of lines
   (setq-local indent-line-function 'indent-relative)
-  (setq-local truncate-lines t)
+  (setq-local truncate-lines nil)
   (setq-local word-wrap t)
   ;; It conflicts with org-modern block prettification
   ;; Use it with org-modern-indent

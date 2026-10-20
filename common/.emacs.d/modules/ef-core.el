@@ -377,11 +377,11 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   ;; Do not show an arrow at the top/bottomin the fringe and empty lines
   (setq-default indicate-buffer-boundaries nil)
   (setq-default indicate-empty-lines nil)
-  (setq-default word-wrap t)
+  ;; (setq-default word-wrap t)
   ;; Disable wrapping by default due to its performance cost.
   (setq-default truncate-lines t)
   ;; Truncate lines in all buffers
-  (global-visual-line-mode 1)
+  ;; (global-visual-line-mode 1)
 
   ;; Various Modes
   (set-fringe-mode 8)
@@ -401,6 +401,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   ;; Visual line mode in Messages buffer
   (add-hook 'messages-buffer-mode-hook #'visual-line-mode)
   )
+
 
 
 ;;; Emacs: TAB
@@ -1590,7 +1591,7 @@ to the IFF buffer or  the files listed."
   :hook
   ((text-mode . turn-on-auto-fill)
    (text-mode . turn-on-visual-line-mode)
-   ;; (prog-mode . (lambda () (setq-local sentence-end-double-space t)))
+   (prog-mode . (lambda () (setq-local sentence-end-double-space t)))
    )
   :config
   (setq word-wrap-by-category t)
