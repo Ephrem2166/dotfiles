@@ -1218,16 +1218,17 @@ Finally falls through to `keyboard-quit'."
 ;;; Remaps (respect user bindings)
 ;; (define-key global-map [remap kill-line]              #'my/kill-dwim)
 (keymap-global-set "<remap> <kill-line>" #'my/kill-dwim)
+(keymap-global-set "<remap> <move-beginning-of-line>" #'my/smarter-move-beginning-of-line)
+(keymap-global-set "<remap> <backward-up-list>" #'my/backward-up-sexp)
+(keymap-global-set "<remap> <goto-line>" #'my/goto-line-with-line-numbers)
+(keymap-global-set "<remap> <fill-paragraph>" #'my/toggle-paragraph-fill)
+(keymap-global-set "<remap> <save-buffers-kill-terminal>" #'my/clean-exit)
+(keymap-global-set "<remap> <keyboard-quit>" #'doom/escape)
+(keymap-global-set "<remap> <abort-recursive-edit>" #'doom/escape)
 
 
-(define-key global-map [remap move-beginning-of-line] #'my/smarter-move-beginning-of-line)
-(define-key global-map [remap backward-up-list]       #'my/backward-up-sexp)
-(define-key global-map [remap goto-line]              #'my/goto-line-with-line-numbers)
-(define-key global-map [remap fill-paragraph]         #'my/toggle-paragraph-fill)
-(define-key global-map [remap save-buffers-kill-terminal] #'my/clean-exit)
-
-(define-key global-map [remap keyboard-quit]        #'doom/escape)
-(define-key global-map [remap abort-recursive-edit] #'doom/escape)
+;; (define-key global-map [remap keyboard-quit]        #'doom/escape)
+;; (define-key global-map [remap abort-recursive-edit] #'doom/escape)
 
 
 ;;; `C-z' prefix (ef-super-keymap defined in ef-keybindings.el)
