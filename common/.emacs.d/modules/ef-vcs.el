@@ -95,6 +95,13 @@
 
   )
 
+;;; Magit Todos
+(use-package magit-todos
+  :ensure t
+  :after magit
+  :config
+  (magit-todos-mode 1))
+
 ;;; VC
 (use-package vc
   :ensure nil
