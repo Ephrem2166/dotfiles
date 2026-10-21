@@ -68,7 +68,7 @@ if (( $+commands[bat] )); then
 --preview 'bat -n --color=always {}' \
 --bind 'ctrl-/:change-preview-window(down|hidden|)' \
 --border=rounded \
---preview-window=65% \
+--preview-window=right:60%:wrap \
 "
 else
   export FZF_CTRL_T_OPTS="\
@@ -76,7 +76,7 @@ else
 --preview 'head -100 {}' \
 --bind 'ctrl-/:change-preview-window(down|hidden|)' \
 --border=rounded \
---preview-window=65% \
+--preview-window=right:60:wrap \
 "
 fi
 

@@ -223,7 +223,8 @@
 
   ;; Shift selct
   (setq org-support-shift-select 'always)
-
+  ;; M-x org-speed-command-help
+  (setq org-use-speed-commands t)
   )
 
 ;;; Org Faces
@@ -508,7 +509,7 @@
      org-attach-id-uuid-folder-format
      org-attach-id-fallback-folder-format)))
 
-;;; Org Text Colors
+;;; Org Text Colors and Emphasis
 (use-package org
   :ensure nil
   :config
@@ -518,6 +519,15 @@
                              ("=" (:foreground "#a3be8c" :family "Berkeley Nerd Font"))
                              ("~" (:foreground "#d08770" :family "Berkeley Nerd Font"))
                              )))
+
+(use-package org
+  :ensure nil
+  :bind (:map org-mode-map
+              ("C-c b" . (lambda () (interactive) (org-emphasize ?*)))    ; bold
+              ("C-c i" . (lambda () (interactive) (org-emphasize ?/)))    ; italic
+              ("C-c s" . (lambda () (interactive) (org-emphasize ?+)))    ; strike
+              ("C-c v" . (lambda () (interactive) (org-emphasize ?=)))    ; verbatim
+              ("C-c c" . (lambda () (interactive) (org-emphasize ?~)))))  ; code
 
 ;;; Org SRC Blocks
 (use-package org
@@ -547,28 +557,31 @@
 ;;; Org Tags
 (use-package org
   :ensure nil
-  :config
-  ;; (setq org-tag-alist nil)
-  ;; Tags with fast selection keys
-  (setq org-tag-alist (quote ((:startgroup)
-                              ("WAITING" . ?w)
-                              ("HOLD" . ?h)
-                              ("MEETING" . ?m)
-                              ("REVIEW" . ?r)
-                              ("NOTE" . ?n)
-                              (:endgroup)
-                              ("PERSONAL" . ?p)
-                              ("WORK" . ?W)
-                              ("EMACS" . ?e)
-                              ("CLASS" . ?c)
-                              ("IDEA" . ?i)
-                              ("LINUX" . ?l)
-                              ("FLAGGED" . ??))))
-  (setq org-auto-align-tags nil)
-  ;; Allow setting single tags without the menu
-  (setq org-fast-tag-selection-single-key (quote expert))
-
-  (setq org-tags-column 0))
+  :custom
+  (org-tag-alist
+   '((:startgroup)
+     ("WAITING" . ?w)
+     ("HOLD"    . ?h)
+     ("REVIEW"  . ?r)
+     (:endgroup)
+     ("MEETING"  . ?m)
+     ("NOTE"     . ?n)
+     ("PERSONAL" . ?p)
+     ("WORK"     . ?o)        ; was ?W — avoids WAITING collision
+     ("EMACS"    . ?e)
+     ("CLASS"    . ?c)
+     ("IDEA"     . ?i)
+     ("LINUX"    . ?l)
+     ("FLAGGED"  . ?!)))       ; was ?? — avoids help ambiguity
+  (org-tag-persistent-alist
+   '(("WAITING" . ?w)
+     ("HOLD"    . ?h)
+     ("REVIEW"  . ?r)))
+  (org-auto-align-tags nil)
+  (org-fast-tag-selection-single-key 'expert)
+  (org-complete-tags-always-offer-all-agenda-tags t)
+  ;; delete org-tags-column — dead code with auto-align off
+  )
 
 ;;; ORG-ID
 (use-package org-id

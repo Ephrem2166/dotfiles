@@ -663,28 +663,7 @@ In Org mode, dispatches to `org-fill-paragraph'."
   (interactive (list (thing-at-point 'word)))
   (browse-url (format "https://en.wiktionary.org/wiki/%s" word)))
 
-;;; Org Helpers
-(defun my/org-apply-format (prefix suffix)
-  "Wrap region or line in PREFIX and SUFFIX markup."
-  (interactive "sPrefix: \nsSuffix: ")
-  (let* ((region (region-active-p))
-         (beg (if region
-                  (region-beginning)
-                (save-excursion
-                  (beginning-of-line)
-                  (skip-chars-forward " \t")
-                  (point))))
-         (end (if region (region-end) (line-end-position)))
-         (text (buffer-substring-no-properties beg end)))
-    (delete-region beg end)
-    (insert (concat prefix text suffix))))
-
-(defun my/org-apply-bold          () (interactive) (my/org-apply-format "*" "*"))
-(defun my/org-apply-italic        () (interactive) (my/org-apply-format "/" "/"))
-(defun my/org-apply-strike-through() (interactive) (my/org-apply-format "+" "+"))
-(defun my/org-apply-verbatim      () (interactive) (my/org-apply-format "=" "="))
-(defun my/org-apply-code          () (interactive) (my/org-apply-format "~" "~"))
-
+;;; Align Tables
 (defun my/align-all-tables ()
   "Align all Org tables in the buffer."
   (interactive)
@@ -1110,14 +1089,16 @@ Finally falls through to `keyboard-quit'."
     (message filename)))
 
 ;;; Move Text up and down
-(defun my/move-text-internal (arg)
-  "Move current line or region up/down by ARG lines."
+(defun my/move-text--step (direction)
+  "Move current line or region one line in DIRECTION (1 = down, -1 = up)."
   (cond
-   ((and mark-active transient-mark-mode)
+   ((use-region-p)
     (if (> (point) (mark)) (exchange-point-and-mark))
     (let ((column (current-column))
           (text (delete-and-extract-region (point) (mark))))
-      (forward-line arg)
+      ;; Guard: don't try to move past buffer edges.
+      (when (or (> direction 0) (not (bobp)))
+        (forward-line direction))
       (move-to-column column t)
       (set-mark (point))
       (insert text)
@@ -1126,23 +1107,29 @@ Finally falls through to `keyboard-quit'."
    (t
     (let ((column (current-column)))
       (beginning-of-line)
-      (when (or (> arg 0) (not (bobp)))
+      (when (or (> direction 0) (not (bobp)))
         (forward-line)
-        (when (or (< arg 0) (not (eobp)))
-          (transpose-lines arg))
+        (when (or (< direction 0) (not (eobp)))
+          (transpose-lines direction))
         (forward-line -1))
       (move-to-column column t)))))
 
-(defun my/move-text-up (arg)
-  "Move the current line or region ARG lines up."
-  (interactive "*p")
-  (my/move-text-internal (- arg)))
+(defun my/move-text-internal (arg)
+  "Move current line or region up (negative ARG) or down (positive ARG)."
+  (let ((direction (if (< arg 0) -1 1))
+        (steps (abs arg)))
+    (dotimes (_ steps)
+      (my/move-text--step direction))))
 
-(defun my/move-text-down (arg)
-  "Move the current line or region ARG lines down."
+(defun my/move-text-up (&optional arg)
+  "Move the current line or region ARG lines up (default 1)."
   (interactive "*p")
-  (my/move-text-internal arg))
+  (my/move-text-internal (- (or arg 1))))
 
+(defun my/move-text-down (&optional arg)
+  "Move the current line or region ARG lines down (default 1)."
+  (interactive "*p")
+  (my/move-text-internal (or arg 1)))
 
 ;;; Miscellaneous
 (defun my/cancel ()
