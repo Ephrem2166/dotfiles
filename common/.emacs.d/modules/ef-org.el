@@ -255,18 +255,31 @@
 ;;;  FIXME  Autoinsertion for Org
 (use-package org
   :ensure nil
-  :after org
-  :config
-  (define-auto-insert 'org-mode
-    '(t
-      "#+TITLE: " (read-string "Title: ") "\n"
-      "#+AUTHOR: " (user-full-name) "\n"
-      (if (y-or-n-p "Add Date? ") (concat "#+DATE: " (format-time-string "%Y-%m-%d") "\n"))
-      ;; Startup options completion
-      ;; "#+startup: " ((completing-read "Startup: " org-startup-options nil t) str " ") "\n"
-      )    )
-
-  )
+  :init
+  (define-auto-insert
+    'org-mode
+    '((lambda ()
+        (and buffer-file-name
+             (string-prefix-p (expand-file-name "~/Org/")
+                              (expand-file-name buffer-file-name))))
+      ;; Metadata
+      "#+TITLE: " (if noninteractive "" (read-string "Title: ")) "\n"
+      "#+AUTHOR: " (or (user-full-name) "") "\n"
+      (if (and (not noninteractive) (y-or-n-p "Add date? "))
+          (concat "#+DATE: " (format-time-string "%Y-%m-%d") "\n")
+        "")
+      (if (and (not noninteractive) (y-or-n-p "Add filetags? "))
+          (concat "#+FILETAGS: :" (read-string "Tags: ") ":\n")
+        "")
+      (if (and (not noninteractive) (y-or-n-p "Override startup folding? "))
+          (concat "#+STARTUP: "
+                  (completing-read "Startup: "
+                                   '("content" "overview" "showall" "show2levels" "fold"))
+                  "\n")
+        "")
+      ;; Body
+      "\n"
+      _ "\n")))
 
 ;;; Org Num
 ;; (use-package org-num
