@@ -96,6 +96,11 @@ zstyle ':completion:*:history-words' remove-all-dups yes
 zstyle ':completion:*:history-words' list false
 zstyle ':completion:*:history-words' menu yes
 
+
+# --- Tab support for sudo
+zstyle ':completion:*:sudo:*' command-path \
+  /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
+
 # --- Include dotfiles in completion only ---
 # This is the SAFE alternative to `setopt GLOB_DOTS` (which we left off in
 # 10-options.zsh). It only affects Tab completion, not `rm *`.
@@ -122,7 +127,7 @@ if [[ -r "$_plugin_dir/fzf-tab/fzf-tab.plugin.zsh" ]]; then
 
   # --- Keybindings inside fzf-tab ---
   zstyle ':fzf-tab:*' fzf-bindings 'space:accept' 'ctrl-j:accept' 'ctrl-a:toggle-all'
-  zstyle ':fzf-tab:*' fzf-min-height 100
+  zstyle ':fzf-tab:*' fzf-min-height 20
   zstyle ':fzf-tab:*' switch-group '<' '>'
 fi
 unset _plugin_dir

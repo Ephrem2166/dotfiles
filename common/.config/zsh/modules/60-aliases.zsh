@@ -69,8 +69,13 @@ alias fontfind='fc-list : family style'
 # ---------------------------------------------------------------------------
 # Editor
 # ---------------------------------------------------------------------------
-alias vi='vim -u NONE -N'                # vanilla vim (no config)
-alias vim='nvim'                         # vim = nvim with config
+# alias vi='vim -u NONE -N'                # vanilla vim (no config)
+# alias vim='nvim'                         # vim = nvim with config
+if (( $+commands[vim] )); then
+  alias vi='vim -u NONE -N'
+elif (( $+commands[nvim] )); then
+  alias vi='nvim -u NONE -N'
+fi
 alias e='emacsclient -nw'
 alias ew='emacs'
 alias ec='emacsclient --alternate-editor= -nw'
@@ -122,8 +127,9 @@ alias calc='python3 -ic "from math import *; import cmath"'
 # ---------------------------------------------------------------------------
 # fzf
 # ---------------------------------------------------------------------------
-alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
-
+if (( $+commands[bat] )); then
+  alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
+fi
 # ---------------------------------------------------------------------------
 # System commands
 # ---------------------------------------------------------------------------

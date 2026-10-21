@@ -57,7 +57,7 @@ bindkey '^[[1;3C' forward-word
 bindkey '^[[1;3D' backward-word
 bindkey '^[[3;5~' kill-word
 bindkey '^[^?'   kill-whole-line          # Alt+Backspace
-
+bindkey '^H' backward-kill-word
 # ---------------------------------------------------------------------------
 # Emacs-y extras
 # ---------------------------------------------------------------------------
