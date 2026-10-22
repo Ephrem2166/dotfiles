@@ -225,5 +225,25 @@ fedit() {
   done
 }
 
-# NOTE: `fzf_man` was removed — it was a duplicate of `fman` above.
-# NOTE: `cdd` was removed — it was a duplicate of `fzfcd` above.
+
+
+
+# FZF with Beets
+# bif: Fuzzy-find a directory and import it with beet
+bif() {
+  local dir
+  # Use fd or find to list directories and pipe to fzf
+  dir=$(fd --type d --hidden --exclude .git --exclude node_modules 2>/dev/null | fzf --prompt='Import to beet> ' --preview 'tree -C {} | head -100')
+  # If a directory was selected, run beet import on it
+  [[ -n "$dir" ]] && beet import "$dir"
+}
+
+
+# bls: Fuzzy-select an artist/album from your beets library
+bls() {
+  local query
+  # Use beet ls to get a list of unique artists/albums
+  query=$(beet ls -f '$albumartist - $album' 2>/dev/null | sort -u | fzf --prompt='Select album> ' --preview 'beet ls -f "$albumartist - $album"')
+  # If a selection was made, pass it to the provided beet command
+  [[ -n "$query" ]] && beet "$1" "$query"
+}

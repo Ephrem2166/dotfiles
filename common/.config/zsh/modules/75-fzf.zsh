@@ -118,3 +118,22 @@ if fzf --zsh >/dev/null 2>&1; then
 elif [[ -f "$HOME/.fzf.zsh" ]]; then
   source "$HOME/.fzf.zsh"
 fi
+
+
+# Show only directories for fuzzy path completion
+export FZF_COMPLETION_PATH_OPTS='--walker dir'
+
+# FZF with Beet
+_fzf_comprun() {
+  local command=$1
+  shift
+  case "$command" in
+    beet)
+      # A specific preview for beet: show directory contents
+      fzf --preview 'tree -C {} | head -200' "$@"
+      ;;
+    *)
+      fzf "$@"
+      ;;
+  esac
+}
