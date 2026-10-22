@@ -69,6 +69,7 @@ export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/ripgreprc"
 # --- fpath additions (must run before compinit in 40-completion.zsh) ---
 [[ -d "$XDG_CONFIG_HOME/beets" ]] && fpath=("$XDG_CONFIG_HOME/beets" $fpath)
 
+
 # --- dircolors ---
 export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors"
 if (( $+commands[dircolors] )) && [[ -f $DIRCOLOR ]]; then
