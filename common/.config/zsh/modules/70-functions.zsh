@@ -324,3 +324,9 @@ add_to_path() {
   [[ ":$PATH:" == *":$dir:"* ]] && return 0
   path=("$dir" $path)
 }
+
+
+# Usage: bsoundtrack "Album Name" Games "GTA"
+bsoundtrack() {
+  beet modify album:"$1" category:"$2" series:"$3" && beet move album:"$1"
+}
