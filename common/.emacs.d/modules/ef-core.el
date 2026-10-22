@@ -5,7 +5,7 @@
 (defun inhibit-messages-wrapper! (function)
   "Prevent FUNCTION from showing messages in the echo area"
   (let ((inhibit-message t))
-	(funcall function)))
+    (funcall function)))
 
 ;;; Alias
 ;; Text Manipulation
@@ -49,15 +49,15 @@
   :config
   (setq-default abbrev-mode t)
   (define-abbrev-table 'global-abbrev-table
-	'(
+    '(
 
-	  ("todo"  "👷 TODO:")
-	  ("fixme" "🔥 FIXME:")
-	  ("note"  "📎 NOTE:")
-	  ("hack"  "👾 HACK:")
+      ("todo"  "👷 TODO:")
+      ("fixme" "🔥 FIXME:")
+      ("note"  "📎 NOTE:")
+      ("hack"  "👾 HACK:")
 
-	  )
-	)
+      )
+    )
 
   )
 
@@ -84,34 +84,34 @@
   ;; (global-auto-revert-mode)
   ;; Performance
   (defun my/visible-buffers (&optional buffer-list all-frames)
-	"Return a list of visible buffers, optionally filtered by BUFFER-LIST.
+    "Return a list of visible buffers, optionally filtered by BUFFER-LIST.
 When ALL-FRAMES is non-nil, consider every visible frame."
-	(let* ((frames (if all-frames (visible-frame-list) (list (selected-frame))))
-		   (buffers (delete-dups
-					 (cl-loop for frame in frames
-							  for wins = (window-list frame)
-							  when wins
-							  nconc (mapcar #'window-buffer wins)))))
-	  (if buffer-list
-		  (cl-remove-if (lambda (b) (memq b buffer-list)) buffers)
-		buffers)))
+    (let* ((frames (if all-frames (visible-frame-list) (list (selected-frame))))
+           (buffers (delete-dups
+                     (cl-loop for frame in frames
+                              for wins = (window-list frame)
+                              when wins
+                              nconc (mapcar #'window-buffer wins)))))
+      (if buffer-list
+          (cl-remove-if (lambda (b) (memq b buffer-list)) buffers)
+        buffers)))
 
 
   (defun my/auto-revert-current-buffer-h ()
-	(unless (or auto-revert-mode
-				(active-minibuffer-window)
-				;; Skip non-file buffers
-				(not (buffer-file-name))
-				;; Skip temporary/internal buffers
-				(string-prefix-p " " (buffer-name)))
-	  (let ((auto-revert-mode t))
-		(auto-revert-handler))))
+    (unless (or auto-revert-mode
+                (active-minibuffer-window)
+                ;; Skip non-file buffers
+                (not (buffer-file-name))
+                ;; Skip temporary/internal buffers
+                (string-prefix-p " " (buffer-name)))
+      (let ((auto-revert-mode t))
+        (auto-revert-handler))))
 
   (defun my/auto-revert-visible-buffers-h ()
-	"Auto revert stale buffers in visible windows, if necessary."
-	(dolist (buf (my/visible-buffers))
-	  (with-current-buffer buf
-		(my/auto-revert-current-buffer-h))))
+    "Auto revert stale buffers in visible windows, if necessary."
+    (dolist (buf (my/visible-buffers))
+      (with-current-buffer buf
+        (my/auto-revert-current-buffer-h))))
   :hook
   (after-save-hook . my/auto-revert-visible-buffers-h)
   (after-change-major-mode-hook . my/auto-revert-current-buffer-h)
@@ -125,17 +125,17 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :config
   (auto-insert-mode 1)
   (define-auto-insert
-	"\\.el\\'"
-	'(
-	  "Emacs Lisp header"
-	  ";;; " (file-name-nondirectory (buffer-file-name)) " --- " _ " -*- lexical-binding: t; -*-\n\n"
-	  ";;; Commentary:\n"
-	  ";; \n\n"
-	  ";;; Code:\n\n\n"
-	  ;; ";;; Code Ends Here"
-	  "(provide '" (file-name-base) ")\n"
-	  ";;; " (file-name-nondirectory (buffer-file-name)) " ends here\n"
-	  )))
+    "\\.el\\'"
+    '(
+      "Emacs Lisp header"
+      ";;; " (file-name-nondirectory (buffer-file-name)) " --- " _ " -*- lexical-binding: t; -*-\n\n"
+      ";;; Commentary:\n"
+      ";; \n\n"
+      ";;; Code:\n\n\n"
+      ;; ";;; Code Ends Here"
+      "(provide '" (file-name-base) ")\n"
+      ";;; " (file-name-nondirectory (buffer-file-name)) " ends here\n"
+      )))
 
 
 ;;; Bookmarks
@@ -165,8 +165,8 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setopt calendar-mark-holidays-flag t)
   (setopt calendar-mode-line-format nil)
   (setopt calendar-time-display-form
-		  '(12-hours ":" minutes
-					 (when time-zone (format "(%s)" time-zone))))
+          '(12-hours ":" minutes
+                     (when time-zone (format "(%s)" time-zone))))
   (setopt calendar-week-start-day 1)
   (setopt calendar-date-style 'iso)
   (setopt calendar-time-zone-style 'numeric)
@@ -209,7 +209,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :commands (dabbrev-expand dabbrev-completion)
   ;;  Swap M-/ and C-M-/
   :bind (("M-/" . dabbrev-expand)
-		 ("C-M-/" . dabbrev-completion))
+         ("C-M-/" . dabbrev-completion))
 
   :config
   (setq dabbrev-abbrev-char-regexp "\\sw\\|\\s_")
@@ -222,7 +222,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setq dabbrev-eliminate-newlines t)
   (setq dabbrev-upcase-means-case-search t)
   (setq dabbrev-ignored-buffer-modes
-		'(archive-mode image-mode docview-mode pdf-view-mode))
+        '(archive-mode image-mode docview-mode pdf-view-mode))
   (add-to-list 'dabbrev-ignored-buffer-regexps "\\` ")
   ;; Available since Emacs 29 (Use `dabbrev-ignored-buffer-regexps' on older Emacs)
   (add-to-list 'dabbrev-ignored-buffer-modes 'authinfo-mode)
@@ -263,12 +263,12 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :bind ("C-c d" . dictionary-search)
   :config
   (setopt dictionary-server "dict.org"
-		  dictionary-default-popup-strategy "lev"
-		  dictionary-read-word-function 'dictionary-read-word-default
-		  dictionary-search-interface nil
-		  dictionary-read-dictionary-function 'dictionary-completing-read-dictionary
-		  dictionary-create-buttons nil
-		  dictionary-use-single-buffer t))
+          dictionary-default-popup-strategy "lev"
+          dictionary-read-word-function 'dictionary-read-word-default
+          dictionary-search-interface nil
+          dictionary-read-dictionary-function 'dictionary-completing-read-dictionary
+          dictionary-create-buttons nil
+          dictionary-use-single-buffer t))
 
 
 ;;; Delete Selection Mode
@@ -300,8 +300,8 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setopt read-answer-short t)
   ;; (setopt warning-suppress-types '((lexical-binding)))
   (setopt undo-limit (* 13 160000)
-		  undo-strong-limit (* 13 240000)
-		  undo-outer-limit (* 13 24000000))
+          undo-strong-limit (* 13 240000)
+          undo-outer-limit (* 13 24000000))
   (setopt use-file-dialog nil)
   (setopt use-dialog-box nil)
   ;; Language
@@ -319,9 +319,9 @@ When ALL-FRAMES is non-nil, consider every visible frame."
 
   ;; Help Related
   (setopt help-enable-completion-auto nil
-		  help-enable-autoload nil
-		  help-enable-symbol-autoload nil
-		  help-window-select t)
+          help-enable-autoload nil
+          help-enable-symbol-autoload nil
+          help-window-select t)
 
   ;;(setopt bookmark-save-flag 1)
   (setopt warning-minimum-level :error)
@@ -336,8 +336,8 @@ When ALL-FRAMES is non-nil, consider every visible frame."
 
   ;; Mouse
   (setopt mouse-drag-and-drop-region t
-		  mouse-drag-and-drop-region-cross-program t
-		  mouse-yank-at-point t)
+          mouse-drag-and-drop-region-cross-program t
+          mouse-yank-at-point t)
 ;;;; Trash
   (setopt delete-by-moving-to-trash t)
 
@@ -369,8 +369,8 @@ When ALL-FRAMES is non-nil, consider every visible frame."
 
   ;; Remove warnings from narrow-to-region, upcase-region...
   (dolist (cmd '(list-timers narrow-to-region upcase-region downcase-region
-							 erase-buffer scroll-left dired-find-alternate-file))
-	(put cmd 'disabled nil))
+                             erase-buffer scroll-left dired-find-alternate-file))
+    (put cmd 'disabled nil))
 
   (setq-default left-fringe-width 8)
   (setq-default right-fringe-width 8)
@@ -397,7 +397,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (mouse-avoidance-mode t)
   ;; Show context menu on right click
   (when (display-graphic-p)
-	(context-menu-mode))
+    (context-menu-mode))
   ;; Visual line mode in Messages buffer
   (add-hook 'messages-buffer-mode-hook #'visual-line-mode)
   )
@@ -430,7 +430,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   ;;   (add-hook 'after-save-hook #'check-parens)
   ;;   )
   (add-hook 'emacs-lisp-mode-hook
-			(lambda () (add-hook 'after-save-hook #'check-parens nil t)))
+            (lambda () (add-hook 'after-save-hook #'check-parens nil t)))
   )
 
 
@@ -439,13 +439,13 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :ensure nil
   :config
   (setopt auto-save-interval 300
-		  auto-save-timeout 30
-		  auto-save-no-message t
-		  auto-save-include-big-deletions t
-		  auto-save-list-file-name nil
-		  delete-auto-save-files t
-		  kill-buffer-delete-auto-save-files t
-		  ))
+          auto-save-timeout 30
+          auto-save-no-message t
+          auto-save-include-big-deletions t
+          auto-save-list-file-name nil
+          delete-auto-save-files t
+          kill-buffer-delete-auto-save-files t
+          ))
 
 ;;; Emacs: Prettify Symbols
 (use-package emacs
@@ -453,29 +453,29 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :config
   (setq prettify-symbols-unprettify-at-point 'right-edge)
   (setq-default prettify-symbols-alist
-				'(("<-" . ?←)
-				  ("->" . ?→)
-				  ("->>" . ?↠)
-				  ("=>" . ?⇒)
-				  ;; ("/=" . ?≠)
-				  ;; ("!=" . ?≠)
-				  ;; ("==" . ?≡)
-				  ;; ("<=" . ?≤)
-				  ;; (">=" . ?≥)
-				  ("=<<" . (?= (Br . Bl) ?≪))
-				  (">>=" . (?≫ (Br . Bl) ?=))
-				  ("<=<" . ?↢)
-				  (">=>" . ?↣)
-				  ("lambda" . 955)
-				  ("delta" . 120517)
-				  ("epsilon" . 120518)
-				  ;; ("<" . 10216)
-				  (">" . 10217)
-				  ;; ("[" . 10214)
-				  ;; ("]" . 10215)
-				  ("<<" . 10218)
-				  (">>" . 10219)
-				  ))
+                '(("<-" . ?←)
+                  ("->" . ?→)
+                  ("->>" . ?↠)
+                  ("=>" . ?⇒)
+                  ;; ("/=" . ?≠)
+                  ;; ("!=" . ?≠)
+                  ;; ("==" . ?≡)
+                  ;; ("<=" . ?≤)
+                  ;; (">=" . ?≥)
+                  ("=<<" . (?= (Br . Bl) ?≪))
+                  (">>=" . (?≫ (Br . Bl) ?=))
+                  ("<=<" . ?↢)
+                  (">=>" . ?↣)
+                  ("lambda" . 955)
+                  ("delta" . 120517)
+                  ("epsilon" . 120518)
+                  ;; ("<" . 10216)
+                  (">" . 10217)
+                  ;; ("[" . 10214)
+                  ;; ("]" . 10215)
+                  ("<<" . 10218)
+                  (">>" . 10219)
+                  ))
   )
 
 ;;; Make Emacs less verbose in some places
@@ -483,11 +483,11 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :ensure nil
   :config
   (setq command-error-function
-		(defun +command-error-function (data context caller)
-		  "Hide some error message."
-		  (when (not (memq (car data) '(beginning-of-buffer
-										end-of-buffer)))
-			(command-error-default-function data context caller))))
+        (defun +command-error-function (data context caller)
+          "Hide some error message."
+          (when (not (memq (car data) '(beginning-of-buffer
+                                        end-of-buffer)))
+            (command-error-default-function data context caller))))
   )
 
 ;;; Electric Pair
@@ -517,29 +517,29 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   ;; (electric-quote-mode 1)
   (electric-indent-mode 1)
   (setq electric-pair-pairs '(
-							  (?\{ . ?\})
-							  (?\[ . ?\])
-							  ))
+                              (?\{ . ?\})
+                              (?\[ . ?\])
+                              ))
   ;; disable auto pairing for <  >
   (add-function :before-until electric-pair-inhibit-predicate
-				(lambda (c) (eq c ?<   ;; >
-						   )))
+                (lambda (c) (eq c ?<   ;; >
+                           )))
   ;; Better Electric Pair
   (defun my/electric-pair-conservative-inhibit (char)
-	(or
-	 ;; I find it more often preferable not to pair when the
-	 ;; same char is next.
-	 (eq char (char-after))
-	 ;; Don't pair up when we insert the second of "" or of ((.
-	 (and (eq char (char-before))
-		  (eq char (char-before (1- (point)))))
-	 ;; I also find it often preferable not to pair next to a word.
-	 (eq (char-syntax (following-char)) ?w)
-	 ;; Don't pair at the end of a word, unless parens.
-	 (and
-	  (eq (char-syntax (char-before (1- (point)))) ?w)
-	  (eq (preceding-char) char)
-	  (not (eq (char-syntax (preceding-char)) ?\()))))
+    (or
+     ;; I find it more often preferable not to pair when the
+     ;; same char is next.
+     (eq char (char-after))
+     ;; Don't pair up when we insert the second of "" or of ((.
+     (and (eq char (char-before))
+          (eq char (char-before (1- (point)))))
+     ;; I also find it often preferable not to pair next to a word.
+     (eq (char-syntax (following-char)) ?w)
+     ;; Don't pair at the end of a word, unless parens.
+     (and
+      (eq (char-syntax (char-before (1- (point)))) ?w)
+      (eq (preceding-char) char)
+      (not (eq (char-syntax (preceding-char)) ?\()))))
   (setq electric-pair-inhibit-predicate 'my/electric-pair-conservative-inhibit)
   )
 
@@ -595,15 +595,15 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setq find-file-visit-truename t)
 
   (setq backup-directory-alist
-		`(("." . ,(expand-file-name "etc/backup/" user-emacs-directory))))
+        `(("." . ,(expand-file-name "etc/backup/" user-emacs-directory))))
   (setq auto-save-list-file-prefix
-		(expand-file-name "etc/autosave/" user-emacs-directory))
+        (expand-file-name "etc/autosave/" user-emacs-directory))
   (setq view-read-only t)
   (auto-save-visited-mode 1)
   ;;; Check Parens in Emacs Mode Before Closing
   (defun my/maybe-check-parens ()
-	"If derived-mode is Lisp data, check for parenthesis correcteness."
-	(if (derived-mode-p 'lisp-data-mode) (check-parens)))
+    "If derived-mode is Lisp data, check for parenthesis correcteness."
+    (if (derived-mode-p 'lisp-data-mode) (check-parens)))
   (add-hook 'write-file-functions #'my/maybe-check-parens)
   )
 
@@ -649,7 +649,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :ensure nil
   :hook (prog-mode . hs-minor-mode)
   :bind (:map hs-minor-mode-map
-			  ([C-tab] . hs-toggle-hiding))
+              ([C-tab] . hs-toggle-hiding))
   ;; :bind ("C-c C-h" . my/hideshow-toggle)
   :config
   ;; Unfold code when searching
@@ -659,13 +659,13 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   ;; (add-hook 'prog-mode-hook  #'hs-minor-mode)
   :preface
   (defun my/hideshow-toggle (column)
-	"Toggle hiding/showing blocks via hs-mode."
-	(interactive "P")
-	(condition-case nil
-		(hs-toggle-hiding)
-	  (error (hs-show-all))
-	  )
-	)
+    "Toggle hiding/showing blocks via hs-mode."
+    (interactive "P")
+    (condition-case nil
+        (hs-toggle-hiding)
+      (error (hs-show-all))
+      )
+    )
   )
 
 ;;; Hippie Expand
@@ -681,20 +681,20 @@ When ALL-FRAMES is non-nil, consider every visible frame."
 
   ;; change the order it tries things
   (setq hippie-expand-try-functions-list
-		'(
-		  try-expand-dabbrev
-		  try-expand-dabbrev-all-buffers
-		  try-expand-dabbrev-visible
-		  try-expand-dabbrev-from-kill
-		  try-complete-file-name-partially
-		  try-complete-file-name
-		  try-expand-all-abbrevs
-		  try-complete-lisp-symbol-partially
-		  try-complete-lisp-symbol
-		  try-expand-list
-		  try-expand-whole-kill
-		  try-expand-line
-		  ))
+        '(
+          try-expand-dabbrev
+          try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-visible
+          try-expand-dabbrev-from-kill
+          try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-all-abbrevs
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol
+          try-expand-list
+          try-expand-whole-kill
+          try-expand-line
+          ))
   )
 
 ;;; hl-line-mode
@@ -703,7 +703,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :ensure nil
   :defer t
   :hook ((text-mode . (lambda () (hl-line-mode 1)))
-		 (prog-mode . (lambda () (hl-line-mode 1))))
+         (prog-mode . (lambda () (hl-line-mode 1))))
   ;; :custom
   ;; (hl-line-sticky-flag nil "only highlight line in active mode")
   )
@@ -729,18 +729,18 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :preface
   ;; Keep Message and Scratch Buffers from being deleted
   (defvar protected-buffers '("*scratch*" "*Messages*")
-	"Buffer that cannot be killed.")
+    "Buffer that cannot be killed.")
 
   (defun my/protected-buffers ()
-	"Protect some buffers from being killed."
-	(dolist (buffer protected-buffers)
-	  (with-current-buffer buffer
-		(emacs-lock-mode 'kill))))
+    "Protect some buffers from being killed."
+    (dolist (buffer protected-buffers)
+      (with-current-buffer buffer
+        (emacs-lock-mode 'kill))))
   :init
   (my/protected-buffers)
   (add-hook 'ibuffer-mode-hook
-			(lambda ()
-			  (ibuffer-switch-to-saved-filter-groups "default")))
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
   :hook
   (ibuffer-mode . ibuffer-auto-mode)
   :bind
@@ -754,16 +754,16 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :config
   ;; Modify the default ibuffer formats
   (setq ibuffer-formats
-		'((mark modified read-only vc-status-mini " "
-				(name 18 18 :left :elide)
-				" "
-				(size 9 -1 :right)
-				" "
-				(mode 16 16 :left :elide)
-				" "
-				(vc-status 16 16 :left)
-				" "
-				filename-and-process)))
+        '((mark modified read-only vc-status-mini " "
+                (name 18 18 :left :elide)
+                " "
+                (size 9 -1 :right)
+                " "
+                (mode 16 16 :left :elide)
+                " "
+                (vc-status 16 16 :left)
+                " "
+                filename-and-process)))
   (setq ibuffer-save-with-custom nil)
   (setq ibuffer-default-sorting-mode 'recency)
   (setq ibuffer-eliding-string "…")
@@ -778,110 +778,110 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setq ibuffer-default-display-maybe-show-predicates t)
   ;; Kill ibuffer after quit
   (advice-add 'ibuffer-quit :after
-			  (lambda (&rest _)
-				(when (get-buffer "*Ibuffer*")
-				  (kill-buffer "*Ibuffer*"))))
+              (lambda (&rest _)
+                (when (get-buffer "*Ibuffer*")
+                  (kill-buffer "*Ibuffer*"))))
 
 
   (setq ibuffer-saved-filter-groups
-		'(("default"
-		   ("Magit"
-			(or
-			 (mode . magit-status-mode)
-			 (mode . magit-log-mode)
-			 (name . "\\*magit")
-			 (name . "magit-")
-			 (name . "git-monitor")
-			 ))
-		   ("Commands"
-			(or
-			 (mode . shell-mode)
-			 (mode . eshell-mode)
-			 (mode . term-mode)
-			 (mode . compilation-mode)))
+        '(("default"
+           ("Magit"
+            (or
+             (mode . magit-status-mode)
+             (mode . magit-log-mode)
+             (name . "\\*magit")
+             (name . "magit-")
+             (name . "git-monitor")
+             ))
+           ("Commands"
+            (or
+             (mode . shell-mode)
+             (mode . eshell-mode)
+             (mode . term-mode)
+             (mode . compilation-mode)))
 
-		   ("Dired"
-			(mode . dired-mode))
-		   ("Help"    (or
-					   (name . "^\\*Help\\*$")
-					   (name . "^\\*info\\*$")))
-		   ("Org"
-			(or
-			 (name . "^\\*Calendar\\*$")
-			 (name . "^\\*Org Agenda")
-			 (name . "^\\*Org Src")
-			 (name . "^ \\*Agenda")
-			 (mode . org-agenda-mode)
-			 (mode . org-mode)))
-		   ("Emacs"
-			(or
-			 (name . "^\\*scratch\\*$")
-			 (name . "^\\*Messages\\*$")
-			 (name . "^\\*Warnings\\*$")
-			 (name . "^\\*Shell Command Output\\*$")
-			 (name . "^\\*Async-native-compile-log\\*$")
-			 (name . "^\\*\\(Customize\\|Help\\)")
-			 (name . "\\*\\(Echo\\|Minibuf\\)")))
+           ("Dired"
+            (mode . dired-mode))
+           ("Help"    (or
+                       (name . "^\\*Help\\*$")
+                       (name . "^\\*info\\*$")))
+           ("Org"
+            (or
+             (name . "^\\*Calendar\\*$")
+             (name . "^\\*Org Agenda")
+             (name . "^\\*Org Src")
+             (name . "^ \\*Agenda")
+             (mode . org-agenda-mode)
+             (mode . org-mode)))
+           ("Emacs"
+            (or
+             (name . "^\\*scratch\\*$")
+             (name . "^\\*Messages\\*$")
+             (name . "^\\*Warnings\\*$")
+             (name . "^\\*Shell Command Output\\*$")
+             (name . "^\\*Async-native-compile-log\\*$")
+             (name . "^\\*\\(Customize\\|Help\\)")
+             (name . "\\*\\(Echo\\|Minibuf\\)")))
 
-		   ("Code" (or (mode . emacs-lisp-mode)
-					   (mode . cperl-mode)
-					   (mode . c-mode)
-					   (mode . java-mode)
-					   (mode . idl-mode)
-					   (mode . web-mode)
-					   (mode . lisp-mode)
-					   (mode . js2-mode)
-					   (mode . c++-mode)
-					   (mode . lua-mode)
-					   (mode . cmake-mode)
-					   (mode . ruby-mode)
-					   (mode . css-mode)
-					   (mode . objc-mode)
-					   (mode . sql-mode)
-					   (mode . python-mode)
-					   (mode . php-mode)
-					   (mode . sh-mode)
-					   (mode . json-mode)
-					   (mode . scala-mode)
-					   (mode . go-mode)
-					   (mode . typescript-mode)
-					   (mode . javascript-mode)
-					   (mode . js-mode)
-					   (mode . jsx-mode)
-					   (mode . js2-mode)
-					   (mode . json-mode)
-					   (name . "\\*js\\*")
-					   (mode . nodejs-repl-mode)
-					   (mode . erlang-mode)
-					   (mode . html-mode)
-					   (mode . web-mode)
-					   (name . "\\.yml$")
-					   ))
-		   ("Magit" (name . "^\\*magit.*$"))
-		   ("Markdown" (or
-						(name . "*.md$")
-						(mode . markdown-mode)))
-		   ("LaTeX" (or (mode . latex-mode)
-						(name . "*.tex$")))
-		   ("IRC" (or
-				   (mode . erc-mode)
-				   (mode . rcirc-mode)))
+           ("Code" (or (mode . emacs-lisp-mode)
+                       (mode . cperl-mode)
+                       (mode . c-mode)
+                       (mode . java-mode)
+                       (mode . idl-mode)
+                       (mode . web-mode)
+                       (mode . lisp-mode)
+                       (mode . js2-mode)
+                       (mode . c++-mode)
+                       (mode . lua-mode)
+                       (mode . cmake-mode)
+                       (mode . ruby-mode)
+                       (mode . css-mode)
+                       (mode . objc-mode)
+                       (mode . sql-mode)
+                       (mode . python-mode)
+                       (mode . php-mode)
+                       (mode . sh-mode)
+                       (mode . json-mode)
+                       (mode . scala-mode)
+                       (mode . go-mode)
+                       (mode . typescript-mode)
+                       (mode . javascript-mode)
+                       (mode . js-mode)
+                       (mode . jsx-mode)
+                       (mode . js2-mode)
+                       (mode . json-mode)
+                       (name . "\\*js\\*")
+                       (mode . nodejs-repl-mode)
+                       (mode . erlang-mode)
+                       (mode . html-mode)
+                       (mode . web-mode)
+                       (name . "\\.yml$")
+                       ))
+           ("Magit" (name . "^\\*magit.*$"))
+           ("Markdown" (or
+                        (name . "*.md$")
+                        (mode . markdown-mode)))
+           ("LaTeX" (or (mode . latex-mode)
+                        (name . "*.tex$")))
+           ("IRC" (or
+                   (mode . erc-mode)
+                   (mode . rcirc-mode)))
 
-		   )))
+           )))
   ;; Auto-update ibuffer
   (add-hook 'ibuffer-mode-hook
-			(lambda ()
-			  ;; (ibuffer-auto-mode 1)
-			  (ibuffer-switch-to-saved-filter-groups "default")))
+            (lambda ()
+              ;; (ibuffer-auto-mode 1)
+              (ibuffer-switch-to-saved-filter-groups "default")))
   ;; recycle move cursor
   (defun ibuffer-previous-line ()
-	(interactive) (previous-line)
-	(if (<= (line-number-at-pos) 2)
-		(goto-line (- (count-lines (point-min) (point-max)) 2))))
+    (interactive) (previous-line)
+    (if (<= (line-number-at-pos) 2)
+        (goto-line (- (count-lines (point-min) (point-max)) 2))))
   (defun ibuffer-next-line ()
-	(interactive) (next-line)
-	(if (>= (line-number-at-pos) (- (count-lines (point-min) (point-max)) 1))
-		(goto-line 3)))
+    (interactive) (next-line)
+    (if (>= (line-number-at-pos) (- (count-lines (point-min) (point-max)) 1))
+        (goto-line 3)))
   (define-key ibuffer-mode-map (kbd "<up>") 'ibuffer-previous-line)
   (define-key ibuffer-mode-map (kbd "<down>") 'ibuffer-next-line)
 
@@ -893,12 +893,12 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :ensure nil
   :config
   (defun my/imenu-setup ()
-	"Set up the imenu customization. Use in hooks."
-	(ignore-errors
-	  (imenu-add-menubar-index)
-	  (setq-local imenu-auto-rescan t)
-	  (when (derived-mode-p 'prog-mode)
-		(setq-local imenu-sort-function 'imenu--sort-by-name))))
+    "Set up the imenu customization. Use in hooks."
+    (ignore-errors
+      (imenu-add-menubar-index)
+      (setq-local imenu-auto-rescan t)
+      (when (derived-mode-p 'prog-mode)
+        (setq-local imenu-sort-function 'imenu--sort-by-name))))
   (setq imenu-use-markers t)
   (setq org-imenu-depth 7)
   (setq imenu-auto-rescan t)
@@ -910,7 +910,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   ;;
   ;; 	)
   (dolist (mode '(org-mode markdown-mode text-mode prog-mode))
-	(add-hook (intern (format "%s-hook" mode)) #'my/imenu-setup))
+    (add-hook (intern (format "%s-hook" mode)) #'my/imenu-setup))
 
   )
 
@@ -924,17 +924,17 @@ When ALL-FRAMES is non-nil, consider every visible frame."
 
   :config
   (defun my/info-buffer-setup ()
-	(hl-line-mode)
-	(when (fboundp 'visual-line-fill-column-mode)
-	  (setq-local visual-fill-column-width 80)
-	  (visual-line-fill-column-mode))
-	(face-remap-set-base 'default `(:height 1.0))
+    (hl-line-mode)
+    (when (fboundp 'visual-line-fill-column-mode)
+      (setq-local visual-fill-column-width 80)
+      (visual-line-fill-column-mode))
+    (face-remap-set-base 'default `(:height 1.0))
 
-	)
+    )
   (add-hook 'Info-selection-hook
-			(lambda (&rest _)
-			  (when (fboundp 'info-colors-fontify-node)
-				(info-colors-fontify-node))))
+            (lambda (&rest _)
+              (when (fboundp 'info-colors-fontify-node)
+                (info-colors-fontify-node))))
   )
 
 ;;; Info Look
@@ -956,95 +956,95 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   :ensure nil
   :config
   (defun my/isearch-hungry-delete ()
-	"Delete the failed portion of the search string, or the last
+    "Delete the failed portion of the search string, or the last
 char if successful."
-	(interactive)
-	(if (isearch-fail-pos)
-		(while (isearch-fail-pos)
-		  (isearch-delete-char))
-	  (isearch-delete-char)))
+    (interactive)
+    (if (isearch-fail-pos)
+        (while (isearch-fail-pos)
+          (isearch-delete-char))
+      (isearch-delete-char)))
   (define-key isearch-mode-map (kbd "<backspace>") #'my/isearch-hungry-delete)
   ;; Isearch Repeat Map
   (defvar isearch-repeat-map
-	(let ((map (make-sparse-keymap)))
-	  (define-key map "s" 'isearch-repeat-forward)
-	  (define-key map "r" 'isearch-repeat-backward)
-	  map))
+    (let ((map (make-sparse-keymap)))
+      (define-key map "s" 'isearch-repeat-forward)
+      (define-key map "r" 'isearch-repeat-backward)
+      map))
   (put 'isearch-repeat-forward  'repeat-map 'isearch-repeat-map)
   (put 'isearch-repeat-backward 'repeat-map 'isearch-repeat-map)
 
   (defun my/isearch-mark-and-exit ()
-	"Mark the current search string and exit the search."
-	(interactive)
-	(push-mark isearch-other-end t 'activate)
-	(setq deactivate-mark nil)
-	(activate-mark)
-	(isearch-done))
+    "Mark the current search string and exit the search."
+    (interactive)
+    (push-mark isearch-other-end t 'activate)
+    (setq deactivate-mark nil)
+    (activate-mark)
+    (isearch-done))
   (define-key isearch-mode-map (kbd "C-SPC") #'my/isearch-mark-and-exit)
 
   (defun my/isearch-other-end ()
-	"End current search in the opposite side of the match.
+    "End current search in the opposite side of the match.
 Particularly useful when the match does not fall within the
 confines of word boundaries (e.g. multiple words)."
-	(interactive)
-	(isearch-done)
-	(when isearch-other-end
-	  (goto-char isearch-other-end)))
+    (interactive)
+    (isearch-done)
+    (when isearch-other-end
+      (goto-char isearch-other-end)))
   (define-key isearch-mode-map (kbd "<C-return>") #'my/isearch-other-end)
 
   (defun my/isearch-forward-symbol-at-point (&optional arg)
-	(interactive "p")
-	(let ((arg (or arg 1)))
-	  (isearch-forward-symbol-at-point arg)))
+    (interactive "p")
+    (let ((arg (or arg 1)))
+      (isearch-forward-symbol-at-point arg)))
 
   (defun my/isearch-backward-symbol-at-point (&optional arg)
-	(interactive "p")
-	(let ((arg (or arg 1)))
-	  (isearch-forward-symbol-at-point (- arg))))
+    (interactive "p")
+    (let ((arg (or arg 1)))
+      (isearch-forward-symbol-at-point (- arg))))
   (define-key isearch-mode-map (kbd "M-s .") #'my/isearch-forward-symbol-at-point)
   (define-key isearch-mode-map (kbd "M-s ,") #'my/isearch-backward-symbol-at-point)
   ;; Abort Isearch
   (defun my/abort-isearch-dwim ()
-	(interactive)
-	(if (eq (length isearch-string) 0)
-		(isearch-cancel)
-	  (isearch-del-char)
-	  (while (or (not isearch-success) isearch-error)
-		(isearch-pop-state)))
-	(isearch-update))
+    (interactive)
+    (if (eq (length isearch-string) 0)
+        (isearch-cancel)
+      (isearch-del-char)
+      (while (or (not isearch-success) isearch-error)
+        (isearch-pop-state)))
+    (isearch-update))
   (define-key isearch-mode-map (kbd "C-<backspace>") #'my/abort-isearch-dwim)
   ;; Search under the cursor
   (defun my/isearch-yank-symbol ()
-	"*Put symbol at current point into search string."
-	(interactive)
-	(let ((sym (thing-at-point 'symbol)))
-	  (if sym
-		  (progn
-			(setq isearch-regexp t
-				  isearch-string (concat "\\_<" (regexp-quote sym) "\\_>")
-				  isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
-				  isearch-yank-flag t))
-		(ding)))
-	(isearch-search-and-update))
+    "*Put symbol at current point into search string."
+    (interactive)
+    (let ((sym (thing-at-point 'symbol)))
+      (if sym
+          (progn
+            (setq isearch-regexp t
+                  isearch-string (concat "\\_<" (regexp-quote sym) "\\_>")
+                  isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
+                  isearch-yank-flag t))
+        (ding)))
+    (isearch-search-and-update))
   ;; Mark active region and added it to search string
   (defun my/isearch-mode-setup ()
-	"If the region is on, use it as initial search string.
+    "If the region is on, use it as initial search string.
 Intended to be added to `isearch-mode-hook'."
-	;; Note that the text of the region can be an invalid regexp
-	(when (use-region-p)
-	  (let ((beg (region-beginning))
-			(end (region-end)))
-		(deactivate-mark)
-		(goto-char beg)
-		(isearch-yank-internal (lambda () end)))))
+    ;; Note that the text of the region can be an invalid regexp
+    (when (use-region-p)
+      (let ((beg (region-beginning))
+            (end (region-end)))
+        (deactivate-mark)
+        (goto-char beg)
+        (isearch-yank-internal (lambda () end)))))
 
   (add-hook 'isearch-mode-hook #'my/isearch-mode-setup)
   ;; (define-key ef-file-keymap (kbd "s") #'my/isearch-yank-symbol)
   ;; (setq search-default-mode 'char-fold-to-regexp)
   (setq search-default-mode nil)
   (setq search-whitespace-regexp ".*?"
-		isearch-lax-whitespace t
-		isearch-regexp-lax-whitespace nil)
+        isearch-lax-whitespace t
+        isearch-regexp-lax-whitespace nil)
   ;; Highlight search
   (setq search-highlight t)
   (setq isearch-lazy-highlight t)
@@ -1093,37 +1093,6 @@ Intended to be added to `isearch-mode-hook'."
   (setopt comment-column 0)
   (setopt comment-indent-offset 1)
 
-  ;; Better Comment
-  ;; (defun ef-comment (n)
-  ;; "Comment and Uncomment"
-  ;; (interactive "p")
-  ;; (if (use-region-p)
-  ;; (comment-or-uncomment-region (region-beginning) (region-end))
-  ;; (comment-line n)))
-  ;; (bind-key "C-/" #'ef-comment 'global-map)
-  (defun my-comment-or-uncomment-region-or-line ()
-	"Comments or uncomments the region or the current line if there's no active region."
-	(interactive)
-	(let (beg end)
-	  (if (region-active-p)
-		  (setq beg (region-beginning) end (region-end))
-		(setq beg (line-beginning-position) end (line-end-position)))
-	  (comment-or-uncomment-region beg end)
-	  (forward-line)))
-  (global-set-key (kbd "C-/") #'my-comment-or-uncomment-region-or-line)
-  ;; Smart Comment Advice
-  (defun my/comment-advice (orig-fun &rest args)
-	"Comment or uncomment lines intelligently.
-
-  When called interactively with no active region, comment a single
-  line instead."
-	(if (or (use-region-p) (not (called-interactively-p 'any)))
-		(apply orig-fun args)
-	  (comment-or-uncomment-region (line-beginning-position)
-								   (line-end-position))
-	  (message "[Commented line]")))
-
-  (advice-add 'comment-dwim :around #'my/comment-advice)
   )
 
 
@@ -1184,42 +1153,42 @@ Intended to be added to `isearch-mode-hook'."
   ;; All defuns go here so they are available before :hook / :bind
   ;; are processed.
   (defun my/outline-cycle ()
-	"Cycle current heading, or fall back to mode-local TAB off-heading.
+    "Cycle current heading, or fall back to mode-local TAB off-heading.
 
 When point is on a heading line, defer to `outline-cycle' (which
 cycles hide-all → children-only → show-all for that subtree).
 When point is elsewhere, temporarily disable `outline-minor-mode'
 so TAB reaches the buffer's major-mode binding (indentation in
 prog modes, list continuation in Markdown, etc.)."
-	(interactive)
-	(if (save-excursion
-		  (forward-line 0)
-		  (looking-at-p outline-regexp))
-		(call-interactively #'outline-cycle)
-	  (let* ((outline-minor-mode nil)
-			 (cmd (or (key-binding (this-command-keys-vector))
-					  (key-binding (key-parse "TAB")))))
-		(when cmd
-		  (setq this-command cmd)
-		  (call-interactively cmd)))))
+    (interactive)
+    (if (save-excursion
+          (forward-line 0)
+          (looking-at-p outline-regexp))
+        (call-interactively #'outline-cycle)
+      (let* ((outline-minor-mode nil)
+             (cmd (or (key-binding (this-command-keys-vector))
+                      (key-binding (key-parse "TAB")))))
+        (when cmd
+          (setq this-command cmd)
+          (call-interactively cmd)))))
 
   (defun my/prog-outline ()
-	"Enable `outline-minor-mode' and hide sublevels in prog/text buffers."
-	(outline-minor-mode 1)
-	(outline-hide-sublevels 1))
+    "Enable `outline-minor-mode' and hide sublevels in prog/text buffers."
+    (outline-minor-mode 1)
+    (outline-hide-sublevels 1))
 
   (defun my/outline-hide-elisp-sublevels ()
-	"Collapse all bodies in Emacs Lisp buffers, leaving only headings.
+    "Collapse all bodies in Emacs Lisp buffers, leaving only headings.
 Triggered by `outline-minor-mode-hook' so every elisp buffer opens
 fully folded rather than expanded."
-	(when (and outline-minor-mode
-			   (derived-mode-p 'emacs-lisp-mode))
-	  (outline-hide-sublevels 1000)))
+    (when (and outline-minor-mode
+               (derived-mode-p 'emacs-lisp-mode))
+      (outline-hide-sublevels 1000)))
 
   (defun ef/outline-up-heading-first ()
-	"Move to the current heading before jumping up a level."
-	(unless (outline-on-heading-p)
-	  (outline-backward-same-level 0)))
+    "Move to the current heading before jumping up a level."
+    (unless (outline-on-heading-p)
+      (outline-backward-same-level 0)))
 
   :hook
   ((prog-mode . my/prog-outline)
@@ -1229,7 +1198,7 @@ fully folded rather than expanded."
 
   :bind
   ((:map ef-toggle-keymap
-		 ("o" . outline-toggle-children))
+         ("o" . outline-toggle-children))
    :map outline-minor-mode-map
    ("TAB"      . my/outline-cycle)
    ("<tab>"    . my/outline-cycle)
@@ -1273,18 +1242,18 @@ fully folded rather than expanded."
   :config
   ;; Scroll settings
   (setopt scroll-conservatively 101
-		  scroll-error-top-bottom nil
-		  scroll-preserve-screen-position t
-		  next-screen-context-lines 4
-		  scroll-minibuffer-conservatively t
-		  scroll-up-aggressively nil
-		  scroll-down-aggressively nil
-		  scroll-margin 2
-		  scroll-step 1
-		  fast-but-imprecise-scrolling t
-		  hscroll-margin 2
-		  hscroll-step 1
-		  auto-window-vscroll nil)
+          scroll-error-top-bottom nil
+          scroll-preserve-screen-position t
+          next-screen-context-lines 4
+          scroll-minibuffer-conservatively t
+          scroll-up-aggressively nil
+          scroll-down-aggressively nil
+          scroll-margin 2
+          scroll-step 1
+          fast-but-imprecise-scrolling t
+          hscroll-margin 2
+          hscroll-step 1
+          auto-window-vscroll nil)
   (pixel-scroll-precision-mode 1)
   )
 
@@ -1293,19 +1262,19 @@ fully folded rather than expanded."
   :ensure nil
   :defer t
   :bind (
-		 ("C-c e s" . my/run-profiler)
-		 )
+         ("C-c e s" . my/run-profiler)
+         )
   :config
   (defun my/run-profiler ()
-	(interactive)
-	(if (and (fboundp 'profiler-running-p)
-			 (profiler-running-p))
-		(prog1 (profiler-stop)
-		  (profiler-report))
-	  (profiler-reset)
-	  (profiler-start 'cpu)
-	  (message "CPU Profiler Started"))
-	)
+    (interactive)
+    (if (and (fboundp 'profiler-running-p)
+             (profiler-running-p))
+        (prog1 (profiler-stop)
+          (profiler-report))
+      (profiler-reset)
+      (profiler-start 'cpu)
+      (message "CPU Profiler Started"))
+    )
   )
 
 ;;; Proced
@@ -1315,7 +1284,7 @@ fully folded rather than expanded."
   :defer t
   :bind
   (:map applications-map
-		("p" . proced))
+        ("p" . proced))
   :config
   (setopt proced-enable-color-flag t)
   (setopt proced-tree-flag t)
@@ -1352,16 +1321,16 @@ fully folded rather than expanded."
   (advice-add 'recentf-load-list :around #'inhibit-messages-wrapper!)
   ;; (quiet! (recentf-mode 1))
   (setq recentf-exclude
-		'("\\.?cache"
-		  "~$"
-		  ".cask"
-		  "url"
-		  "COMMIT_EDITMSG\\'"
-		  "bookmarks"
-		  "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
-		  "\\.?ido\\.last$" "\\.revive$" "/G?TAGS$" "/.elfeed/"
-		  "^/tmp/" "^/var/folders/.+$" "^/ssh:" "/persp-confs/"
-		  (lambda (file) (file-in-directory-p file package-user-dir))))
+        '("\\.?cache"
+          "~$"
+          ".cask"
+          "url"
+          "COMMIT_EDITMSG\\'"
+          "bookmarks"
+          "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
+          "\\.?ido\\.last$" "\\.revive$" "/G?TAGS$" "/.elfeed/"
+          "^/tmp/" "^/var/folders/.+$" "^/ssh:" "/persp-confs/"
+          (lambda (file) (file-in-directory-p file package-user-dir))))
   (push (expand-file-name recentf-save-file) recentf-exclude)
   ;; When to cleanup recentf
   (setq recentf-auto-cleanup 'never)
@@ -1370,8 +1339,8 @@ fully folded rather than expanded."
   (setq recentf-save-file (concat user-emacs-directory "etc/recentf"))
   ;; Anything in runtime folders
   (add-to-list 'recentf-exclude
-			   (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")
-											 "/run"))))
+               (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")
+                                             "/run"))))
   ;; Quiet Recentf
   ;; (defun my/recentf-quiet ()
   ;;   "Wrapper for `recentf-save-list' with no message."
@@ -1381,10 +1350,10 @@ fully folded rather than expanded."
   ;; (run-at-time 60 (* 5 60) #'my/recentf-quiet)
   ;; Remove non-existent files from the recent files list automatically.
   (defun my/recentf-cleanup ()
-	"Clean up recentf list by removing non-existent files."
-	(interactive)
-	(setq recentf-list (cl-remove-if-not 'file-exists-p recentf-list))
-	(recentf-cleanup))
+    "Clean up recentf list by removing non-existent files."
+    (interactive)
+    (setq recentf-list (cl-remove-if-not 'file-exists-p recentf-list))
+    (recentf-cleanup))
   ;; Advice recentf-load-list to perform cleanup after loading the recentf
   ;; list.
   (advice-add 'recentf-load-list :after #'my/recentf-cleanup)
@@ -1393,16 +1362,16 @@ fully folded rather than expanded."
   ;;  (advice-add #'recentf-load-list :around #'doom-shut-up-a)
   :preface
   (defun my/recentf-add-dired-directory ()
-	"Add directories visit by dired into recentf."
-	(if (and dired-directory
-			 (stringp dired-directory)
-			 (file-directory-p dired-directory)
-			 (not (string= "/" dired-directory)))
-		(let ((last-idx (1- (length dired-directory))))
-		  (recentf-add-file
-		   (if (= ?/ (aref dired-directory last-idx))
-			   (substring dired-directory 0 last-idx)
-			 dired-directory)))))
+    "Add directories visit by dired into recentf."
+    (if (and dired-directory
+             (stringp dired-directory)
+             (file-directory-p dired-directory)
+             (not (string= "/" dired-directory)))
+        (let ((last-idx (1- (length dired-directory))))
+          (recentf-add-file
+           (if (= ?/ (aref dired-directory last-idx))
+               (substring dired-directory 0 last-idx)
+             dired-directory)))))
   (add-hook 'dired-mode-hook #'my/recentf-add-dired-directory)
   )
 
@@ -1416,11 +1385,11 @@ fully folded rather than expanded."
   (setq register-separator " ")
   (setq register-use-preview 'traditional)
   (setq register-preview-display-buffer-alist
-		'(display-buffer-at-bottom
-		  (window-height . fit-window-to-buffer)
-		  (preserve-size . (nil . t))
-		  (window-parameters . ((mode-line-format . none)
-								(no-other-window . t)))))
+        '(display-buffer-at-bottom
+          (window-height . fit-window-to-buffer)
+          (preserve-size . (nil . t))
+          (window-parameters . ((mode-line-format . none)
+                                (no-other-window . t)))))
   )
 
 
@@ -1454,28 +1423,28 @@ fully folded rather than expanded."
   (setq savehist-file (concat user-emacs-directory "etc/savehist"))
   (setq savehist-autosave-interval 60)
   (setq savehist-additional-variables '(mark-ring
-										command-history
-										file-name-history
-										minibuffer-history
-										read-expression-history
-										custom-variable-history
-										kill-ring
-										set-variable-value-history
-										Info-history-list
-										last-kbd-macro
-										kmacro-ring
-										global-mark-ring
-										register-alist
-										search-ring
-										regexp-search-ring
-										extended-command-history))
+                                        command-history
+                                        file-name-history
+                                        minibuffer-history
+                                        read-expression-history
+                                        custom-variable-history
+                                        kill-ring
+                                        set-variable-value-history
+                                        Info-history-list
+                                        last-kbd-macro
+                                        kmacro-ring
+                                        global-mark-ring
+                                        register-alist
+                                        search-ring
+                                        regexp-search-ring
+                                        extended-command-history))
   ;; Stop text properties from being saved in the kill ring
   (add-hook 'savehist-save-hook
-			(lambda ()
+            (lambda ()
 
-			  (setq kill-ring
-					(mapcar #'substring-no-properties
-							(cl-remove-if-not #'stringp kill-ring)))))
+              (setq kill-ring
+                    (mapcar #'substring-no-properties
+                            (cl-remove-if-not #'stringp kill-ring)))))
 
   )
 
@@ -1491,13 +1460,13 @@ fully folded rather than expanded."
   (setq save-place-limit 600)
   (setq save-place-forget-unreadable-files t)
   (setq save-place-ignore-files-regexp
-		"\\(?:COMMIT_EDITMSG\\|hg-editor-[[:alnum:]]+\\.txt\\|elpa\\|svn-commit\\.tmp\\|bzr_log\\.[[:alnum:]]+\\)$")
+        "\\(?:COMMIT_EDITMSG\\|hg-editor-[[:alnum:]]+\\.txt\\|elpa\\|svn-commit\\.tmp\\|bzr_log\\.[[:alnum:]]+\\)$")
   ;; activate it for all buffers
   (setq-default save-place t)
   ;; Recenter view after jump
   (advice-add 'save-place-find-file-hook :after
-			  (lambda (&rest _)
-				(when buffer-file-name (ignore-errors (recenter)))))
+              (lambda (&rest _)
+                (when buffer-file-name (ignore-errors (recenter)))))
   )
 
 
@@ -1513,7 +1482,7 @@ fully folded rather than expanded."
   :config
   ;; Start the server if it's not running
   (unless (or (daemonp) (server-running-p))
-	(server-start)))
+    (server-start)))
 
 
 ;;; Simple
@@ -1547,7 +1516,7 @@ fully folded rather than expanded."
   (line-number-mode 1)
   ;; Performance: Remove text properties for kill ring entries
   (defun unpropertize-kill-ring ()
-	(setq kill-ring (mapcar 'substring-no-properties kill-ring)))
+    (setq kill-ring (mapcar 'substring-no-properties kill-ring)))
   (add-hook 'kill-emacs-hook #'unpropertize-kill-ring)
   )
 
@@ -1560,34 +1529,34 @@ fully folded rather than expanded."
   (speedbar-use-images nil)
   (speedbar-frame-parameters
    '((name . "speedbar")
-	 (title . "speedbar")
-	 (minibuffer . nil)
-	 (border-width . 2)
-	 (menu-bar-lines . 0)
-	 (tool-bar-lines . 0)
-	 (unsplittable . t)
-	 (left-fringe . 10)))
+     (title . "speedbar")
+     (minibuffer . nil)
+     (border-width . 2)
+     (menu-bar-lines . 0)
+     (tool-bar-lines . 0)
+     (unsplittable . t)
+     (left-fringe . 10)))
   :config
   ;; File Extensions
   (speedbar-add-supported-extension
    '(;; Classic Lisp Languages
-	 ".cl" ".el" ".scm" ".lisp"
-	 ;; Lua/Fennel (Lisp that transpiles to lua)
-	 ".lua" ".fnl" ".fennel"
-	 ;; JVM languages (Java, Kotlin, Clojure)
-	 ".java" ".kt" ".mvn" ".gradle" ".properties" ".clj"
-	 ;; C/C++
-	 ".c" ".cpp" ".cc" ".h" ".hh" ".hpp"
-	 ;; Shell scripts
-	 ".sh" ".bash"
-	 ;; Web Languages and Markup/Styling
-	 ".php" ".js" ".ts" ".html" ".htm" ".css" ".less" ".scss" ".sass"
-	 ;; Makefile
-	 "makefile" "MAKEFILE" "Makefile"
-	 ;; Data formats
-	 ".json" ".yaml" ".toml"
-	 ;; Notes and Markup
-	 ".md" ".markdown" ".org" ".txt" "README")))
+     ".cl" ".el" ".scm" ".lisp"
+     ;; Lua/Fennel (Lisp that transpiles to lua)
+     ".lua" ".fnl" ".fennel"
+     ;; JVM languages (Java, Kotlin, Clojure)
+     ".java" ".kt" ".mvn" ".gradle" ".properties" ".clj"
+     ;; C/C++
+     ".c" ".cpp" ".cc" ".h" ".hh" ".hpp"
+     ;; Shell scripts
+     ".sh" ".bash"
+     ;; Web Languages and Markup/Styling
+     ".php" ".js" ".ts" ".html" ".htm" ".css" ".less" ".scss" ".sass"
+     ;; Makefile
+     "makefile" "MAKEFILE" "Makefile"
+     ;; Data formats
+     ".json" ".yaml" ".toml"
+     ;; Notes and Markup
+     ".md" ".markdown" ".org" ".txt" "README")))
 
 ;;; Subword
 ;; Enable builtin packages after init
@@ -1596,7 +1565,7 @@ fully folded rather than expanded."
 (use-package subword
   :ensure nil
   :hook ((python-mode yaml-ts-mode conf-mode
-					  java-mode java-ts-mode js-mode js-ts-mode) . subword-mode))
+                      java-mode java-ts-mode js-mode js-ts-mode) . subword-mode))
 
 
 ;;; 🔥  FIXME::: So long
@@ -1621,8 +1590,8 @@ fully folded rather than expanded."
   (setq display-time-default-load-average nil)
   ;; Use M-x shell RET timedatectl list-timezones
   (setq zoneinfo-style-world-list
-		'(("Africa/Addis_Ababa" "Addis Ababa"))
-		)
+        '(("Africa/Addis_Ababa" "Addis Ababa"))
+        )
   )
 
 
@@ -1631,19 +1600,19 @@ fully folded rather than expanded."
   :ensure nil
   :preface
   (defun my/tab-bar-new (name &optional bff)
-	"Create a new tab with a NAME.
+    "Create a new tab with a NAME.
 With a non-nil IFF, call IFF as a function or switch
 to the IFF buffer or  the files listed."
-	(interactive "sWorkspace Name: ")
-	(tab-bar-switch-to-tab name)
-	(when bff
-	  (cond
-	   ((listp bff) (find-file (car bff))
-		(dolist (f (cdr bff))
-		  (split-window-right)
-		  (find-file f)))
-	   ((fboundp bff) (call-interactively bff))
-	   ((bufferp bff) (switch-to-buffer bff)))))
+    (interactive "sWorkspace Name: ")
+    (tab-bar-switch-to-tab name)
+    (when bff
+      (cond
+       ((listp bff) (find-file (car bff))
+        (dolist (f (cdr bff))
+          (split-window-right)
+          (find-file f)))
+       ((fboundp bff) (call-interactively bff))
+       ((bufferp bff) (switch-to-buffer bff)))))
   :config
   (setq tab-bar-new-button-show nil)
   (setq tab-bar-close-button-show nil)
@@ -1736,15 +1705,15 @@ to the IFF buffer or  the files listed."
   (setq which-key-prefix-prefix "+" )
 
   (which-key-add-key-based-replacements
-	"C-c" "mode-and-user"
-	"C-c a" "applications"
-	"C-c b" "buffer"
-	"C-c c" "consult"
-	"C-c f" "file"
-	"C-c t" "toggle"
-	"C-x a" "avy"
-	"C-x t" "tab-bar"
-	)
+    "C-c" "mode-and-user"
+    "C-c a" "applications"
+    "C-c b" "buffer"
+    "C-c c" "consult"
+    "C-c f" "file"
+    "C-c t" "toggle"
+    "C-x a" "avy"
+    "C-x t" "tab-bar"
+    )
   (add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
   (add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
   (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil)))
@@ -1756,27 +1725,27 @@ to the IFF buffer or  the files listed."
   :ensure nil
   :defer t
   :hook (
-		 (prog-mode . whitespace-mode)
-		 (before-save . whitespace-cleanup)
-		 )
+         (prog-mode . whitespace-mode)
+         (before-save . whitespace-cleanup)
+         )
   :config
   (setq whitespace-action '(cleanup auto-cleanup))
   (setq whitespace-line-column nil)
   (setq whitespace-display-mappings '((tab-mark ?\t [?› ?\t])
-									  (newline-mark ?\n [?¬ ?\n])
-									  (space-mark ?\  [?·] [?.])))
+                                      (newline-mark ?\n [?¬ ?\n])
+                                      (space-mark ?\  [?·] [?.])))
   (setq whitespace-style '(empty face newline newline-mark lines-tail trailing tabs tab-mark spaces space-mark indentation missing-newline-at-eof))
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
   ;; Remove trailing whitespace before saving, with exceptions.
   (add-hook 'before-save-hook
-			(lambda ()
-			  "Remove trailing whitespace before save, skipping message-mode and diff-mode."
-			  (let ((buffer-undo-list t))
-				(unless (or (derived-mode-p 'message-mode)
-							(derived-mode-p 'markdown-mode)
-							(derived-mode-p 'org-mode)
-							(derived-mode-p 'diff-mode))
-				  (delete-trailing-whitespace)))))
+            (lambda ()
+              "Remove trailing whitespace before save, skipping message-mode and diff-mode."
+              (let ((buffer-undo-list t))
+                (unless (or (derived-mode-p 'message-mode)
+                            (derived-mode-p 'markdown-mode)
+                            (derived-mode-p 'org-mode)
+                            (derived-mode-p 'diff-mode))
+                  (delete-trailing-whitespace)))))
   )
 
 
@@ -1796,91 +1765,91 @@ to the IFF buffer or  the files listed."
   (setq switch-to-buffer-obey-display-actions t)
   (setq switch-to-buffer-in-dedicated-window 'pop)
   (setq display-buffer-alist
-		'(("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
-		   (display-buffer-in-side-window)
-		   (window-height . 0.25)
-		   (side . bottom)
-		   (slot . 0))
-		  ;; Diff Mode
-		  ((major-mode . diff-mode)
-		   (display-buffer-same-window))
-		  ("\\*\\([Hh]elp\\)\\*"
-		   (display-buffer-in-side-window)
-		   (window-width . 75)
-		   (side . right)
-		   (slot . 0))
-		  ("\\*\\(Ibuffer\\)\\*"
-		   ;; (display-buffer-in-side-window)
-		   (display-buffer-in-new-tab)
-		   (window-width . 100)
-		   (side . right)
-		   ;; (slot . 1)
-		   )
-		  ("\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
-		   (display-buffer-in-side-window)
-		   (window-height . 0.25)
-		   (side . bottom)
-		   (slot . 1))
-		  ("\\*\\(grep\\|find\\)\\*"
-		   (display-buffer-in-side-window)
-		   (window-height . 0.25)
-		   (side . bottom)
-		   (slot . 2))
-		  ("\\*\\(M3U Playlist\\)"
-		   (display-buffer-in-side-window)
-		   (window-height . 0.25)
-		   (side . bottom)
-		   (slot . 3))
-		  ;; Denote
-		  ((major-mode . denote-interface-mode)
-		   (display-buffer-same-window))
-		  ;; Occur
-		  ("\\*Occur"
-		   (display-buffer-reuse-mode-window display-buffer-pop-up-window display-buffer-below-selected)
-		   (window-height . fit-window-to-buffer)
-		   (post-command-select-window . t))
-		  ;; Embark
-		  ("\\*Embark Actions\\*"
-		   (display-buffer-in-direction)
-		   (window-height . fit-window-to-buffer)
-		   (direction . above)
-		   (window-parameters . ((no-other-window . t)
-								 (mode-line-format . none))))
-		  ;; Help Mode Alternative
-		  ((major-mode . help-mode)
-		   (display-buffer-reuse-window display-buffer-pop-up-window display-buffer-below-selected)
-		   (window-height . shrink-window-if-larger-than-buffer))
-		  ;; Eldoc
-		  ("^\\*eldoc"
-		   (display-buffer-at-bottom)
-		   (post-command-select-window . t)
-		   (window-height . shrink-window-if-larger-than-buffer)
-		   (window-parameters . ((mode-line-format . none))))
-		  ;; Org and calendar
-		  ("\\*\\(?:Org Select\\|Agenda Commands\\)\\*"
-		   (display-buffer-in-side-window)
-		   (window-height . fit-window-to-buffer)
-		   (side . top)
-		   (slot . -2)
-		   (preserve-size . (nil . t))
-		   (window-parameters . ((mode-line-format . none)))
-		   (post-command-select-window . t))
-		  ("\\*Calendar\\*"
-		   (display-buffer-below-selected)
-		   (window-height . fit-window-to-buffer))
-		  ;; Embark
-		  ("\\*Embark Actions\\*"
-		   (display-buffer-in-direction)
-		   (window-height . fit-window-to-buffer)
-		   (direction . above)
-		   (window-parameters . ((no-other-window . t)
-								 (mode-line-format . none))))
+        '(("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\|Bookmark List\\|Occur\\|eldoc\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 0))
+          ;; Diff Mode
+          ((major-mode . diff-mode)
+           (display-buffer-same-window))
+          ("\\*\\([Hh]elp\\)\\*"
+           (display-buffer-in-side-window)
+           (window-width . 75)
+           (side . right)
+           (slot . 0))
+          ("\\*\\(Ibuffer\\)\\*"
+           ;; (display-buffer-in-side-window)
+           (display-buffer-in-new-tab)
+           (window-width . 100)
+           (side . right)
+           ;; (slot . 1)
+           )
+          ("\\*\\(Flymake diagnostics\\|xref\\|Completions\\)"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 1))
+          ("\\*\\(grep\\|find\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 2))
+          ("\\*\\(M3U Playlist\\)"
+           (display-buffer-in-side-window)
+           (window-height . 0.25)
+           (side . bottom)
+           (slot . 3))
+          ;; Denote
+          ((major-mode . denote-interface-mode)
+           (display-buffer-same-window))
+          ;; Occur
+          ("\\*Occur"
+           (display-buffer-reuse-mode-window display-buffer-pop-up-window display-buffer-below-selected)
+           (window-height . fit-window-to-buffer)
+           (post-command-select-window . t))
+          ;; Embark
+          ("\\*Embark Actions\\*"
+           (display-buffer-in-direction)
+           (window-height . fit-window-to-buffer)
+           (direction . above)
+           (window-parameters . ((no-other-window . t)
+                                 (mode-line-format . none))))
+          ;; Help Mode Alternative
+          ((major-mode . help-mode)
+           (display-buffer-reuse-window display-buffer-pop-up-window display-buffer-below-selected)
+           (window-height . shrink-window-if-larger-than-buffer))
+          ;; Eldoc
+          ("^\\*eldoc"
+           (display-buffer-at-bottom)
+           (post-command-select-window . t)
+           (window-height . shrink-window-if-larger-than-buffer)
+           (window-parameters . ((mode-line-format . none))))
+          ;; Org and calendar
+          ("\\*\\(?:Org Select\\|Agenda Commands\\)\\*"
+           (display-buffer-in-side-window)
+           (window-height . fit-window-to-buffer)
+           (side . top)
+           (slot . -2)
+           (preserve-size . (nil . t))
+           (window-parameters . ((mode-line-format . none)))
+           (post-command-select-window . t))
+          ("\\*Calendar\\*"
+           (display-buffer-below-selected)
+           (window-height . fit-window-to-buffer))
+          ;; Embark
+          ("\\*Embark Actions\\*"
+           (display-buffer-in-direction)
+           (window-height . fit-window-to-buffer)
+           (direction . above)
+           (window-parameters . ((no-other-window . t)
+                                 (mode-line-format . none))))
 
-		  ))
+          ))
   ;; Set up the display buffer alist for a select window.
   (defun my/give-buffer-focus (window)
-	"Select WINDOW for 'display-buffer-alist'."
-	(select-window window))
+    "Select WINDOW for 'display-buffer-alist'."
+    (select-window window))
   ;; window-height seems to have no effect. it's always huge.
   ;; (setq display-buffer-alist
   ;; 		'((;;"\\*Occur\\*"
@@ -1895,21 +1864,21 @@ to the IFF buffer or  the files listed."
   ;; 		   (dedicated . t)
   ;; 		   )))
   (add-to-list 'display-buffer-alist
-			   '((derived-mode . occur-mode)
-				 (display-buffer-reuse-mode-window display-buffer-below-selected)
-				 (body-function . my/give-buffer-focus)
-				 (window-height . fit-window-to-buffer)
-				 (dedicated . t)))
+               '((derived-mode . occur-mode)
+                 (display-buffer-reuse-mode-window display-buffer-below-selected)
+                 (body-function . my/give-buffer-focus)
+                 (window-height . fit-window-to-buffer)
+                 (dedicated . t)))
   ;; Don't create new frames
   ;; (setq display-buffer-alist (quote (("" ignore (nil . reusable-frames)))))
 
   (add-to-list 'display-buffer-alist
-			   '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
-				 (display-buffer-same-window)
-				 (dedicated . t)))
+               '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
+                 (display-buffer-same-window)
+                 (dedicated . t)))
 
   (add-to-list 'display-buffer-alist '("\\*shell\\*"
-									   display-buffer-same-window))
+                                       display-buffer-same-window))
 
   ;; FIXME: Reuse Help Windows
   ;; (setq display-buffer-alist
@@ -1925,35 +1894,35 @@ to the IFF buffer or  the files listed."
   ;; Helper Function
   ;; push and pop window configuration
   (eval-and-compile
-	(defvar saved-window-configuration nil)
+    (defvar saved-window-configuration nil)
 
-	(defun push-window-configuration ()
-	  (interactive)
-	  (push (current-window-configuration) saved-window-configuration))
+    (defun push-window-configuration ()
+      (interactive)
+      (push (current-window-configuration) saved-window-configuration))
 
-	(defun my/pop-window-configuration ()
-	  (interactive)
-	  (let ((config (pop saved-window-configuration)))
-		(if config
-			(set-window-configuration config)
-		  (if (> (length (window-list)) 1)
-			  (delete-window)
-			(bury-buffer))))))
+    (defun my/pop-window-configuration ()
+      (interactive)
+      (let ((config (pop saved-window-configuration)))
+        (if config
+            (set-window-configuration config)
+          (if (> (length (window-list)) 1)
+              (delete-window)
+            (bury-buffer))))))
   ;; (define-key dired-mode-map "z" 'my/pop-window-configuration)
   ;; (define-key Info-mode-map "z" 'my/pop-window-configuration)
   (setq same-window-buffer-names
-		'( "*eshell*"
-		   "*shell*"
-		   "*mail*"
-		   "*inferior-lisp*"
-		   "*ielm*"
-		   "*scheme*"           ))
+        '( "*eshell*"
+           "*shell*"
+           "*mail*"
+           "*inferior-lisp*"
+           "*ielm*"
+           "*scheme*"           ))
   ;; Make the default window separator a straight-line
   (add-hook 'window-configuration-change-hook
-			(defun change-window-divider ()
-			  (when-let* ((display-table (or buffer-display-table standard-display-table)))
-				(set-display-table-slot display-table 5 ?│)
-				(set-window-display-table (selected-window) display-table))))
+            (defun change-window-divider ()
+              (when-let* ((display-table (or buffer-display-table standard-display-table)))
+                (set-display-table-slot display-table 5 ?│)
+                (set-window-display-table (selected-window) display-table))))
   )
 
 ;;; Winner
@@ -1962,23 +1931,23 @@ to the IFF buffer or  the files listed."
   :ensure nil
   :hook (after-init . winner-mode)
   :init (setq winner-boring-buffers '("*Completions*"
-									  "*Compile-Log*"
-									  "*inferior-lisp*"
-									  "*Fuzzy Completions*"
-									  "*Apropos*"
-									  "*Help*"
-									  "*cvs*"
-									  "*Buffer List*"
-									  "*Ibuffer*"
-									  "*esh command on file*"))
+                                      "*Compile-Log*"
+                                      "*inferior-lisp*"
+                                      "*Fuzzy Completions*"
+                                      "*Apropos*"
+                                      "*Help*"
+                                      "*cvs*"
+                                      "*Buffer List*"
+                                      "*Ibuffer*"
+                                      "*esh command on file*"))
   ;; Make C-x 1 toggle between single window and previous layout
   (defun toggle-delete-other-windows ()
-	"Delete other windows in frame if any, or restore previous window config."
-	(interactive)
-	(if (and winner-mode
-			 (equal (selected-window) (next-window)))
-		(winner-undo)
-	  (delete-other-windows)))
+    "Delete other windows in frame if any, or restore previous window config."
+    (interactive)
+    (if (and winner-mode
+             (equal (selected-window) (next-window)))
+        (winner-undo)
+      (delete-other-windows)))
 
   (global-set-key (kbd "C-x 1") #'toggle-delete-other-windows)
   )
@@ -2033,11 +2002,11 @@ to the IFF buffer or  the files listed."
   :init
   ;; Use faster search tool
   (when (executable-find "rg")
-	(setq xref-search-program 'ripgrep))
+    (setq xref-search-program 'ripgrep))
 
   ;; Select from xref candidates in minibuffer
   (setq xref-show-definitions-function #'xref-show-definitions-completing-read
-		xref-show-xrefs-function #'xref-show-definitions-completing-read)
+        xref-show-xrefs-function #'xref-show-definitions-completing-read)
   :custom
   (xref-show-definitions-function #'xref-show-definitions-completing-read)
   (xref-show-xrefs-function #'xref-show-definitions-buffer)

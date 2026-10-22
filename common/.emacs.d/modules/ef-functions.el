@@ -605,36 +605,97 @@ In Org mode, dispatches to `org-fill-paragraph'."
   (interactive)
   (save-excursion (indent-region (point-min) (point-max))))
 
-(defun my/comment-box (b e)
-  "Draw a boxed comment around the region BEG..END."
+;;; Comment Box
+;; (defun my/comment-box (b e)
+;;   "Draw a boxed comment around the region BEG..END."
+;;   (interactive "r")
+;;   (let ((end (copy-marker e t)))
+;;     (goto-char b)
+;;     (end-of-line)
+;;     (insert-char ?\s (- fill-column (current-column)))
+;;     (comment-box b end 1)
+;;     (goto-char end)
+;;     (set-marker end nil)))
+
+(defun my/comment-box (beg end)
+  "Draw a boxed comment around BEG..END, at least `fill-column' wide.
+
+Uses the built-in `comment-box', so it works in any mode that defines
+`comment-start'.  The first line of the region is padded to
+`fill-column' so short boxes still reach the right margin.
+
+Works in: Emacs Lisp, C, C++, Java, Python, Rust, Shell, YAML, TOML,
+HTML, and every other mode with a comment syntax."
   (interactive "r")
-  (let ((end (copy-marker e t)))
-    (goto-char b)
+  (when (= beg end)
+    (user-error "Nothing to comment"))
+  (let ((end-marker (copy-marker end t)))
+    (goto-char beg)
     (end-of-line)
-    (insert-char ?\s (- fill-column (current-column)))
-    (comment-box b end 1)
-    (goto-char end)
-    (set-marker end nil)))
+    (let ((pad (- fill-column (current-column))))
+      (when (> pad 0)
+        (insert-char ?\s pad)))
+    (comment-box beg end-marker 1)
+    (goto-char end-marker)
+    (set-marker end-marker nil)))
 
-(defun my/comment-section (start end)
-  "Wrap region START..END in a section comment appropriate for the mode."
+;;; Comment Section
+;; (defun my/comment-section (start end)
+;;   "Wrap region START..END in a section comment appropriate for the mode."
+;;   (interactive "*r")
+;;   (cond
+;;    ((memq major-mode '(emacs-lisp-mode lisp-interaction-mode racket-mode))
+;;     (let* ((c (substring comment-start 0 1))
+;;            (template (concat c c "*" (make-string (- fill-column 5) ?-) "*/" "\n"
+;;                              c c "*" "%s" "*/" "\n"
+;;                              c c "*" (make-string (- fill-column 5) ?-) "*/" "\n"))
+;;            (body (buffer-substring start end))
+;;            (padded (format (concat "%-" (number-to-string (- fill-column 5)) "s")
+;;                            (concat "    " body))))
+;;       (delete-region start end)
+;;       (insert (format template padded))))
+;;    ((eq major-mode 'c-mode)
+;;     (let ((body (buffer-substring start end)))
+;;       (delete-region start end)
+;;       (insert (format "/*** %s ***/" body))))))
+(defun my/comment-section (beg end)
+  "Wrap single-line region BEG..END in a foldable section header.
+
+In Lisp modes (`emacs-lisp-mode', `racket-mode', etc.) and any mode
+whose `comment-start' begins with `;', the header is prefixed with
+`;;;' so `outline-minor-mode' recognizes it as a level-3 heading —
+TAB / S-TAB / `outline-hide-sublevels' work on it.
+
+In other modes, uses the mode's `comment-start' / `comment-end' so the
+output is a valid comment in that language.
+
+Refuses multi-line regions; use `my/comment-box' for those."
   (interactive "*r")
-  (cond
-   ((memq major-mode '(emacs-lisp-mode lisp-interaction-mode racket-mode))
-    (let* ((c (substring comment-start 0 1))
-           (template (concat c c "*" (make-string (- fill-column 5) ?-) "*/" "\n"
-                             c c "*" "%s" "*/" "\n"
-                             c c "*" (make-string (- fill-column 5) ?-) "*/" "\n"))
-           (body (buffer-substring start end))
-           (padded (format (concat "%-" (number-to-string (- fill-column 5)) "s")
-                           (concat "    " body))))
-      (delete-region start end)
-      (insert (format template padded))))
-   ((eq major-mode 'c-mode)
-    (let ((body (buffer-substring start end)))
-      (delete-region start end)
-      (insert (format "/*** %s ***/" body))))))
+  (let ((body (string-trim (buffer-substring-no-properties beg end))))
+    (when (string-empty-p body)
+      (user-error "Nothing to comment"))
+    (when (string-match-p "\n" body)
+      (user-error "Multi-line regions not supported — use `my/comment-box'"))
+    (let* ((cs (or comment-start ""))
+           (ce (or comment-end   "")))
+      (when (string-empty-p (string-trim cs))
+        (user-error "No comment syntax in %s" major-mode))
+      (let* ((lisp-like (or (derived-mode-p 'emacs-lisp-mode
+                                            'lisp-interaction-mode
+                                            'racket-mode
+                                            'scheme-mode
+                                            'clojure-mode
+                                            'emacs-lisp-mode)
+                            (string-prefix-p ";" cs)))
+             (prefix (if lisp-like ";;; " cs))
+             (bar-width (max (- fill-column (length prefix) (length ce) 1) 8))
+             (bar (make-string bar-width ?-))
+             (top (concat prefix bar ce))
+             (mid (concat prefix body ce)))
+        (delete-region beg end)
+        (insert top "\n" mid "\n" top "\n")))))
 
+;; Replace in Buffer
 (defun my/replace-in-buffer ()
   "Replace a string or symbol throughout the buffer."
   (interactive)
@@ -1248,6 +1309,9 @@ Finally falls through to `keyboard-quit'."
     (keymap-set ef-functions-keymap "c" #'my/cancel)))
 
 
+;;; Org Globally
+(keymap-global-set "C-c #" #'my/comment-box)
+(keymap-global-set "C-c =" #'my/comment-section)
 
 
 ;;; Code Ends Here
