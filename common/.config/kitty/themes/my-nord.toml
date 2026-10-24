@@ -1,11 +1,11 @@
 cursor_shape          block
 cursor_underline_thickness 1
-window_padding_width  15
+
 
 foreground            #ECEFF4
 background            #2E3440
-selection_foreground  #2E3440
-selection_background  #81A1C1
+selection_foreground  #ECEFF4
+selection_background  #4C4C5E
 url_color             #5E81AC
 cursor                #ECEFF4
 
