@@ -5,7 +5,7 @@
 (require 'seq)
 (require 'subr-x)
 (require 'nerd-icons nil t)
-
+(require 'which-func)
 
 (defgroup ef-modeline nil
   "Custom mode-line configuration."
@@ -193,16 +193,16 @@ Falls back to t on Emacs < 30."
   (if (not (ef/modeline-selected-p))
       (cond (buffer-read-only
              (if (fboundp 'nerd-icons-octicon)
-                 (concat (nerd-icons-octicon "nf-oct-lock" :v-adjust -0.05 ) " ")
+                 (concat (nerd-icons-octicon "nf-oct-lock" :v-adjust -0.05 :face 'ef/modeline-icon-face ) " ")
                "RO "))
             ((buffer-modified-p)
              (if (fboundp 'nerd-icons-faicon)
-                 (concat (nerd-icons-faicon "nf-fa-floppy_o" :v-adjust -0.05) " ")
+                 (concat (nerd-icons-faicon "nf-fa-floppy_o" :v-adjust -0.05 :face 'ef/modeline-icon-face) " ")
                "* "))
             ((and buffer-file-name
                   (not (file-exists-p buffer-file-name)))
              (if (fboundp 'nerd-icons-faicon)
-                 (concat (nerd-icons-faicon "nf-fa-ban" :v-adjust -0.05) " ")
+                 (concat (nerd-icons-faicon "nf-fa-ban" :v-adjust -0.05 :face 'ef/modeline-icon-face) " ")
                "? "))
             (t ""))))
 
@@ -213,7 +213,7 @@ Falls back to t on Emacs < 30."
                 (file-remote-p buffer-file-name)))
       ""
     (if (fboundp 'nerd-icons-faicon)
-        (concat (nerd-icons-faicon "nf-fa-rss" :v-adjust -0.02) " ")
+        (concat (nerd-icons-faicon "nf-fa-rss" :v-adjust -0.02 :face 'ef/modeline-icon-face) " ")
       "@ ")))
 
 
