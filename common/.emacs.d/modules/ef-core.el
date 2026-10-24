@@ -48,12 +48,10 @@
   (abbrev-suggest t)
   (abbrev-suggest-hint-threshold 2)
   :preface
-  :preface
   (defun my/enable-abbrev ()
     "Enable `abbrev-mode' in the current buffer, without toggling."
     (abbrev-mode 1))
   :config
-  (setq-default abbrev-mode t)
   (define-abbrev-table 'global-abbrev-table
     '(
       ("TODO"       "👷 TODO:"         nil :case-fixed t)
@@ -72,6 +70,11 @@
       ("DELETE" "🗑️  DELETE:"  nil :case-fixed t)
       )
     )
+  ;; (setq-default abbrev-mode t)
+  (add-hook 'prog-mode-hook #'my/enable-abbrev)
+  (add-hook 'text-mode-hook #'my/enable-abbrev)
+  (add-hook 'conf-mode-hook #'my/enable-abbrev)
+
   (when (file-exists-p abbrev-file-name)
     (quietly-read-abbrev-file abbrev-file-name))
 
