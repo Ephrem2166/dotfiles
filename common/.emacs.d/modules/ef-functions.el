@@ -605,6 +605,21 @@ In Org mode, dispatches to `org-fill-paragraph'."
   (interactive)
   (save-excursion (indent-region (point-min) (point-max))))
 
+;;; Line wise comment toggle
+(defun ef/comment-dwim-linewise (&optional arg)
+  "Toggle linewise comment on the region or current line.
+With numeric ARG, operate on ARG lines (negative: lines before point)."
+  (interactive "*P")
+  (let* ((n (prefix-numeric-value arg))
+         (beg (if (use-region-p)
+                  (region-beginning)
+                (line-beginning-position)))
+         (end (if (use-region-p)
+                  (region-end)
+                (line-beginning-position (if (> n 0) (1+ n) (1+ (- n)))))))
+    (comment-or-uncomment-region beg end)))
+
+
 ;;; Comment Box
 ;; (defun my/comment-box (b e)
 ;;   "Draw a boxed comment around the region BEG..END."
@@ -1262,7 +1277,7 @@ Finally falls through to `keyboard-quit'."
 (keymap-global-set "C-c C-r" #'ef/reload-config)   ; ← was C-x r
 (keymap-global-set "M-<up>"   #'my/move-text-up)
 (keymap-global-set "M-<down>" #'my/move-text-down)
-
+(keymap-global-set "M-;" #'ef/comment-dwim-linewise)
 ;;; Remaps (respect user bindings)
 ;; (define-key global-map [remap kill-line]              #'my/kill-dwim)
 (keymap-global-set "<remap> <kill-line>" #'my/kill-dwim)
