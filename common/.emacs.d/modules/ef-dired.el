@@ -6,80 +6,80 @@
   :ensure nil
   :bind ("C-x d" . dired)
   :hook (
-		 (dired-mode . diredfl-mode-fn)   ; helper below
-		 (dired-mode . dired-hide-details-mode-fn)
-		 (dired-mode . hl-line-mode-fn)
-		 (dired-mode . dired-omit-mode-fn)
-		 (dired-mode . my/dired-mode-setup)
-		 )
+         (dired-mode . diredfl-mode-fn)   ; helper below
+         (dired-mode . dired-hide-details-mode-fn)
+         (dired-mode . hl-line-mode-fn)
+         (dired-mode . dired-omit-mode-fn)
+         (dired-mode . my/dired-mode-setup)
+         )
   :preface
   (defun diredfl-mode-fn ()        (diredfl-mode 1))
   (defun dired-hide-details-mode-fn () (dired-hide-details-mode 1))
   (defun hl-line-mode-fn ()         (hl-line-mode 1))
   (defun dired-omit-mode-fn ()     (dired-omit-mode 1))
   (defun my/dired-mode-setup ()
-	(setq-local truncate-lines t))
+    (setq-local truncate-lines t))
   :config
   (setq dired-deletion-confirmer 'y-or-n-p)
   ;; (setq dired-recursive-copies 'always)
   (setq dired-dwim-target t)
   (setq delete-by-moving-to-trash t)
   (setq dired-omit-files
-		"^\\.\\|\\.Rhistory\\|\\.RData\\|__pycache__")
+        "^\\.\\|\\.Rhistory\\|\\.RData\\|__pycache__")
   (setq dired-omit-verbose nil)
   (setq dired-hide-details-hide-symlink-targets nil)
   (setq dired-kill-when-opening-new-dired-buffer t)
   (setq dired-create-destination-dirs 'ask)
   (setq dired-listing-switches
-		"-AGFhlv --group-directories-first --time-style=long-iso")
+        "-AGFhlv --group-directories-first --time-style=long-iso")
   (setq dired-auto-revert-buffer #'dired-directory-changed-p) ; also see `dired-do-revert-buffer'
   (setq dired-make-directory-clickable t) ; Emacs 29.1
   (setq dired-guess-shell-alist-user
-		(list
-		 (list "\\.pptx?$" "libreoffice &")
-		 (list "\\.odf$" "libreoffice &")
-		 (list "\\.odt$" "libreoffice &")
+        (list
+         (list "\\.pptx?$" "libreoffice &")
+         (list "\\.odf$" "libreoffice &")
+         (list "\\.odt$" "libreoffice &")
 
-		 (list "\\.svg$" "gimp")
-		 (list "\\.csv$" "libreoffice &")
-		 (list "\\.sla$" "scribus")
-		 (list "\\.od[sgpt]$" "libreoffice &")
-		 (list "\\.xls$" "libreoffice &")
-		 (list "\\.xlsx$" "libreoffice &")
-		 (list "\\.jpe?g$" "sxiv")
-		 (list "\\.png$" "sxiv")
-		 (list "\\.gif$" "sxiv")
-		 (list "\\.psd$" "gimp")
-		 (list "\\.xcf" "gimp")
-		 (list "\\.3gp$" "vlc")
-		 (list "\\.mp3$" "vlc")
-		 (list "\\.flac$" "vlc")
-		 (list "\\.avi$" "vlc")
-		 ;; (list "\\.og[av]$" "vlc")
-		 (list "\\.wm[va]$" "vlc")
-		 (list "\\.flv$" "vlc")
-		 (list "\\.mov$" "vlc")
-		 (list "\\.divx$" "vlc")
-		 (list "\\.mp4$" "vlc")
-		 (list "\\.webm$" "vlc")
-		 (list "\\.mkv$" "vlc")
-		 (list "\\.mpe?g$" "vlc")
-		 (list "\\.m4[av]$" "vlc")
-		 (list "\\.mp2$" "vlc")
-		 (list "\\.pp[st]$" "libreoffice &")
-		 (list "\\.ogg$" "vlc")
-		 (list "\\.ogv$" "vlc")
-		 (list "\\.rtf$" "libreoffice &")
-		 (list "\\.mp3$" "play")
-		 (list "\\.wav$" "vlc")
-		 ))
+         (list "\\.svg$" "gimp")
+         (list "\\.csv$" "libreoffice &")
+         (list "\\.sla$" "scribus")
+         (list "\\.od[sgpt]$" "libreoffice &")
+         (list "\\.xls$" "libreoffice &")
+         (list "\\.xlsx$" "libreoffice &")
+         (list "\\.jpe?g$" "sxiv")
+         (list "\\.png$" "sxiv")
+         (list "\\.gif$" "sxiv")
+         (list "\\.psd$" "gimp")
+         (list "\\.xcf" "gimp")
+         (list "\\.3gp$" "vlc")
+         (list "\\.mp3$" "vlc")
+         (list "\\.flac$" "vlc")
+         (list "\\.avi$" "vlc")
+         ;; (list "\\.og[av]$" "vlc")
+         (list "\\.wm[va]$" "vlc")
+         (list "\\.flv$" "vlc")
+         (list "\\.mov$" "vlc")
+         (list "\\.divx$" "vlc")
+         (list "\\.mp4$" "vlc")
+         (list "\\.webm$" "vlc")
+         (list "\\.mkv$" "vlc")
+         (list "\\.mpe?g$" "vlc")
+         (list "\\.m4[av]$" "vlc")
+         (list "\\.mp2$" "vlc")
+         (list "\\.pp[st]$" "libreoffice &")
+         (list "\\.ogg$" "vlc")
+         (list "\\.ogv$" "vlc")
+         (list "\\.rtf$" "libreoffice &")
+         (list "\\.mp3$" "play")
+         (list "\\.wav$" "vlc")
+         ))
   (setq dired-free-space nil)
   (setq dired-vc-rename-file t)
   (setq dired-clean-confirm-killing-deleted-buffers nil)
   (setq dired-mouse-drag-files t)
   ;;; Function
   (defun my/dired-mode-hook ()
-	(setq-local truncate-lines t))
+    (setq-local truncate-lines t))
   (add-hook 'dired-mode-hook #'my/dired-mode-hook)
   )
 
@@ -110,8 +110,8 @@
   ;; :demand t
   :after dired
   :bind (
-		 :map dired-mode-map
-		 ("TAB" . dired-subtree-toggle))
+         :map dired-mode-map
+         ("TAB" . dired-subtree-toggle))
   )
 
 
@@ -130,12 +130,12 @@
   :after dired
   :config
   (setq dired-open-extensions '(
-								("gif" . "sxiv")
-								("jpg" . "sxiv")
-								("png" . "sxiv")
-								("mp3" . "vlc")
-								("mkv" . "mpv")
-								("mp4" . "mpv"))))
+                                ("gif" . "sxiv")
+                                ("jpg" . "sxiv")
+                                ("png" . "sxiv")
+                                ("mp3" . "vlc")
+                                ("mkv" . "mpv")
+                                ("mp4" . "mpv"))))
 
 ;;; Dired Filter
 ;; Ibuffer like filtering for dired
@@ -147,19 +147,19 @@
   :ensure nil
   :after dired
   :bind (:map dired-mode-map
-			  ("C-+"       . dired-create-empty-file)
-			  ("M-s f"     . nil)
-			  ("C-x v v"   . dired-vc-next-action))
+              ("C-+"       . dired-create-empty-file)
+              ("M-s f"     . nil)
+              ("C-x v v"   . dired-vc-next-action))
   :config
   (setq dired-isearch-filenames 'dwim
-		dired-vc-rename-file t
-		dired-create-destination-dirs 'ask)
+        dired-vc-rename-file t
+        dired-create-destination-dirs 'ask)
   (when (boundp 'dired-do-revert-buffer)
-	(setq dired-do-revert-buffer (lambda (_dir) t)))  ; always revert
+    (setq dired-do-revert-buffer (lambda (_dir) t)))  ; always revert
   (when (boundp 'dired-create-destination-dirs-on-trailing-dirsep)
-	(setq dired-create-destination-dirs-on-trailing-dirsep t))
+    (setq dired-create-destination-dirs-on-trailing-dirsep t))
   (when (fboundp 'dired-do-open)
-	(define-key dired-mode-map (kbd "C-<return>") #'dired-do-open)))
+    (define-key dired-mode-map (kbd "C-<return>") #'dired-do-open)))
 
 
 ;;; Dired-x
@@ -168,7 +168,7 @@
   :after dired
   :bind
   ( :map dired-mode-map
-	("I" . dired-info))
+    ("I" . dired-info))
   :config
   (setq dired-clean-up-buffers-too t)
   (setq dired-x-hands-off-my-keys t)    ; easier to show the keys I use
@@ -182,7 +182,7 @@
   :commands (image-dired)
   :bind
   ( :map image-dired-thumbnail-mode-map
-	("<return>" . image-dired-thumbnail-display-external))
+    ("<return>" . image-dired-thumbnail-display-external))
   :config
   (setq image-dired-thumbnail-storage 'standard)
   (setq image-dired-external-viewer "xdg-open")
@@ -192,13 +192,22 @@
   (setq image-dired-thumbs-per-row 4))
 
 ;;; Peep-dired
+;; Replace by dired-preview
 ;; Peep at files in another window from dired buffers
 ;; Preview files before loading them.
-(use-package peep-dired
+;; (use-package peep-dired
+;;   :ensure t
+;;   :after dired
+;;   :bind (:map dired-mode-map ("P" . peep-dired-toggle-peep-mode))
+;;   )
+
+;;; Dired Preview
+(use-package dired-preview
   :ensure t
-  :after dired
-  :bind (:map dired-mode-map ("P" . peep-dired-toggle-peep-mode))
-  )
+  :config (dired-preview-global-mode 1)
+  :custom
+  (dired-preview-delay 0.5)
+  (dired-preview-max-size (expt 2 20)))
 
 ;;; Trashed
 ;; Viewing/editing system trash can
@@ -241,49 +250,49 @@
   :custom
   (dirvish-quick-access-entries
    '(("h" "~/" "Home")
-	 ("d" "~/Downloads/" "Downloads")
-	 ("c" "~/org/config" "Config")
-	 ("m" "/mnt/"                       "Drives")
-	 ("t" "~/.local/share/Trash/files/" "TrashCan")))
+     ("d" "~/Downloads/" "Downloads")
+     ("c" "~/org/config" "Config")
+     ("m" "/mnt/"                       "Drives")
+     ("t" "~/.local/share/Trash/files/" "TrashCan")))
   :config
   ;;  (setq dired-mouse-drag-files t)                   ; added in Emacs 29
   ;;  (setq mouse-drag-and-drop-region-cross-program t) ; added in Emacs 29
   ;; (dirvish-peek-mode)
   ;; Option 1
   (setq  dirvish-mode-line-format
-		 '(:left
-		   (" " file-modes " " file-link-number " " file-user ":" file-group " "
-			symlink omit vc-info)
-		   :right
-		   (sort yank index)))
+         '(:left
+           (" " file-modes " " file-link-number " " file-user ":" file-group " "
+            symlink omit vc-info)
+           :right
+           (sort yank index)))
   ;; Option 2
   ;; (setq dirvish-mode-line-format
   ;; '(:left (sort file-time "" file-size symlink) :right (omit yank index)))
   (setq dirvish-attributes
-		'(nerd-icons file-time file-size collapse subtree-state vc-state git-msg)
-		dirvish-side-attributes
-		'(vc-state file-size nerd-icons collapse))
+        '(nerd-icons file-time file-size collapse subtree-state vc-state git-msg)
+        dirvish-side-attributes
+        '(vc-state file-size nerd-icons collapse))
   ;; (setq dirvish-attributes '(all-the-icons file-size collapse subtree-state vc-state git-msg))
   (setq dirvish-yank-new-name-style 'append-to-filename)
   (setq dirvish-header-line-format
-		'(:left
-		  (path symlink)
-		  :right
-		  (free-space)))
+        '(:left
+          (path symlink)
+          :right
+          (free-space)))
   (setq  dirvish-layout-recipes
-		 (list '(0 0 0.8)
-			   '(0 0 0.4)
-			   dirvish-default-layout))
+         (list '(0 0 0.8)
+               '(0 0 0.4)
+               dirvish-default-layout))
   (setq dirvish-mode-line-position 'global)
   (setq delete-by-moving-to-trash t)
   (setq dired-listing-switches
-		"-l --almost-all --human-readable --group-directories-first --no-group")
+        "-l --almost-all --human-readable --group-directories-first --no-group")
   (setq dirvish-yank-overwrite-existing-files 'never)
   (setq dired-dwim-target         t
-		dired-recursive-copies    'always
-		dired-recursive-deletes   'top
-		delete-by-moving-to-trash t
-		dirvish-preview-dispatchers (cl-substitute 'pdf-preface 'pdf dirvish-preview-dispatchers))
+        dired-recursive-copies    'always
+        dired-recursive-deletes   'top
+        delete-by-moving-to-trash t
+        dirvish-preview-dispatchers (cl-substitute 'pdf-preface 'pdf dirvish-preview-dispatchers))
 
   )
 
@@ -291,14 +300,14 @@
 (use-package dired
   :ensure nil
   :bind (
-		 :map dired-mode-map
-		 ("<backspace>" . dired-up-directory)
-		 ("." . dired-find-file)
-		 ("c" . dired-create-directory)
-		 ("I" . dired-info)
-		 ;; ("r" . dired-do-rename)
+         :map dired-mode-map
+         ("<backspace>" . dired-up-directory)
+         ("." . dired-find-file)
+         ("c" . dired-create-directory)
+         ("I" . dired-info)
+         ;; ("r" . dired-do-rename)
 
-		 ))
+         ))
 
 ;; (define-key dired-mode-map (kbd "<backspace>") 'dired-up-directory)
 
