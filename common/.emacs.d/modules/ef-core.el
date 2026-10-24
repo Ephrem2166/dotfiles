@@ -43,21 +43,37 @@
   :ensure nil
   :custom
   (abbrev-file-name (expand-file-name "etc/abbrev.el" user-emacs-directory))
+  (quietly-read-abbrev-file abbrev-file-name)
   (save-abbrevs 'silently)
   (abbrev-suggest t)
   (abbrev-suggest-hint-threshold 2)
+  :preface
+  :preface
+  (defun my/enable-abbrev ()
+    "Enable `abbrev-mode' in the current buffer, without toggling."
+    (abbrev-mode 1))
   :config
   (setq-default abbrev-mode t)
   (define-abbrev-table 'global-abbrev-table
     '(
-
-      ("todo"  "👷 TODO:")
-      ("fixme" "🔥 FIXME:")
-      ("note"  "📎 NOTE:")
-      ("hack"  "👾 HACK:")
-
+      ("TODO"       "👷 TODO:"         nil :case-fixed t)
+      ("FIXME"      "🔥 FIXME:"        nil :case-fixed t)
+      ("NOTE"       "📎 NOTE:"         nil :case-fixed t)
+      ("HACK"       "👾 HACK:"         nil :case-fixed t)
+      ("BUG"        "🐛 BUG:"          nil :case-fixed t)
+      ("XXX"        "⚠️  XXX:"         nil :case-fixed t)
+      ("WARN"       "⚠️  WARNING:"     nil :case-fixed t)
+      ("TIP"        "💡 TIP:"          nil :case-fixed t)
+      ("OPTIMIZE"   "⚡ OPTIMIZE:"     nil :case-fixed t)
+      ("REFACTOR"   "🔧 REFACTOR:"     nil :case-fixed t)
+      ("REVIEW"     "👀 REVIEW:"       nil :case-fixed t)
+      ("CRITICAL"   "🚨 CRITICAL:"     nil :case-fixed t)
+      ("DEPRECATED" "🗑️  DEPRECATED:"  nil :case-fixed t)
+      ("DELETE" "🗑️  DELETE:"  nil :case-fixed t)
       )
     )
+  (when (file-exists-p abbrev-file-name)
+    (quietly-read-abbrev-file abbrev-file-name))
 
   )
 
@@ -120,10 +136,11 @@ When ALL-FRAMES is non-nil, consider every visible frame."
 ;;; Auto Insert
 (use-package autoinsert
   :ensure nil
+  :hook (after-init . auto-insert-mode)
   :init
   (setq auto-insert-query nil)
   :config
-  (auto-insert-mode 1)
+  ;; (auto-insert-mode 1)
   (define-auto-insert
     "\\.el\\'"
     '(
@@ -738,16 +755,17 @@ When ALL-FRAMES is non-nil, consider every visible frame."
         (emacs-lock-mode 'kill))))
   :init
   (my/protected-buffers)
-  (add-hook 'ibuffer-mode-hook
-            (lambda ()
-              (ibuffer-switch-to-saved-filter-groups "default")))
+  ;; (add-hook 'ibuffer-mode-hook
+  ;;           (lambda ()
+  ;;             (ibuffer-switch-to-saved-filter-groups "default")))
   :hook
   (ibuffer-mode . ibuffer-auto-mode)
   :bind
   ;; ("C-c i" . ibuffer)
   ([remap list-buffers] . ibuffer)
   :custom
-  (ibuffer-filter-group-name-face '(:inherit (font-lock-string-face bold)))
+  ;; (ibuffer-filter-group-name-face '(:inherit (font-lock-string-face bold)))
+  (ibuffer-filter-group-name-face '(:inherit (success bold)))
   (ibuffer-title-face '(:inherit (font-lock-type-face)))
   (ibuffer-never-show-predicates (list (rx bol " " (* any))))
 
@@ -774,7 +792,7 @@ When ALL-FRAMES is non-nil, consider every visible frame."
   (setq ibuffer-use-other-window t)
   (setq ibuffer-show-empty-filter-groups nil)
   (setq ibuffer-shrink-to-minimum-size  t)
-  (setq ibuffer-filter-group-name-face '(:inherit (success bold)))
+  ;; (setq ibuffer-filter-group-name-face '(:inherit (success bold)))
   (setq ibuffer-default-display-maybe-show-predicates t)
   ;; Kill ibuffer after quit
   (advice-add 'ibuffer-quit :after
@@ -822,42 +840,59 @@ When ALL-FRAMES is non-nil, consider every visible frame."
              (name . "^\\*Async-native-compile-log\\*$")
              (name . "^\\*\\(Customize\\|Help\\)")
              (name . "\\*\\(Echo\\|Minibuf\\)")))
-
-           ("Code" (or (mode . emacs-lisp-mode)
-                       (mode . cperl-mode)
-                       (mode . c-mode)
-                       (mode . java-mode)
-                       (mode . idl-mode)
-                       (mode . web-mode)
-                       (mode . lisp-mode)
-                       (mode . js2-mode)
-                       (mode . c++-mode)
-                       (mode . lua-mode)
-                       (mode . cmake-mode)
-                       (mode . ruby-mode)
-                       (mode . css-mode)
-                       (mode . objc-mode)
-                       (mode . sql-mode)
-                       (mode . python-mode)
-                       (mode . php-mode)
-                       (mode . sh-mode)
-                       (mode . json-mode)
-                       (mode . scala-mode)
-                       (mode . go-mode)
-                       (mode . typescript-mode)
-                       (mode . javascript-mode)
-                       (mode . js-mode)
-                       (mode . jsx-mode)
-                       (mode . js2-mode)
-                       (mode . json-mode)
-                       (name . "\\*js\\*")
-                       (mode . nodejs-repl-mode)
-                       (mode . erlang-mode)
-                       (mode . html-mode)
-                       (mode . web-mode)
-                       (name . "\\.yml$")
-                       ))
-           ("Magit" (name . "^\\*magit.*$"))
+           ("Code"
+            (or
+             ;; Elisp
+             (derived-mode . emacs-lisp-mode)
+             (derived-mode . lisp-interaction-mode)
+             ;; C family
+             (derived-mode . c-mode)
+             (derived-mode . c-ts-mode)
+             (derived-mode . c++-mode)
+             (derived-mode . c++-ts-mode)
+             (derived-mode . java-mode)
+             (derived-mode . java-ts-mode)
+             (derived-mode . objc-mode)
+             ;; Rust
+             (derived-mode . rust-mode)
+             (derived-mode . rust-ts-mode)
+             ;; Python
+             (derived-mode . python-mode)
+             (derived-mode . python-ts-mode)
+             ;; JavaScript / TypeScript
+             (derived-mode . js-mode)
+             (derived-mode . js-ts-mode)
+             (derived-mode . typescript-mode)
+             (derived-mode . typescript-ts-mode)
+             (derived-mode . js2-mode)
+             ;; JSON
+             (derived-mode . json-mode)
+             (derived-mode . json-ts-mode)
+             ;; CSS
+             (derived-mode . css-mode)
+             (derived-mode . css-ts-mode)
+             ;; HTML
+             (derived-mode . html-mode)
+             (derived-mode . html-ts-mode)
+             ;; YAML / TOML
+             (derived-mode . yaml-mode)
+             (derived-mode . yaml-ts-mode)
+             (derived-mode . toml-mode)
+             (derived-mode . toml-ts-mode)
+             ;; Shell
+             (derived-mode . sh-mode)
+             (derived-mode . bash-ts-mode)
+             ;; Config
+             (derived-mode . conf-mode)
+             (derived-mode . conf-toml-mode)
+             ;; Other
+             (derived-mode . lua-mode)
+             (derived-mode . lua-ts-mode)
+             (derived-mode . cmake-mode)
+             (derived-mode . ruby-mode)
+             (derived-mode . php-mode)
+             (derived-mode . go-mode)
+             (derived-mode . sql-mode)))
            ("Markdown" (or
                         (name . "*.md$")
                         (mode . markdown-mode)))
@@ -866,7 +901,9 @@ When ALL-FRAMES is non-nil, consider every visible frame."
            ("IRC" (or
                    (mode . erc-mode)
                    (mode . rcirc-mode)))
-
+           ("Other"
+            (and (derived-mode . prog-mode)
+                 (not (derived-mode . special-mode))))
            )))
   ;; Auto-update ibuffer
   (add-hook 'ibuffer-mode-hook
@@ -874,16 +911,40 @@ When ALL-FRAMES is non-nil, consider every visible frame."
               ;; (ibuffer-auto-mode 1)
               (ibuffer-switch-to-saved-filter-groups "default")))
   ;; recycle move cursor
-  (defun ibuffer-previous-line ()
-    (interactive) (previous-line)
-    (if (<= (line-number-at-pos) 2)
-        (goto-line (- (count-lines (point-min) (point-max)) 2))))
-  (defun ibuffer-next-line ()
-    (interactive) (next-line)
-    (if (>= (line-number-at-pos) (- (count-lines (point-min) (point-max)) 1))
-        (goto-line 3)))
-  (define-key ibuffer-mode-map (kbd "<up>") 'ibuffer-previous-line)
-  (define-key ibuffer-mode-map (kbd "<down>") 'ibuffer-next-line)
+  ;; (defun ibuffer-previous-line ()
+  ;;   (interactive) (previous-line)
+  ;;   (if (<= (line-number-at-pos) 2)
+  ;;       (goto-line (- (count-lines (point-min) (point-max)) 2))))
+  ;; (defun ibuffer-next-line ()
+  ;;   (interactive) (next-line)
+  ;;   (if (>= (line-number-at-pos) (- (count-lines (point-min) (point-max)) 1))
+  ;;       (goto-line 3)))
+  (defun my/ibuffer-previous-line ()
+    "Move up one line, wrapping from the first buffer to the last."
+    (interactive)
+    (call-interactively #'previous-line)
+    (when (<= (line-number-at-pos) 2)          ; header is line 1, first buffer is line 2
+      (goto-char (point-max))
+      (forward-line -1)))
+
+  (defun my/ibuffer-next-line ()
+    "Move down one line, wrapping from the last buffer to the first."
+    (interactive)
+    (call-interactively #'next-line)
+    (when (>= (line-number-at-pos)
+              (- (line-number-at-pos (point-max)) 1))
+      (goto-char (point-min))
+      (forward-line 2)))
+  ;; (define-key ibuffer-mode-map (kbd "<up>") 'ibuffer-previous-line)
+  ;; (define-key ibuffer-mode-map (kbd "<down>") 'ibuffer-next-line)
+  :bind (:map ibuffer-mode-map
+              ("<up>"   . my/ibuffer-previous-line)
+              ("<down>" . my/ibuffer-next-line)
+              ("/ m"    . ibuffer-filter-by-mode)      ; filter by mode
+              ("/ n"    . ibuffer-filter-by-name)      ; filter by name
+              ("/ /"    . ibuffer-filter-disable)      ; clear filters
+              ("TAB"    . ibuffer-toggle-filter-group) ; toggle group
+              ("C-s"    . ibuffer-do-sort-by-alphabetic))
 
   )
 
