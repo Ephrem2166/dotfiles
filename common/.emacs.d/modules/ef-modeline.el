@@ -32,6 +32,30 @@ same family used for `default' in ef-fonts.el."
   "Face for mode-line Nerd Font icons.
 Bumped above `mode-line' height so glyphs are legible at mode-line size.")
 
+(defun ef/modeline-selected-p ()
+  "Non-nil when the current mode line belongs to the selected window.
+Falls back to t on Emacs < 30."
+  (if (fboundp 'mode-line-window-selected-p)
+      (mode-line-window-selected-p)
+    t))
+
+
+(defcustom ef/modeline-truncate-length 9
+  "Truncate mode-line strings longer than this in narrow windows."
+  :type 'natnum
+  :group 'ef-modeline)
+
+(defun ef/modeline-cut-middle (str)
+  "Cut STR in the middle if the window is narrow."
+  (if (and (< (window-width) split-width-threshold)
+           (> (length str) ef/modeline-truncate-length))
+      (let* ((half (/ ef/modeline-truncate-length 2))
+             (head (substring str 0 half))
+             (tail (substring str (- (length str) half))))
+        (concat head "…" tail))
+    str))
+
+
 (defconst ef/modeline-major-mode-icons
   '(
 
@@ -105,31 +129,31 @@ Bumped above `mode-line' height so glyphs are legible at mode-line size.")
 
     (corfu-mode         . " ")   ; key icon
     (yas-minor-mode     . " ")   ; snippet icon
-    (abbrev-mode        . " ")   ; abbreviation/cog
-    (subword-mode       . " ")   ; font/case icon
-    (eldoc-mode         . "󰙎 ")   ; info icon
-    (rainbow-mode       . " ")   ; tint/droplet
-    (valign-mode        . "󰑭 ")   ; ruler/align
-    (hs-minor-mode      . " ")   ; fold/compress
-    (outline-minor-mode . " ")   ; list tree
-    (visual-line-mode   . " ")   ; paragraph/wrap
-    (auto-revert-mode   . " ")   ; refresh
+    ;; (abbrev-mode        . " ")   ; abbreviation/cog
+    ;; (subword-mode       . " ")   ; font/case icon
+    ;; (eldoc-mode         . "󰙎 ")   ; info icon
+    ;; (rainbow-mode       . " ")   ; tint/droplet
+    ;; (valign-mode        . "󰑭 ")   ; ruler/align
+    ;; (hs-minor-mode      . " ")   ; fold/compress
+    ;; (outline-minor-mode . " ")   ; list tree
+    ;; (visual-line-mode   . " ")   ; paragraph/wrap
+    ;; (auto-revert-mode   . " ")   ; refresh
 
     ;; ─── Evil ───
     (evil-snipe-local-mode           . " ")   ; search
     (evil-goggles-mode               . "󰈈 ")   ; eye
-    (evil-commentary-mode            . "󰅺 ")   ; comment
-    (evil-collection-unimpaired-mode . " ")   ; operator/cogs
+    ;; (evil-commentary-mode            . "󰅺 ")   ; comment
+    ;; (evil-collection-unimpaired-mode . " ")   ; operator/cogs
 
     ;; ─── Development ───
     (flymake-mode       . " ")   ; check-circle
     (flyspell-mode      . " ")   ; spell-check
-    (which-key-mode     . "󰌌 ")   ; keyboard
-    (gcmh-mode          . " ")   ; memory/chip
+    ;; (which-key-mode     . "󰌌 ")   ; keyboard
+    ;; (gcmh-mode          . " ")   ; memory/chip
     (apheleia-mode      . " ")   ; wand/magic
     (org-indent-mode    . " ")   ; indent
-    (winner-mode        . "󰋚 ")   ; history
-    (so-long-mode       . " ")   ; warning triangle
+    ;; (winner-mode        . "󰋚 ")   ; history
+    ;; (so-long-mode       . " ")   ; warning triangle
 
 
 
@@ -139,13 +163,6 @@ Bumped above `mode-line' height so glyphs are legible at mode-line size.")
   "Alist mapping minor-mode variables to their icons."
 
   )
-
-(defun ef/modeline-selected-p ()
-  "Non-nil when the current mode line belongs to the selected window.
-Falls back to t on Emacs < 30."
-  (if (fboundp 'mode-line-window-selected-p)
-      (mode-line-window-selected-p)
-    t))
 
 ;;; Renderes
 (defun ef/modeline-major-mode-icon ()
@@ -160,44 +177,48 @@ Falls back to t on Emacs < 30."
 
 (defun ef/modeline-minor-mode-icons ()
   "Return the icons for all enabled minor modes with a mapped icon."
-  (let (icons)
-    (dolist (entry ef/modeline-minor-mode-icons)
-      (when (and (boundp (car entry))
-                 (symbol-value (car entry)))
-        (push (cdr entry) icons)))
-    (when icons
-      (propertize (apply #'concat (nreverse icons))
-                  'face 'shadow
-                  'help-echo "Enabled minor modes"))))
+  (when (ef/modeline-selected-p)
+    (let (icons)
+      (dolist (entry ef/modeline-minor-mode-icons)
+        (when (and (boundp (car entry))
+                   (symbol-value (car entry)))
+          (push (cdr entry) icons)))
+      (when icons
+        (propertize (apply #'concat (nreverse icons))
+                    'face 'shadow
+                    'help-echo "Enabled minor modes")))))
 
 (defun ef/modeline-modified-icon ()
   "Return a state icon: lock, floppy, or ban — or empty string."
-  (cond (buffer-read-only
-         (if (fboundp 'nerd-icons-octicon)
-             (concat (nerd-icons-octicon "nf-oct-lock" :v-adjust -0.05 ) " ")
-           "RO "))
-        ((buffer-modified-p)
-         (if (fboundp 'nerd-icons-faicon)
-             (concat (nerd-icons-faicon "nf-fa-floppy_o" :v-adjust -0.05) " ")
-           "* "))
-        ((and buffer-file-name
-              (not (file-exists-p buffer-file-name)))
-         (if (fboundp 'nerd-icons-faicon)
-             (concat (nerd-icons-faicon "nf-fa-ban" :v-adjust -0.05) " ")
-           "? "))
-        (t "")))
+  (if (not (ef/modeline-selected-p))
+      (cond (buffer-read-only
+             (if (fboundp 'nerd-icons-octicon)
+                 (concat (nerd-icons-octicon "nf-oct-lock" :v-adjust -0.05 ) " ")
+               "RO "))
+            ((buffer-modified-p)
+             (if (fboundp 'nerd-icons-faicon)
+                 (concat (nerd-icons-faicon "nf-fa-floppy_o" :v-adjust -0.05) " ")
+               "* "))
+            ((and buffer-file-name
+                  (not (file-exists-p buffer-file-name)))
+             (if (fboundp 'nerd-icons-faicon)
+                 (concat (nerd-icons-faicon "nf-fa-ban" :v-adjust -0.05) " ")
+               "? "))
+            (t ""))))
 
 (defun ef/modeline-remote-icon ()
-  "Return a remote-file icon or empty string."
-  (if (and buffer-file-name (file-remote-p buffer-file-name))
-      (if (fboundp 'nerd-icons-faicon)
-          (concat (nerd-icons-faicon "nf-fa-rss" :v-adjust -0.02) " ")
-        "@ ")
-    ""))
+  "Return a remote-file icon or empty string, only in the selected window."
+  (if (not (and (ef/modeline-selected-p)
+                buffer-file-name
+                (file-remote-p buffer-file-name)))
+      ""
+    (if (fboundp 'nerd-icons-faicon)
+        (concat (nerd-icons-faicon "nf-fa-rss" :v-adjust -0.02) " ")
+      "@ ")))
+
 
 (defun ef/modeline-buffer-name ()
-  "Return the buffer name with state-dependent styling."
-  (propertize (format-mode-line "%b")
+  (propertize (ef/modeline-cut-middle (format-mode-line "%b"))
               'face (cond
                      ((and buffer-file-name
                            (not (file-exists-p buffer-file-name)))
@@ -208,11 +229,13 @@ Falls back to t on Emacs < 30."
               'help-echo (format "Buffer: %s" (buffer-name))))
 
 (defun ef/modeline-coding-system ()
-  "Return a `[mnemonic]' warning for non-UTF-8 coding, or nil."
-  (when (bound-and-true-p buffer-file-coding-system)
+  "Return a `[mnemonic]' warning for non-UTF-8 coding, only in the selected window."
+  (when (and (ef/modeline-selected-p)
+             (bound-and-true-p buffer-file-coding-system))
     (let ((mnemonic (format-mode-line "%z")))
       (unless (or (string-empty-p mnemonic) (string-equal mnemonic "U"))
         (propertize (format "[%s]" mnemonic) 'face 'warning)))))
+
 
 (defun ef/modeline-vc-branch (string)
   "Prepend a git icon to STRING and shorten long branch names."
@@ -231,35 +254,54 @@ Falls back to t on Emacs < 30."
   (advice-add 'vc-git-mode-line-string
               :filter-return #'ef/modeline-vc-branch))
 
+
+(defvar ef/modeline-flymake-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [mode-line down-mouse-1] #'flymake-show-buffer-diagnostics)
+    (define-key map [mode-line down-mouse-3] #'flymake-show-project-diagnostics)
+    map)
+  "Keymap for the Flymake mode-line indicator.")
+
 (defun ef/modeline-flymake-summary ()
-  "Return a compact Flymake diagnostic summary, or nil if clean.
-Format: [E1 W2 N3] with per-severity colours."
-  (when (and ef/modeline-selected-p)
-    (bound-and-true-p flymake-mode)
-    (let ((parts nil)
-          (errors 0) (warnings 0) (notes 0))
+  "Return [E1 W2 N3] with clickable map, or nil when clean."
+  (when (and (ef/modeline-selected-p)
+             (bound-and-true-p flymake-mode))
+    (let ((e 0) (w 0) (n 0))
       (dolist (d (flymake-diagnostics))
         (let* ((type (flymake-diagnostic-type d))
                (sev  (flymake--lookup-type-property
-                      type 'severity
-                      (warning-numeric-level :warning))))
-          (cond ((>= sev (warning-numeric-level :error))   (cl-incf errors))
-                ((>= sev (warning-numeric-level :warning)) (cl-incf warnings))
-                (t                                         (cl-incf notes)))))
-      (when (> errors 0)
-        (push (propertize (format "E%d" errors) 'face 'error
-                          'help-echo (format "%d error(s)" errors)) parts))
-      (when (> warnings 0)
-        (push (propertize (format "W%d" warnings) 'face 'warning
-                          'help-echo (format "%d warning(s)" warnings)) parts))
-      (when (> notes 0)
-        (push (propertize (format "N%d" notes) 'face 'shadow
-                          'help-echo (format "%d note(s)" notes)) parts))
-      (when parts
-        (concat " [" (mapconcat #'identity (nreverse parts) " ") "] ")))))
+                      type 'severity (warning-numeric-level :warning))))
+          (cond ((>= sev (warning-numeric-level :error))   (cl-incf e))
+                ((>= sev (warning-numeric-level :warning)) (cl-incf w))
+                (t                                         (cl-incf n)))))
+      (when (> (+ e w n) 0)
+        (let ((help "mouse-1: buffer diagnostics\nmouse-3: project diagnostics"))
+          (concat " ["
+                  (and (> e 0)
+                       (propertize (format "E%d" e)
+                                   'face 'error
+                                   'local-map ef/modeline-flymake-map
+                                   'help-echo help
+                                   'mouse-face 'mode-line-highlight))
+                  (and (> w 0)
+                       (concat (and (> e 0) " ")
+                               (propertize (format "W%d" w)
+                                           'face 'warning
+                                           'local-map ef/modeline-flymake-map
+                                           'help-echo help
+                                           'mouse-face 'mode-line-highlight)))
+                  (and (> n 0)
+                       (concat (and (> (+ e w) 0) " ")
+                               (propertize (format "N%d" n)
+                                           'face 'shadow
+                                           'local-map ef/modeline-flymake-map
+                                           'help-echo help
+                                           'mouse-face 'mode-line-highlight)))
+                  "] "))))))
+
 
 (defun ef/modeline-macro-recording ()
-  "Return a red dot while a keyboard macro is recording."
+  "Return a red dot when `defining-kbd-macro' is active, in the selected window."
   (when (and (ef/modeline-selected-p) defining-kbd-macro)
     (propertize "● " 'face 'error
                 'help-echo "Recording keyboard macro")))
@@ -283,6 +325,16 @@ Shown only when more than one window is visible."
                   'face 'font-lock-string-face
                   'help-echo (format "Project: %s" root)))))
 
+
+(defun ef/modeline-frame-name ()
+  "Return the current frame's name, when on a client frame or multiple frames."
+  (when (and (ef/modeline-selected-p)
+             (or (frame-parameter nil 'client)
+                 (> (length (frame-list)) 1)))
+    (when-let* ((name (alist-get 'name (frame-parameters))))
+      (propertize (capitalize name) 'face 'mode-line-emphasis))))
+
+
 (defun ef/modeline-evil-state ()
   "Return a compact Evil state tag: N/I/V/M/O/R/E."
   (when (bound-and-true-p evil-mode)
@@ -305,6 +357,15 @@ Shown only when more than one window is visible."
                (_         'mode-line-emphasis))
        'help-echo (format "Evil state: %s" state)))))
 
+(defun ef/modeline-narrow ()
+  "Return \" Narrow \" when the buffer is narrowed."
+  (when (and (ef/modeline-selected-p)
+             (buffer-narrowed-p)
+             (not (memq major-mode '(Info-mode help-mode special-mode))))
+    (propertize " Narrow " 'face 'warning
+                'help-echo "Buffer is narrowed (C-x n w to widen)")))
+
+
 (defun ef/modeline-selection-info ()
   "Return selection size when a region is active."
   (when (use-region-p)
@@ -314,8 +375,32 @@ Shown only when more than one window is visible."
                   'face 'mode-line-emphasis
                   'help-echo "Selection (lines:characters)"))))
 
+
+(defun ef/modeline-window-number ()
+  "Return the window's position in the window list (1-indexed).
+Only when more than one window is visible."
+  (let* ((wins (window-list nil 'no-minibuffer))
+         (pos  (cl-position (selected-window) wins)))
+    (when (and pos (> (length wins) 1))
+      (propertize (format "%d " (1+ pos))
+                  'face 'mode-line-emphasis
+                  'help-echo "Window number (M-x ace-window to jump)"))))
+
+(defun ef/modeline-which-function ()
+  "Return the current defun name, or nil."
+  (when (and (ef/modeline-selected-p)
+             (bound-and-true-p which-function-mode)
+             (derived-mode-p 'prog-mode 'text-mode))
+    (let ((name (or (gethash (selected-window) which-func-table)
+                    which-func-unknown)))
+      (unless (string= name which-func-unknown)
+        (propertize name 'face 'font-lock-function-name-face
+                    'help-echo (format "Current definition: %s" name))))))
+(which-function-mode 1)
+
 (setq mode-line-compact nil
       mode-line-percent-position nil
+      mode-line-right-align-edge 'right-margin
       mode-line-position-column-line-format '(" L%l:C%C"))
 
 (column-number-mode 1)
@@ -377,6 +462,7 @@ the mode-line content to its left."
                 (:propertize " " display (raise -0.4))
                 (:propertize "λ " face font-lock-keyword-face)
                 (:eval (ef/modeline-macro-recording))
+                (:eval (ef/modeline-window-number))
                 (:eval (ef/modeline-modified-icon))
                 ;; (:eval (ef/modeline-remote-icon))
                 (:eval (ef/modeline-evil-state))
@@ -391,11 +477,14 @@ the mode-line content to its left."
                 mode-line-position
                 " "
                 (:eval (ef/modeline-flymake-summary))
+                (:eval (ef/modeline-which-function))
                 (:eval (ef/modeline-selection-info))
                 (:eval (ef/modeline-coding-system))
+                (:eval (ef/modeline-narrow))
                 " "
                 mode-line-misc-info
                 mode-line-modes
+                (:eval (ef/modeline-frame-name))
                 (:eval (ef/modeline-right-info))
                 "%]"))
 
