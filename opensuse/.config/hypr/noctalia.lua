@@ -1,13 +1,22 @@
 local mainMod = "SUPER"
-local launcher = "qs -c noctalia-shell ipc call launcher toggle"
-local controlCenter = "qs -c noctalia-shell ipc call controlCenter toggle"
-local settings = "qs -c noctalia-shell ipc call settings toggle"
-local power = "qs -c noctalia-shell ipc call sessionMenu toggle"
-hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(launcher))
-hl.bind(mainMod .. "+ ALT + C", hl.dsp.exec_cmd(controlCenter))
-hl.bind(mainMod .. "+ ALT + S", hl.dsp.exec_cmd(settings))
-hl.bind(mainMod .. "+ SHIFT + X", hl.dsp.exec_cmd(power))
+local ipc = "noctalia msg "
 
--- bind = SUPER, SPACE, exec, $ipc launcher toggle
--- bind = SUPER, S, exec, $ipc controlCenter toggle
--- bind = SUPER, comma, exec, $ipc settings toggle
+-- Core binds
+hl.bind(mainMod .. "+D", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"))
+hl.bind(mainMod .. "+S", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center"))
+hl.bind(mainMod .. "+comma", hl.dsp.exec_cmd(ipc .. "settings-toggle"))
+hl.bind("ALT + Tab", hl.dsp.exec_cmd(ipc .. "window-switcher hold"))
+
+-- Media keys
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume-up"))
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume-down"))
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd(ipc .. "volume-mute"))
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. "brightness-up"))
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"))
+
+-- Noctalia Settings
+hl.window_rule({
+  match = { class = "dev.noctalia.Noctalia" },
+  float = true,
+  size = { 1080, 920 },
+})
