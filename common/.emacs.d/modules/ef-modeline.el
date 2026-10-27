@@ -55,6 +55,18 @@ Falls back to t on Emacs < 30."
         (concat head "…" tail))
     str))
 
+(defvar-local ef/modeline-save-message nil
+  "Transient save indicator shown in the mode line, or nil.")
+
+(defvar-local ef/modeline-save-timer nil
+  "Timer that clears `ef/modeline-save-message'.")
+
+(defcustom ef/modeline-save-flash-duration 0.7
+  "Seconds the save indicator stays visible."
+  :type 'number
+  :group 'ef-modeline)
+
+
 
 (defconst ef/modeline-major-mode-icons
   '(
@@ -227,6 +239,27 @@ Falls back to t on Emacs < 30."
                      ((buffer-modified-p) 'bold)
                      (t 'mode-line-buffer-id))
               'help-echo (format "Buffer: %s" (buffer-name))))
+
+(defun ef/modeline-show-saved ()
+  "Flash a \"Saved\" indicator in the mode line after saving."
+  (when (timerp ef/modeline-save-timer)
+    (cancel-timer ef/modeline-save-timer))
+  (setq-local ef/modeline-save-message
+              (propertize "󰆓 Saved " 'face 'success))
+  (force-mode-line-update)
+  (setq-local ef/modeline-save-timer
+              (run-with-timer
+               ef/modeline-save-flash-duration nil
+               (lambda (buf)
+                 (when (buffer-live-p buf)
+                   (with-current-buffer buf
+                     (setq ef/modeline-save-message nil)
+                     (setq ef/modeline-save-timer nil)
+                     (force-mode-line-update))))
+               (current-buffer))))
+
+(add-hook 'after-save-hook #'ef/modeline-show-saved)
+
 
 (defun ef/modeline-coding-system ()
   "Return a `[mnemonic]' warning for non-UTF-8 coding, only in the selected window."
@@ -477,6 +510,7 @@ the mode-line content to its left."
                 ;; vc-mode
                 mode-line-position
                 " "
+                (:eval ef/modeline-save-message)
                 (:eval (ef/modeline-flymake-summary))
                 (:eval (ef/modeline-which-function))
                 (:eval (ef/modeline-selection-info))
@@ -489,9 +523,6 @@ the mode-line content to its left."
                 (:eval (ef/modeline-right-info))
                 "%]"))
 
-
-
-
-
+;;; Code ends here
 (provide 'ef-modeline)
 ;;; ef-modeline.el ends here
