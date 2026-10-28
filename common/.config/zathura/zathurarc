@@ -1,19 +1,95 @@
-# zathurarc config sample
-...
+# ============================================================
+#  zathurarc — Nord theme
+#  ~/.config/zathura/zathurarc
+# ============================================================
 
-# colors
-set default-bg     "#2E3440"
+# ------------------------------------------------------------
+#  Nord palette (reference)
+#  nord0  #2E3440   nord1  #3B4252   nord2  #434C5E   nord3  #4C566A
+#  nord4  #D8DEE9   nord5  #E5E9F0   nord6  #ECEFF4
+#  nord7  #8FBCBB   nord8  #88C0D0   nord9  #81A1C1   nord10 #5E81AC
+#  nord11 #BF616A   nord12 #D08770   nord13 #EBCB8B   nord14 #A3BE8C
+#  nord15 #B48EAD
+# ------------------------------------------------------------
 
-# complementary foreground, but keep it light
-set default-fg     "#F4F1EC"
+# ------------------------------------------------------------
+#  Base / document
+# ------------------------------------------------------------
+set default-bg            "#2E3440"   # nord0
+set default-fg            "#ECEFF4"   # nord6
 
-# make it a bit lighter than background
-set statusbar-bg   "#6D7179"
+# Force dark rendering on light PDFs (and keep accent hues intact)
+set recolor               true
+set recolor-keephue       true
 
-# make it darken by blending to a darken color
-set statusbar-fg   "#E3E6EC"
+# ------------------------------------------------------------
+#  Statusbar
+# ------------------------------------------------------------
+set statusbar-bg          "#434C5E"   # nord2
+set statusbar-fg          "#ECEFF4"   # nord6
+set statusbar-h-padding   8
+set statusbar-v-padding   2
 
-# use it's complementary
-set inputbar-bg    "#403A2E"
+# ------------------------------------------------------------
+#  Inputbar (search / command line)
+# ------------------------------------------------------------
+set inputbar-bg           "#3B4252"   # nord1
+set inputbar-fg           "#ECEFF4"   # nord6
 
-selection-clipboard "clipboard"
+# ------------------------------------------------------------
+#  Notifications
+# ------------------------------------------------------------
+set notification-bg         "#8FBCBB" # nord7
+set notification-fg         "#2E3440" # nord0
+set notification-error-bg   "#BF616A" # nord11
+set notification-error-fg   "#ECEFF4" # nord6
+set notification-warning-bg "#EBCB8B" # nord13
+set notification-warning-fg "#2E3440" # nord0
+
+# ------------------------------------------------------------
+#  Completion menu
+# ------------------------------------------------------------
+set completion-bg              "#3B4252" # nord1
+set completion-fg              "#D8DEE9" # nord4
+set completion-group-bg        "#434C5E" # nord2
+set completion-group-fg        "#8FBCBB" # nord7
+set completion-highlight-bg    "#88C0D0" # nord8
+set completion-highlight-fg    "#2E3440" # nord0
+
+# ------------------------------------------------------------
+#  Index / table of contents sidebar
+# ------------------------------------------------------------
+set index-bg               "#3B4252"   # nord1
+set index-fg               "#D8DEE9"   # nord4
+set index-active-bg        "#88C0D0"   # nord8
+set index-active-fg        "#2E3440"   # nord0
+
+# ------------------------------------------------------------
+#  Behaviour
+# ------------------------------------------------------------
+set selection-clipboard    clipboard
+set selection-notification true
+set guioptions             "s"          # show statusbar
+set font                   "monospace normal 10"
+
+# ------------------------------------------------------------
+#  Layout & navigation
+# ------------------------------------------------------------
+set page-padding           4
+set pages-per-row          1
+set scroll-step            60
+set scroll-full-step       10
+set scroll-hstep           60
+set zoom-step              10
+set zoom-min               10
+set zoom-max               1000
+
+# ------------------------------------------------------------
+#  Optional quality-of-life keybinds
+# ------------------------------------------------------------
+map <C-r> recolor
+map <C-i> recolor
+map J     scroll full-down
+map K     scroll full-up
+map L     navigate next
+map H     navigate previous
