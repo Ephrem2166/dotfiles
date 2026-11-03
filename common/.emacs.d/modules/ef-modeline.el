@@ -433,7 +433,7 @@ Only when more than one window is visible."
 
 (setq mode-line-compact nil
       mode-line-percent-position nil
-      mode-line-right-align-edge 'right-margin
+      mode-line-right-align-edge 'right-fringe
       column-number-indicator-zero-based nil
       mode-line-position-column-line-format '(" L%l:C%C"))
 
