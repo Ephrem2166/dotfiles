@@ -1,0 +1,19 @@
+[[plugin.deps]]
+use = "yazi-rs/plugins"
+rev = ""
+hash = ""
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-enter"
+rev = "598cdb6"
+hash = "187cc58ba7ac3befd49c342129e6f1b6"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-paste"
+rev = "598cdb6"
+hash = "3f8d49413bc8691b4c652eb417a20178"
+
+[[flavor.deps]]
+use = "AdithyanA2005/nord"
+rev = "1b1bf78"
+hash = "4dbe11b947f327a0075d16f4a6b55043"
