@@ -75,6 +75,7 @@ same family used for `default' in ef-fonts.el."
   '(ef/modeline-macro-recording
     ef/modeline-window-number
     ef/modeline-modified-icon
+    ef/modeline-remote
     ef/modeline-evil-state
     ef/modeline-major-mode-icon
     ef/modeline-project-name
@@ -99,7 +100,7 @@ same family used for `default' in ef-fonts.el."
     ef/modeline-narrow
     ef/modeline-minor-modes
     ef/modeline-edit-state
-    ;; ef/modeline-indentation
+    ef/modeline-indentation
     ef/modeline-word-count
     " "
     ef/modeline-global-info
@@ -114,10 +115,42 @@ same family used for `default' in ef-fonts.el."
   '(ef/modeline-input-method
     ef/modeline-lsp
     ef/modeline-treesit
-    ef/modeline-clock-battery)
+    ef/modeline-battery
+    ef/modeline-clock)
   "Segments pinned to the right: ambient information."
   :type '(repeat sexp)
   :set #'ef/modeline--set-segments
+  :group 'ef-modeline)
+
+(defcustom ef/modeline-responsive-tiers
+  '((110 . (ef/modeline-indentation
+            ef/modeline-word-count
+            ef/modeline-treesit
+            ef/modeline-frame-name
+            ef/modeline-global-info
+            ef/modeline-minor-modes))
+    (80  . (ef/modeline-which-function
+            ef/modeline-edit-state
+            ef/modeline-multi-edit
+            ef/modeline-lsp))
+    (60  . (ef/modeline-project-name
+            ef/modeline-clock
+            ef/modeline-input-method)))
+  "Segments to hide in narrow windows.
+Each entry is (WIDTH . SEGMENT-FUNCTIONS): when the window is narrower
+than WIDTH columns, those segments render nothing.  Set to nil to turn
+responsive hiding off."
+  :type '(alist :key-type natnum :value-type (repeat symbol))
+  :group 'ef-modeline)
+
+(defcustom ef/modeline-battery-low-threshold 20
+  "Battery percentage at or below which the battery turns `warning'."
+  :type 'natnum
+  :group 'ef-modeline)
+
+(defcustom ef/modeline-battery-critical-threshold 10
+  "Battery percentage at or below which the battery turns `error'."
+  :type 'natnum
   :group 'ef-modeline)
 
 (defcustom ef/modeline-truncate-length 9
@@ -188,15 +221,27 @@ Falls back to t on Emacs < 30."
 Used to dim segments instead of hiding them, so the layout stays stable."
   (if (ef/modeline-selected-p) face 'mode-line-inactive))
 
+(defun ef/modeline--hidden-p (fn)
+  "Non-nil when segment function FN is hidden at the current window width.
+See `ef/modeline-responsive-tiers'."
+  (and ef/modeline-responsive-tiers
+       (symbolp fn)
+       (let ((width (window-width)))
+         (seq-some (lambda (tier)
+                     (and (< width (car tier)) (memq fn (cdr tier))))
+                   ef/modeline-responsive-tiers))))
+
 (defun ef/modeline--safe (fn)
   "Call FN, returning a visible error marker instead of signaling.
-A broken segment can then never break the whole mode line."
-  (condition-case err
-      (funcall fn)
-    (error (propertize (format "[%s]" (car err))
-                       'face 'error
-                       'help-echo (format "%S: %s" fn
-                                          (error-message-string err))))))
+A broken segment can then never break the whole mode line.  Segments
+listed in `ef/modeline-responsive-tiers' render nothing in narrow windows."
+  (unless (ef/modeline--hidden-p fn)
+    (condition-case err
+        (funcall fn)
+      (error (propertize (format "[%s]" (car err))
+                         'face 'error
+                         'help-echo (format "%S: %s" fn
+                                            (error-message-string err)))))))
 
 (defmacro ef/modeline--on-click (&rest body)
   "Return a mouse command running BODY in the clicked window."
@@ -217,7 +262,7 @@ for icons and is also applied to FALLBACK when given."
                                 :face (or face 'ef/modeline-icon-face))
                        " ")
              (error nil)))
-      (if face (propertize fallback 'face face) fallback)))
+      (if (and face fallback) (propertize fallback 'face face) fallback)))
 
 (defun ef/modeline--bare-icon (fn name)
   "Return the icon NAME from FN without extra text, or the empty string."
@@ -331,6 +376,21 @@ Returns the empty string otherwise."
           (ef/modeline--file-missing
            (ef/modeline--icon 'nerd-icons-faicon "nf-fa-ban" "? "))
           (t ""))))
+
+(defun ef/modeline-remote ()
+  "Return the remote host (with an icon) for TRAMP buffers, or nil.
+Only parses `default-directory'; it never contacts the host."
+  (when (file-remote-p default-directory)
+    (let ((host   (or (file-remote-p default-directory 'host) "remote"))
+          (user   (file-remote-p default-directory 'user))
+          (method (file-remote-p default-directory 'method)))
+      (concat (ef/modeline--icon 'nerd-icons-mdicon "nf-md-ssh" "@" nil 'warning)
+              (propertize (concat (ef/modeline-cut-middle host) " ")
+                          'face 'warning
+                          'help-echo (format "Remote: %s%s via %s"
+                                             (if user (concat user "@") "")
+                                             host
+                                             (or method "?")))))))
 
 (defun ef/modeline-buffer-name ()
   "Return the buffer name, styled by buffer state."
@@ -605,19 +665,19 @@ Dimmed, not hidden, in unselected windows."
       (when parts
         (concat (string-join (nreverse parts) " ") " ")))))
 
-;; (defun ef/modeline-indentation ()
-;;   "Return the indentation style (tabs or spaces) in code and text buffers."
-;;   (when (and (ef/modeline-selected-p)
-;;              (derived-mode-p 'prog-mode 'text-mode))
-;;     (propertize (if indent-tabs-mode
-;;                     (format "Tab:%d " tab-width)
-;;                   "Sp ")
-;;                 'face 'shadow
-;;                 'help-echo (if indent-tabs-mode
-;;                                "Indenting with tabs"
-;;                              "Indenting with spaces"))))
-;;
-;; ;; Word count: computed from an idle timer, never during redisplay.
+(defun ef/modeline-indentation ()
+  "Return the indentation style (tabs or spaces) in code and text buffers."
+  (when (and (ef/modeline-selected-p)
+             (derived-mode-p 'prog-mode 'text-mode))
+    (propertize (if indent-tabs-mode
+                    (format "Tab:%d " tab-width)
+                  "Sp ")
+                'face 'shadow
+                'help-echo (if indent-tabs-mode
+                               "Indenting with tabs"
+                             "Indenting with spaces"))))
+
+;; Word count: computed from an idle timer, never during redisplay.
 (defvar-local ef/modeline--word-count nil
   "Cached word count for the current prose buffer.")
 
@@ -711,14 +771,73 @@ Those two are rendered in the right-aligned block instead."
   (let ((val (and (boundp sym) (symbol-value sym))))
     (if (and (stringp val) (not (string-empty-p val))) val "")))
 
+(defvar ef/modeline--battery-state nil
+  "Cons of (PERCENT . CHARGING-P) from the last battery update, or nil.")
+
+(defun ef/modeline--battery-update (data)
+  "Record battery percentage and charging state from DATA.
+Runs from `battery-update-functions', so nothing is polled during
+redisplay."
+  (let* ((p   (cdr (assq ?p data)))
+         (b   (cdr (assq ?B data)))
+         (pct (and (stringp p)
+                   (string-match-p "[0-9]" p)
+                   (round (string-to-number p)))))
+    (setq ef/modeline--battery-state
+          (and pct
+               (cons pct (and (stringp b)
+                              (string-prefix-p "charging" (downcase b))))))))
+
+(defun ef/modeline--battery-icon-name (pct charging)
+  "Return the mdicon name for battery level PCT, CHARGING or not."
+  (let ((level (* 10 (max 1 (min 10 (/ (+ pct 5) 10))))))
+    (cond ((and charging (< level 100))
+           (format "nf-md-battery_charging_%d" level))
+          (charging "nf-md-battery_charging_100")
+          ((< level 100) (format "nf-md-battery_%d" level))
+          (t "nf-md-battery"))))
+
+(defun ef/modeline-battery ()
+  "Return the battery text with a level-aware icon.
+Green while charging, yellow when low, red when critical (see
+`ef/modeline-battery-low-threshold' and
+`ef/modeline-battery-critical-threshold').  Icons are built at render
+time so they carry the right face."
+  (let ((text (ef/modeline--nonempty-string 'battery-mode-line-string)))
+    (unless (string-empty-p text)
+      (let* ((pct      (car ef/modeline--battery-state))
+             (charging (cdr ef/modeline--battery-state))
+             (face     (cond (charging 'success)
+                             ((and pct (<= pct ef/modeline-battery-critical-threshold))
+                              'error)
+                             ((and pct (<= pct ef/modeline-battery-low-threshold))
+                              'warning)))
+             (name     (if pct
+                           (ef/modeline--battery-icon-name pct charging)
+                         "nf-md-battery"))
+             (icon     (or (ef/modeline--icon 'nerd-icons-mdicon name nil nil face)
+                           (ef/modeline--icon 'nerd-icons-mdicon "nf-md-battery"
+                                              nil nil face)
+                           "")))
+        (concat icon
+                (if face (propertize text 'face face) text)
+                " ")))))
+
+(defun ef/modeline-clock ()
+  "Return the date and time with an icon.
+Built at render time so the icon carries the right face."
+  (let ((text (ef/modeline--nonempty-string 'display-time-string)))
+    (unless (string-empty-p text)
+      (concat " "
+              (ef/modeline--icon 'nerd-icons-mdicon "nf-md-calendar_clock" "")
+              text
+              " "))))
+
 (defun ef/modeline-clock-battery ()
-  "Return the battery and clock text."
-  (let ((parts (seq-remove
-                #'string-empty-p
-                (list (ef/modeline--nonempty-string 'battery-mode-line-string)
-                      (ef/modeline--nonempty-string 'display-time-string)))))
-    (when parts
-      (concat (string-join parts " ") " "))))
+  "Return battery and clock together.
+Kept for custom segment lists that still reference it."
+  (let ((str (concat (ef/modeline-battery) (ef/modeline-clock))))
+    (unless (string-empty-p str) str)))
 
 (defun ef/modeline-right-legacy ()
   "Return all right segments pinned right with `:align-to'.
@@ -747,13 +866,15 @@ Fallback for Emacs versions without `mode-line-format-right-align'."
 (line-number-mode 1)
 (which-function-mode 1)
 
-(setq display-time-format
-      (concat " %a, %b %e "
-              (ef/modeline--bare-icon 'nerd-icons-mdicon "nf-md-clock_outline")
-              " %R")
-      battery-mode-line-format
-      (concat (ef/modeline--bare-icon 'nerd-icons-mdicon "nf-md-battery")
-              " %p%%"))
+;; Keep these format strings plain.  The icons are added at render time by
+;; `ef/modeline-clock-battery': embedding them here means they are looked up
+;; once at load time, and `format-time-string' / battery formatting can drop
+;; the face that selects the Nerd Font family.
+(setq display-time-format "%a, %b %e %R"
+      battery-mode-line-format "%p%%")
+
+;; Register before enabling the mode so the first update is captured.
+(add-hook 'battery-update-functions #'ef/modeline--battery-update)
 
 (display-time-mode 1)
 (display-battery-mode 1)
