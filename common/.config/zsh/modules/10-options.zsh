@@ -6,7 +6,7 @@
 [[ -o interactive ]] && bindkey -e
 
 # Multi-key binding timeout. Default 40 (0.4 s) feels sluggish for `<M-x>` bindings.
-KEYTIMEOUT=1
+KEYTIMEOUT=20
 
 # --- Navigation ---
 setopt AUTO_CD              # `foo/` -> `cd foo/`
@@ -31,6 +31,8 @@ setopt LIST_PACKED          # tighter completion columns
 setopt INTERACTIVE_COMMENTS # `# comment` works at interactive prompt
 setopt MULTIOS              # `>a >b` writes to both files
 setopt NOTIFY               # report bg job completion immediately
+setopt LONG_LIST_JOBS       # `jobs` shows PIDs
+setopt NO_FLOW_CONTROL      # free Ctrl-S / Ctrl-Q (no terminal freeze on Ctrl-S)
 setopt IGNORE_EOF           # don't exit on Ctrl-D when buffer non-empty
 
 # --- Beep ---
@@ -41,13 +43,15 @@ unsetopt LIST_BEEP          # redundant with BEEP off, but explicit
 setopt RM_STAR_WAIT         # 10 s pause before `rm *`
 setopt CORRECT              # correct command typos
 unsetopt CORRECT_ALL        # do NOT correct arguments (noisy)
+CORRECT_IGNORE='_*'         # never "correct" to internal functions
+
 
 # --- Completion-adjacent ---
 unsetopt COMPLETE_ALIASES   # substitute alias before completion
 setopt ALWAYS_TO_END        # cursor jumps to end of word after completion
 setopt COMPLETE_IN_WORD     # complete from both ends of the word
 setopt AUTO_PARAM_SLASH     # `~user<Tab>` -> `~user/`
-setopt AUTO_NAME_DIRS       # `~var` names for directories in $cdpath
+# setopt AUTO_NAME_DIRS       # `~var` names for directories in $cdpath
 
 # --- Menu: AUTO_MENU + menu select, NOT MENU_COMPLETE ---
 # MENU_COMPLETE inserts the first match immediately and cycles on Tab.
@@ -57,8 +61,18 @@ unsetopt MENU_COMPLETE
 setopt AUTO_MENU
 setopt AUTO_LIST            # list choices on ambiguous completion
 
+# --- `time` output format ---
+TIMEFMT=$'\n%J\n  user %U  system %S  cpu %P  total %*E'
+
+# --- Handy autoloadable zsh tools ---
+autoload -Uz zmv zcalc zargs     # zmv: batch rename (see `mmv` alias), zcalc: calculator
+
+# --- ZLE ---
+zle_highlight=('paste:none')   # don't reverse-video pasted text
+
 # --- zsh/complist: needed for `menuselect` keymap widgets ---
 zmodload -i zsh/complist
 
 # --- run-help extensions ---
+(( $+aliases[run-help] )) && unalias run-help
 autoload -Uz run-help run-help-git run-help-ip run-help-sudo

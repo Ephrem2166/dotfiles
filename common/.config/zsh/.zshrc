@@ -16,13 +16,13 @@ __ZSHRC_LOADED=1
 
 
 # Load modules in order.
-for _m in 00-env 10-options 20-history 30-plugins 40-completion 50-keybindings \
+for _m in 00-env 05-lib 10-options 20-history 30-plugins 40-completion 50-keybindings \
           60-aliases 70-functions 75-fzf 76-fzf-functions \
-          90-integrations 92-prompt 95-highlight; do
+          90-integrations 92-prompt; do
   [[ -r "$ZDOTDIR/modules/${_m}.zsh" ]] \
     && source "$ZDOTDIR/modules/${_m}.zsh"
 done
-unset _m
+
 
 
 # Per-machine overrides, loaded after all modules.
@@ -30,6 +30,20 @@ for _f in "$ZDOTDIR/local/"*.zsh(N); do
   source "$_f"
 done
 unset _f
+
+# Syntax highlighting MUST be last.
+[[ -r "$ZDOTDIR/modules/95-highlight.zsh" ]] && source "$ZDOTDIR/modules/95-highlight.zsh"
+unset _m _f
+
+# Byte-compile config files in the background (zsh uses file.zwc when it is newer
+# than file); recompiles automatically after you edit something.
+() {
+  local _z
+  for _z in "$ZDOTDIR/.zshrc" "$ZDOTDIR"/{modules,local}/*.zsh(N); do
+    [[ ! -e $_z.zwc || $_z -nt $_z.zwc ]] && zcompile "$_z"
+  done
+} &!
+
 
 # # 1. Environment: XDG checks, PATH, EDITOR, LOCALE, MANPAGER, DE/Wayland vars
 # source "$ZDOTDIR/modules/00-env.zsh"

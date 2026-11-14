@@ -1,10 +1,8 @@
 # 76-fzf-functions.zsh — user utilities built on fzf.
 # Loaded after 75-fzf.zsh so fzf's env is set, and after 70-functions.zsh so
 # nothing here shadows a generic function by accident.
-
 # --- fzf default walker overrides ---
-# fzf's built-in `**` completion calls these. Fix the `--exclude` typo
-# (`-exclude` was invalid) and prefer fd if available, else fall back to find.
+# fzf's built-in `**` completion calls these when defined.
 if (( $+commands[fd] )); then
   _fzf_compgen_path() {
     fd --hidden --follow --exclude .git --exclude node_modules . "$1"
@@ -21,11 +19,17 @@ fman() {
     | tr -d '()' | awk '{printf "%s ", $2} {print $1}' | xargs -r man
 }
 
+# --- fman2: man page browser via zsh command list ---
+# (was `_fman`: underscore names are hidden from completion and look internal)
+fman2() {
+  print -l -- ${(k)commands} | fzf --prompt='man> ' | xargs -r man
+}
+
 # --- fif: find pattern in files, preview matches ---
 fif() {
   (( $# > 0 )) || { print -u2 'Usage: fif <pattern>'; return 1; }
-  rg --files-with-matches --no-messages "$1" \
-    | fzf --preview "rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' {}" \
+  rg --files-with-matches --no-messages -- "$1" \
+    | fzf --preview "rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 -- ${(q)1} {}" \
           --preview-window=right:60%:wrap \
           --prompt="Search for: $1> "
 }
@@ -34,13 +38,14 @@ fif() {
 fifa() {
   (( $# > 0 )) || { print -u2 'Usage: fifa <pattern>'; return 1; }
   (( $+commands[rga] )) || { print -u2 'rga (ripgrep-all) is not installed'; return 1; }
-  local file
+  local file pat="$*"
+  local prev="rga --ignore-case --pretty --context 10 -- ${(q)pat} {}"
   if [[ -n $TMUX ]]; then
-    file=$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$*" \
-      | fzf-tmux -p +m --preview="rga --ignore-case --pretty --context 10 '$*' {}")
+    file=$(rg --max-count=1 --ignore-case --files-with-matches --no-messages -- "$pat" \
+      | fzf-tmux -p +m --preview="$prev")
   else
-    file=$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$*" \
-      | fzf --preview="rga --ignore-case --pretty --context 10 '$*' {}")
+    file=$(rg --max-count=1 --ignore-case --files-with-matches --no-messages -- "$pat" \
+      | fzf --preview="$prev")
   fi
   [[ -n $file ]] && print -z "./$file"
 }
@@ -64,7 +69,7 @@ fpdf() {
   fi
 }
 
-# --- vf: multi-select files, open in vim split ---
+# --- vf: multi-select files, open in $EDITOR split ---
 vf() {
   local tmp
   tmp=$(mktemp) || return 1
@@ -75,8 +80,8 @@ vf() {
       --preview-window="border:rounded" --border=double --scroll-off=3 \
       --prompt="> " --pointer="->" --layout=reverse --multi=3 \
       > "$tmp"
-  xargs -r -o -a "$tmp" vim -n -T alacritty -o
-  rm -f "$tmp"
+  xargs -r -o -a "$tmp" "${EDITOR:-vim}" -o
+  command rm -f -- "$tmp"
 }
 
 # --- list_packages: browse and remove distro packages ---
@@ -85,13 +90,15 @@ list_packages() {
     pacman -Qq | fzf -m --preview 'pacman -Qil {}' \
       --border=rounded --margin=1% --layout=reverse \
       --bind 'enter:execute(echo "Selected: "{+}; sudo pacman -Rns {+})+abort'
-  elif (( $+commands[zypper] )); then
-    zypper --no-refresh se -i | awk '/^i/{print $3}' | fzf -m \
-      --preview 'zypper --no-refresh info {1} 2>/dev/null' \
+  elif (( $+commands[rpm] )); then
+    # rpm is much faster than `zypper se -i`; {+} = all multi-selected packages
+    rpm -qa --qf '%{NAME}\n' | sort -u | fzf -m \
+      --preview 'rpm -qi {}' \
       --border=rounded --margin=1% --layout=reverse \
-      --bind 'enter:execute(echo "Selected: "{1}; sudo zypper rm {1})+abort'
+      --header 'TAB: multi-select, ENTER: remove selected (sudo zypper rm)' \
+      --bind 'enter:execute(echo "Selected: "{+}; sudo zypper rm {+})+abort'
   else
-    print -u2 'No supported package manager found (pacman/zypper)'
+    print -u2 'No supported package manager found (pacman/rpm)'
     return 1
   fi
 }
@@ -105,7 +112,7 @@ zopen() {
   builtin cd - >/dev/null
 }
 
-# --- fopen: grep + fzf + open in $EDITOR ---
+# --- fopen: grep + fzf + open in $EDITOR (rg when available: respects .gitignore) ---
 fopen() {
   local file editor preview_cmd
   editor=${EDITOR:-vim}
@@ -114,9 +121,15 @@ fopen() {
   else
     preview_cmd='cat {}'
   fi
-  file=$(grep -irl "${1:-}" ./ 2>/dev/null \
-    | fzf --height 80% --layout=reverse --cycle \
-          --preview-window right:60% --preview "$preview_cmd")
+  if (( $+commands[rg] )); then
+    file=$(rg -il --hidden --glob '!.git' -- "${1:-.}" 2>/dev/null \
+      | fzf --height 80% --layout=reverse --cycle \
+            --preview-window right:60% --preview "$preview_cmd")
+  else
+    file=$(grep -irl -- "${1:-}" ./ 2>/dev/null \
+      | fzf --height 80% --layout=reverse --cycle \
+            --preview-window right:60% --preview "$preview_cmd")
+  fi
   if [[ -n $file ]]; then
     "$editor" "$file"
   else
@@ -127,28 +140,31 @@ fopen() {
 # NOTE: `frm` is intentionally NOT here — it lives in 70-functions.zsh with a
 # confirmation prompt. Don't define it twice.
 
-# --- fkill: pick a process and kill it ---
+# --- fkill: pick processes and signal them (default SIGTERM) ---
+# usage: fkill [SIGNAL]      e.g. fkill KILL
 fkill() {
-  local pids
-  pids=$(ps -u "$USER" -o pid,comm --no-headers \
-    | fzf -m --header='CTRL-K to kill' --prompt='kill> ' \
-    | awk '{print $1}')
-  [[ -z $pids ]] && return 0
-  print -l -- $pids | xargs -r kill -9 2>/dev/null
+  local sig=${1:-TERM}
+  local -a pids
+  pids=(${(f)"$(ps -u "$USER" -o pid=,comm= \
+    | fzf -m --header="Selected processes get SIG$sig" --prompt='kill> ' \
+    | awk '{print $1}')"})
+  (( $#pids )) || return 0
+  kill -s "$sig" "${pids[@]}"
 }
 
-# --- fman2: man page browser via zsh command list ---
-# (Old _fman used `compgen -c` — bash-only. This is the zsh equivalent.)
-_fman() {
-  print -l -- ${(k)commands} | fzf --prompt='man> ' | xargs -r man
-}
-
-# --- fzfcd: fuzzy cd to a subdirectory ---
+# --- fzfcd / fcd: fuzzy cd to a subdirectory (skips .git, node_modules) ---
 fzfcd() {
-  local dir
-  dir=$(find "${1:-.}" -type d 2>/dev/null | fzf +m --prompt='cd> ')
+  local dir root=${1:-.}
+  if (( $+commands[fd] )); then
+    dir=$(fd --type d --hidden --follow --exclude .git --exclude node_modules . "$root" \
+      | fzf +m --prompt='cd> ' --preview "$_fzf_tree {}" --preview-window 'up:60%')
+  else
+    dir=$(find "$root" \( -name .git -o -name node_modules \) -prune -o -type d -print 2>/dev/null \
+      | fzf +m --prompt='cd> ' --preview "$_fzf_tree {}" --preview-window 'up:60%')
+  fi
   [[ -n $dir ]] && builtin cd -- "$dir"
 }
+fcd() { fzfcd "$@"; }
 
 # --- fzfhist: search history, edit then run ---
 fzfhist() {
@@ -161,7 +177,7 @@ fzfhist() {
 fsc() {
   (( $+commands[systemctl] )) || { print -u2 'systemd not available'; return 1; }
   local unit
-  unit=$(systemctl list-units --all --no-pager | sed 1d \
+  unit=$(systemctl list-units --all --plain --no-legend --no-pager \
     | fzf --prompt='systemd> ' | awk '{print $1}')
   [[ -n $unit ]] && systemctl status "$unit"
 }
@@ -178,14 +194,18 @@ fgl() {
 
 # --- fzf_grep: grep + fzf + open at matching line ---
 fzf_grep() {
-  local pattern=${1:-}
-  local file
+  local pattern=${1:-} file prev
   [[ -n $pattern ]] || { print -u2 'Usage: fzf_grep <pattern>'; return 1; }
   (( $+commands[rg] )) || { print -u2 'ripgrep (rg) is required'; return 1; }
-  file=$(rg --line-number --color=never --no-heading --smart-case "$pattern" 2>/dev/null \
+  if (( $+commands[bat] )); then
+    prev='bat --style=numbers --color=always --highlight-line {2} {1}'
+  else
+    prev='cat {1}'
+  fi
+  file=$(rg --line-number --color=never --no-heading --smart-case -- "$pattern" 2>/dev/null \
     | fzf --delimiter=: --nth=1..2 \
-          --preview 'bat --style=numbers --color=always {1} 2>/dev/null | grep -C 3 --color=always {2}' \
-          --preview-window=right:50%:wrap \
+          --preview "$prev" \
+          --preview-window='right:50%:wrap:+{2}-5' \
           --prompt="grep: $pattern> " \
           --bind="ctrl-o:execute(${EDITOR:-vim} +{2} {1})+abort")
   if [[ -n $file ]]; then
@@ -201,49 +221,22 @@ fenv() {
   var=$(env | fzf --height 40% --prompt='env> ' --preview 'echo {} | cut -d= -f2-')
   [[ -z $var ]] && return 0
   name=${var%%=*}
-  if [[ -n ${WAYLAND_DISPLAY:-} ]] && (( $+commands[wl-copy] )); then
-    print -rn -- "$var" | wl-copy
-  elif [[ -n ${DISPLAY:-} ]] && (( $+commands[xclip] )); then
-    print -rn -- "$var" | xclip -selection clipboard
+  if print -rn -- "$var" | _clip; then
+    print "Copied: $name"
   else
     print -u2 'No clipboard tool (wl-copy or xclip) available'
     return 1
   fi
-  print "Copied: $name"
 }
 
-# --- fedit: multi-select files, open in $EDITOR ---
+# --- fedit: multi-select files, open ALL in $EDITOR at once ---
+# (was: `... | while read; do $editor`, which gave the editor a pipe as stdin)
 fedit() {
-  local files editor
-  editor=${EDITOR:-vim}
-  files=$(fzf -m \
+  local editor=${EDITOR:-vim}
+  local -a files
+  files=(${(f)"$(fzf -m \
     --preview 'bat --style=numbers --color=always {} 2>/dev/null || cat {}' \
-    --preview-window=right:50%:wrap --prompt='edit> ')
-  [[ -z $files ]] && return 0
-  print -l -- $files | while IFS= read -r file; do
-    [[ -n $file ]] && "$editor" "$file"
-  done
-}
-
-
-
-
-# FZF with Beets
-# bif: Fuzzy-find a directory and import it with beet
-bif() {
-  local dir
-  # Use fd or find to list directories and pipe to fzf
-  dir=$(fd --type d --hidden --exclude .git --exclude node_modules 2>/dev/null | fzf --prompt='Import to beet> ' --preview 'tree -C {} | head -100')
-  # If a directory was selected, run beet import on it
-  [[ -n "$dir" ]] && beet import "$dir"
-}
-
-
-# bls: Fuzzy-select an artist/album from your beets library
-bls() {
-  local query
-  # Use beet ls to get a list of unique artists/albums
-  query=$(beet ls -f '$albumartist - $album' 2>/dev/null | sort -u | fzf --prompt='Select album> ' --preview 'beet ls -f "$albumartist - $album"')
-  # If a selection was made, pass it to the provided beet command
-  [[ -n "$query" ]] && beet "$1" "$query"
+    --preview-window=right:50%:wrap --prompt='edit> ')"})
+  (( $#files )) || return 0
+  "$editor" "${files[@]}"
 }

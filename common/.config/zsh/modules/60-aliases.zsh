@@ -28,15 +28,21 @@ alias mkdir='mkdir -pv'
 alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -Iv'
-alias rsync='rsync -avhP --no-inc-recursive --inplace'
+alias rsync='rsync -avhP'
 alias less='less -R'
 
 # ---------------------------------------------------------------------------
 # Tree
 # ---------------------------------------------------------------------------
-alias tree='tree -F --dirsfirst -a -I ".git|.hg|.svn|__pycache__|.mypy_cache|.pytest_cache|*.egg-info|.sass-cache|.DS_Store"'
+if (( $+commands[tree] )); then
+  alias tree='tree -F --dirsfirst -a -I ".git|.hg|.svn|__pycache__|.mypy_cache|.pytest_cache|*.egg-info|.sass-cache|.DS_Store"'
+elif (( $+commands[eza] )); then
+  alias tree='eza --tree --group-directories-first -a -I ".git|.hg|.svn|__pycache__|.mypy_cache|.pytest_cache|*.egg-info|.sass-cache|.DS_Store"'
+fi
 alias tree2='tree -L 2'
 alias tree3='tree -L 3'
+
+
 
 # ---------------------------------------------------------------------------
 # Colorized output
@@ -136,6 +142,29 @@ fi
 alias shutdown='sudo shutdown -h now'
 alias restart='sudo reboot'
 alias caffienate='systemd-inhibit tail -f /dev/null'
+
+# ---------------------------------------------------------------------------
+# Git (no `gs`: that is Ghostscript)
+# ---------------------------------------------------------------------------
+if (( $+commands[git] )); then
+  alias gst='git status -sb'
+  alias ga='git add'
+  alias gaa='git add -A'
+  alias gc='git commit'
+  alias gcm='git commit -m'
+  alias gca='git commit --amend'
+  alias gco='git checkout'
+  alias gsw='git switch'
+  alias gb='git branch'
+  alias gd='git diff'
+  alias gds='git diff --staged'
+  alias gl='git log --oneline --graph --decorate -20'
+  alias gp='git push'
+  alias gpl='git pull --ff-only'
+  alias gf='git fetch --all --prune'
+fi
+(( $+commands[lazygit] )) && alias lg='lazygit'
+
 
 # ---------------------------------------------------------------------------
 # Conditional replacements

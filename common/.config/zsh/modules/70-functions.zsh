@@ -7,6 +7,20 @@
 #   5. `print -u2` for errors (not `echo >&2`).
 
 # ---------------------------------------------------------------------------
+# Helper: copy stdin to the clipboard (Wayland, then X11). Returns 1 if none.
+# ---------------------------------------------------------------------------
+_clip() {
+  if [[ -n ${WAYLAND_DISPLAY:-} ]] && (( $+commands[wl-copy] )); then
+    wl-copy
+  elif [[ -n ${DISPLAY:-} ]] && (( $+commands[xclip] )); then
+    xclip -selection clipboard
+  else
+    return 1
+  fi
+}
+
+
+# ---------------------------------------------------------------------------
 # Compression
 # ---------------------------------------------------------------------------
 compress() {
@@ -79,11 +93,11 @@ y() {
 # ---------------------------------------------------------------------------
 # fzf cd — jump to a subdirectory
 # ---------------------------------------------------------------------------
-fcd() {
-  local dir
-  dir=$(find . -type d 2>/dev/null | fzf --preview 'tree -C {} | head -200' --preview-window 'up:60%')
-  [[ -n $dir ]] && builtin cd -- "$dir"
-}
+# fcd() {
+#   local dir
+#   dir=$(find . -type d 2>/dev/null | fzf --preview 'tree -C {} | head -200' --preview-window 'up:60%')
+#   [[ -n $dir ]] && builtin cd -- "$dir"
+# }
 
 # ---------------------------------------------------------------------------
 # fzf rm — multi-select and confirm before delete
@@ -120,48 +134,54 @@ pf() {
 # ---------------------------------------------------------------------------
 update_system() {
   if (( $+commands[zypper] )); then
-    sudo zypper dup
+    sudo zypper ref && sudo zypper dup || return
+    print '\n--- services using old files ---'
+    sudo zypper ps -s
+    zypper needs-rebooting 2>/dev/null
   elif (( $+commands[pacman] )); then
     sudo pacman -Syu
   fi
   (( $+commands[flatpak] )) && flatpak update
 }
 
+
 # ---------------------------------------------------------------------------
 # mkdir + cd
 # ---------------------------------------------------------------------------
 mk() {
-  mkdir -p "$@" && builtin cd -- "$1"
+  [[ -n $1 ]] || { print -u2 'Usage: mk <dir> [more dirs]'; return 1; }
+  command mkdir -p -- "$@" && builtin cd -- "$1"
 }
+
 
 # ---------------------------------------------------------------------------
 # Daily file: 2026-01-15_notes.md
 # ---------------------------------------------------------------------------
 daily_file() {
-  local today name
-  today=$(date -I)
-  name="${today}_$1.$2"
-  touch -- "$name" && nvim -- "$name"
+  local name="$(date -I)_${1:-notes}.${2:-md}"
+  touch -- "$name" && "${EDITOR:-vim}" -- "$name"
 }
+
 
 # ---------------------------------------------------------------------------
 # Local + external IP
 # ---------------------------------------------------------------------------
 myip() {
-  hostname -I | awk '{print $1}'
+  command ip -4 -o addr show scope global | awk '{print $2": "$4}'
   print -n 'External: '
-  curl -s ifconfig.me
+  curl -fsS --max-time 5 ifconfig.me || print -u2 '(lookup failed)'
   print
 }
+
 
 # ---------------------------------------------------------------------------
 # cheat.sh lookup
 # ---------------------------------------------------------------------------
 ch() {
   [[ -z $1 ]] && { print -u2 'No command to look up'; return 1; }
-  local path=$1
-  [[ -n $2 ]] && path="$path/$2"
-  curl "https://cht.sh/$path"
+  local topic=$1
+  [[ -n $2 ]] && topic="$path/$2"
+  curl "https://cht.sh/$topic"
 }
 
 # ---------------------------------------------------------------------------
@@ -192,17 +212,20 @@ color_text() {
 ssh-create() {
   [[ -z $1 ]] && { print -u2 'Usage: ssh-create <name>'; return 1; }
   local key="$HOME/.ssh/$1"
-  ssh-keygen -f "$key" -t ed25519 -N '' -C "$1"
-  chmod 700 "$key"
+  [[ -e $key ]] && { print -u2 "$key already exists"; return 1; }
+  command mkdir -p -m 700 -- "$HOME/.ssh"
+  ssh-keygen -f "$key" -t ed25519 -C "$1" || return
+  chmod 600 "$key"
   [[ -f "$key.pub" ]] && chmod 644 "$key.pub"
 }
 
 # ---------------------------------------------------------------------------
-# History statistics
+# History statistics  (usage: historystat [N])
 # ---------------------------------------------------------------------------
 historystat() {
-  fc -l 1 | awk '{print $2}' | sort | uniq -c | sort -rn | head
+  fc -l 1 | awk '{print $2}' | sort | uniq -c | sort -rn | head -n "${1:-10}"
 }
+top10() { historystat 10; }
 
 # ---------------------------------------------------------------------------
 # Mount / umount
@@ -213,17 +236,20 @@ mnt() {
   sudo mount "$1" "$target" -o rw && print "Mounted $1 at $target"
 }
 
+# umnt [dir]: unmount everything at or below dir (default /mnt), deepest first
 umnt() {
-  local dir=${1:-/mnt} mounted
-  mounted=$(findmnt -rno TARGET "$dir" 2>/dev/null | sort -r)
-  [[ -z $mounted ]] && { print -u2 "Nothing mounted under $dir"; return 1; }
-  sudo umount $mounted && print "Unmounted: $mounted"
+  local dir=${1:-/mnt}
+  local -a mounted
+  mounted=(${(f)"$(findmnt -rno TARGET 2>/dev/null | awk -v d="$dir" '$0 == d || index($0, d "/") == 1' | sort -r)"})
+  (( $#mounted )) || { print -u2 "Nothing mounted under $dir"; return 1; }
+  sudo umount "${mounted[@]}" && print -l -- 'Unmounted:' "${mounted[@]}"
 }
+
 
 # ---------------------------------------------------------------------------
 # Random password — uses /dev/urandom (never blocks)
 # ---------------------------------------------------------------------------
-pass() {
+genpass() {
   local size=${1:-20}
   LC_ALL=C tr -dc '[:graph:]' < /dev/urandom | head -c "$size"
   print
@@ -232,8 +258,9 @@ pass() {
 # ---------------------------------------------------------------------------
 # Disk usage, human sort
 # ---------------------------------------------------------------------------
-du1() { du -h --max-depth=1 "$@" | sort -k1,1hr -k2,2f; }
-du2() { du -h --max-depth=1 "$@" | sort -k1,1h  -k2,2f; }
+du1() { command du -h --max-depth=1 "$@" | sort -k1,1hr -k2,2f; }
+du2() { command du -h --max-depth=1 "$@" | sort -k1,1h  -k2,2f; }
+
 
 # ---------------------------------------------------------------------------
 # fzf font list
@@ -257,15 +284,19 @@ which() {
 # Base64 encode/decode to/from Wayland clipboard
 # ---------------------------------------------------------------------------
 b64e() {
-  print -n -- "$1" | base64 | wl-copy
-  wl-paste; print
-  print -u2 'Copied to clipboard.'
+  local out
+  out=$(print -rn -- "$1" | base64 -w0)
+  print -r -- "$out"
+  print -rn -- "$out" | _clip && print -u2 'Copied to clipboard.'
 }
 
 b64d() {
-  print -n -- "$1" | base64 --decode | wl-copy
-  wl-paste; print
+  local out
+  out=$(print -rn -- "$1" | base64 --decode)
+  print -r -- "$out"
+  print -rn -- "$out" | _clip && print -u2 'Copied to clipboard.'
 }
+
 
 # ---------------------------------------------------------------------------
 # History grep
@@ -274,12 +305,12 @@ hgrep() {
   fc -l 1 | command grep -i --color=auto "$@" | fzf
 }
 
-# ---------------------------------------------------------------------------
-# Top 10 most-used commands
-# ---------------------------------------------------------------------------
-top10() {
-  fc -l 1 | awk '{print $2}' | sort | uniq -c | sort -rn | head
-}
+# # ---------------------------------------------------------------------------
+# # Top 10 most-used commands
+# # ---------------------------------------------------------------------------
+# top10() {
+#   fc -l 1 | awk '{print $2}' | sort | uniq -c | sort -rn | head
+# }
 
 # ---------------------------------------------------------------------------
 # Up N directories
@@ -310,10 +341,22 @@ make-bak() {
 # ---------------------------------------------------------------------------
 # Cleanup by extension (prints then deletes; safe-by-print)
 # ---------------------------------------------------------------------------
+# cleanup() {
+  # [[ -z $1 ]] && { print -u2 'Usage: cleanup <ext>'; return 1; }
+  # find . -type f -name "*.$1" -print -delete
+# }
 cleanup() {
   [[ -z $1 ]] && { print -u2 'Usage: cleanup <ext>'; return 1; }
-  find . -type f -name "*.$1" -print -delete
+  [[ $1 == *[/*?]* ]] && { print -u2 'Give a plain extension (e.g. "log"), no wildcards'; return 1; }
+  local -a files
+  files=(${(f)"$(find . -type f -name "*.$1")"})
+  (( $#files )) || { print "No *.$1 files below $PWD"; return 0; }
+  print -l -- "${files[@]}"
+  read -q "?Delete these $#files file(s)? [y/N] " || { print; return 1; }
+  print
+  command rm -f -- "${files[@]}"
 }
+
 
 # ---------------------------------------------------------------------------
 # Add a directory to PATH if not already present
@@ -326,7 +369,61 @@ add_to_path() {
 }
 
 
-# Usage: bsoundtrack "Album Name" Games "GTA"
-bsoundtrack() {
-  beet modify album:"$1" category:"$2" series:"$3" && beet move album:"$1"
+# ---------------------------------------------------------------------------
+# Small extras
+# ---------------------------------------------------------------------------
+# serve [port]: static file server for the current directory
+serve() {
+  python3 -m http.server "${1:-8000}"
 }
+
+# gclone <url> [dir]: git clone and cd into it
+gclone() {
+  [[ -n $1 ]] || { print -u2 'Usage: gclone <url> [dir]'; return 1; }
+  git clone "$@" || return
+  builtin cd -- "${2:-${${1:t}%.git}}"
+}
+
+# trash <files...>: move to the desktop trash instead of deleting
+trash() {
+  (( $# )) || { print -u2 'Usage: trash <file...>'; return 1; }
+  if (( $+commands[gio] )); then
+    gio trash -- "$@"
+  elif (( $+commands[trash-put] )); then
+    trash-put -- "$@"
+  else
+    print -u2 'Need gio (glib2-tools) or trash-cli'; return 1
+  fi
+}
+
+# weather [city]: one-screen forecast
+weather() {
+  curl -fsS --max-time 8 "https://wttr.in/${1:-}?m" || print -u2 'weather: lookup failed'
+}
+
+# zshbench: how long does an interactive shell take to start?
+zshbench() {
+  if (( $+commands[hyperfine] )); then
+    hyperfine --warmup 2 'zsh -i -c exit'
+  else
+    time (for n in {1..10}; do zsh -i -c exit; done)
+    print 'total for 10 starts (divide by 10)'
+  fi
+}
+
+# zsh-clean: delete generated caches (init scripts, compdump) and compiled .zwc files
+zsh-clean() {
+  local -a f
+  f=("$XDG_CACHE_HOME"/zsh/(init-*|zcompdump*)(N) "$ZDOTDIR"/{.zshrc,modules/*,local/*}.zwc(N))
+  (( $#f )) && command rm -f -- "${f[@]}"
+  print "Removed $#f generated files. Open a new shell to rebuild them."
+}
+
+# ---------------------------------------------------------------------------
+# Completion for the functions above
+# ---------------------------------------------------------------------------
+if (( $+functions[compdef] )); then
+  compdef _files decompress compress make-bak
+  compdef _directories mk fzfcd fcd
+  compdef _command_names is_installed
+fi

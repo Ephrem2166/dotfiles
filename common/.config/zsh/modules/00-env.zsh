@@ -5,33 +5,44 @@
 : "${XDG_DATA_HOME:=$HOME/.local/share}"
 : "${XDG_CACHE_HOME:=$HOME/.cache}"
 : "${XDG_STATE_HOME:=$HOME/.local/state}"
-mkdir -p -m 0750 \
-  "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_CACHE_HOME" "$XDG_STATE_HOME"
+for _d in "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_CACHE_HOME" "$XDG_STATE_HOME"; do
+  [[ -d $_d ]] || mkdir -p -m 0750 "$_d"
+done
+unset _d
 
-# --- PATH: build once, deduplicated, in explicit priority order ---
+# --- PATH: built once, deduplicated, only existing directories ---
+# (N-/) = null-glob, follow symlinks, directories only -> missing dirs are dropped.
 typeset -U path PATH
 path=(
-  "$HOME/.local/bin"
-  "$HOME/.cargo/bin"
-  "$HOME/scripts"
-  "$XDG_CONFIG_HOME/scripts"
+  "$HOME/.local/bin"(N-/)
+  "$HOME/.cargo/bin"(N-/)
+  "$HOME/scripts"(N-/)
+  "$XDG_CONFIG_HOME/scripts"(N-/)
   /usr/local/bin
   /usr/bin
   /bin
-  /var/lib/flatpak/exports/bin
+  /var/lib/flatpak/exports/bin(N-/)
+  "$HOME/.local/share/flatpak/exports/bin"(N-/)
   $path
 )
+
 
 # --- Terminal ---
 [[ -z $TERM ]] && export TERM=xterm-256color
 export TERMINAL=alacritty
 
 # --- Locale: fall back to C.UTF-8 if en_US.UTF-8 isn't generated ---
-if locale -a 2>/dev/null | grep -qiE '^en_US\.utf-?8$'; then
-  export LANG=en_US.UTF-8
-else
+# if locale -a 2>/dev/null | grep -qiE '^en_US\.utf-?8$'; then
+#   export LANG=en_US.UTF-8
+# else
+#   export LANG=C.UTF-8
+# fi
+#
+# # openSUSE sets LANG from /etc/locale.conf at login; only fall back when unset.
+if [[ -z $LANG || $LANG == (C|POSIX) ]]; then
   export LANG=C.UTF-8
 fi
+
 
 # --- Editor ---
 if (( $+commands[nvim] )); then
@@ -49,18 +60,27 @@ else
   export MANPAGER='less -R'
 fi
 export MANROFFOPT='-c'
-# ... LESS_TERMCAP_* stay as-is (they work with any pager)
-export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
-export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
-export LESS_TERMCAP_me=$(tput sgr0)
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4)
-export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 8)
-export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
-export LESS_TERMCAP_mr=$(tput rev)
-export LESS_TERMCAP_mh=$(tput dim)
-
 export PAGER='less -R'
+# -F quit if it fits on one screen, -X don't clear the screen on exit (git's own
+# defaults are lost once LESS is set, so they are repeated here), -i smart-case search
+export LESS='-R -F -X -i -M'
+
+# LESS_TERMCAP_* as literal escapes (was 9x `tput` = 9 forks per shell).
+# They only matter when less is the man pager (bat brings its own colours).
+export LESS_TERMCAP_mb=$'\e[1;32m'        # begin blink
+export LESS_TERMCAP_md=$'\e[1;36m'        # begin bold
+export LESS_TERMCAP_me=$'\e[0m'           # end all modes
+export LESS_TERMCAP_so=$'\e[1;33;44m'     # begin standout (status line)
+export LESS_TERMCAP_se=$'\e[0m'           # end standout
+export LESS_TERMCAP_us=$'\e[4;1;38;5;8m'  # begin underline
+export LESS_TERMCAP_ue=$'\e[0m'           # end underline
+export LESS_TERMCAP_mr=$'\e[7m'           # reverse
+export LESS_TERMCAP_mh=$'\e[2m'           # dim
+
+
+# Keep less history out of $HOME
+[[ -d $XDG_STATE_HOME/less ]] || mkdir -p "$XDG_STATE_HOME/less"
+export LESSHISTFILE="$XDG_STATE_HOME/less/history"
 
 # --- Misc program env ---
 export TIME_STYLE=+"%Y-%m-%d %a %H:%M"
@@ -68,35 +88,21 @@ export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/ripgreprc"
 
 # --- fpath additions (must run before compinit in 40-completion.zsh) ---
 [[ -d "$XDG_CONFIG_HOME/beets" ]] && fpath=("$XDG_CONFIG_HOME/beets" $fpath)
+# Your own completion functions: drop `_name` files into this directory
+fpath=("$XDG_DATA_HOME/zsh/site-functions"(N-/) $fpath)
 
-
-# --- dircolors ---
-export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors"
-if (( $+commands[dircolors] )) && [[ -f $DIRCOLOR ]]; then
-  eval "$(dircolors -b "$DIRCOLOR")"
+# --- GPG / SSH agents ---
+export GPG_TTY=$TTY      # pinentry-curses needs to know the terminal
+if [[ -z $SSH_AUTH_SOCK ]]; then
+  for _s in "$XDG_RUNTIME_DIR/ssh-agent.socket" "$XDG_RUNTIME_DIR/gcr/ssh" "$XDG_RUNTIME_DIR/keyring/ssh"; do
+    [[ -S $_s ]] && { export SSH_AUTH_SOCK=$_s; break; }
+  done
+  unset _s
 fi
 
-# --- Desktop / Wayland environment ---
-# Only applies when the session actually set DESKTOP_SESSION.
-if [[ -n $DESKTOP_SESSION ]]; then
-  case $DESKTOP_SESSION in
-    sway|river|niri|hyprland|*wayland*)
-      export QT_QPA_PLATFORM=wayland
-      export QT_QPA_PLATFORMTHEME=kde
-      export XDG_SESSION_TYPE=wayland
-      export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-      export QT_AUTO_SCREEN_SCALE_FACTOR=1
-      export SDL_VIDEODRIVER=wayland
-      export _JAVA_AWT_WM_NONREPARENTING=1
-      export MOZ_ENABLE_WAYLAND=1
-      export XCURSOR_SIZE=24
-      export GDK_BACKEND=wayland
-      ;;
-  esac
-  case $DESKTOP_SESSION in
-    sway)        export XDG_CURRENT_DESKTOP=sway; export GTK_USE_PORTAL=0 ;;
-    river)       export XDG_CURRENT_DESKTOP=river; export GTK_USE_PORTAL=1; export XCURSOR_THEME=Adwaita ;;
-    niri)        export XDG_CURRENT_DESKTOP=niri; export GTK_USE_PORTAL=1 ;;
-    qtile|bspwm) export QT_QPA_PLATFORMTHEME=kde ;;
-  esac
-fi
+
+# # --- dircolors ---
+# export DIRCOLOR="$XDG_CONFIG_HOME/zsh/dircolors"
+# if (( $+commands[dircolors] )) && [[ -f $DIRCOLOR ]]; then
+#   eval "$(dircolors -b "$DIRCOLOR")"
+# fi

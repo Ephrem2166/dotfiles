@@ -4,6 +4,9 @@
 # Only run in interactive shells
 [[ -o interactive ]] || return
 
+zmodload zsh/terminfo 2>/dev/null   # provides $terminfo[] used below
+
+
 # ---------------------------------------------------------------------------
 # Custom ZLE widgets
 # ---------------------------------------------------------------------------
@@ -32,32 +35,76 @@ zle -N backward-kill-dir
 autoload -Uz edit-command-line
 zle -N edit-command-line
 
+# --- sudo-command-line — toggle a leading `sudo` (empty buffer: previous command) ---
+sudo-command-line() {
+  [[ -z $BUFFER ]] && zle up-history
+  if [[ $BUFFER == sudo\ * ]]; then
+    BUFFER="${BUFFER#sudo }"
+  else
+    BUFFER="sudo $BUFFER"
+  fi
+  zle end-of-line
+}
+zle -N sudo-command-line
+
+# --- fg-bg — Ctrl-Z on an empty line runs `fg`; on a non-empty line stashes it ---
+fg-bg() {
+  if [[ -z $BUFFER ]]; then
+    BUFFER=fg
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fg-bg
+
+
 # ---------------------------------------------------------------------------
 # History navigation
 # ---------------------------------------------------------------------------
 # If zsh-history-substring-search is loaded (30-plugins.zsh), bind Up/Down
 # to its widgets. Otherwise, fall back to the prefix-matching builtins.
+# if (( $+widgets[history-substring-search-up] )); then
+#   bindkey '^[[A' history-substring-search-up
+#   bindkey '^[[B' history-substring-search-down
+# else
+#   bindkey '^[[A' history-beginning-search-backward
+#   bindkey '^[[B' history-beginning-search-forward
+# fi
+# Bind both normal (^[[A) and application-mode (^[OA) arrow sequences.
 if (( $+widgets[history-substring-search-up] )); then
-  bindkey '^[[A' history-substring-search-up
-  bindkey '^[[B' history-substring-search-down
+  bindkey '^[[A' history-substring-search-up   '^[OA' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down '^[OB' history-substring-search-down
 else
-  bindkey '^[[A' history-beginning-search-backward
-  bindkey '^[[B' history-beginning-search-forward
+  bindkey '^[[A' history-beginning-search-backward '^[OA' history-beginning-search-backward
+  bindkey '^[[B' history-beginning-search-forward  '^[OB' history-beginning-search-forward
 fi
+bindkey '^[[5~' history-beginning-search-backward   # PageUp
+bindkey '^[[6~' history-beginning-search-forward    # PageDown
+
+
 
 # ---------------------------------------------------------------------------
 # Cursor and editing
 # ---------------------------------------------------------------------------
 bindkey '^[[H' beginning-of-line
 bindkey '^[[F' end-of-line
+bindkey '^[[1~' beginning-of-line
+bindkey '^[[4~' end-of-line
 bindkey '^[[3~' delete-char
-bindkey '^[[1;5C' forward-word
-bindkey '^[[1;5D' backward-word
-bindkey '^[[1;3C' forward-word
-bindkey '^[[1;3D' backward-word
-bindkey '^[[3;5~' kill-word
-bindkey '^[^?'   kill-whole-line          # Alt+Backspace
-bindkey '^H' backward-kill-word
+[[ -n ${terminfo[khome]} ]] && bindkey "${terminfo[khome]}" beginning-of-line
+[[ -n ${terminfo[kend]}  ]] && bindkey "${terminfo[kend]}"  end-of-line
+[[ -n ${terminfo[kdch1]} ]] && bindkey "${terminfo[kdch1]}" delete-char
+bindkey '^[[1;5C' forward-word      # Ctrl+Right
+bindkey '^[[1;5D' backward-word     # Ctrl+Left
+bindkey '^[[1;3C' forward-word      # Alt+Right
+bindkey '^[[1;3D' backward-word     # Alt+Left
+bindkey '^[[3;5~' kill-word         # Ctrl+Delete
+bindkey '^[^?'    backward-kill-word  # Alt+Backspace (was kill-whole-line)
+bindkey '^H'      backward-kill-word  # Ctrl+Backspace (terminal sends ^H)
+
+
 # ---------------------------------------------------------------------------
 # Emacs-y extras
 # ---------------------------------------------------------------------------
@@ -75,6 +122,8 @@ bindkey '^[d'    kill-line
 bindkey '^[w'    backward-kill-dir
 bindkey '^[y'    yank
 bindkey '^[e'    edit-command-line
+bindkey '^[s'    sudo-command-line       # Alt+s: toggle sudo (replaces spell-word)
+bindkey '^z'     fg-bg
 bindkey '\e\C-u' up-directory
 bindkey '^[[Z'   reverse-menu-complete    # Shift+Tab
 

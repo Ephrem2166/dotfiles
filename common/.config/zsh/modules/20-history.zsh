@@ -26,9 +26,21 @@ setopt HIST_IGNORE_ALL_DUPS   # delete the older copy of a duplicate
 setopt HIST_SAVE_NO_DUPS      # don't write duplicates to the file
 setopt HIST_EXPIRE_DUPS_FIRST # when trimming, remove duplicates first
 setopt HIST_FIND_NO_DUPS      # when searching history, skip duplicates
+setopt HIST_NO_STORE          # don't store the `history` / `fc -l` commands themselves
+
+# Whole-line patterns that are never stored (noise)
+HISTORY_IGNORE='(ls|ll|lla|lsa|pwd|exit|q|c|clear|reload|history|cd|cd -|..|...)'
+
 
 # --- Filtering ---
 setopt HIST_IGNORE_SPACE      # commands starting with a space are not saved
 
 # --- Safety ---
 setopt HIST_VERIFY            # show expansion, press Enter again to execute
+
+# Keep obvious secrets out of the history FILE (still reachable with Up in this
+# session). Return 2 = "keep in memory, don't write to disk".
+zshaddhistory() {
+  [[ ${1:l} == *(token|secret|password|passwd|api_key|apikey)=* ]] && return 2
+  return 0
+}

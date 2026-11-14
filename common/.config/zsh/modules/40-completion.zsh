@@ -19,6 +19,10 @@ if [[ -n ${ZSH_COMPDUMP}(#qN.mh+24) ]]; then
 else
   compinit -C -d "$ZSH_COMPDUMP"
 fi
+# Byte-compile the dump (loads faster next time); redo when the dump changed.
+if [[ -s $ZSH_COMPDUMP && ( ! -s $ZSH_COMPDUMP.zwc || $ZSH_COMPDUMP -nt $ZSH_COMPDUMP.zwc ) ]]; then
+  zcompile "$ZSH_COMPDUMP" 2>/dev/null
+fi
 
 # --- General ---
 zstyle ':completion:*' completer _complete _correct _approximate
@@ -105,22 +109,35 @@ zstyle ':completion:*:sudo:*' command-path \
 # This is the SAFE alternative to `setopt GLOB_DOTS` (which we left off in
 # 10-options.zsh). It only affects Tab completion, not `rm *`.
 _comp_options+=(globdots)
-
 # --- fzf-tab: MUST be sourced AFTER compinit ---
-_plugin_dir="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
-if [[ -r "$_plugin_dir/fzf-tab/fzf-tab.plugin.zsh" ]]; then
-  source "$_plugin_dir/fzf-tab/fzf-tab.plugin.zsh"
+if _find_plugin fzf-tab fzf-tab.plugin.zsh; then
+  source "$REPLY"
 
-  # --- Preview windows ---
-  zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --color=always $realpath'
-  zstyle ':fzf-tab:complete:cd:*'         fzf-preview 'eza -1 --color=always $realpath'
-  zstyle ':fzf-tab:complete:vim:*'        fzf-preview 'bat --color=always $realpath'
+  # fzf-tab replaces the built-in menu; make sure they don't fight.
+  zstyle ':completion:*' menu no
+  zstyle ':completion:*:git-checkout:*' sort false
+
+  # --- Preview commands (fall back gracefully if eza/bat are missing) ---
+  if (( $+commands[eza] )); then
+    _ft_dir='eza -1 --color=always $realpath'
+  else
+    _ft_dir='ls -1 --color=always $realpath'
+  fi
+  if (( $+commands[bat] )); then
+    _ft_file='bat --color=always $realpath'
+  else
+    _ft_file='cat $realpath'
+  fi
+  zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview "$_ft_dir"
+  zstyle ':fzf-tab:complete:z:*'          fzf-preview "$_ft_dir"
+  zstyle ':fzf-tab:complete:cd:*'         fzf-preview "$_ft_dir"
+  zstyle ':fzf-tab:complete:(vim|nvim):*' fzf-preview "$_ft_file"
   zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
     fzf-preview 'echo ${(P)word}'
   zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
+  unset _ft_dir _ft_file
 
   # --- Process previews for kill / ps ---
-  zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
   zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
     '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
   zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
@@ -129,5 +146,32 @@ if [[ -r "$_plugin_dir/fzf-tab/fzf-tab.plugin.zsh" ]]; then
   zstyle ':fzf-tab:*' fzf-bindings 'space:accept' 'ctrl-j:accept' 'ctrl-a:toggle-all'
   zstyle ':fzf-tab:*' fzf-min-height 20
   zstyle ':fzf-tab:*' switch-group '<' '>'
+  # NOTE: fzf-tab ignores $FZF_DEFAULT_OPTS unless you add:
+    zstyle ':fzf-tab:*' use-fzf-default-opts yes
 fi
-unset _plugin_dir
+
+# --- fzf-tab: MUST be sourced AFTER compinit ---
+# _plugin_dir="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
+# if [[ -r "$_plugin_dir/fzf-tab/fzf-tab.plugin.zsh" ]]; then
+#   source "$_plugin_dir/fzf-tab/fzf-tab.plugin.zsh"
+#
+#   # --- Preview windows ---
+#   zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --color=always $realpath'
+#   zstyle ':fzf-tab:complete:cd:*'         fzf-preview 'eza -1 --color=always $realpath'
+#   zstyle ':fzf-tab:complete:vim:*'        fzf-preview 'bat --color=always $realpath'
+#   zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
+#     fzf-preview 'echo ${(P)word}'
+#   zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
+#
+#   # --- Process previews for kill / ps ---
+#   zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+#   zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
+#     '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
+#   zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
+#
+#   # --- Keybindings inside fzf-tab ---
+#   zstyle ':fzf-tab:*' fzf-bindings 'space:accept' 'ctrl-j:accept' 'ctrl-a:toggle-all'
+#   zstyle ':fzf-tab:*' fzf-min-height 20
+#   zstyle ':fzf-tab:*' switch-group '<' '>'
+# fi
+# unset _plugin_dir

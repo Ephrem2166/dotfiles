@@ -2,14 +2,21 @@
 # Loaded after 50-keybindings.zsh so fzf's CTRL-T/R/ALT-C bindings are the
 # default state — your custom bindings win without you having to worry about
 # rebinding.
-
 if (( ! $+commands[fzf] )); then
   return 0
 fi
 
+# --- Tree/dir preview command, detected once (also used by 76-fzf-functions) ---
+# Previews run under `sh`, so aliases don't apply; pick the tool explicitly.
+if (( $+commands[eza] )); then
+  _fzf_tree='eza -T -L2 --color=always --icons=never'
+elif (( $+commands[tree] )); then
+  _fzf_tree='tree -C -L 2'
+else
+  _fzf_tree='ls -1 --color=always'
+fi
+
 # --- Default finder command ---
-# rg respects .gitignore, skips .git itself, and is faster than fd/find on
-# large trees. If ripgrep is not installed, fall back to fd, then find.
 if (( $+commands[rg] )); then
   export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
 elif (( $+commands[fd] )); then
@@ -18,12 +25,13 @@ else
   export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/\.git/*" -not -path "*/node_modules/*"'
 fi
 
-# --- Path / directory completion (fzf >= 0.53 `**` completion) ---
+# --- Path / directory completion (`**<Tab>`, fzf >= 0.53) ---
+# (A second, later assignment of `--walker dir` used to override this, so
+#  `vim **<Tab>` only listed directories. Directories-only is now just for `cd`.)
 export FZF_COMPLETION_PATH_OPTS='--walker file,dir,follow,hidden'
-# export FZF_COMPLETION_DIR_OPTS='--walker dir,follow'
+export FZF_COMPLETION_DIR_OPTS='--walker dir,follow,hidden'
 
 # --- Clipboard command, detected once ---
-# Wayland → wl-copy; X11 → xclip; neither → no clipboard binding.
 if [[ -n ${WAYLAND_DISPLAY:-} ]] && (( $+commands[wl-copy] )); then
   _fzf_clip_copy='wl-copy'
 elif [[ -n ${DISPLAY:-} ]] && (( $+commands[xclip] )); then
@@ -33,8 +41,8 @@ else
 fi
 
 # --- General options ---
-# NOTE: requires fzf >= 0.53 for --walker-*, --style, --border=rounded.
-# Comment out the specific lines that error if you're on an older fzf.
+# NOTE: requires fzf >= 0.58 for --style=full; drop that line on older fzf.
+# (ctrl-b/f/u/d are rebound to preview scrolling, so they no longer edit the query line.)
 export FZF_DEFAULT_OPTS="\
 --exact \
 --smart-case \
@@ -61,27 +69,21 @@ export FZF_DEFAULT_OPTS="\
 --style=full \
 "
 
-# --- CTRL-T: file picker with bat preview ---
+# --- CTRL-T: file picker with preview ---
 if (( $+commands[bat] )); then
-  export FZF_CTRL_T_OPTS="\
+  _fzf_ct_preview='bat -n --color=always {}'
+else
+  _fzf_ct_preview='head -100 {}'
+fi
+export FZF_CTRL_T_OPTS="\
 --walker-skip .git,node_modules,target \
---preview 'bat -n --color=always {}' \
+--preview '$_fzf_ct_preview' \
 --bind 'ctrl-/:change-preview-window(down|hidden|)' \
---border=rounded \
 --preview-window=right:60%:wrap \
 "
-else
-  export FZF_CTRL_T_OPTS="\
---walker-skip .git,node_modules,target \
---preview 'head -100 {}' \
---bind 'ctrl-/:change-preview-window(down|hidden|)' \
---border=rounded \
---preview-window=right:60:wrap \
-"
-fi
+unset _fzf_ct_preview
 
 # --- CTRL-R: history picker with clipboard bind ---
-# We build the bind string conditionally so it works with or without clipboard.
 if [[ -n $_fzf_clip_copy ]]; then
   export FZF_CTRL_R_OPTS="\
 --height 80% \
@@ -108,32 +110,24 @@ unset _fzf_clip_copy
 # --- ALT-C: cd picker with tree preview ---
 export FZF_ALT_C_OPTS="\
 --walker-skip .git,node_modules,target \
---preview 'tree -C {}' \
+--preview '$_fzf_tree {}' \
 "
 
-# --- Init ---
-# `fzf --zsh` is available on fzf >= 0.48. Older installs used ~/.fzf.zsh.
-if fzf --zsh >/dev/null 2>&1; then
-  eval "$(fzf --zsh)"
-elif [[ -f "$HOME/.fzf.zsh" ]]; then
+# --- Init (cached: one `fzf --zsh` run per fzf upgrade instead of two per shell) ---
+if _cache_path fzf fzf --zsh; then
+  source "$REPLY"
+elif [[ -f "$HOME/.fzf.zsh" ]]; then       # old fzf (< 0.48)
   source "$HOME/.fzf.zsh"
 fi
 
-
-# Show only directories for fuzzy path completion
-export FZF_COMPLETION_PATH_OPTS='--walker dir'
-
-# FZF with Beet
+# --- Per-command previews for `**<Tab>` completion ---
 _fzf_comprun() {
   local command=$1
   shift
   case "$command" in
-    beet)
-      # A specific preview for beet: show directory contents
-      fzf --preview 'tree -C {} | head -200' "$@"
-      ;;
+    beet|cd|z|zi|pushd)
+      fzf --preview "$_fzf_tree {}" "$@" ;;
     *)
-      fzf "$@"
-      ;;
+      fzf "$@" ;;
   esac
 }
