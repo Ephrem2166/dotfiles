@@ -37,12 +37,12 @@ unset _m _f
 
 # Byte-compile config files in the background (zsh uses file.zwc when it is newer
 # than file); recompiles automatically after you edit something.
-() {
-  local _z
-  for _z in "$ZDOTDIR/.zshrc" "$ZDOTDIR"/{modules,local}/*.zsh(N); do
-    [[ ! -e $_z.zwc || $_z -nt $_z.zwc ]] && zcompile "$_z"
-  done
-} &!
+# () {
+#   local _z
+#   for _z in "$ZDOTDIR/.zshrc" "$ZDOTDIR"/{modules,local}/*.zsh(N); do
+# 	[[ ! -e $_z.zwc || $_z -nt $_z.zwc ]] && zcompile "$_z"
+#   done
+# } &!
 
 
 # # 1. Environment: XDG checks, PATH, EDITOR, LOCALE, MANPAGER, DE/Wayland vars
