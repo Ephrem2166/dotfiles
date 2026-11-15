@@ -286,7 +286,7 @@
   (setq dirvish-mode-line-position 'global)
   (setq delete-by-moving-to-trash t)
   (setq dired-listing-switches
-        "-l --almost-all --human-readable --group-directories-first --no-group")
+        "-la --almost-all --human-readable --group-directories-first --no-group")
   (setq dirvish-yank-overwrite-existing-files 'never)
   (setq dired-dwim-target         t
         dired-recursive-copies    'always
