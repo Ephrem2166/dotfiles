@@ -174,7 +174,10 @@
   (setq dired-x-hands-off-my-keys t)    ; easier to show the keys I use
 
   (setq dired-bind-man nil)
-  (setq dired-bind-info nil))
+  (setq dired-bind-info nil)
+
+
+  )
 
 ;;; Image Dired
 (use-package image-dired
