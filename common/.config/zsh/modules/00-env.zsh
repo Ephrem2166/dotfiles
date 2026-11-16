@@ -77,6 +77,9 @@ export LESS_TERMCAP_ue=$'\e[0m'           # end underline
 export LESS_TERMCAP_mr=$'\e[7m'           # reverse
 export LESS_TERMCAP_mh=$'\e[2m'           # dim
 
+# bat: Nord theme to match the fzf colours (if bat says "unknown theme", run
+# `bat --list-themes`, or use BAT_THEME=ansi to follow your terminal palette)
+(( $+commands[bat] )) && export BAT_THEME="${BAT_THEME:-Nord}"
 
 # Keep less history out of $HOME
 [[ -d $XDG_STATE_HOME/less ]] || mkdir -p "$XDG_STATE_HOME/less"

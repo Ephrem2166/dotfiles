@@ -19,6 +19,14 @@ if [[ -n ${ZSH_COMPDUMP}(#qN.mh+24) ]]; then
 else
   compinit -C -d "$ZSH_COMPDUMP"
 fi
+# _comp_regen=1 is set by 35-tool-completions when a NEW completion file appeared,
+# which forces one full rebuild so it is picked up immediately.
+if (( _comp_regen )) || [[ -n ${ZSH_COMPDUMP}(#qN.mh+24) ]]; then
+  compinit -d "$ZSH_COMPDUMP"
+else
+  compinit -C -d "$ZSH_COMPDUMP"
+fi
+unset _comp_regen
 # Byte-compile the dump (loads faster next time); redo when the dump changed.
 if [[ -s $ZSH_COMPDUMP && ( ! -s $ZSH_COMPDUMP.zwc || $ZSH_COMPDUMP -nt $ZSH_COMPDUMP.zwc ) ]]; then
   zcompile "$ZSH_COMPDUMP" 2>/dev/null

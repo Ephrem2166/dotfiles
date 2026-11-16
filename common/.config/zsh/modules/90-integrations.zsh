@@ -62,6 +62,15 @@ _rehash_check() {
 }
 add-zsh-hook precmd _rehash_check
 
+# ---------------------------------------------------------------------------
+# atuin — searchable, optionally synced shell history (replaces Ctrl-R)
+# ---------------------------------------------------------------------------
+# Loaded after fzf (75) so atuin owns Ctrl-R; the Up arrow stays with
+# history-substring-search (--disable-up-arrow). Without atuin installed, fzf's Ctrl-R
+# is used. Disable with ZSH_ATUIN=0 in local/*.zsh. First time: `atuin import auto`.
+if (( ${ZSH_ATUIN:-1} )) && _cache_path atuin atuin init zsh --disable-up-arrow; then
+  source "$REPLY"
+fi
 
 # ---------------------------------------------------------------------------
 # Lazy NVM

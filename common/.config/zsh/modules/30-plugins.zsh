@@ -28,7 +28,31 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40   # skip suggestions for very long buffers
 # fi
-_find_plugin zsh-autosuggestions zsh-autosuggestions.zsh && source "$REPLY"
+
+
+# With zsh-defer the plugin loads right after the first prompt appears; it is then
+# activated by hand (otherwise it would only bind its widgets after the 1st command).
+_autosuggest_activate() {
+  (( $+functions[_zsh_autosuggest_start] )) && _zsh_autosuggest_start
+}
+if _find_plugin zsh-autosuggestions zsh-autosuggestions.zsh; then
+  _defer source "$REPLY"
+  (( $+functions[zsh-defer] )) && zsh-defer _autosuggest_activate
+fi
+
+# --- zsh-history-substring-search ---
+# Defines the widgets; the bindkeys live in 50-keybindings.zsh so ours win.
+_find_plugin zsh-history-substring-search zsh-history-substring-search.zsh && source "$REPLY"
+
+# --- Fresh machine? Say so once per shell (silence with ZSH_PLUGIN_HINT=0) ---
+if (( ${ZSH_PLUGIN_HINT:-1} )) \
+   && ! _find_plugin zsh-autosuggestions zsh-autosuggestions.zsh \
+   && ! _find_plugin fzf-tab fzf-tab.plugin.zsh; then
+  print -P '%F{yellow}zsh:%f plugins are not installed — run %F{cyan}zsh-plugins install%f'
+fi
+
+
+# _find_plugin zsh-autosuggestions zsh-autosuggestions.zsh && source "$REPLY"
 
 
 # --- zsh-history-substring-search ---
@@ -48,4 +72,4 @@ _find_plugin zsh-autosuggestions zsh-autosuggestions.zsh && source "$REPLY"
 # unset _plugin_dir
 # --- zsh-history-substring-search ---
 # Defines the widgets; the bindkeys live in 50-keybindings.zsh so ours win.
-_find_plugin zsh-history-substring-search zsh-history-substring-search.zsh && source "$REPLY"
+# _find_plugin zsh-history-substring-search zsh-history-substring-search.zsh && source "$REPLY"

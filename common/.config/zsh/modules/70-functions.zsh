@@ -19,6 +19,38 @@ _clip() {
   fi
 }
 
+# Helper: print the clipboard contents (no trailing newline). Returns 1 if no tool.
+_clip_paste() {
+  if [[ -n ${WAYLAND_DISPLAY:-} ]] && (( $+commands[wl-paste] )); then
+    wl-paste --no-newline
+  elif [[ -n ${DISPLAY:-} ]] && (( $+commands[xclip] )); then
+    xclip -selection clipboard -o
+  else
+    return 1
+  fi
+}
+
+# cpath [path]: copy the absolute path of a file/dir (default: current directory)
+cpath() {
+  local target=${1:+${1:A}}
+  target=${target:-$PWD}
+  if print -rn -- "$target" | _clip; then
+    print "Copied: $target"
+  else
+    print -u2 'No clipboard tool (install wl-clipboard or xclip)'; return 1
+  fi
+}
+
+# cfile <file>: copy the CONTENTS of a text file
+cfile() {
+  [[ -r $1 ]] || { print -u2 'Usage: cfile <readable-file>'; return 1; }
+  if _clip < "$1"; then
+    print "Copied contents of $1"
+  else
+    print -u2 'No clipboard tool (install wl-clipboard or xclip)'; return 1
+  fi
+}
+
 
 # ---------------------------------------------------------------------------
 # Compression
@@ -401,23 +433,88 @@ weather() {
   curl -fsS --max-time 8 "https://wttr.in/${1:-}?m" || print -u2 'weather: lookup failed'
 }
 
+
 # zshbench: how long does an interactive shell take to start?
 zshbench() {
   if (( $+commands[hyperfine] )); then
     hyperfine --warmup 2 'zsh -i -c exit'
+    print 'Note: deferred plugins (autosuggestions, highlighting) load after the first prompt,'
+    print 'so this measures time-to-prompt. Use ZSH_DEFER=0 zsh -i -c exit for the full cost.'
   else
     time (for n in {1..10}; do zsh -i -c exit; done)
     print 'total for 10 starts (divide by 10)'
   fi
 }
 
-# zsh-clean: delete generated caches (init scripts, compdump) and compiled .zwc files
+# zsh-plugins <install|update|list>: manage the plugins in ~/.local/share/zsh/plugins
+#   install  clone what's missing (shallow)      update  fast-forward everything
+#   list     show what is installed and its commit
+# (`update` = shallow fetch + hard reset to the remote HEAD: same result as `git pull`,
+#  but it can't fail on a force-pushed or diverged shallow clone. Plugins are never edited here.)
+zsh-plugins() {
+  emulate -L zsh
+  local action=${1:-help} root="$XDG_DATA_HOME/zsh/plugins" repo name dest before after
+  local changed=0
+  [[ $action == (install|update|list) ]] || { print 'Usage: zsh-plugins <install|update|list>'; return 1; }
+  (( $+commands[git] )) || { print -u2 'zsh-plugins: git is required'; return 1; }
+  command mkdir -p -- "$root"
+
+  for repo in "${_plugin_repos[@]}"; do
+    name=${repo:t}
+    dest=$root/$name
+    # only the highlighter you actually use (ZSH_HIGHLIGHTER, see 95-highlight.zsh)
+    [[ $name == (fast|zsh)-syntax-highlighting && $name != ${ZSH_HIGHLIGHTER:-fast-syntax-highlighting} ]] && continue
+
+    case $action in
+      install)
+        if [[ -d $dest/.git ]]; then
+          print "  ✓ $name (already installed)"
+        else
+          print "  ↓ $name"
+          git clone --depth 1 --quiet "https://github.com/$repo.git" "$dest" || print -u2 "  ✗ $name: clone failed"
+        fi ;;
+      update)
+        if [[ -d $dest/.git ]]; then
+          before=$(git -C "$dest" rev-parse --short HEAD)
+          if git -C "$dest" fetch --depth 1 --quiet origin HEAD && git -C "$dest" reset --hard --quiet FETCH_HEAD; then
+            after=$(git -C "$dest" rev-parse --short HEAD)
+            if [[ $before == $after ]]; then
+              print "  ✓ $name (up to date)"
+            else
+              print "  ↑ $name  $before → $after"
+              changed=1
+            fi
+          else
+            print -u2 "  ✗ $name: update failed (network?)"
+          fi
+        else
+          print "  - $name (not installed — run: zsh-plugins install)"
+        fi ;;
+      list)
+        if [[ -d $dest/.git ]]; then
+          print "  ✓ $name  $(git -C "$dest" log -1 --format='%h  %cs')"
+        else
+          print "  - $name (missing)"
+        fi ;;
+    esac
+  done
+
+  [[ $action == install ]] && print 'Done. Open a new shell to load them.'
+  (( changed )) && print 'Updated. Open a new shell (and run zsh-clean if completions changed).'
+  return 0
+}
+
+# zsh-clean: delete generated caches (init scripts, generated completions, compdump,
+# beet command list) and compiled .zwc files
 zsh-clean() {
   local -a f
-  f=("$XDG_CACHE_HOME"/zsh/(init-*|zcompdump*)(N) "$ZDOTDIR"/{.zshrc,modules/*,local/*}.zwc(N))
+  f=("$XDG_CACHE_HOME"/zsh/(init-*|zcompdump*|beet-commands)(N)
+     "$XDG_CACHE_HOME"/zsh/completions/_*(N)
+     "$ZDOTDIR"/{.zshrc,modules/*,local/*}.zwc(N))
   (( $#f )) && command rm -f -- "${f[@]}"
   print "Removed $#f generated files. Open a new shell to rebuild them."
 }
+
 
 # ---------------------------------------------------------------------------
 # Completion for the functions above
@@ -426,4 +523,8 @@ if (( $+functions[compdef] )); then
   compdef _files decompress compress make-bak
   compdef _directories mk fzfcd fcd
   compdef _command_names is_installed
+  _zsh_plugins() { _arguments '1:action:(install update list)'; }
+  compdef _zsh_plugins zsh-plugins
+  compdef _files cfile
+  compdef _files cpath
 fi

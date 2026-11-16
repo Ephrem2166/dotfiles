@@ -59,3 +59,35 @@ if [[ -f $DIRCOLOR ]]; then
 else
   _cache_path dircolors-default dircolors -b && source "$REPLY"   # built-in defaults
 fi
+
+# ---------------------------------------------------------------------------
+# Plugin list for `zsh-plugins install|update|list` (GitHub owner/name).
+# Only the highlighter named by $ZSH_HIGHLIGHTER is installed (see 95-highlight).
+# ---------------------------------------------------------------------------
+typeset -ga _plugin_repos=(
+  zsh-users/zsh-autosuggestions
+  zsh-users/zsh-history-substring-search
+  zsh-users/zsh-completions
+  Aloxaf/fzf-tab
+  romkatv/zsh-defer
+  zdharma-continuum/fast-syntax-highlighting
+  zsh-users/zsh-syntax-highlighting
+)
+
+# ---------------------------------------------------------------------------
+# _defer <command...>: run after the first prompt is drawn (needs zsh-defer),
+# otherwise run immediately. Used for the heavy, non-essential plugins
+# (autosuggestions, syntax highlighting). Disable with ZSH_DEFER=0 in local/*.zsh.
+# fzf-tab is deliberately NOT deferred: it must bind Tab before fzf's `**` hook.
+# ---------------------------------------------------------------------------
+: ${ZSH_DEFER:=1}
+if (( ZSH_DEFER )) && _find_plugin zsh-defer zsh-defer.plugin.zsh; then
+  source "$REPLY"
+fi
+_defer() {
+  if (( $+functions[zsh-defer] )); then
+    zsh-defer "$@"
+  else
+    "$@"
+  fi
+}

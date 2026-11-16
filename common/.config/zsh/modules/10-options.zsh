@@ -33,7 +33,7 @@ setopt MULTIOS              # `>a >b` writes to both files
 setopt NOTIFY               # report bg job completion immediately
 setopt LONG_LIST_JOBS       # `jobs` shows PIDs
 setopt NO_FLOW_CONTROL      # free Ctrl-S / Ctrl-Q (no terminal freeze on Ctrl-S)
-setopt IGNORE_EOF           # don't exit on Ctrl-D when buffer non-empty
+# setopt IGNORE_EOF           # don't exit on Ctrl-D when buffer non-empty
 
 # --- Beep ---
 unsetopt BEEP               # no beep on any error
@@ -60,6 +60,24 @@ setopt AUTO_PARAM_SLASH     # `~user<Tab>` -> `~user/`
 unsetopt MENU_COMPLETE
 setopt AUTO_MENU
 setopt AUTO_LIST            # list choices on ambiguous completion
+
+# --- Named directories: `cd ~dl`, `ls ~docs/x`, Tab after `~` (only those that exist) ---
+typeset -A _named_dirs=(
+  dl    "$HOME/Downloads"
+  docs  "$HOME/Documents"
+  music "$HOME/Music"
+  pics  "$HOME/Pictures"
+  vids  "$HOME/Videos"
+  proj  "$HOME/Projects"
+  cfg   "$XDG_CONFIG_HOME"
+  zdot  "$ZDOTDIR"
+  share "$XDG_DATA_HOME"
+)
+for _k _v in ${(kv)_named_dirs}; do
+  [[ -d $_v ]] && hash -d -- "$_k=$_v"
+done
+unset _named_dirs _k _v
+
 
 # --- `time` output format ---
 TIMEFMT=$'\n%J\n  user %U  system %S  cpu %P  total %*E'

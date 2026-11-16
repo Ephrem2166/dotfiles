@@ -19,6 +19,7 @@ fman() {
     | tr -d '()' | awk '{printf "%s ", $2} {print $1}' | xargs -r man
 }
 
+
 # --- fman2: man page browser via zsh command list ---
 # (was `_fman`: underscore names are hidden from completion and look internal)
 fman2() {
