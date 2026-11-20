@@ -1,0 +1,175 @@
+# ~/.config/zsh/dircolors — LS_COLORS source, Nord palette (matches your fzf colours).
+# Read by 05-lib.zsh via `dircolors -b`; the result is cached and regenerated
+# automatically whenever this file changes. Used by ls, eza, zsh completion, fzf-tab.
+#
+# No TERM lines on purpose: every entry is global, so the cached output is valid for
+# every terminal (alacritty, tmux, linux console ...).
+#
+# Format:  <type or .ext>  <SGR codes>      38;5;N = 256-colour foreground, 01 = bold
+# Nord 256-colour approximations:
+#   frost  109 teal   110 blue    67 dark blue
+#   aurora 131 red    173 orange  222 yellow   108 green   139 purple
+#   snow   188 / 255      polar night 59 (dim grey)
+
+RESET 0
+
+# --- File types ---
+DIR                   01;38;5;110     # directories
+LINK                  38;5;109        # symlinks
+MULTIHARDLINK         0
+FIFO                  38;5;222;40     # named pipes
+SOCK                  38;5;139        # sockets
+DOOR                  38;5;139
+BLK                   38;5;222;40     # block devices
+CHR                   38;5;222;40     # character devices
+ORPHAN                38;5;131;09     # broken symlink (struck through)
+MISSING               38;5;131
+EXEC                  01;38;5;108     # executables
+
+# --- Permission highlights ---
+SETUID                38;5;255;48;5;131    # setuid
+SETGID                38;5;255;48;5;173    # setgid
+CAPABILITY            0
+STICKY_OTHER_WRITABLE 38;5;59;48;5;108     # other-writable + sticky (/tmp)
+OTHER_WRITABLE        38;5;59;48;5;222     # other-writable
+STICKY                38;5;255;48;5;67     # sticky
+
+# --- Archives & compressed ---
+.tar   01;38;5;131
+.tgz   01;38;5;131
+.gz    01;38;5;131
+.bz2   01;38;5;131
+.xz    01;38;5;131
+.zst   01;38;5;131
+.lz4   01;38;5;131
+.zip   01;38;5;131
+.7z    01;38;5;131
+.rar   01;38;5;131
+.cpio  01;38;5;131
+
+# --- Packages, disk images, installers ---
+.rpm         38;5;173
+.deb         38;5;173
+.AppImage    38;5;173
+.flatpakref  38;5;173
+.iso         38;5;173
+.img         38;5;173
+.qcow2       38;5;173
+.vmdk        38;5;173
+
+# --- Images ---
+.jpg   38;5;139
+.jpeg  38;5;139
+.png   38;5;139
+.gif   38;5;139
+.webp  38;5;139
+.avif  38;5;139
+.bmp   38;5;139
+.tif   38;5;139
+.tiff  38;5;139
+.svg   38;5;139
+.ico   38;5;139
+.xcf   38;5;139
+.heic  38;5;139
+
+# --- Video ---
+.mp4   01;38;5;139
+.mkv   01;38;5;139
+.webm  01;38;5;139
+.avi   01;38;5;139
+.mov   01;38;5;139
+.m4v   01;38;5;139
+.flv   01;38;5;139
+
+# --- Audio ---
+.mp3   38;5;109
+.flac  38;5;109
+.ogg   38;5;109
+.opus  38;5;109
+.m4a   38;5;109
+.wav   38;5;109
+.aac   38;5;109
+.wma   38;5;109
+.mid   38;5;109
+.m3u   38;5;109
+.m3u8  38;5;109
+.cue   38;5;109
+
+# --- Documents ---
+.pdf   38;5;222
+.epub  38;5;222
+.mobi  38;5;222
+.djvu  38;5;222
+.doc   38;5;222
+.docx  38;5;222
+.odt   38;5;222
+.xls   38;5;222
+.xlsx  38;5;222
+.ods   38;5;222
+.ppt   38;5;222
+.pptx  38;5;222
+.odp   38;5;222
+.md    38;5;222
+.rst   38;5;222
+.txt   38;5;188
+.tex   38;5;222
+
+# --- Scripts & source ---
+.sh    38;5;108
+.bash  38;5;108
+.zsh   38;5;108
+.fish  38;5;108
+.py    38;5;108
+.rb    38;5;108
+.pl    38;5;108
+.lua   38;5;108
+.js    38;5;108
+.ts    38;5;108
+.rs    38;5;108
+.go    38;5;108
+.c     38;5;108
+.h     38;5;108
+.cpp   38;5;108
+.hpp   38;5;108
+.java  38;5;108
+.php   38;5;108
+.el    38;5;108
+.vim   38;5;108
+.nix   38;5;108
+
+# --- Config & data ---
+.json  38;5;146
+.yaml  38;5;146
+.yml   38;5;146
+.toml  38;5;146
+.ini   38;5;146
+.conf  38;5;146
+.cfg   38;5;146
+.xml   38;5;146
+.csv   38;5;146
+.sql   38;5;146
+.db    38;5;146
+.sqlite 38;5;146
+.service 38;5;146
+.timer   38;5;146
+.desktop 38;5;146
+
+# --- Fonts ---
+.ttf   38;5;139
+.otf   38;5;139
+.woff  38;5;139
+.woff2 38;5;139
+
+# --- Logs, backups, temporary: dim ---
+.log   38;5;102
+.bak   38;5;59
+.old   38;5;59
+.orig  38;5;59
+.tmp   38;5;59
+.swp   38;5;59
+.part  38;5;59
+.rpmnew   38;5;59
+.rpmsave  38;5;59
+.rpmorig  38;5;59
+*~     38;5;59
+*#     38;5;59
