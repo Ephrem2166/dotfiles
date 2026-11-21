@@ -16,7 +16,7 @@ __ZSHRC_LOADED=1
 
 
 # Load modules in order.
-for _m in 00-env 05-lib 10-options 20-history 30-plugins 35-tool-completions 40-completion 50-keybindings \
+for _m in 00-env 05-lib 10-options 20-history 30-plugins 35-tool-completions 40-completion 45-completion-extras 50-keybindings  \
           60-aliases 70-functions 75-fzf 76-fzf-functions \
           90-integrations 92-prompt; do
   [[ -r "$ZDOTDIR/modules/${_m}.zsh" ]] \
