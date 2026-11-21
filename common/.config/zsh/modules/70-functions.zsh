@@ -509,7 +509,8 @@ zsh-plugins() {
 zsh-clean() {
   local -a f
   f=("$XDG_CACHE_HOME"/zsh/(init-*|zcompdump*|beet-commands)(N)
-     "$XDG_CACHE_HOME"/zsh/completions/_*(N)
+     # "$XDG_CACHE_HOME"/zsh/completions/_*(N)
+     "$XDG_CACHE_HOME"/zsh/completions/(_*|.scan|.fail-*)(N)
      "$ZDOTDIR"/{.zshrc,modules/*,local/*}.zwc(N))
   (( $#f )) && command rm -f -- "${f[@]}"
   print "Removed $#f generated files. Open a new shell to rebuild them."
